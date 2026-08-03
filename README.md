@@ -7,6 +7,7 @@ momentum, mass, spin) are *necessary representations* of a non-injective
 projection π and its kernel ker π, not objects we are free to define.
 
 - **中文版**: [README.zh-CN.md](README.zh-CN.md) · 数学草案细节: [SPEC.md](SPEC.md)
+- **Repository**: [github.com/logos-42/Hibs-Physics](https://github.com/logos-42/Hibs-Physics)
 - **Source material**: HIBS paper (Liu & Xu) + a six-round derivation dialogue
   with Gemini (archived at `../HIBS/gemini/` in the sibling repository).
 
