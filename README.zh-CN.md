@@ -1,7 +1,8 @@
 # ProjectionPhysics — 代数涌现物理学（Lean 4 草案）
 
 > **上游材料**：HIBS 论文（三公理隐藏空间桥接系统，刘元杰 & 徐依娜）+
-> 与 Gemini 的六轮推导对话（`/Users/apple/lean/HIBS/gemini/`）
+> 与 Gemini 的六轮推导对话（`/Users/apple/lean/HIBS/gemini/`）。
+> HIBS 开源仓库: [github.com/logos-42/Lean_HIBS](https://github.com/logos-42/Lean_HIBS)
 >
 > **工程目标**：证明"物理即代数的表示"——从 HIBS 公理 (S, ⊕, ⊗) 与非单射
 > 投影 π 出发，所有物理量（度规、能量、动量、质量、自旋）都是

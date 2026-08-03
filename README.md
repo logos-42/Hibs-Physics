@@ -170,8 +170,10 @@ Weyl decomposition is the open question `CliffordEmergence`.
 
 ## 4. Relation to the sibling projects
 
-- **HIBS** (`/Users/apple/lean/HIBS/`): the source theory. K5 ↔ HIBS Thm 6.5
+- **HIBS** ([github.com/logos-42/Lean_HIBS](https://github.com/logos-42/Lean_HIBS),
+  local `/Users/apple/lean/HIBS/`): the source theory. K5 ↔ HIBS Thm 6.5
   (π ∘ ι = id); `ProjectionPair` is exactly the HIBS embedding–projection pair.
+  This project is the *physics program* built on top of HIBS's axioms.
 - **DengYu** (`/Users/apple/lean/DengYu/`): formalization of Deng–Hani–Ma,
   *Hilbert's Sixth Problem* (hard spheres → Boltzmann → fluids). The Boltzmann
   collision operator Q has **collision invariants** (1, v, |v|²) — mass,
