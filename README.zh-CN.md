@@ -1,0 +1,105 @@
+# ProjectionPhysics — 代数涌现物理学（Lean 4 草案）
+
+> **上游材料**：HIBS 论文（三公理隐藏空间桥接系统，刘元杰 & 徐依娜）+
+> 与 Gemini 的六轮推导对话（`/Users/apple/lean/HIBS/gemini/`）
+>
+> **工程目标**：证明"物理即代数的表示"——从 HIBS 公理 (S, ⊕, ⊗) 与非单射
+> 投影 π 出发，所有物理量（度规、能量、动量、质量、自旋）都是
+> **Image 二次型 Q 与 Kernel 标量 K 的必然表示**，而非人为定义。
+>
+> English: [README.md](README.md) · 数学草案细节: [SPEC.md](SPEC.md)
+
+## 核心主张
+
+> **任何可观测量都只是两个对象的函数：**
+> **Image**（π(S) 上的二次型 Q）与 **Kernel**（ker π 的标量不变量 κ）。
+> 不存在第三种自由度。
+
+若此 *表示完备性* 成立，则：质量 = 核的标量表示；度规 = Q 诱导的双线性形式；
+动量 = 乘法流（Flow）的投影；自旋/狄拉克结构 = Q 的 Clifford 表示。
+已知物理（牛顿、麦克斯韦、薛定谔、狄拉克、爱因斯坦）成为极限特例，
+核空间中标准物理忽略的部分则产生全新预言（质量融化、因果指纹）。
+
+## 已证明（编译通过，无 sorry）
+
+```
+observables_depend_only_on_image     Kernel 不可观测：π(s_im + s_ker) = π s_im
+invariant_factor_through_projection  可观测量必然因子化通过投影：I = J ∘ π
+left_inverse_of_injective            单射嵌入 ⟹ 存在左逆投影（HIBS 6.5 一般化）
+kernel_mass_zero_on_trivial_kernel   平凡核 ⟹ 核质量为零
+nontrivial_kernel_gives_internal_degree  非平凡核 ⟹ 存在内部自由度
+```
+
+### 核心证明思路
+
+- **C1 因子化**：可观测量"不区分同一观测值的微观态"（π s₁ = π s₂ ⟹ I s₁ = I s₂）。
+  定义 J(v) := I(选一个 s 使 π s = v)，则 I = J ∘ π。**一切可观测的都是 π(s) 的函数**
+  ——核只贡献标量自由度（如维度），这正是质量猜想需要的。
+- **K5 左逆**：ι 单射 ⟹ 像上每个 v 有唯一原像 ⟹ 取原像即得 π 使 π ∘ ι = id。
+  **投影不是假设，而是嵌入单射性的必然结果**（HIBS 定理 6.5 的一般形式）。
+- **K3 Kernel 不可观测**：往态里加任意核元素，观测值不变——完备性的地基。
+
+## 草案（结构已陈述，证明为开放目标）
+
+```
+RepresentationCompleteness   I = F(Q, κ)   —— Q 半已证（C1），κ 半待核表示论
+KernelRepresentation         质量 = Aut(ker π) 的唯一标量表示（m = Φ(ker π)）
+KernelNullTheorem            核平凡 ⟹ 动量在零锥上 Q(p) = 0（前半已证：N1/N2）
+```
+
+## 物理论证思路（五座桥梁）
+
+| 物理量 | 代数定义 | 论证要点 |
+|---|---|---|
+| 不变量 | I(ζ) 在 Aut(S) 下恒定 | 系统的核心指纹 |
+| 能量 | E = I(ζ) − J(π(ζ))（信息损失） | 投影无法输出的那部分不变量 |
+| 动量 | P = π(Flow(ζ))（乘法链投影） | ⊗ 结合 ⟹ 守恒，无需 Noether |
+| 质量 | m = κ(ζ_κ)（核标量不变量） | 投影无法出口到可观测像的代数残渣 |
+| 相互作用 | ζ₁ ⊗ ζ₂（A2b 强制流入 R） | 代数级联与坍缩 |
+
+## 诚实声明
+
+1. **草案是草案**：三个 structure 是良型陈述（含全部假设），Lean 保证自洽，
+   不保证成立。证明它们是研究计划本身。
+2. **(1,3) 签名未被推导**：所有"推导出减号"的尝试要么走私连续时空（∂_μ）、
+   要么借用质量壳条件、要么手挥。在真正证明之前，度规表示诚实地缺席。
+3. **"推导出 KG/薛定谔/狄拉克"不是独立推导**：它们预设连续时空与场论框架，
+   是重新表述。
+4. **数字命理学已剔除**：π 幂次"匹配"粒子质量比（如 6π⁵ ≈ 1836.118）是凑数，
+   不属于本仓库。
+
+## 构建
+
+```bash
+elan override set v4.28.0
+lake build            # 18 jobs, 无 error 无 sorry
+.lake/build/bin/projphys
+```
+
+## 目录
+
+```
+ProjectionPhysics/
+├── SPEC.md                 # 数学草案：定理清单、证明状态、诚实声明（中文）
+├── README.md               # 英文详细说明
+├── README.zh-CN.md         # 本文件（中文概览）
+├── ProjectionPhysics.lean   # 根模块
+├── Main.lean                # 可执行入口
+└── ProjectionPhysics/
+    ├── Definitions.lean     # 投影/核/像/信息守恒/不变量/二次型/ProjectionPair
+    ├── Kernel.lean          # 核的代数性质（K1–K6，全部已证）
+    ├── Completeness.lean    # 不变量因子化（已证）+ 完备性草案
+    ├── Mass.lean            # 核质量（平凡核情形已证）+ 核表示草案
+    ├── NullTheorem.lean     # Kernel Null 草案 + 代数核心
+    └── Bridges.lean         # 五座桥梁的代数定义
+```
+
+## 路线（下一步）
+
+1. **极化恒等式**（Jordan–von Neumann）在 core Lean 形式化——度规表示的第一块真骨头
+2. **核表示论**：有限核 Aut(ker) 的标量不变量唯一性
+3. **Flow 结合性**：⊗ 结合 ⟹ 投影流的代数守恒
+
+---
+
+*Lean 4 (core, 无 mathlib) 形式化。证明手段：omega / simp / rw / ac_rfl / 经典选择。*

@@ -1,0 +1,10 @@
+name = "ProjectionPhysics"
+version = "0.1.0"
+defaultTargets = ["projphys"]
+
+[[lean_lib]]
+name = "ProjectionPhysics"
+
+[[lean_exe]]
+name = "projphys"
+root = "Main"

@@ -1,0 +1,104 @@
+# ProjectionPhysics — 数学草案 SPEC
+
+> 来源：HIBS 论文（刘元杰、徐依娜）+ 与 Gemini 的六轮推导对话（`../HIBS/gemini/`）
+> 工程目标：证明"物理即代数的表示"——所有物理量（度规、能量、动量、质量、自旋）
+> 是投影 π 与核 ker π 的必然表示，而非人为定义。
+
+## 状态图例
+
+- ✅ **已证**：Lean 4 编译通过的定理（见对应模块）
+- 📋 **草案**：结构已陈述（含全部假设），证明为开放目标
+- ❌ **待定**：概念尚需精确化
+
+## 1. 基本设定
+
+隐藏空间 S（带加法 ⊕ 与乘法 ⊗），观测空间 V，非单射投影 π : S → V。
+
+- 核：`KernelOf π = { s : S // π s = 0 }`（Definitions.lean）
+- 像：`ImageOf π = { v : V // ∃ s, π s = v }`
+- 信息守恒（等变）：`π(σ_S s) = σ_V (π s)`（InfoPreserving）
+- 可观测量：在观测等价类上取常值 `IsObservable π I`
+
+## 2. 已证明定理（✅ Kernel.lean / Completeness.lean / Mass.lean）
+
+| 编号 | 定理 | 内容 | 物理意义 |
+|---|---|---|---|
+| K1 | `kernel_add_closed` | π 保加法 ⟹ 核加法封闭 | 核是子空间 |
+| K2 | `kernel_contains_zero` | π0 = 0 ⟹ 0 ∈ 核 | 核非空 |
+| K3 | `observables_depend_only_on_image` | π(s_im + s_ker) = π s_im | **Kernel 不可观测**：完备性的地基 |
+| K4 | `nontrivial_kernel_gives_internal_degree` | 非平凡核 ⟹ 核内 ∃ 两个不同元素 | 核有内部自由度（Kernel Null 论证第一步） |
+| K5 | `left_inverse_of_injective` | 单射嵌入 ⟹ ∃ 左逆投影 | 投影的存在性来自嵌入单射（HIBS 定理 6.5 一般化） |
+| K6 | `pair_embed_injective` | ProjectionPair ⟹ 嵌入单射 | 与 K5 对偶 |
+| C1 | `invariant_factor_through_projection` | 可观测量 I = J ∘ π（因子化） | **"Q 来自 Image"的精确内容** |
+| C2 | `invariant_factor_iff` | 观测等价不变 ⟺ 通过 π 因子化 | 完备性等价刻画 |
+| C3 | `factor_preserves_add` | I 保加法 ⟹ J 保加法（像上态射） | 结构保持 |
+| M1 | `kernel_mass_zero_on_trivial_kernel` | 平凡核 ⟹ 核质量可归一化为零 | **Kernel Null 第一段** |
+| N1 | `trivial_kernel_iff_no_internal_degree` | 核平凡 ⟺ 无内部自由度 | 定义等价 |
+| N2 | `no_internal_degree_implies_no_kernel_mass` | 无内部自由度 ⟹ 无核质量 | M1 的别名 |
+| B1 | `infoLoss_zero_on_observable` | I = J∘π ⟹ 纯可观测态信息损失为零 | 信息损失定义一致性 |
+
+## 3. 草案声明（📋 待证明）
+
+### D1. Representation Completeness Theorem
+```
+设 (S, ⊕, ⊗) 满足 HIBS 公理 A1–A3，π : S → V 非单射信息守恒投影。
+则任意可观测量 I 唯一分解为：
+    I(s) = F( Q(π(s)), κ(ζ_κ(s)) )
+Q = 像空间二次型（Image 不变量）；κ = 核标量不变量（Kernel 不变量）。
+完备性：不存在独立于 {Q, κ} 的第三自由度。
+```
+**现状**：Q 半已证（C1：I = J∘π）。κ 半（核表示论）与分解 s ↦ ζ_κ 为开放目标。
+**Lean 位置**：`Completeness.RepresentationCompleteness`
+
+### D2. Kernel Representation Theorem
+```
+核 ker π 拥有内部代数结构；Aut(ker π) 上的标量表示唯一。
+满足 (a) Image 不可见 (b) Aut 不变 (c) 与投影秩无关 的标量只能依赖 dim(ker π)。
+质量 m = Φ(dim ker π)，不是定义。
+```
+**现状**：M1（平凡核 ⟹ 质量零）已证；唯一性需核上表示论。
+**Lean 位置**：`Mass.KernelRepresentation`
+
+### D3. Kernel Null Theorem
+```
+核容量 C_κ → 0（核平凡）⟹ 投影后动量 p 满足 Q(p) = 0（零锥上）。
+论证链：无内部自由度 ⟹ 无静止参考系 ⟹ 唯一路径 Q(p) = 0 ⟹ "光速"成为推论。
+```
+**现状**：N1/N2（无内部自由度 ⟹ 无核质量）已证；"Q(p)=0"需 Metric
+Representation（动量 Q 的定义与色散关系推导）完成后才能证。
+**Lean 位置**：`NullTheorem.KernelNullTheorem`
+
+### D4. Metric Representation（五座桥梁之一）
+```
+任何投影 π 诱导唯一的双线性形式 B(u,v)（由二次型 Q 经极化恒等式给出）。
+Minkowski 签名 (1,3) 是 B 的符号差结论，不是公理。
+```
+**现状**：完全未证。极化恒等式（Jordan–von Neumann）在 core Lean 可形式化，
+但"签名 (1,3)"需要额外的结构假设——**这是全工程最薄弱、最关键的一环**。
+
+### D5. Flow Representation
+```
+Flow F := 乘法链 ⊗ 的连续施加；动量 P := π(F(ζ))。
+动量守恒来自乘法结合律（非 Noether 定理）。
+```
+**现状**：`Bridges.momentumOf` 已定义；守恒性未证（需要 ⊗ 结合性假设）。
+
+### D6. Clifford Emergence
+```
+投影产生二次型 ⟹ 存在唯一 Clifford 表示；γ 矩阵、Dirac 是表示而非基本对象。
+```
+**现状**：未开始。core Lean 可先形式化 Clifford 代数的矩阵表示（2×2 复矩阵 / 4×4 实矩阵）。
+
+## 4. 与 HIBS / DengYu 的连接
+
+- **HIBS**：K5 ↔ HIBS 定理 6.5（π∘ι = id）；ProjectionPair ↔ HIBS 的嵌入-投影结构。
+- **DengYu**：玻尔兹曼碰撞算子 Q 的碰撞不变量（1, v, |v|²）正是 Q 的核——
+  "Kernel 决定质量"对应"碰撞不变量决定流体守恒律"；粗粒化投影是本工程 π 的物理实例。
+
+## 5. 诚实声明
+
+- D1–D6 是**研究目标**，不是已证定理；结构中的 `completeness`/`null_cone` 等字段
+  是假设（axiom-like），Lean 只保证陈述良型，不保证成立。
+- "推导出 KG/薛定谔/狄拉克方程"（gemini 对话 5.md）依赖连续时空假设（∂_μ），
+  在严格第一性原理下不成立——这些是"已有框架下的重新表述"，不是独立推导。
+- 数值匹配（6π⁵ ≈ 1836.118 等）为数字命理学，与定理链无关，已从本工程剔除。
