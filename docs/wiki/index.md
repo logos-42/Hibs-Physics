@@ -9,4 +9,5 @@
 - [runtime-profile.md](./runtime-profile.md)
 - [theory-kernel-mass.md](./theory-kernel-mass.md) — 核/质量/投影/流通（概念澄清）
 - [theory-time-emergence.md](./theory-time-emergence.md) — 时间/自旋/对称性（概念澄清）
+- [theory-differential-emergence.md](./theory-differential-emergence.md) — 导数/斜率/散度/旋度（概念澄清）
 - [log.md](./log.md)
