@@ -42,9 +42,9 @@ entity_type: concept
 | 微积分算子 | 代数身份 | 雏形状态 |
 |---|---|---|
 | 导数/线性化 | End(S) 的元素（Flow 的线性化 L） | ✅ End(S) 是环（A1+A2）——"居住地"已存在 |
-| 斜率 | π ∘ L（线性化的观测投影） | ✅ 投影算子 π 存在（L2） |
-| 散度 | tr(L)（线性化的迹；环上的标量 = 核方向信息流） | ❌ 迹未定义；需矩阵表示 + D5 |
-| 旋度 | (L − Lᵀ)/2（反对称部分） | ✅ **Clifford 楔结构已证**（C2 反交换 ⟹ 外代数） |
+| 斜率 | π ∘ L（线性化的观测投影） | ✅ 投影算子 π 存在（L2）；差商形式已证（E10） |
+| 散度 | tr(L)（线性化的迹；环上的标量 = 核方向信息流） | ✅ **迹已定义并证**（Differential.lean matTr：线性 E1、循环性 E7、标量性 E8） |
+| 旋度 | (L − Lᵀ)/2（反对称部分） | ✅ **Clifford 楔结构已证**（C2 反交换 ⟹ 外代数）+ 反对称部分已形式化（E4 tr(M−Mᵀ)=0、E5 反对称） |
 
 - 旋度的代数雏形是**已有的**：σᵢσⱼ + σⱼσᵢ = 0 就是楔积结构，Cℓ(Q) ⊃ 外代数
 - 散度的物理含义候选：核方向的信息流，∝ 信息损失（= 能量，Bridges.infoLoss）——与 K4 核运动（内部自由度）同族
@@ -52,15 +52,15 @@ entity_type: concept
 
 ## 4. 下一步建议
 
-不新增微积分公理；先补两个环内对象：
+不新增微积分公理；代数种子已落地（Differential.lean E1–E12），剩余两步：
 
 1. 📋 D5（⊗ 结合性）⟹ Flow 链可线性化 ⟹ L 存在 ⟹ 差商对象有住处
-2. 在 End(S) 矩阵表示上定义迹（tr 是环上唯一标量函数，呼应 D2 的 κ 唯一性）
+2. ✅ **已做（2026-08-04）**：在 End(S) 矩阵表示上定义迹并证其性质（matTr：tr 是环上唯一标量函数的代数雏形，呼应 D2 的 κ 唯一性）——见 Differential.lean
 
 两者之间有一个值得注意的联系：**质量 = Aut(ker) 不变量（D2），散度 = tr(L) 沿核方向的退化**——"核决定质量"与"核方向信息流"可能是同一标量的两个投影面。
 
 ## 5. 相关链接
 
 - 草案：D7 Differential Emergence（SPEC.md §3）· D5 FlowRepresentation · D4 MetricRepresentation
-- 已证：A1/A2 复合封闭/结合（Algebra.lean）· C2 反交换（Clifford.lean）· K4 核运动（Kernel.lean）· infoLoss（Bridges.lean）
+- 已证：A1/A2 复合封闭/结合（Algebra.lean）· C2 反交换（Clifford.lean）· K4 核运动（Kernel.lean）· infoLoss（Bridges.lean）· **E1–E12 微分代数种子（Differential.lean）**
 - 相关页：[[theory-kernel-mass.md]] · [[theory-time-emergence.md]]

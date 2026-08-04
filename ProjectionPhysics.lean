@@ -13,6 +13,7 @@
 --   Clifford.lean      自旋：Pauli 矩阵反交换 + i 涌现 + 旋量表示（C1–C5）
 --   LinearAlgebra.lean 矢量/张量/kernel：向量空间公理、核子空间、rank-nullity、
 --                     双线性形式 + 极化恒等式（L1–L7）
+--   Differential.lean  微分涌现的代数种子：迹(散度)/转置/反对称部分(旋度)/差商（E1–E12）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -23,3 +24,4 @@ import ProjectionPhysics.Bridges
 import ProjectionPhysics.Algebra
 import ProjectionPhysics.Clifford
 import ProjectionPhysics.LinearAlgebra
+import ProjectionPhysics.Differential
