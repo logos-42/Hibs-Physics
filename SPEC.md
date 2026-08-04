@@ -45,6 +45,13 @@
 | C3 | `i_emerges_from_clifford` | (σ₁σ₂)² = −1 | ★ **虚数单位从反交换涌现**（呼应 HIBS：ℂ 非基本） |
 | C4 | `sigma3_from_sigma1_sigma2` | σ₃ = i·σ₁σ₂ | 第三生成元从前两个涌现 |
 | C5 | `spinor_rep_hom` | (MN)ψ = M(Nψ) | 旋量表示是同态（自旋 = 表示） |
+| C6 | `sigma1_sigma2_eq` … `sigma3_sigma2_eq` (×6) | σᵢσⱼ = δᵢⱼI − iεᵢⱼₖσₖ 完整乘法表 | 9 个乘积全部确定 |
+| L1 | `VecSpace` 结构 + `cVecSpace`/`intVecSpace` | 向量空间公理；ℂ 是 2 维实向量空间、Int 是 1 维 | 隐数空间的矢量结构 |
+| L2 | `reProj_linear` | Re : ℂ → Int 保加法保数乘 | 线性映射（HIBS f : S → R） |
+| L3 | `kernel_smul_closed` / `kernel_is_subspace` | 核在数乘下封闭；核是子空间 | 补 K1 的缺 |
+| L4 | `complexBasisInst` / `kerReBasisInst` / `imReBasisInst` | ℂ 的基 {1,i}；ker(Re) 的基 {i}；im(Re) 的基 {1} | 张成 + 线性无关 |
+| L5 | `rank_nullity_complex_re` | **dim ℂ = dim ker(Re) + dim im(Re) = 1+1** | ★ **rank-nullity 实例：虚轴 iR 是实部投影的核**（HIBS A3 的 iR） |
+| L6 | `polarization` / `quad_zero` | 2B(x,y) = Q(x+y) − Q(x) − Q(y)；Q(0)=0 | ★ 极化恒等式：度规从二次型涌现（Metric Representation 心脏） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

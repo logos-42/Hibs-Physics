@@ -11,6 +11,8 @@
 --   Bridges.lean       五座桥梁的代数定义
 --   Algebra.lean       矩阵算法：加法群→自同态环→矩阵乘法结合律（A1–A4）
 --   Clifford.lean      自旋：Pauli 矩阵反交换 + i 涌现 + 旋量表示（C1–C5）
+--   LinearAlgebra.lean 矢量/张量/kernel：向量空间公理、核子空间、rank-nullity、
+--                     双线性形式 + 极化恒等式（L1–L7）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -20,3 +22,4 @@ import ProjectionPhysics.NullTheorem
 import ProjectionPhysics.Bridges
 import ProjectionPhysics.Algebra
 import ProjectionPhysics.Clifford
+import ProjectionPhysics.LinearAlgebra
