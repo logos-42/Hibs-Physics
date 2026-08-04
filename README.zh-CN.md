@@ -35,6 +35,11 @@ sigma1_sq ... anticommute ...        自旋：Pauli 生成元平方 = I、反交
 i_emerges_from_clifford              ★ (σ₁σ₂)² = -1：虚数单位从反交换涌现（C3）
 sigma3_from_sigma1_sigma2            σ₃ = i·σ₁σ₂：第三生成元从前两个涌现（C4）
 spinor_rep_hom                       (MN)ψ = M(Nψ)：自旋表示是同态（C5）
+sigma1_sigma2_eq ... (×6)            完整乘法表：σᵢσⱼ = δᵢⱼI − iεᵢⱼₖσₖ（C6）
+cVecSpace / reProj_linear            ℂ 是 2 维实向量空间；Re 是线性映射（L1–L2）
+kernel_smul_closed                   ★ 核在数乘下封闭，核是子空间（L3）
+rank_nullity_complex_re              ★ dim ℂ = dim ker(Re) + dim im(Re) = 1+1（L5）
+polarization                         极化恒等式：2B(x,y) = Q(x+y) − Q(x) − Q(y)（L6）
 ```
 
 ### 核心证明思路
@@ -100,7 +105,9 @@ ProjectionPhysics/
     ├── NullTheorem.lean     # Kernel Null 草案 + 代数核心
     ├── Bridges.lean         # 五座桥梁的代数定义
     ├── Algebra.lean         # 矩阵算法：加法群→自同态环→乘法结合律（A1–A4）
-    └── Clifford.lean        # 自旋：Pauli 反交换 + i 涌现 + 旋量表示（C1–C5）
+    ├── Clifford.lean        # 自旋：Pauli 反交换 + i 涌现 + 完整乘法表（C1–C6）
+    └── LinearAlgebra.lean   # 矢量/张量/kernel：向量空间公理、核子空间、
+                             # rank-nullity（虚轴 = ker Re）、极化恒等式（L1–L6）
 ```
 
 ## 路线（下一步）

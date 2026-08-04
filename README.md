@@ -77,6 +77,13 @@ The following are **fully proved in Lean 4** (compiled, zero `sorry`):
 | B1 | `infoLoss_zero_on_observable` | I = J ∘ π ⟹ information loss vanishes on pure observables | energy-as-information-loss is consistent |
 | A1–A4 | `comp_additive`, `comp_assoc`, `matMul_assoc`, `matMul_add_right` | End(S) is a ring; 2×2 complex matrix multiplication is associative & distributive | **matrix arithmetic emerges from composition** (A2a ⟹ additive group ⟹ endomorphism ring ⟹ matrices) |
 | C1–C5 | `sigma*_sq`, `sigma*_anticommute`, `i_emerges_from_clifford`, `sigma3_from_sigma1_sigma2`, `spinor_rep_hom` | σᵢ² = I; σᵢσⱼ+σⱼσᵢ = 0; **(σ₁σ₂)² = −1**; σ₃ = i·σ₁σ₂; (MN)ψ = M(Nψ) | **spin from Clifford**: the imaginary unit i emerges from anticommutation — ℂ is not primitive, exactly as HIBS claims |
+| C6 | `sigma1_sigma2_eq` … `sigma3_sigma2_eq` (×6) | σᵢσⱼ = δᵢⱼI − iεᵢⱼₖσₖ | **complete 9-entry multiplication table** of the Clifford generators |
+| L1 | `cVecSpace`, `intVecSpace` | VecSpace axioms; ℂ is a 2-dim real vector space, Int is 1-dim | the vector structure of the hidden space |
+| L2 | `reProj_linear` | Re : ℂ → Int preserves + and scalar mult | the linear map (HIBS f : S → R) |
+| L3 | `kernel_smul_closed`, `kernel_is_subspace` | kernel closed under scalar multiplication | completes K1 (kernel is a subspace) |
+| L4 | `complexBasisInst`, `kerReBasisInst`, `imReBasisInst` | bases {1,i} of ℂ, {i} of ker(Re), {1} of im(Re) | spanning + linear independence |
+| L5 | `rank_nullity_complex_re` | **dim ℂ = dim ker(Re) + dim im(Re) = 1+1** | ★ **rank-nullity instance: the imaginary axis iR is the kernel of the real-part projection** — the iR of HIBS A3, made precise |
+| L6 | `polarization`, `quad_zero` | 2B(x,y) = Q(x+y) − Q(x) − Q(y); Q(0) = 0 | ★ polarization identity: the metric is determined by the quadratic form (heart of Metric Representation) |
 
 **The central proof idea (C1).** An observable is a quantity that cannot
 distinguish micro-states with the same π-value. Formally: π s₁ = π s₂ ⟹ I s₁ = I s₂.
@@ -231,7 +238,9 @@ ProjectionPhysics/
     ├── NullTheorem.lean     # Kernel Null draft + algebraic core
     ├── Bridges.lean         # the five bridges (algebraic definitions)
     ├── Algebra.lean         # matrix arithmetic: additive group → End ring → matMul assoc (A1–A4)
-    └── Clifford.lean        # spin: Pauli matrices, anticommutation, i-emergence, spinor rep (C1–C5)
+    ├── Clifford.lean        # spin: Pauli matrices, anticommutation, i-emergence, spinor rep (C1–C6)
+    └── LinearAlgebra.lean   # vectors/tensors/kernel: VecSpace axioms, kernel subspace,
+                             # rank-nullity (iR = ker Re), bilinear forms + polarization (L1–L6)
 ```
 
 ## 7. Next steps
