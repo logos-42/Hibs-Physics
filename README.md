@@ -75,6 +75,8 @@ The following are **fully proved in Lean 4** (compiled, zero `sorry`):
 | M1 | `kernel_mass_zero_on_trivial_kernel` | trivial kernel ⟹ kernel mass normalizable to 0 | **first half of Kernel Null** |
 | N1/N2 | `trivial_kernel_iff_no_internal_degree` etc. | trivial kernel ⟺ no internal degree ⟹ no kernel mass | the Null argument chain |
 | B1 | `infoLoss_zero_on_observable` | I = J ∘ π ⟹ information loss vanishes on pure observables | energy-as-information-loss is consistent |
+| A1–A4 | `comp_additive`, `comp_assoc`, `matMul_assoc`, `matMul_add_right` | End(S) is a ring; 2×2 complex matrix multiplication is associative & distributive | **matrix arithmetic emerges from composition** (A2a ⟹ additive group ⟹ endomorphism ring ⟹ matrices) |
+| C1–C5 | `sigma*_sq`, `sigma*_anticommute`, `i_emerges_from_clifford`, `sigma3_from_sigma1_sigma2`, `spinor_rep_hom` | σᵢ² = I; σᵢσⱼ+σⱼσᵢ = 0; **(σ₁σ₂)² = −1**; σ₃ = i·σ₁σ₂; (MN)ψ = M(Nψ) | **spin from Clifford**: the imaginary unit i emerges from anticommutation — ℂ is not primitive, exactly as HIBS claims |
 
 **The central proof idea (C1).** An observable is a quantity that cannot
 distinguish micro-states with the same π-value. Formally: π s₁ = π s₂ ⟹ I s₁ = I s₂.
@@ -227,7 +229,9 @@ ProjectionPhysics/
     ├── Completeness.lean    # invariant factorization (proved) + completeness draft
     ├── Mass.lean            # kernel mass (trivial-kernel case proved) + representation draft
     ├── NullTheorem.lean     # Kernel Null draft + algebraic core
-    └── Bridges.lean         # the five bridges (algebraic definitions)
+    ├── Bridges.lean         # the five bridges (algebraic definitions)
+    ├── Algebra.lean         # matrix arithmetic: additive group → End ring → matMul assoc (A1–A4)
+    └── Clifford.lean        # spin: Pauli matrices, anticommutation, i-emergence, spinor rep (C1–C5)
 ```
 
 ## 7. Next steps

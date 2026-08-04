@@ -36,6 +36,27 @@
 | N1 | `trivial_kernel_iff_no_internal_degree` | 核平凡 ⟺ 无内部自由度 | 定义等价 |
 | N2 | `no_internal_degree_implies_no_kernel_mass` | 无内部自由度 ⟹ 无核质量 | M1 的别名 |
 | B1 | `infoLoss_zero_on_observable` | I = J∘π ⟹ 纯可观测态信息损失为零 | 信息损失定义一致性 |
+| A1 | `comp_additive` | 保加法映射复合仍保加法 | 自同态环封闭（A2a ⟹ End(S) 是环） |
+| A2 | `comp_assoc` | 函数复合结合 | 一切矩阵乘法结合律之源 |
+| A3 | `matMul_assoc` | 2×2 复矩阵乘法结合律 (MN)P = M(NP) | **矩阵算法从复合涌现** |
+| A4 | `matMul_add_right` | 矩阵乘法分配律 M(N+K) = MN+MK | 矩阵算法完整 |
+| C1 | `sigma1_sq`/`sigma2_sq`/`sigma3_sq` | σᵢ² = I | Clifford 生成元平方 = 度规 |
+| C2 | `sigma1_sigma2_anticommute` 等 | σᵢσⱼ + σⱼσᵢ = 0 (i≠j) | **Clifford 反交换关系** |
+| C3 | `i_emerges_from_clifford` | (σ₁σ₂)² = −1 | ★ **虚数单位从反交换涌现**（呼应 HIBS：ℂ 非基本） |
+| C4 | `sigma3_from_sigma1_sigma2` | σ₃ = i·σ₁σ₂ | 第三生成元从前两个涌现 |
+| C5 | `spinor_rep_hom` | (MN)ψ = M(Nψ) | 旋量表示是同态（自旋 = 表示） |
+
+## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
+
+```
+A2a (⊕ 封闭) ──► S 加法群 ──► End(S) 环（A1: 复合封闭；A2: 复合结合）
+   ──► 选基 ⟹ 矩阵表示 ──► 矩阵乘法结合律/分配律（A3, A4 已证）
+A2b (⊗ : S×S → R) ──► 双线性形式（张量原语）──► 二次型 Q
+   ──► Clifford 代数 Cℓ(Q)（C1: σ²=I；C2: 反交换）
+   ──► 旋量空间（C5: 表示同态）──► 自旋
+   ──► ★ (σ₁σ₂)² = −1（C3）：i 是表示对象，不是公理
+   ──► σ₃ = i·σ₁σ₂（C4）：第三方向从前两个涌现（手性的代数雏形）
+```
 
 ## 3. 草案声明（📋 待证明）
 

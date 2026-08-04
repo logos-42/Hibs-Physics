@@ -9,6 +9,8 @@
 --   Mass.lean          核质量（平凡核 ⟹ 质量为零，可证明）+ 核表示草案
 --   NullTheorem.lean   Kernel Null Theorem 草案 + 代数核心
 --   Bridges.lean       五座桥梁的代数定义
+--   Algebra.lean       矩阵算法：加法群→自同态环→矩阵乘法结合律（A1–A4）
+--   Clifford.lean      自旋：Pauli 矩阵反交换 + i 涌现 + 旋量表示（C1–C5）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -16,3 +18,5 @@ import ProjectionPhysics.Completeness
 import ProjectionPhysics.Mass
 import ProjectionPhysics.NullTheorem
 import ProjectionPhysics.Bridges
+import ProjectionPhysics.Algebra
+import ProjectionPhysics.Clifford

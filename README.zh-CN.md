@@ -30,6 +30,11 @@ invariant_factor_through_projection  可观测量必然因子化通过投影：I
 left_inverse_of_injective            单射嵌入 ⟹ 存在左逆投影（HIBS 6.5 一般化）
 kernel_mass_zero_on_trivial_kernel   平凡核 ⟹ 核质量为零
 nontrivial_kernel_gives_internal_degree  非平凡核 ⟹ 存在内部自由度
+matMul_assoc / matMul_add_right      矩阵算法：2×2 复矩阵乘法结合律/分配律（A1–A4）
+sigma1_sq ... anticommute ...        自旋：Pauli 生成元平方 = I、反交换（C1–C2）
+i_emerges_from_clifford              ★ (σ₁σ₂)² = -1：虚数单位从反交换涌现（C3）
+sigma3_from_sigma1_sigma2            σ₃ = i·σ₁σ₂：第三生成元从前两个涌现（C4）
+spinor_rep_hom                       (MN)ψ = M(Nψ)：自旋表示是同态（C5）
 ```
 
 ### 核心证明思路
@@ -93,7 +98,9 @@ ProjectionPhysics/
     ├── Completeness.lean    # 不变量因子化（已证）+ 完备性草案
     ├── Mass.lean            # 核质量（平凡核情形已证）+ 核表示草案
     ├── NullTheorem.lean     # Kernel Null 草案 + 代数核心
-    └── Bridges.lean         # 五座桥梁的代数定义
+    ├── Bridges.lean         # 五座桥梁的代数定义
+    ├── Algebra.lean         # 矩阵算法：加法群→自同态环→乘法结合律（A1–A4）
+    └── Clifford.lean        # 自旋：Pauli 反交换 + i 涌现 + 旋量表示（C1–C5）
 ```
 
 ## 路线（下一步）
