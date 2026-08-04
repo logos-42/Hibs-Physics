@@ -37,6 +37,18 @@ entity_type: concept
 
 推论（✅ 平凡但关键）：线性映射的差商恒等于它自己 ⟹ 当前框架内"导数 = 线性算子本身"（slope(π) = π，slope(L) = L）。在出现非线性映射之前，微积分没有可推导的内容。
 
+## 2.5 ★ E9 与逆元：差分 vs 差商的分界（2026-08-04 澄清）
+
+问题：E9（导数 = 线性算子本身，`L(s+h) − L(s) = L h`）可以和逆元有关吗？
+
+- **证明层面：无关。** E9 只用**加法逆元**（`−L s` 消去 `L s`）——加法逆元框架里一直有（ℂ 有 `Neg` 实例）。它能在 ℤ[i] 下被证出来不是巧合，**乘法逆元完全没出场**。
+- **语义层面：E9 是差分，不是差商。** 差分 `ΔL(s,h) = L(s+h) − L(s) = L h`（分子，无除法，已证）；差商要除以 h：`(L h)·h⁻¹`——**h⁻¹ 就是乘法逆元的入口**。E9 恰好是"分子定理"，分母缺席。
+- **补上逆元后（关键）**：差商 `(L h)·h⁻¹` 化简到"方向无关"需要两步，都不免费：
+  1. 乘法结合律：`(a·h)·h⁻¹ = a·(h·h⁻¹) = a·1 = a`（E16 `left_mul_comp` 是同一结合律的伏笔）
+  2. `L h` 必须是 `h` 的倍数（`L h = L(1)·h`）——这需要 **L 保乘法**（代数同态），光保加法不够（E13 `scalar2_mul` 是"标量层保乘法"的雏形）
+- **结论**：E9 的"位置无关"（加法层，平凡，已证）与差商的"方向无关"（乘法层，非平凡）是两件事。**逆元不改变 E9，但逆元让 E9 有了下一步**——平凡性在除法门前结束。差商草案结构 `DifferenceQuotient`（D7'）把逆元假设显式化：L 保乘法 + 保单位 + 逆元存在 ⟹ `(L h)·h⁻¹ = L 1`（开放目标，ℤ[i] 无逆元，实例化需升级到 ℚ[i]/ℝ）。
+- **框架连接**：L 保乘法 = 代数同态 = 表示——C5 `spinor_rep_hom`（(MN)ψ = M(Nψ)）已证表示保乘法；Flow（D5 乘法链）的线性化是左乘（E16）⟹ 补逆元后差商 = 左乘矩阵本身。E7 `tr(MN)=tr(NM)` 同理：它是共轭不变性 `tr(N⁻¹MN)=tr(N)` 的**无逆元版**，也停在逆元门前。
+
 ## 3. 代数雏形：导数形状的对象已经住在 End(S) 环里
 
 | 微积分算子 | 代数身份 | 雏形状态 |
@@ -52,15 +64,16 @@ entity_type: concept
 
 ## 4. 下一步建议
 
-不新增微积分公理；代数种子已落地（Differential.lean E1–E12），剩余两步：
+不新增微积分公理；代数种子已落地（Differential.lean E1–E16），剩余两步：
 
-1. 📋 D5（⊗ 结合性）⟹ Flow 链可线性化 ⟹ L 存在 ⟹ 差商对象有住处
+1. 📋 D5（⊗ 结合性）⟹ Flow 链可线性化 ⟹ L 存在 ⟹ 差商对象有住处（E16 已给"左乘线性化"雏形）
 2. ✅ **已做（2026-08-04）**：在 End(S) 矩阵表示上定义迹并证其性质（matTr：tr 是环上唯一标量函数的代数雏形，呼应 D2 的 κ 唯一性）——见 Differential.lean
+3. 📋 **D7' 差商实例化**：升级系数环到 ℚ[i]/ℝ（给 S 补乘法逆元）⟹ `DifferenceQuotient.direction_independent` 的 `inv_existence` 可满足 ⟹ 差商方向无关 `(L h)·h⁻¹ = L 1` 可证
 
 两者之间有一个值得注意的联系：**质量 = Aut(ker) 不变量（D2），散度 = tr(L) 沿核方向的退化**——"核决定质量"与"核方向信息流"可能是同一标量的两个投影面。
 
 ## 5. 相关链接
 
-- 草案：D7 Differential Emergence（SPEC.md §3）· D5 FlowRepresentation · D4 MetricRepresentation
-- 已证：A1/A2 复合封闭/结合（Algebra.lean）· C2 反交换（Clifford.lean）· K4 核运动（Kernel.lean）· infoLoss（Bridges.lean）· **E1–E12 微分代数种子（Differential.lean）**
+- 草案：D7 Differential Emergence（SPEC.md §3）· D7' DifferenceQuotient（逆元层）· D5 FlowRepresentation · D4 MetricRepresentation
+- 已证：A1/A2 复合封闭/结合（Algebra.lean）· C2 反交换（Clifford.lean）· K4 核运动（Kernel.lean）· infoLoss（Bridges.lean）· **E1–E16 微分代数种子（Differential.lean）**
 - 相关页：[[theory-kernel-mass.md]] · [[theory-time-emergence.md]]

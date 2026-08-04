@@ -20,8 +20,23 @@
 --   (E10) 斜率 = π∘L 的差商形式                          （A1 复合封闭 ⟹ π∘L 仍保加法）
 --   (E11) 自旋无迹：tr σᵢ = 0                            （旋量流无散）
 --   (E12) σ₂ 反对称 / σ₁,σ₃ 对称                         （自旋的旋转部分 = 旋度生成元）
+--   (E13) 标量嵌入保乘法：matMul (scalar2 z) (scalar2 w) = scalar2 (z·w)
+--                                                          （"斜率 = L(1)·h 倍数形式"的载体）
+--   (E14) 标量层是中心：matMul (scalar2 z) M = matMul M (scalar2 z)
+--                                                          （标量 = 方向无关的量）
+--   (E15) 保乘法映射的复合仍保乘法                        （A1 的乘法孪生版）
+--   (E16) 左乘复合 = 左乘乘积：A∘B = (AB)·h               （A3 结合律 ⟹ Flow 线性化是左乘；
+--                                                          差商化简 (a·h)·h⁻¹ = a 的伏笔）
+--   (D7') 差商草案结构：逆元 + 乘法同态 ⟹ 差商方向无关      （"逆元登场"的显式位置；
+--                                                          实例化需升级系数环到 ℚ[i]/ℝ）
 --
 -- 支撑引理：转置的代数性质（对合/保加法/反同态）、Mat2 加法群定律。
+--
+-- ★ E9 与逆元的关系（2026-08-04 澄清）：
+--   E9 证的是差分（分子 L h），证明只用加法逆元；真正的差商要除以 h，
+--   化简 (L h)·h⁻¹ 需要乘法结合律（E16 的伏笔）+ L 保乘法（E13/E15 的雏形）。
+--   逆元不改变 E9，但逆元让 E9 有了下一步——"位置无关"（加法，平凡）与
+--   "方向无关"（乘法，非平凡）在除法门前分界。
 
 import ProjectionPhysics.Clifford
 
@@ -205,5 +220,66 @@ theorem sigma3_symmetric : matTranspose σ₃ = σ₃ := rfl
 
 /-- ★ σ₂ 反对称：σ₂ᵀ = −σ₂。自旋的旋转部分（旋度生成元）由 σ₂ 承载。 -/
 theorem sigma2_skewsymmetric : matTranspose σ₂ = -σ₂ := rfl
+
+-- ---------------------------------------------------------------------------
+-- (E13–E16) 乘法结构：差商化简的前提物（"补上逆元后 E9 的下一步"）
+-- ---------------------------------------------------------------------------
+
+/-- (E13) 标量嵌入保乘法：matMul (scalar2 z) (scalar2 w) = scalar2 (z·w)。
+    "斜率 = L(1)·h 的倍数形式"的载体：标量层是乘法同态。 -/
+theorem scalar2_mul (z w : ℂ) : matMul (scalar2 z) (scalar2 w) = scalar2 (z * w) := by
+  unfold scalar2
+  apply Mat2.ext <;> apply ℂ.ext <;>
+    simp [matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
+
+/-- (E14) 标量层是中心：matMul (scalar2 z) M = matMul M (scalar2 z)。
+    标量 = 方向无关的量（与任意线性化方向 h 交换）。 -/
+theorem scalar2_commute (z : ℂ) (M : Mat2) : matMul (scalar2 z) M = matMul M (scalar2 z) := by
+  unfold scalar2
+  apply Mat2.ext <;> apply ℂ.ext <;>
+    simp [matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.mul_comm] <;> omega
+
+/-- (E15) 保乘法映射的复合仍保乘法（A1 comp_additive 的乘法孪生版）。
+    "L 保乘法"的映射构成一个类（代数同态封闭于复合）。 -/
+theorem mul_hom_comp (T S' : Mat2 → Mat2)
+    (hT : ∀ a b : Mat2, T (matMul a b) = matMul (T a) (T b))
+    (hS : ∀ a b : Mat2, S' (matMul a b) = matMul (S' a) (S' b)) :
+    ∀ a b : Mat2, (fun x : Mat2 => T (S' x)) (matMul a b) =
+      matMul ((fun x : Mat2 => T (S' x)) a) ((fun x : Mat2 => T (S' x)) b) := by
+  intro a b
+  dsimp
+  rw [hS]
+  exact hT (S' a) (S' b)
+
+/-- (E16) 左乘复合 = 左乘乘积：(h ↦ A·(B·h)) = (h ↦ (A·B)·h)。
+    A3 结合律的直接推论 ⟹ Flow（乘法链）的线性化是"左乘"作用；
+    这正是差商化简 (a·h)·h⁻¹ = a·(h·h⁻¹) = a 所用的同一结合律。 -/
+theorem left_mul_comp (A B : Mat2) :
+    (fun h : Mat2 => matMul A (matMul B h)) = fun h : Mat2 => matMul (matMul A B) h := by
+  funext h
+  exact (matMul_assoc A B h).symm
+
+-- ---------------------------------------------------------------------------
+-- (D7') 差商草案结构：逆元登场的显式位置
+-- ---------------------------------------------------------------------------
+
+/-- 差商（草案声明，D7 的乘法层）。
+    E9 是它的分子（差分 = L h，已证）；分母 h⁻¹ 需要乘法逆元。
+    若 L 保乘法（代数同态）且每个非零 h 有逆元，则差商方向无关：
+        (L h) · h⁻¹ = L 1
+    与 E9 的"位置无关"（加法层）互补——这是"方向无关"（乘法层）。
+    注意：inv_existence 在 ℤ[i]-型系数（Int）下不可满足——ℂ 无 `Inv` 实例，
+    Mat2 非除环。实例化需要升级系数环到 ℚ[i]/ℝ（给 S 补上逆元）。
+    mul_hom 的实例：scalar2（E13）、旋量表示 spinor_rep_hom（C5）同族。 -/
+structure DifferenceQuotient (L : Mat2 → Mat2) where
+  -- 假设 1：L 保乘法（代数同态——差商 = 乘法倍数的条件）
+  mul_hom : ∀ a b : Mat2, L (matMul a b) = matMul (L a) (L b)
+  -- 假设 2：L 保单位
+  preserves_unit : L 1 = 1
+  -- 假设 3：乘法逆元存在（卡点：ℤ[i] 非域，需升级系数环）
+  inv_existence : ∀ h : Mat2, h ≠ 0 → ∃ hinv : Mat2, matMul h hinv = 1
+  -- 结论（开放目标）：差商方向无关 (L h)·h⁻¹ = L 1
+  direction_independent : ∀ h : Mat2, h ≠ 0 → ∀ hinv : Mat2, matMul h hinv = 1 →
+    matMul (L h) hinv = L 1
 
 end ProjectionPhysics
