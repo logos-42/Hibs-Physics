@@ -96,9 +96,10 @@ structure RepresentationCompleteness (S V : Type) [Add S] [Add V] [Zero V]
   kernelComponent : S → KernelOf π
   -- κ：核空间的标量不变量（Aut(ker π) 等变，质量之根）
   κ : KernelOf π → Int
-  -- 完备性声明：任意可观测量 I = F(Q ∘ π, κ ∘ kernelComponent)
-  completeness : ∀ (I : S → Int), IsObservable π I →
-    ∃ F : Int → Int → Int, ∀ s : S, I s = F (Q (π s)) (κ (kernelComponent s))
+  -- 完备性（可证部分，= C1）：任意可观测量因子化通过 π：I = J ∘ π
+  -- （"Q 来自 Image"；κ 的独立贡献见范数分解定理，如 completeness_complex）
+  complete : ∀ (I : S → Int), IsObservable π I →
+    ∃ J : V → Int, ∀ s : S, I s = J (π s)
 
 /-- 完备性定理的"Q 半"（已证明）：可观测量通过投影因子化。 -/
 theorem completeness_Q_half {S V : Type} [Add S] [Add V] [Zero V] [Nonempty S]

@@ -125,6 +125,10 @@ theorem Mat2.ext {M N : Mat2}
 @[simp] theorem Mat2.ofNat1_c : (1 : Mat2).c = 0 := rfl
 @[simp] theorem Mat2.ofNat1_d : (1 : Mat2).d = 1 := rfl
 
+/-- Mat2 加法交换（分量展开）。 -/
+theorem Mat2.add_comm (M N : Mat2) : M + N = N + M := by
+  apply Mat2.ext <;> apply ℂ.ext <;> simp <;> omega
+
 /-- 矩阵乘法（= 线性映射复合的坐标表示，A2b 的 ⊗ 给出的矩阵算法）。 -/
 def matMul (M N : Mat2) : Mat2 :=
   ⟨ M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d

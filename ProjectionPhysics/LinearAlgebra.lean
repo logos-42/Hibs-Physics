@@ -14,6 +14,7 @@
 --   (L7) 双线性形式（张量原语）+ 极化恒等式（Metric Representation 的前置）
 
 import ProjectionPhysics.Algebra
+import ProjectionPhysics.Completeness
 
 namespace ProjectionPhysics
 
@@ -311,5 +312,76 @@ theorem quad_zero {V : Type} [Add V] [Zero V] {VS : VecSpace V}
   have h : bf.B 0 0 = bf.B 0 0 + bf.B 0 0 := by
     rw [← bf.add_left, hz]
   omega
+
+-- ---------------------------------------------------------------------------
+-- (L8) ★ 表示完备性（ℂ 实例）：分解唯一性 + 范数分解
+-- ---------------------------------------------------------------------------
+
+instance : Nonempty ℂ := Nonempty.intro (⟨0, 0⟩ : ℂ)
+
+/-- 正交分解：z = Re(z)·1 + Im(z)·i（可观测部分 + 核部分）。 -/
+theorem cOrthogonalDecomp (z : ℂ) :
+    z = cSmul (z.re) 1 + cSmul (z.im) cI := by
+  apply ℂ.ext <;> simp [cSmul] <;> omega
+
+/-- 分解唯一性：z = a·1 + b·i ⟹ a = Re z ∧ b = Im z。 -/
+theorem cOrthogonalDecomp_unique (z : ℂ) {a b : Int}
+    (hz : z = cSmul a 1 + cSmul b cI) : a = z.re ∧ b = z.im := by
+  have hre : z.re = a := by
+    have h := congrArg (fun w : ℂ => w.re) hz
+    simp [cSmul] at h
+    omega
+  have him : z.im = b := by
+    have h := congrArg (fun w : ℂ => w.im) hz
+    simp [cSmul] at h
+    omega
+  exact ⟨hre.symm, him.symm⟩
+
+/-- 核分量提取：ζ_κ(z) := Im(z)·i ∈ ker(Re)。 -/
+def kernelComponentC (z : ℂ) : KernelOf reProj :=
+  ⟨cSmul (z.im) cI, by simp [reProj, cSmul]⟩
+
+theorem kernelComponentC_im (z : ℂ) : (kernelComponentC z).val.im = z.im := by
+  simp [kernelComponentC, cSmul, cI]
+
+/-- 核不变量 κ：核元素的虚部平方。 -/
+def kernelInvC (k : KernelOf reProj) : Int :=
+  k.val.im * k.val.im
+
+/-- ★ 范数分解（完备性的具体形式）：
+    |z|² = Re(z)² + Im(z)² = Q(π z) + κ(ζ_κ z)。
+    信息量 = Image 二次型 + Kernel 二次型，无第三自由度。 -/
+def cNormSq (z : ℂ) : Int := z.re * z.re + z.im * z.im
+
+theorem completeness_complex (z : ℂ) :
+    cNormSq z = (reProj z) * (reProj z) + kernelInvC (kernelComponentC z) := by
+  simp [cNormSq, reProj, kernelInvC, kernelComponentC_im]
+
+/-- 任意可观测 I = J∘Re（C1 在 ℂ 上的实例化：Image 完全决定观测）。 -/
+theorem observable_factors_through_re (I : ℂ → Int) (hI : IsObservable reProj I) :
+    ∃ J : Int → Int, ∀ z : ℂ, I z = J (reProj z) :=
+  invariant_factor_through_projection reProj I hI
+
+/-- ★ RepresentationCompleteness 的 ℂ 实例：所有字段全部证明（草案实例化）。 -/
+def completenessComplex : RepresentationCompleteness ℂ Int reProj :=
+  { hadd := reProj_add
+  , non_injective := by
+      refine ⟨cI, 0, ?_, ?_⟩
+      · intro h
+        have him := congrArg (fun z : ℂ => z.im) h
+        simp [cI] at him
+      · rfl
+  , Q := fun v => v * v
+  , Q_quadratic := by simp
+  , kernelComponent := kernelComponentC
+  , κ := kernelInvC
+  , complete := by
+      intro I hI
+      exact invariant_factor_through_projection reProj I hI }
+
+/-- 核质量归零（ℂ 实例）：核元素为零 ⟹ κ = 0。 -/
+theorem kernelInv_zero_of_zero {k : KernelOf reProj} (hk : k.val = 0) :
+    kernelInvC k = 0 := by
+  simp [kernelInvC, hk]
 
 end ProjectionPhysics

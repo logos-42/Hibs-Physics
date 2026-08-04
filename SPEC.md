@@ -52,6 +52,10 @@
 | L4 | `complexBasisInst` / `kerReBasisInst` / `imReBasisInst` | ℂ 的基 {1,i}；ker(Re) 的基 {i}；im(Re) 的基 {1} | 张成 + 线性无关 |
 | L5 | `rank_nullity_complex_re` | **dim ℂ = dim ker(Re) + dim im(Re) = 1+1** | ★ **rank-nullity 实例：虚轴 iR 是实部投影的核**（HIBS A3 的 iR） |
 | L6 | `polarization` / `quad_zero` | 2B(x,y) = Q(x+y) − Q(x) − Q(y)；Q(0)=0 | ★ 极化恒等式：度规从二次型涌现（Metric Representation 心脏） |
+| L7 | `cOrthogonalDecomp` / `cOrthogonalDecomp_unique` | z = Re(z)·1 + Im(z)·i，分解唯一 | ℂ 的正交分解（可观测 + 核） |
+| L8 | `completeness_complex` | **\|z\|² = Re(z)² + Im(z)² = Q(π z) + κ(ζ_κ z)** | ★ **范数分解：信息 = Image 二次型 + Kernel 二次型，无第三自由度** |
+| L9 | `completenessComplex` | RepresentationCompleteness 的 ℂ 实例（**全部字段已证**） | ★ 草案 D1 实例化 |
+| L10 | `kernelInv_zero_of_zero` | 核元素为零 ⟹ κ = 0 | 核质量归零（ℂ） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
@@ -75,8 +79,11 @@ A2b (⊗ : S×S → R) ──► 双线性形式（张量原语）──► 二�
 Q = 像空间二次型（Image 不变量）；κ = 核标量不变量（Kernel 不变量）。
 完备性：不存在独立于 {Q, κ} 的第三自由度。
 ```
-**现状**：Q 半已证（C1：I = J∘π）。κ 半（核表示论）与分解 s ↦ ζ_κ 为开放目标。
-**Lean 位置**：`Completeness.RepresentationCompleteness`
+**现状**：
+- ✅ Q 半已证（C1：I = J∘π）+ ℂ 实例 `observable_factors_through_re`
+- ✅ **ℂ 实例化**：`completenessComplex`（全部字段已证）+ 范数分解 `completeness_complex`（|z|² = Re² + Im²，Q+κ 无第三项）
+- ⚠️ 注意（诚实修正）：任意可观测 I 无法用"平方 Q"表示（I z = z.re 丢符号）——完备性的可证部分是**因子化 I = J∘π**；"Q+κ 分解"以范数分解定理（L8）为具体形式，κ 的唯一性（D2）仍开放
+- **Lean 位置**：`Completeness.RepresentationCompleteness` + `LinearAlgebra.completenessComplex`
 
 ### D2. Kernel Representation Theorem
 ```
@@ -115,7 +122,11 @@ Flow F := 乘法链 ⊗ 的连续施加；动量 P := π(F(ζ))。
 ```
 投影产生二次型 ⟹ 存在唯一 Clifford 表示；γ 矩阵、Dirac 是表示而非基本对象。
 ```
-**现状**：未开始。core Lean 可先形式化 Clifford 代数的矩阵表示（2×2 复矩阵 / 4×4 实矩阵）。
+**现状**：
+- ✅ **3 维实例化**：`pauliClifford : CliffordEmergence 3`（Pauli 生成元，反交换 + 平方全部验证，Fin 3 全情况分解）
+- ✅ C1–C6：σᵢ²=I、反交换、(σ₁σ₂)²=−1、σ₃=iσ₁σ₂、完整乘法表、旋量表示同态
+- 开放：一般维数 Cℓ(p,q) 的表示论；Weyl 手性分解（A3 的 √→iR 需要复结构）
+- **Lean 位置**：`Clifford.pauliClifford`
 
 ## 4. 与 HIBS / DengYu 的连接
 
