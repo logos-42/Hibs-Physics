@@ -165,6 +165,25 @@ Flow F := 乘法链 ⊗ 的连续施加；动量 P := π(F(ζ))。
 - **推导结论**：线性映射的差商恒等于它自己 ⟹ 当前框架内"导数 = 线性算子本身"（平凡的，已证 E9/E10）；非线性结构出现前，散度/旋度无法脱离 End(S) 环走得更远
 - **Lean 位置**：`Differential.lean`（E1–E12 已证）；连续版本仍无（依赖 D5 ⊗ 结合性 + D4 度量）
 
+### D8. Symmetry Breaking（自发对称性破缺）
+
+```
+对称性 = 核平移：ζ ↦ ζ ⊕ κ（κ ∈ ker π），观测不变（K3 已证）。
+势经投影因子化 V(ζ) := Ṽ(π ζ) ⟹ 自动核平移不变（规律对称）。
+真空流形 = 整条核纤维 π⁻¹(v₀) = v₀ ⊕ ker π。
+破缺 = 选择真空：观测等价但状态不同的真空存在。
+Goldstone = 核模式：沿核方向移动无势能变化（无质量方向）。
+```
+
+**现状（2026-08-05 编译）**：
+- ✅ **SB1** `factorized_potential_is_kernel_shift_symmetric`：因子化势核平移对称（K3 直接推论）
+- ✅ **SB2** `kernel_fiber_is_ground`：核纤维都是真空 · ✅ **SB2'** `shifted_vacuum_is_ground`：真空的核平移仍真空（Goldstone 代数种子）
+- ✅ **SB3** `broken_vacua_observationally_equivalent`：非平凡核 ⟹ 观测等价、势相等、状态不同的真空存在（"规律对称+状态不对称"是可证定理）
+- 📋 `SymmetryBreaking` 结构（axiom-like，与 D1–D7 同级）
+- **与 D7' 关键对比**：差商卡乘法逆元（ℤ[i] 非域）；破缺只需加法+核，ℤ[i] 完全满足——**破缺比微积分更早可达**
+- **开放问题**：①质量 = 真空核分量（接 KernelRepresentation）需 ⊗ 泄漏机制（i⊗i = −1 ∈ ℝ，核非理想 ⟹ Goldstone"被吃掉"的代数原型）；②连续剩余对称（U(1) 型稳定子）；③动态破缺（T>T_c 相变）需时间
+- **Lean 位置**：`SymmetryBreaking.lean`（SB1–SB3 已证）
+
 ## 4. 与 HIBS / DengYu 的连接
 
 - **HIBS**：K5 ↔ HIBS 定理 6.5（π∘ι = id）；ProjectionPair ↔ HIBS 的嵌入-投影结构。

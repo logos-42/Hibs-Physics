@@ -14,6 +14,7 @@
 --   LinearAlgebra.lean 矢量/张量/kernel：向量空间公理、核子空间、rank-nullity、
 --                     双线性形式 + 极化恒等式（L1–L7）
 --   Differential.lean  微分涌现的代数种子：迹(散度)/转置/反对称部分(旋度)/差商（E1–E12）
+--   SymmetryBreaking.lean 对称性破缺：核平移对称(规范)/核纤维真空流形/Goldstone(核模式)（SB1–SB3, D8）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -25,3 +26,4 @@ import ProjectionPhysics.Algebra
 import ProjectionPhysics.Clifford
 import ProjectionPhysics.LinearAlgebra
 import ProjectionPhysics.Differential
+import ProjectionPhysics.SymmetryBreaking
