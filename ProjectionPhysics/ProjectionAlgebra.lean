@@ -228,4 +228,44 @@ theorem pvm_skeleton (z : ℂ) :
         · exact comp_table_im_re z
         · exact hiddenProj_complete z
 
+-- ---------------------------------------------------------------------------
+-- (PA7) ★ 核质量泄露:核乘法不封闭(核是加法子空间,但不是乘法理想)
+-- ---------------------------------------------------------------------------
+
+/-- cI² = -1:虚轴(核)元素的平方落在实轴(像)——泄漏的代数事实。 -/
+theorem cI_sq_neg_one : cI * cI = -1 := by
+  apply ℂ.ext <;> simp
+
+/-- 核质量泄漏量:核元平方的观测值(核结构对像空间的泄漏)。 -/
+def kernelLeak (k : KernelOf reProj) : Int := reProj (k.val * k.val)
+
+/-- 泄漏量实例:κ(i·i) = Re(i²) = -1(非零,核向像泄漏)。 -/
+theorem kernelLeak_i : kernelLeak ⟨cI, by simp [reProj]⟩ = -1 := by
+  simp [kernelLeak, cI_sq_neg_one, reProj]
+
+/-- ★ 核质量泄露:存在核元素,其平方的观测非零。
+    核是加法子空间(K1),但乘法不封闭——核非理想,
+    "Goldstone 被吃掉"的代数原型(SB 文档 i⊗i = -1 ∈ ℝ)。 -/
+theorem kernel_mul_leaks_to_image :
+    ∃ k : KernelOf reProj, reProj (k.val * k.val) ≠ 0 := by
+  refine ⟨⟨cI, by simp [reProj]⟩, ?_⟩
+  rw [cI_sq_neg_one]
+  simp [reProj]
+
+/-- 双核元版本:两个核元素的乘积泄漏到像。 -/
+theorem kernel_pair_mul_leaks :
+    ∃ k₁ k₂ : KernelOf reProj, reProj (k₁.val * k₂.val) ≠ 0 := by
+  refine ⟨⟨cI, by simp [reProj]⟩, ⟨cI, by simp [reProj]⟩, ?_⟩
+  rw [cI_sq_neg_one]
+  simp [reProj]
+
+/-- 泄漏产物是可观测的:-1 ∈ im reProj(泄漏不是丢失,是流向可观测层)。 -/
+theorem leak_product_in_image :
+    ∃ k : KernelOf reProj, ∃ v : Int, reProj (k.val * k.val) = v ∧ v ≠ 0 := by
+  refine ⟨⟨cI, by simp [reProj]⟩, -1, ?_⟩
+  constructor
+  · rw [cI_sq_neg_one]
+    simp [reProj]
+  · omega
+
 end ProjectionPhysics

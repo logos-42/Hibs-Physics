@@ -1,5 +1,13 @@
 # Wiki 日志
 
+## [2026-08-06] 证明补充 | 核质量泄露定理化(PA7)
+
+- 问题(leo):隐空间无状态投影后,经对称性破缺,能否产生质量解析与核质量泄露,解释物理?
+- 评估后补齐唯一可证缺口:**核质量泄露的形式化**(此前只是 SB 文档概念"i⊗i = -1 ∈ ℝ")。
+- 新增 PA7(`ProjectionAlgebra.lean`):`cI_sq_neg_one`(i² = -1)、`kernelLeak` 泄漏量定义 + `kernelLeak_i` = -1、`kernel_mul_leaks_to_image`(∃ k ∈ ker, Re(k²) ≠ 0)、`kernel_pair_mul_leaks`(双核元版)、`leak_product_in_image`(泄漏流向像层,可观测)。
+- 数学内容:核是加法子空间(K1)但**乘法不封闭**(非理想)——虚轴元素平方落在实轴,观测非零。"Goldstone 被吃掉"与"质量从核涌现"的代数原型。
+- 来源:2026-08-06 会话(leo × 小剑)。
+
 ## [2026-08-06] 方向修正 + 证明 | 隐数投影代数:第一性 = P²=P,不是 i²=-1(PA1–PA6, D11)
 
 - **方向修正(leo 粘贴长文纠正)**:隐数 ≠ 复数的另一种写法。隐数是**潜在状态空间**(latent/hidden space),核心不是 i²=-1,而是**投影幂等 P²=P**(状态生成机制)。四元数/旋转降级为**比较对象**(空间已有时的变换机制)。路线改为:Hidden Space → **Projection Algebra** → State Space → Geometry。已删除未提交的 Rotation.lean(i²=-1→旋转非优先项)。

@@ -90,6 +90,7 @@
 | PA4 | `hiddenImProj_kernel_iff` / `hproj_re_image` | ker Π_im = 实轴；im Π_re = 实轴 | 可观测层 / 不可观测层分层 |
 | PA5 | `hproj_re_not_injective` / `hproj_re_not_bijective` | **Π_re 非单射（0 与 cI 同像 0）** | ★ **投影代数生成半群而非群**；确定性来自信息损失（K3 推论） |
 | PA6 | `pvm_skeleton` | 幂等 + 正交 + 完备 = 投影值分解 | ★ **量子测量（PVM）的代数骨架**，无概率公理 |
+| PA7 | `cI_sq_neg_one` + `kernelLeak`/`kernelLeak_i` + `kernel_mul_leaks_to_image` + `kernel_pair_mul_leaks` + `leak_product_in_image` | **i² = -1 且 Re(i²) = -1 ≠ 0：核乘法不封闭** | ★ **核质量泄露**：核是加法子空间（K1）但非乘法理想，"Goldstone 被吃掉"的代数原型 |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
@@ -266,8 +267,9 @@ Goldstone = 核模式：沿核方向移动无势能变化（无质量方向）�
 - ✅ **PA4** 核/像分层：ker Π_im = 实轴、im Π_re = 实轴（可观测层 = 实数，不可观测层 = 虚数）
 - ✅ **PA5** ★ **半群而非群**：`hproj_re_not_injective`（0 与 cI 同像）——非平凡投影不可逆，**状态生成有损 = 确定性来自信息损失**（K3 推论）；群结构需要可逆层（旋转/四元数，比较对象）
 - ✅ **PA6** ★ **PVM 骨架**：`pvm_skeleton`——幂等+正交+完备 = 投影值分解（量子测量结构的代数骨架，无概率公理）
-- 📋 开放：多投影族的一般理论（投影秩、约当代数）、可逆层（变换群 = 旋转群,需域系数）、Born 规则（概率,框架外）
-- **Lean 位置**：`ProjectionAlgebra.lean`（PA1–PA6 已证）
+- ✅ **PA7** ★ **核质量泄露**：`kernel_mul_leaks_to_image`——∃ k ∈ ker π，Re(k²) ≠ 0（实例：i·i = -1，Re(-1) = -1）；核是加法子空间（K1）但**乘法不封闭**（非理想）；`kernelLeak` 定义泄漏量 + `kernelLeak_i` = -1；`leak_product_in_image`：泄漏产物可观测（流向像层，非丢失）。**这是"Goldstone 被吃掉"与"质量从核涌现"的代数原型（SB 文档 i⊗i = -1 ∈ ℝ 的定理化）**
+- 📋 开放：多投影族的一般理论（投影秩、约当代数）、可逆层（变换群 = 旋转群,需域系数）、Born 规则（概率,框架外）；**质量解析的完整链（质量 = Φ(dim ker)，D2）仍需核上表示论**
+- **Lean 位置**：`ProjectionAlgebra.lean`（PA1–PA7 已证）
 
 ## 4. 与 HIBS / DengYu 的连接
 
