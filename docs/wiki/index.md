@@ -11,5 +11,6 @@
 - [theory-time-emergence.md](./theory-time-emergence.md) — 时间/自旋/对称性（概念澄清）
 - [theory-differential-emergence.md](./theory-differential-emergence.md) — 导数/斜率/散度/旋度（概念澄清）
 - [theory-symmetry-breaking.md](./theory-symmetry-breaking.md) — 对称性破缺/核平移规范/Goldstone（概念澄清）
-- [theory-hidden-quaternion.md](./theory-hidden-quaternion.md) — 隐数空间/投影产生状态/四元数涌现（概念澄清）
+- [theory-hidden-quaternion.md](./theory-hidden-quaternion.md) — 隐数四元数（比较对象：i²=-1 从反交换涌现）
+- [theory-projection-algebra.md](./theory-projection-algebra.md) — 隐数投影代数（主线：P²=P 状态生成机制/半群/PVM 骨架）
 - [log.md](./log.md)

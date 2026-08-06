@@ -84,6 +84,12 @@
 | Q5 | `quatToMat_add`/`quatToMat_mul`/`quatToMat_i/j/k` | Φ 保加法保乘法；Φ(i) = iσ₁ | ★ **四元数 ⊂ Mat2 = Cℓ(3) 表示**（i²=-1 的矩阵版） |
 | Q6 | `cToQuat_mul` | 复数乘法 ↔ 四元数乘法 | ℂ 是 ℍ 的子环（扩展不丢结构） |
 | Q7 | `quatHiddenUnit`/`cliffordHiddenUnit` | HiddenUnit 双实例（ℍ 环 / Mat2 矩阵） | ★ **"隐数单元" = 反交换生成元的必然表示，不是新公理** |
+| PA1 | `IsProjection` + `comp_of_commuting_projections_is_projection` | 投影 = 幂等自映射 P²=P；交换投影的复合仍是投影 | ★ **投影复合成为变换的代数前提**（正交投影族自动满足） |
+| PA2 | `ComplementaryProjection` + `realImagProjection` | 互补投影对（幂等/正交/完备），ℂ 实例 {Π_re, Π_im} | ★ **状态生成机制的代数公理**：元素 = 两互补观测方向之和 |
+| PA3 | `hiddenImProj_idempotent` + `comp_table_*` + `projection_composition_semigroup` | 复合表 5 项全确定；{Π_re, Π_im, 0} 在复合下封闭 | 变换复合封闭（状态生成可迭代） |
+| PA4 | `hiddenImProj_kernel_iff` / `hproj_re_image` | ker Π_im = 实轴；im Π_re = 实轴 | 可观测层 / 不可观测层分层 |
+| PA5 | `hproj_re_not_injective` / `hproj_re_not_bijective` | **Π_re 非单射（0 与 cI 同像 0）** | ★ **投影代数生成半群而非群**；确定性来自信息损失（K3 推论） |
+| PA6 | `pvm_skeleton` | 幂等 + 正交 + 完备 = 投影值分解 | ★ **量子测量（PVM）的代数骨架**，无概率公理 |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
@@ -238,6 +244,30 @@ Goldstone = 核模式：沿核方向移动无势能变化（无质量方向）�
 - ✅ **H5** `direction_emerges_from_projection`：方向涌现（复述 L7 正交分解）
 - **与量子测量类比**：投影产生状态（H1）+ 幂等塌缩（H4）+ 核不可观测（K3）三者的代数骨架，无概率公理
 - **Lean 位置**：`HiddenSpace.lean`（H1–H5 已证）
+
+### D11. Hidden Projection Algebra（隐数投影代数）★ 路线主线
+
+```
+隐数的第一性不是 i²=-1（复数路线），而是投影幂等 P² = P（状态生成机制路线）。
+    Hidden Space → Projection Algebra → State Space → Geometry
+    （四元数/旋转 = 比较对象：空间已有时的变换机制，非隐数实现目标）
+
+投影族 {P_i} 满足:
+    幂等 P_i² = P_i          (观测后不再改变)
+    正交 P_i∘P_j = 0 (i≠j)   (不同方向互不可见)
+    完备 ΣP_i = id            (信息不丢失)
+变换 T = P_i∘P_j 的复合是否封闭?是否成群?
+```
+
+**现状（2026-08-06 编译）**：
+- ✅ **PA1** `IsProjection`（幂等自映射）+ `comp_of_commuting_projections_is_projection`：交换投影的复合仍是投影（抽象层）
+- ✅ **PA2** `ComplementaryProjection` 结构（幂等/正交/完备）+ **ℂ 实例 `realImagProjection`**：{Π_re, Π_im} 全部字段已证
+- ✅ **PA3** 复合表 5 项：re∘re=re、im∘im=im、re∘im=0、im∘re=0、0∘任何=0——**{Π_re, Π_im, 0} 构成半群**（`projection_composition_semigroup`）
+- ✅ **PA4** 核/像分层：ker Π_im = 实轴、im Π_re = 实轴（可观测层 = 实数，不可观测层 = 虚数）
+- ✅ **PA5** ★ **半群而非群**：`hproj_re_not_injective`（0 与 cI 同像）——非平凡投影不可逆，**状态生成有损 = 确定性来自信息损失**（K3 推论）；群结构需要可逆层（旋转/四元数，比较对象）
+- ✅ **PA6** ★ **PVM 骨架**：`pvm_skeleton`——幂等+正交+完备 = 投影值分解（量子测量结构的代数骨架，无概率公理）
+- 📋 开放：多投影族的一般理论（投影秩、约当代数）、可逆层（变换群 = 旋转群,需域系数）、Born 规则（概率,框架外）
+- **Lean 位置**：`ProjectionAlgebra.lean`（PA1–PA6 已证）
 
 ## 4. 与 HIBS / DengYu 的连接
 
