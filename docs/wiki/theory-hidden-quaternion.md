@@ -1,6 +1,7 @@
 ---
 title: 理论概念：隐数四元数（比较对象：i²=-1 从反交换涌现）
-source: session (2026-08-06 任务 Prompt 执行)
+source: session
+source_note: 2026-08-06 任务 Prompt 执行
 created: 2026-08-06
 last_confirmed: 2026-08-06
 audience: self

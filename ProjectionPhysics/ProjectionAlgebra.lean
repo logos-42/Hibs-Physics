@@ -268,4 +268,50 @@ theorem leak_product_in_image :
     simp [reProj]
   · omega
 
+-- ---------------------------------------------------------------------------
+-- (PA8) ★ 核上的双线性形式(核张量化):ker π 上的 (0,2) 张量
+-- ---------------------------------------------------------------------------
+
+/-- 核方向的双线性形式 B(x,y) := Im(x)·Im(y)(虚部乘积)。
+    限制到 ker(Re) 上即核上的张量(0,2 型):度量核方向的配对。 -/
+def cKernelBiForm : BiForm ℂ cVecSpace :=
+  { B := fun x y => x.im * y.im
+  , add_left := by
+      intro x y z
+      simp [ℂ.add_im, Int.add_mul] <;> omega
+  , add_right := by
+      intro x y z
+      simp [ℂ.add_im, Int.mul_add] <;> omega
+  , sym := by
+      intro x y
+      simp [Int.mul_comm] <;> omega }
+
+/-- 二次型:Q(x) = Im(x)²(核方向的平方长度)。 -/
+theorem kernelBiForm_quad (z : ℂ) : quadOfBiForm cKernelBiForm z = z.im * z.im := by
+  simp [quadOfBiForm, cKernelBiForm]
+
+/-- ★ 核张量二次型 = 核不变量:Q(k) = κ(k),其中 κ = Im² 是核上的
+    标量不变量(kernelInvC,LinearAlgebra)。**核上的双线性形式给出质量候选
+    m² = κ(ζ_κ)——核张量的第一个物理连接。** -/
+theorem kernelBiForm_quad_kernel (k : KernelOf reProj) :
+    quadOfBiForm cKernelBiForm k.val = kernelInvC k := by
+  unfold kernelInvC
+  simp [kernelBiForm_quad]
+
+/-- 核单位元的度规:B(i, i) = 1(虚轴单位向量的自内积)。 -/
+theorem kernelBiForm_unit_norm : cKernelBiForm.B cI cI = 1 := by
+  simp [cKernelBiForm]
+
+/-- ★ 核上非退化:若核元素 k 与所有核元素配对为零,则 k = 0。
+    核张量是"真正的度量"——核方向被完全区分。 -/
+theorem kernelBiForm_nondegenerate (k : KernelOf reProj) :
+    (∀ k' : KernelOf reProj, cKernelBiForm.B k.val k'.val = 0) → k.val = 0 := by
+  intro h
+  have hk' := h ⟨cI, by simp [reProj]⟩
+  have him : k.val.im = 0 := by simpa [cKernelBiForm] using hk'
+  have hre : k.val.re = 0 := k.property
+  apply ℂ.ext
+  · exact hre
+  · exact him
+
 end ProjectionPhysics

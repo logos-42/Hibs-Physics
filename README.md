@@ -84,6 +84,11 @@ The following are **fully proved in Lean 4** (compiled, zero `sorry`):
 | L4 | `complexBasisInst`, `kerReBasisInst`, `imReBasisInst` | bases {1,i} of ℂ, {i} of ker(Re), {1} of im(Re) | spanning + linear independence |
 | L5 | `rank_nullity_complex_re` | **dim ℂ = dim ker(Re) + dim im(Re) = 1+1** | ★ **rank-nullity instance: the imaginary axis iR is the kernel of the real-part projection** — the iR of HIBS A3, made precise |
 | L6 | `polarization`, `quad_zero` | 2B(x,y) = Q(x+y) − Q(x) − Q(y); Q(0) = 0 | ★ polarization identity: the metric is determined by the quadratic form (heart of Metric Representation) |
+| H1–H5 | `projection_generates_state` … `direction_emerges_from_projection` | state-less vectors via Option tags; **projection generates state** (state = observed value); different projections give different states (Re vs Im on cI); idempotent projection Π = ι∘Re (kernel = imaginary axis); direction = Re·1 + Im·i | **the hidden space**: "no state" = `observed = none`; "collapse" = the Option none → some v transition; the algebraic skeleton of quantum measurement |
+| Q1–Q7 | `quat_i_sq` … `cliffordHiddenUnit` | **i² = j² = k² = ijk = -1 from Clifford anticommutation**; Φ: ℍ ⊂ Mat2 = Cℓ(3) (ring homomorphism); ℂ ⊂ ℍ; HiddenUnit instances (ℍ ring + Mat2 matrices) | **quaternions as comparison object**: the hidden space, if it has internal multiplication, necessarily produces non-commutative structure (ij ≠ ji) — not a new axiom, a necessary representation |
+| PA1–PA6 | `comp_of_commuting_projections_is_projection` … `pvm_skeleton` | projection = idempotent endomap (P²=P); complementary projection pair (idempotent/orthogonal/complete); composition table re∘re=re, re∘im=0, … = **semigroup**; **semigroup, not group** (Π_re not injective); PVM skeleton | ★ **hidden projection algebra (main line)**: the first principle of the hidden space is P² = P (state generation mechanism), **not** i² = -1; determinism comes from information loss (K3) |
+| PA7 | `cI_sq_neg_one`, `kernel_mul_leaks_to_image`, `kernelLeak_i` | **kernel not closed under multiplication**: i·i = -1, Re(i²) = -1 ≠ 0 | ★ **kernel mass-melting**: the kernel is an additive subspace (K1) but not a multiplicative ideal — the algebraic prototype of "Goldstone eaten" and mass emerging from the kernel |
+| PA8 | `cKernelBiForm`, `kernelBiForm_quad_kernel`, `kernelBiForm_nondegenerate` | bilinear form on the kernel B(x,y) = Im(x)·Im(y); quadratic form Q(k) = κ(k) = kernelInvC; nondegenerate on ker | ★ **kernel tensorization**: the (0,2) tensor on ker π — first physical link m² = κ(ζ_κ) as a kernel metric |
 
 **The central proof idea (C1).** An observable is a quantity that cannot
 distinguish micro-states with the same π-value. Formally: π s₁ = π s₂ ⟹ I s₁ = I s₂.
@@ -217,7 +222,7 @@ Weyl decomposition is the open question `CliffordEmergence`.
 
 ```bash
 elan override set v4.28.0    # pinned in lean-toolchain
-lake build                   # 18 jobs, no errors, no sorry
+lake build                   # 34 jobs, no errors, no sorry
 .lake/build/bin/projphys     # prints the theorem inventory
 ```
 
@@ -239,17 +244,24 @@ ProjectionPhysics/
     ├── Bridges.lean         # the five bridges (algebraic definitions)
     ├── Algebra.lean         # matrix arithmetic: additive group → End ring → matMul assoc (A1–A4)
     ├── Clifford.lean        # spin: Pauli matrices, anticommutation, i-emergence, spinor rep (C1–C6)
-    └── LinearAlgebra.lean   # vectors/tensors/kernel: VecSpace axioms, kernel subspace,
-                             # rank-nullity (iR = ker Re), bilinear forms + polarization (L1–L6)
+    ├── LinearAlgebra.lean   # vectors/tensors/kernel: VecSpace axioms, kernel subspace,
+    │                        # rank-nullity (iR = ker Re), bilinear forms + polarization (L1–L6)
+    ├── HiddenSpace.lean     # the hidden space: state-less vectors, Option tags, state generation (H1–H5)
+    ├── Quaternion.lean      # quaternions (comparison object): i²=j²=k²=ijk=-1 from Clifford (Q1–Q7)
+    └── ProjectionAlgebra.lean # hidden projection algebra (main line): complementary projections,
+                               # composition semigroup, kernel mass-melting, kernel tensor (PA1–PA8)
 ```
 
 ## 7. Next steps
 
-1. Polarization identity (Jordan–von Neumann) in core Lean — the first real
-   piece of the metric representation.
-2. Kernel representation theory: uniqueness of the scalar invariant of
-   Aut(ker π) on a finite kernel.
-3. Associativity of ⊗ ⟹ algebraic conservation of the projected flow.
+1. **Kernel representation theory**: uniqueness of the scalar invariant of
+   Aut(ker π) — the missing half of mass (D2).
+2. **Metric signature (D4)**: the weakest link; no honest derivation of the
+   Minkowski minus sign exists yet.
+3. **Coefficient-ring upgrade** (ℤ[i] → ℚ[i]/ℝ): unlocks the difference quotient
+   (D7'), 3D rotations (quaternions as comparison object), and continuous physics.
+4. **Multi-projection families**: Fin n index sets, projection rank, connecting
+   to rank-nullity (L5/L6).
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: 理论概念：导数、斜率、散度与旋度（隐数空间）
-source: session (2026-08-04 问答澄清)
+source: session
+source_note: 2026-08-04 问答澄清
 created: 2026-08-04
 last_confirmed: 2026-08-04
 audience: self

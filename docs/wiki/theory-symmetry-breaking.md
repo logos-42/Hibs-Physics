@@ -1,6 +1,7 @@
 ---
 title: 理论概念：对称性破缺（核平移 = 规范对称，核纤维 = 真空流形）
-source: session (2026-08-05 问答澄清)
+source: session
+source_note: 2026-08-05 问答澄清
 created: 2026-08-05
 last_confirmed: 2026-08-05
 audience: self

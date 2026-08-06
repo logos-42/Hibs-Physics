@@ -40,6 +40,12 @@ cVecSpace / reProj_linear            ℂ 是 2 维实向量空间；Re 是线性
 kernel_smul_closed                   ★ 核在数乘下封闭，核是子空间（L3）
 rank_nullity_complex_re              ★ dim ℂ = dim ker(Re) + dim im(Re) = 1+1（L5）
 polarization                         极化恒等式：2B(x,y) = Q(x+y) − Q(x) − Q(y)（L6）
+projection_generates_state           ★ 投影产生状态：无状态源经投影获得状态（H1–H5）
+quat_i_sq ... quat_ijk_minus_one     ★ i²=j²=k²=ijk=-1 从 Clifford 反交换涌现（Q1–Q3）
+quatToMat_mul                        ★ 四元数 ⊂ Mat2 = Cℓ(3) 表示，保加法保乘法（Q5）
+realImagProjection                   ★ 互补投影对 {Π_re, Π_im}：幂等+正交+完备（PA2）
+kernel_mul_leaks_to_image            ★ 核质量泄露：i·i=-1 且 Re(i²)=-1≠0（PA7）
+cKernelBiForm                        ★ 核上双线性形式：Q(k) = κ(k)，核张量 = 质量候选（PA8）
 ```
 
 ### 核心证明思路
@@ -50,6 +56,19 @@ polarization                         极化恒等式：2B(x,y) = Q(x+y) − Q(x)
 - **K5 左逆**：ι 单射 ⟹ 像上每个 v 有唯一原像 ⟹ 取原像即得 π 使 π ∘ ι = id。
   **投影不是假设，而是嵌入单射性的必然结果**（HIBS 定理 6.5 的一般形式）。
 - **K3 Kernel 不可观测**：往态里加任意核元素，观测值不变——完备性的地基。
+
+## 隐数主线(2026-08-06 方向)
+
+**隐数 ≠ 复数的另一种写法**。隐数的第一性不是 i²=-1,而是**投影幂等 P²=P**(状态生成机制)。
+
+```
+复数/四元数(比较对象):             隐数(主线):
+  单位元 → 乘法规则 → 旋转            潜在对象 → 映射/投影 → 状态出现
+```
+
+- **隐数空间**(H1–H5):无状态向量 = `observed = none`;投影产生状态;不同投影给不同状态;幂等投影 Π = ι∘Re;方向 = Re·1 + Im·i
+- **投影代数**(PA1–PA8,主线):互补投影对(幂等/正交/完备)是状态生成机制的代数公理;复合表 = **半群**而非群(Π_re 非单射,确定性来自信息损失);**核质量泄露**(核乘法不封闭:i·i=-1 泄漏到实轴);**核张量**(核上双线性形式 Q(k)=κ(k),质量候选 m²=κ)
+- **四元数**(Q1–Q7,比较对象):i²=j²=k²=ijk=-1 是 Clifford 反交换的必然表示——隐数空间若有内部乘法,必然产生非交换结构
 
 ## 草案（结构已陈述，证明为开放目标）
 
@@ -84,7 +103,7 @@ KernelNullTheorem            核平凡 ⟹ 动量在零锥上 Q(p) = 0（前半�
 
 ```bash
 elan override set v4.28.0
-lake build            # 18 jobs, 无 error 无 sorry
+lake build            # 34 jobs, 无 error 无 sorry
 .lake/build/bin/projphys
 ```
 
@@ -106,15 +125,20 @@ ProjectionPhysics/
     ├── Bridges.lean         # 五座桥梁的代数定义
     ├── Algebra.lean         # 矩阵算法：加法群→自同态环→乘法结合律（A1–A4）
     ├── Clifford.lean        # 自旋：Pauli 反交换 + i 涌现 + 完整乘法表（C1–C6）
-    └── LinearAlgebra.lean   # 矢量/张量/kernel：向量空间公理、核子空间、
-                             # rank-nullity（虚轴 = ker Re）、极化恒等式（L1–L6）
+    ├── LinearAlgebra.lean   # 矢量/张量/kernel：向量空间公理、核子空间、
+    │                        # rank-nullity（虚轴 = ker Re）、极化恒等式（L1–L6）
+    ├── HiddenSpace.lean     # 隐数空间：无状态向量、Option 标签、状态生成（H1–H5）
+    ├── Quaternion.lean      # 四元数（比较对象）：i²=j²=k²=ijk=-1 从 Clifford 涌现（Q1–Q7）
+    └── ProjectionAlgebra.lean # 隐数投影代数（主线）：互补投影、复合半群、
+                               # 核质量泄露、核张量（PA1–PA8）
 ```
 
 ## 路线（下一步）
 
-1. **极化恒等式**（Jordan–von Neumann）在 core Lean 形式化——度规表示的第一块真骨头
-2. **核表示论**：有限核 Aut(ker) 的标量不变量唯一性
-3. **Flow 结合性**：⊗ 结合 ⟹ 投影流的代数守恒
+1. **核表示论**：有限核 Aut(ker) 的标量不变量唯一性——质量解析缺的另一半（D2）
+2. **度量签名（D4）**：最薄弱环节，尚无诚实的 Minkowski 减号推导
+3. **系数环升级**（ℤ[i] → ℚ[i]/ℝ）：解锁差商（D7'）、3D 旋转、连续物理
+4. **多投影族**：Fin n 指标集、投影秩，连接 rank-nullity（L5/L6）
 
 ---
 

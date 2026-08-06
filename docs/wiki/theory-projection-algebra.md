@@ -1,6 +1,7 @@
 ---
 title: 理论概念：隐数投影代数（第一性 = P²=P，状态生成机制）
-source: session (2026-08-06 leo 方向纠正)
+source: session
+source_note: 2026-08-06 leo 方向纠正
 created: 2026-08-06
 last_confirmed: 2026-08-06
 audience: self
