@@ -1,5 +1,23 @@
 # Wiki 日志
 
+## [2026-08-06] 证明补充 | 隐数空间 + 四元数从 Clifford 反交换涌现（H1–H5, Q1–Q5, D9/D10）
+
+- 问题（leo 的任务 Prompt）：无状态万向向量 u ∈ H 如何经投影产生状态？隐数空间中是否存在满足 i²=-1 或 a·b·c=-1 的"隐数单元"？隐数结构是否类似复数/四元数？
+- **隐数空间（D10, HiddenSpace.lean H1–H5 全部已证）**：
+  - H1 投影产生状态：`HiddenVector`（source + Option 状态标签）形式化"无状态"= none、"有状态"= some v；`projection_generates_state`：任何源元素经投影获得状态且状态 = 观测值
+  - H2 状态真实性：标签 Some v ⟹ π(source) = v（consistency 字段）
+  - H3 不同投影 ⟹ 不同状态：`distinct_projections_distinct_states`（π₁s ≠ π₂s ⟹ 状态不同）；实例：cI 在 Re 下为 0、Im 下为 1（`cI_has_two_states`）
+  - H4 幂等投影 Π = ι∘Re：幂等（观测后再观测不变）+ 线性 + 核 = 虚轴（"观测塌缩"）
+  - H5 方向涌现：z = Re(z)·1 + Im(z)·i（复述 L7）
+- **隐数四元数（D9, Quaternion.lean Q1–Q5 全部已证）**：
+  - 核心答案：**四元数关系是 C1/C2/C6 的推论，不是新公理**。{i,j,k} ↔ {iσ₁, iσ₂, iσ₃}（Pauli 复化）
+  - Q1 i²=j²=k²=-1（`quat_i_sq` 等）；Q2 ijk=-1（`quat_ijk_minus_one`、矩阵版 `iSigmas_ijk`、纯 Clifford 版 `triple_product_square`：(σ₁σ₂σ₃)²=-1 = **"a·b·c=-1"猜想的已证实例**）；Q3 ij≠ji（`quat_ij_ne_ji`，隐数代数必然非交换）；Q4 结合环（`quat_mul_assoc`）
+  - Q5 表示 Φ(a+bi+cj+dk) = aI+b(iσ₁)+c(iσ₂)+d(iσ₃) 保加法保乘法（`quatToMat_mul`）——**四元数完全落入 Mat2 = Cℓ(3) 表示**
+  - Q6 ℂ ⊂ ℍ 子环（`cToQuat_mul`）；Q7 `HiddenUnit` 草案双实例化（`quatHiddenUnit` ℍ 环 + `cliffordHiddenUnit` Mat2 矩阵）
+- **新增**：`HiddenSpace.lean`（Module 12, H1–H5）+ `Quaternion.lean`（Module 13, Q1–Q5）+ `instance : Sub ℂ`（core 缺 Sub，Mat2 同款）；`ProjectionPhysics.lean` 根模块加 import
+- **诚实边界**：`QuatRotation`（单位四元数共轭作用 → 3D 旋转）需范数 + 逆元，ℤ 无逆元（D7' 同款卡点，升级 ℚ[i]/ℝ 后可达）；无概率公理——"类量子坍缩"仅取代数骨架（投影产生状态 + 幂等 + 核不可观测）
+- 来源：2026-08-06 会话（leo × 小剑）。
+
 ## [2026-08-05] 理论概念编译 + 证明 | 对称性破缺在隐数框架内实现（SB1–SB3, D8）
 
 - 问题（leo）：物理的对称性破缺推导（Z₂ 势 → 真空选择 → Goldstone → Higgs）能否在隐数推导里实现？

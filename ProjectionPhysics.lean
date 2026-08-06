@@ -15,6 +15,8 @@
 --                     双线性形式 + 极化恒等式（L1–L7）
 --   Differential.lean  微分涌现的代数种子：迹(散度)/转置/反对称部分(旋度)/差商（E1–E12）
 --   SymmetryBreaking.lean 对称性破缺：核平移对称(规范)/核纤维真空流形/Goldstone(核模式)（SB1–SB3, D8）
+--   HiddenSpace.lean   隐数空间：无状态万向向量/Option 状态标签/投影产生状态/幂等投影（H1–H6）
+--   Quaternion.lean    四元数：Hamilton 关系 i²=j²=k²=ijk=-1 从 Clifford 反交换涌现 + 矩阵表示（Q1–Q5）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -27,3 +29,5 @@ import ProjectionPhysics.Clifford
 import ProjectionPhysics.LinearAlgebra
 import ProjectionPhysics.Differential
 import ProjectionPhysics.SymmetryBreaking
+import ProjectionPhysics.HiddenSpace
+import ProjectionPhysics.Quaternion

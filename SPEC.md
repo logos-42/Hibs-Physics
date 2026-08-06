@@ -72,6 +72,18 @@
 | E14 | `scalar2_commute` | matMul (scalar2 z) M = matMul M (scalar2 z) | 标量层是中心（标量 = 方向无关的量） |
 | E15 | `mul_hom_comp` | 保乘法映射的复合仍保乘法 | A1 的乘法孪生版（代数同态封闭于复合） |
 | E16 | `left_mul_comp` | (h ↦ A·(B·h)) = (h ↦ (A·B)·h) | A3 结合律 ⟹ Flow 线性化是左乘（差商化简 (a·h)·h⁻¹ = a 的伏笔） |
+| H1 | `projection_generates_state` / `state_generation` | 无状态源经投影获得状态（状态 = 观测值 π(s)） | **"投影产生状态"的形式化**（无状态 = Option none，有状态 = some v） |
+| H2 | `state_consistency` / `projected_consistent` | 标签 Some v ⟹ π(source) = v | 状态标签是事实，不是装饰 |
+| H3 | `distinct_projections_distinct_states` + `re_im_proj_distinguish` + `cI_has_two_states` | π₁s ≠ π₂s ⟹ 状态不同（Re vs Im 在 cI 上区分：0 vs 1） | **状态由投影决定**，非源元素的内在属性 |
+| H4 | `hiddenReProj_idempotent` / `hiddenReProj_linear` / `hiddenReProj_kernel_iff` | Π = ι∘Re 幂等 + 线性；ker Π = 虚轴 | **幂等投影 = 观测塌缩**（观测后再观测不变） |
+| H5 | `direction_emerges_from_projection` | z = Re(z)·1 + Im(z)·i | 方向涌现（复述 L7 正交分解） |
+| Q1 | `quat_i_sq`/`quat_j_sq`/`quat_k_sq` | i² = j² = k² = -1 | 四元数单位平方 = -1（C3 的 i 涌现的推广） |
+| Q2 | `quat_ijk_minus_one` / `iSigmas_ijk` / `triple_product_square` | ijk = -1；(iσ₁)(iσ₂)(iσ₃) = -1；(σ₁σ₂σ₃)² = -1 | ★ **三生成元积 = -1 从反交换涌现**（"隐数单元 a·b·c = -1"已证） |
+| Q3 | `quat_ij_ne_ji` / `iSigma1_iSigma2_ne_comm` | ij = k ≠ -k = ji | ★ **非交换：隐数代数必然非交换**（与 ℂ 的本质区别） |
+| Q4 | `quat_mul_assoc` | (qp)r = q(pr) | ℍ 是结合环 |
+| Q5 | `quatToMat_add`/`quatToMat_mul`/`quatToMat_i/j/k` | Φ 保加法保乘法；Φ(i) = iσ₁ | ★ **四元数 ⊂ Mat2 = Cℓ(3) 表示**（i²=-1 的矩阵版） |
+| Q6 | `cToQuat_mul` | 复数乘法 ↔ 四元数乘法 | ℂ 是 ℍ 的子环（扩展不丢结构） |
+| Q7 | `quatHiddenUnit`/`cliffordHiddenUnit` | HiddenUnit 双实例（ℍ 环 / Mat2 矩阵） | ★ **"隐数单元" = 反交换生成元的必然表示，不是新公理** |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
@@ -183,6 +195,49 @@ Goldstone = 核模式：沿核方向移动无势能变化（无质量方向）�
 - **与 D7' 关键对比**：差商卡乘法逆元（ℤ[i] 非域）；破缺只需加法+核，ℤ[i] 完全满足——**破缺比微积分更早可达**
 - **开放问题**：①质量 = 真空核分量（接 KernelRepresentation）需 ⊗ 泄漏机制（i⊗i = −1 ∈ ℝ，核非理想 ⟹ Goldstone"被吃掉"的代数原型）；②连续剩余对称（U(1) 型稳定子）；③动态破缺（T>T_c 相变）需时间
 - **Lean 位置**：`SymmetryBreaking.lean`（SB1–SB3 已证）
+
+### D9. Hidden Quaternion（隐数四元数）
+
+```
+隐数空间中是否存在满足 i² = -1 或 a·b·c = -1 的特殊单元（HiddenUnit）？
+答案（已证）：存在。
+四元数单位 {i, j, k} ↔ 反交换生成元 {iσ₁, iσ₂, iσ₃}：
+    i² = j² = k² = -1  ⟸  C1（σᵢ² = I）+ E14（标量中心）
+    ijk = -1           ⟸  C6（σ₁σ₂ = -iσ₃）+ C1
+    ij ≠ ji            ⟸  C2（反交换）
+表示 Φ(a+bi+cj+dk) = aI + b(iσ₁) + c(iσ₂) + d(iσ₃) 保加法保乘法
+⟹ "i²=-1 型单元"是反交换的必然表示，不是新公理。
+```
+
+**现状（2026-08-06 编译）**：
+- ✅ **Q1** `quat_i_sq`/`quat_j_sq`/`quat_k_sq`：i² = j² = k² = -1
+- ✅ **Q2** `quat_ijk_minus_one`（ℍ 环内）；`iSigmas_ijk`（矩阵表示内）；`triple_product_square`（纯 Clifford：(σ₁σ₂σ₃)² = -1——用户"a·b·c = -1"猜想的已证实例）
+- ✅ **Q3** `quat_ij_ne_ji`：ij ≠ ji（非交换）
+- ✅ **Q4** `quat_mul_assoc`：ℍ 结合环
+- ✅ **Q5** `quatToMat_mul`/`quatToMat_i/j/k`：Φ 保加法保乘法，Φ(i) = iσ₁——**四元数完全落入 Mat2 = Cℓ(3) 表示**
+- ✅ **Q6** `cToQuat_mul`：ℂ ⊂ ℍ 子环
+- ✅ **Q7** `quatHiddenUnit`/`cliffordHiddenUnit`：HiddenUnit 草案双实例化（ℍ 环 + Mat2 矩阵）
+- 📋 `QuatRotation` 草案（单位四元数共轭作用 v ↦ q·v·q⁻¹ → 3D 旋转）：需范数 |q|²=1 + 逆元，ℤ 系数无逆元（D7' 同款卡点，实例化需升级系数环到 ℚ[i]/ℝ）
+- **新增 ℂ 减法实例**：`instance : Sub ℂ`（core 缺 Sub，Mat2 同款处理见 Differential 模块）
+- **Lean 位置**：`Quaternion.lean`（Q1–Q5 已证）；`HiddenSpace.lean`（H1–H5 已证，无状态向量/投影产生状态/幂等投影）
+
+### D10. Hidden Space（隐数空间：无状态向量）
+
+```
+无状态万向向量 u ∈ H 的形式化：
+    State(u) = undefined ⟺ HiddenVector 的 observed = none
+投影 P : H → V 产生状态：P(u) = v ⟺ observed = some v 且 π(source) = v
+不同投影 ⟹ 不同状态（Re 与 Im 在 cI 上区分）。
+```
+
+**现状（2026-08-06 编译）**：
+- ✅ **H1** `projection_generates_state`/`state_generation`：投影产生状态（状态 = 观测值）
+- ✅ **H2** `state_consistency`：标签 Some v ⟹ π(source) = v（标签是事实）
+- ✅ **H3** `distinct_projections_distinct_states` + `cI_has_two_states`：不同投影 ⟹ 不同状态（π₁s ≠ π₂s ⟹ 状态不同；cI 在 Re 下为 0、Im 下为 1）
+- ✅ **H4** `hiddenReProj_idempotent`/`hiddenReProj_linear`/`hiddenReProj_kernel_iff`：幂等投影 Π = ι∘Re 线性、幂等、核 = 虚轴（"观测塌缩"）
+- ✅ **H5** `direction_emerges_from_projection`：方向涌现（复述 L7 正交分解）
+- **与量子测量类比**：投影产生状态（H1）+ 幂等塌缩（H4）+ 核不可观测（K3）三者的代数骨架，无概率公理
+- **Lean 位置**：`HiddenSpace.lean`（H1–H5 已证）
 
 ## 4. 与 HIBS / DengYu 的连接
 
