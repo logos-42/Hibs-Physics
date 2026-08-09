@@ -34,3 +34,4 @@ def main : IO Unit := do
   IO.println "纯隐数 Higgs (HOH1–HOH5): 无时间静态场 / 隐数势 / 隐数耦合质量"
   IO.println "可选流接口 (HOH3): 外部流参数，不等同于时间"
   IO.println "轴转换标准: 全状态正交 / 双侧逆元 / 内积保持；单投影不具逆元"
+  IO.println "质量-时间同步: 每个非零质量事件追加一个离散涌现时间单位"
