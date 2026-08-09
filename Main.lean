@@ -32,3 +32,4 @@ def main : IO Unit := do
   IO.println "隐数物理桥梁 (HSP1–HSP5): 三轴重构 / 空间流 / 旋量阻抗质量 / 三夸克渐近自由指数 / 涌现时间"
   IO.println "HIBS 物理桥梁 (HIBS1–HIBS5): A1–A3 / Higgs-Yukawa / 离散 beta / 质量壳-零锥接口"
   IO.println "纯隐数 Higgs (HOH1–HOH5): 无时间静态场 / 隐数势 / 隐数耦合质量"
+  IO.println "可选流接口 (HOH3): 外部流参数，不等同于时间"

@@ -21,6 +21,7 @@
 --   HiddenSpacePhysics.lean 隐数物理桥梁：三轴/空间流/旋量阻抗质量/夸克自由度/涌现时间（HSP1–HSP5）
 --   HIBSPhysicalBridges.lean HIBS 到 Higgs-Yukawa/离散 beta/质量壳接口（HIBS1–HIBS5）
 --   HiddenOnlyHiggs.lean 纯隐数、无时间的静态 Higgs 构造（HOH1–HOH5）
+--   HiddenHiggsFlowInterface.lean 可选流参数接口（独立于静态模型，HOH3）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -39,3 +40,4 @@ import ProjectionPhysics.ProjectionAlgebra
 import ProjectionPhysics.HiddenSpacePhysics
 import ProjectionPhysics.HIBSPhysicalBridges
 import ProjectionPhysics.HiddenOnlyHiggs
+import ProjectionPhysics.HiddenHiggsFlowInterface
