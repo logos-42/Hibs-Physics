@@ -84,7 +84,7 @@ KernelNullTheorem            核平凡 ⟹ 动量在零锥上 Q(p) = 0（前半�
 |---|---|---|
 | 不变量 | I(ζ) 在 Aut(S) 下恒定 | 系统的核心指纹 |
 | 能量 | E = I(ζ) − J(π(ζ))（信息损失） | 投影无法输出的那部分不变量 |
-| 动量 | P = π(Flow(ζ))（乘法链投影） | ⊗ 结合 ⟹ 守恒，无需 Noether |
+| 动量候选量 | P = π(Flow(ζ))（乘法链投影） | 只是定义；守恒需额外证明 `P ∘ Flow = P` |
 | 质量 | m = κ(ζ_κ)（核标量不变量） | 投影无法出口到可观测像的代数残渣 |
 | 相互作用 | ζ₁ ⊗ ζ₂（A2b 强制流入 R） | 代数级联与坍缩 |
 
@@ -139,7 +139,8 @@ ProjectionPhysics/
     ├── HiddenHiggsFlowInterface.lean # 独立流参数接口，不等同于时间
     ├── HiddenAxisConversions.lean # H/R/I 全状态正交可逆转换标准
     ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
-    └── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
+    ├── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
+    └── FlowConservation.lean # Flow 链组合律与条件式动量不变量
 ```
 
 ## 路线（下一步）

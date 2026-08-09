@@ -4,6 +4,7 @@
 
 | 日期 | 类型 | 主题 | 要点 |
 |---|---|---|---|
+| 2026-08-09 | 形式化修正 + 概念回写 | D5 Flow 组合律与动量守恒边界 | 新增 `FlowConservation.lean`：定义 `flowIterate`，证明 `Flow^(m+n)` 的加法组合律；定义 `flowMomentumInvariant`，证明一步不变量可推广到任意有限迭代；明确 `momentumOf = π ∘ Flow` 只是候选量，结合性不推出幂等性或动量守恒。Wiki/README 同步说明其与海森堡不确定性原理不冲突；量子算子、Hilbert 空间和连续动力学仍未形式化。 |
 | 2026-08-09 | 形式化扩展 | HIBS 逆元、空间流质量与质量-时间同步 | HIBS `Embedding.lean` 新增 `CompositeHiddenImage` 上的双侧逆元，并证明整体 `CompositeHidden` 因标签信息丢失不能满足右逆；ProjectionPhysics 新增 `HiddenMassTimeEvents.lean`：质量事件不携带时间字段，历史长度定义涌现时间，追加一个非零质量事件同步增加一个单位；`lake build` 分别通过 HIBS 14 targets 与 ProjectionPhysics 46 jobs。 |
 | 2026-08-09 | 形式化扩展 + 概念回写 | 事件/质量事件、局部离散时钟与聚合方向 | 新增 `HiddenEventClocks.lean`：将事件作为基本对象、将 `massSquared ≠ 0` 作为事件属性，分别定义全部事件数、非零质量事件数和局部 `clockWeight` 累积；证明追加事件、追加非零/零质量事件的计数规律，证明局部时钟与路径位移对历史拼接可加。Wiki 明确：这是离散局部固有时/钟率的代数原型，不是从度规推出的广义相对论或连续统一时间；定向编译通过。 |
 | 2026-08-09 | 形式化扩展 + 概念回写 | 空间流质量与静态核质量统一、H/R/I 逆元转换标准 | 新增隐空间位移与场平移：`Δq_H → ΔΦ_H → m_flow²=Q_H(y_HΔΦ_H)`，证明零场到真空值退化为静态 `m_H²`，常值真空场流质量为零；新增 `HiddenAxisConversions.lean`，以全状态轴交换形式化正交、双侧逆元和内积保持，并证明单投影/单射本身不能提供逆元；`lake build` 通过 44 jobs。 |

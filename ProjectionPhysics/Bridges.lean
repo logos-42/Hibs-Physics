@@ -27,7 +27,9 @@ def infoLoss {S V : Type} (I : S → Int) (J : V → Int) (π : S → V) (s : S)
 -- Momentum：Flow 的投影
 -- ---------------------------------------------------------------------------
 
-/-- 动量：P := π(Flow(ζ))。Flow 是乘法链 ⊗ 的连续施加（草案：抽象算子）。 -/
+/-- 动量候选量：P := π(Flow(ζ))。Flow 是乘法链 ⊗ 的连续施加
+    （草案：抽象算子）。这个定义本身不包含守恒；守恒需要额外的
+    `P (Flow s) = P s` 不变量条件，见 `FlowConservation.lean`。 -/
 def momentumOf {S V : Type} (π : S → V) (flow : S → S) (s : S) : V :=
   π (flow s)
 
