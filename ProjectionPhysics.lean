@@ -24,6 +24,7 @@
 --   HiddenHiggsFlowInterface.lean 可选流参数接口（独立于静态模型，HOH3）
 --   HiddenAxisConversions.lean H/R/I 全状态正交可逆转换标准
 --   HiddenMassTimeEvents.lean 质量事件计数生成离散涌现时间
+--   HiddenEventClocks.lean 事件/质量事件、局部离散时钟与路径聚合
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -45,3 +46,4 @@ import ProjectionPhysics.HiddenOnlyHiggs
 import ProjectionPhysics.HiddenHiggsFlowInterface
 import ProjectionPhysics.HiddenAxisConversions
 import ProjectionPhysics.HiddenMassTimeEvents
+import ProjectionPhysics.HiddenEventClocks

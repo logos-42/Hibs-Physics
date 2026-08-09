@@ -138,7 +138,8 @@ ProjectionPhysics/
     ├── HiddenOnlyHiggs.lean     # 纯隐数、无时间的静态 Higgs/Yukawa 型质量桥
     ├── HiddenHiggsFlowInterface.lean # 独立流参数接口，不等同于时间
     ├── HiddenAxisConversions.lean # H/R/I 全状态正交可逆转换标准
-    └── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
+    ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
+    └── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
 ```
 
 ## 路线（下一步）
