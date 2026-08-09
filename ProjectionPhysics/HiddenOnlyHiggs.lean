@@ -16,6 +16,7 @@ namespace ProjectionPhysics
 
 structure PureHiddenNumber where
   value : Int
+  deriving DecidableEq
 
 /-! ### HOH1. The hidden scalar as a kernel direction -/
 
@@ -41,6 +42,40 @@ def hiddenKernelQuadratic (h : PureHiddenNumber) : Int :=
 theorem hiddenKernelQuadratic_formula (h : PureHiddenNumber) :
     hiddenKernelQuadratic h = h.value * h.value := by
   simp [hiddenKernelQuadratic, hiddenKernelPairing_formula]
+
+def hiddenProduct (x y : PureHiddenNumber) : PureHiddenNumber :=
+  ⟨x.value * y.value⟩
+
+def hiddenKernelInteraction
+    (a b c : PureHiddenNumber) : Int :=
+  hiddenKernelPairing (hiddenProduct a b) c
+
+theorem hiddenKernelInteraction_formula
+    (a b c : PureHiddenNumber) :
+    hiddenKernelInteraction a b c = a.value * b.value * c.value := by
+  simp [hiddenKernelInteraction, hiddenProduct, hiddenKernelPairing_formula,
+    Int.mul_assoc]
+
+structure HiddenCoupling where
+  linear : PureHiddenNumber
+  quadratic : PureHiddenNumber
+  cubic : PureHiddenNumber
+
+def hiddenCouplingResponse
+    (coupling : HiddenCoupling) (fieldValue : PureHiddenNumber) : Int :=
+  hiddenKernelPairing coupling.linear fieldValue +
+    hiddenKernelPairing coupling.quadratic (hiddenProduct fieldValue fieldValue) +
+    hiddenKernelPairing coupling.cubic
+      (hiddenProduct (hiddenProduct fieldValue fieldValue) fieldValue)
+
+theorem hiddenCouplingResponse_formula
+    (coupling : HiddenCoupling) (fieldValue : PureHiddenNumber) :
+    hiddenCouplingResponse coupling fieldValue =
+      coupling.linear.value * fieldValue.value +
+      coupling.quadratic.value * fieldValue.value * fieldValue.value +
+      coupling.cubic.value * fieldValue.value * fieldValue.value * fieldValue.value := by
+  simp [hiddenCouplingResponse, hiddenProduct, hiddenKernelPairing_formula,
+    Int.mul_assoc, Int.add_assoc]
 
 def hiddenTagged (h : PureHiddenNumber) : HibsState :=
   ⟨h.value, HibsTag.hidden⟩
@@ -231,5 +266,99 @@ theorem hidden_vacua_are_distinct
   have hvalue := congrArg PureHiddenNumber.value h
   simp [hiddenVacuumPartner] at hvalue
   omega
+
+def hiddenMultiVacuumPotential
+    (vacua : List PureHiddenNumber) (fieldValue : PureHiddenNumber) : Nat :=
+  match vacua with
+  | [] => 1
+  | vacuum :: rest =>
+      hiddenPotential vacuum fieldValue *
+        hiddenMultiVacuumPotential rest fieldValue
+
+theorem hidden_multi_vacuum_potential_nonnegative
+    (vacua : List PureHiddenNumber) (fieldValue : PureHiddenNumber) :
+    0 ≤ hiddenMultiVacuumPotential vacua fieldValue := by
+  exact Nat.zero_le _
+
+theorem hidden_multi_vacuum_potential_zero_of_mem
+    (vacua : List PureHiddenNumber) (vacuum : PureHiddenNumber)
+    (hv : vacuum ∈ vacua) :
+    hiddenMultiVacuumPotential vacua vacuum = 0 := by
+  induction vacua with
+  | nil => cases hv
+  | cons head tail ih =>
+      simp only [List.mem_cons] at hv
+      cases hv with
+      | inl h =>
+          cases h
+          simp [hiddenMultiVacuumPotential, hiddenPotential]
+      | inr h =>
+          simp [hiddenMultiVacuumPotential, ih h]
+
+theorem hidden_pm_vacua_are_multi_vacua
+    (vacuum : PureHiddenNumber) :
+    hiddenMultiVacuumPotential
+        [vacuum, hiddenVacuumPartner vacuum] vacuum = 0 ∧
+    hiddenMultiVacuumPotential
+        [vacuum, hiddenVacuumPartner vacuum]
+        (hiddenVacuumPartner vacuum) = 0 := by
+  constructor
+  · apply hidden_multi_vacuum_potential_zero_of_mem
+    simp
+  · apply hidden_multi_vacuum_potential_zero_of_mem
+    simp
+
+structure FiniteHiddenInterval where
+  left : Int
+  right : Int
+  left_le_right : left ≤ right
+
+def hiddenIntervalPoint (coordinate : Int) : HiddenPoint :=
+  ⟨⟨coordinate⟩⟩
+
+def inFiniteHiddenInterval
+    (interval : FiniteHiddenInterval) (point : HiddenPoint) : Prop :=
+  interval.left ≤ point.coordinate.value ∧
+    point.coordinate.value ≤ interval.right
+
+theorem hidden_interval_left_mem
+    (interval : FiniteHiddenInterval) :
+    inFiniteHiddenInterval interval (hiddenIntervalPoint interval.left) := by
+  simp [inFiniteHiddenInterval, hiddenIntervalPoint]
+  exact interval.left_le_right
+
+theorem hidden_interval_right_mem
+    (interval : FiniteHiddenInterval) :
+    inFiniteHiddenInterval interval (hiddenIntervalPoint interval.right) := by
+  simp [inFiniteHiddenInterval, hiddenIntervalPoint]
+  exact interval.left_le_right
+
+structure HiddenDirichletBoundary where
+  interval : FiniteHiddenInterval
+  field : StaticHiddenField
+  leftValue : PureHiddenNumber
+  rightValue : PureHiddenNumber
+  left_condition :
+    field (hiddenIntervalPoint interval.left) = leftValue
+  right_condition :
+    field (hiddenIntervalPoint interval.right) = rightValue
+
+def constantHiddenBoundary
+    (interval : FiniteHiddenInterval) (value : PureHiddenNumber) :
+    HiddenDirichletBoundary :=
+  { interval := interval
+    field := hiddenVacuumField value
+    leftValue := value
+    rightValue := value
+    left_condition := rfl
+    right_condition := rfl }
+
+theorem hidden_dirichlet_boundary_conditions_hold
+    (boundary : HiddenDirichletBoundary) :
+    boundary.field (hiddenIntervalPoint boundary.interval.left) =
+        boundary.leftValue ∧
+      boundary.field (hiddenIntervalPoint boundary.interval.right) =
+        boundary.rightValue := by
+  exact ⟨boundary.left_condition, boundary.right_condition⟩
 
 end ProjectionPhysics
