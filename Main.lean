@@ -33,3 +33,4 @@ def main : IO Unit := do
   IO.println "HIBS 物理桥梁 (HIBS1–HIBS5): A1–A3 / Higgs-Yukawa / 离散 beta / 质量壳-零锥接口"
   IO.println "纯隐数 Higgs (HOH1–HOH5): 无时间静态场 / 隐数势 / 隐数耦合质量"
   IO.println "可选流接口 (HOH3): 外部流参数，不等同于时间"
+  IO.println "轴转换标准: 全状态正交 / 双侧逆元 / 内积保持；单投影不具逆元"

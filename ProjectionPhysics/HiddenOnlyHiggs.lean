@@ -110,6 +110,27 @@ def hiddenSpatialVariation
     (field : StaticHiddenField) (x y : HiddenPoint) : Nat :=
   Int.natAbs ((field x).value - (field y).value)
 
+def hiddenFieldFlow
+    (field : StaticHiddenField) (x y : HiddenPoint) : PureHiddenNumber :=
+  ⟨(field y).value - (field x).value⟩
+
+def hiddenFieldFlowMassSquared
+    (coupling : PureHiddenNumber) (field : StaticHiddenField)
+    (x y : HiddenPoint) : Int :=
+  hiddenKernelQuadratic (hiddenProduct coupling (hiddenFieldFlow field x y))
+
+theorem hidden_vacuum_field_flow_is_zero
+    (vacuum : PureHiddenNumber) (x y : HiddenPoint) :
+    hiddenFieldFlow (hiddenVacuumField vacuum) x y = ⟨0⟩ := by
+  simp [hiddenFieldFlow, hiddenVacuumField]
+
+theorem hidden_vacuum_field_flow_mass_is_zero
+    (coupling vacuum : PureHiddenNumber) (x y : HiddenPoint) :
+    hiddenFieldFlowMassSquared coupling (hiddenVacuumField vacuum) x y = 0 := by
+  simp [hiddenFieldFlowMassSquared, hiddenFieldFlow,
+    hiddenVacuumField, hiddenProduct, hiddenKernelQuadratic,
+    hiddenKernelPairing_formula]
+
 theorem hidden_vacuum_has_zero_spatial_variation
     (vacuum : PureHiddenNumber) (x y : HiddenPoint) :
     hiddenSpatialVariation (hiddenVacuumField vacuum) x y = 0 := by
@@ -142,6 +163,29 @@ def hiddenYukawaMass
 def hiddenYukawaMassSquared
     (coupling vacuum : PureHiddenNumber) : Int :=
   hiddenKernelQuadratic ⟨coupling.value * vacuum.value⟩
+
+def hiddenSpatialDisplacement
+    (x y : PureHiddenNumber) : PureHiddenNumber :=
+  ⟨y.value - x.value⟩
+
+def hiddenFlowMassSquared
+    (coupling x y : PureHiddenNumber) : Int :=
+  hiddenKernelQuadratic (hiddenProduct coupling (hiddenSpatialDisplacement x y))
+
+theorem hidden_flow_mass_squared_formula
+    (coupling x y : PureHiddenNumber) :
+    hiddenFlowMassSquared coupling x y =
+      (coupling.value * (y.value - x.value)) *
+        (coupling.value * (y.value - x.value)) := by
+  simp [hiddenFlowMassSquared, hiddenSpatialDisplacement, hiddenProduct,
+    hiddenKernelQuadratic_formula]
+
+theorem hidden_flow_mass_reduces_to_yukawa
+    (coupling vacuum : PureHiddenNumber) :
+    hiddenFlowMassSquared coupling ⟨0⟩ vacuum =
+      hiddenYukawaMassSquared coupling vacuum := by
+  simp [hiddenFlowMassSquared, hiddenSpatialDisplacement, hiddenProduct,
+    hiddenYukawaMassSquared, hiddenKernelQuadratic]
 
 theorem hidden_yukawa_mass_squared_formula
     (coupling vacuum : PureHiddenNumber) :

@@ -95,4 +95,61 @@ theorem hidden_relaxation_step_is_idempotent
   · simp [hiddenRelaxationStep, h]
   · simp [hiddenRelaxationStep, h]
 
+/-! ### HOH4. Evolution along the hidden spatial coordinate -/
+
+def hiddenShiftPoint
+    (displacement : PureHiddenNumber) (point : HiddenPoint) : HiddenPoint :=
+  ⟨⟨point.coordinate.value + displacement.value⟩⟩
+
+def hiddenSpatialShiftField
+    (field : StaticHiddenField) (displacement : PureHiddenNumber) :
+    StaticHiddenField :=
+  fun point => field (hiddenShiftPoint displacement point)
+
+theorem hidden_shift_point_composes_additively
+    (a b : PureHiddenNumber) (point : HiddenPoint) :
+    hiddenShiftPoint b (hiddenShiftPoint a point) =
+      hiddenShiftPoint ⟨a.value + b.value⟩ point := by
+  cases point with
+  | mk coordinate =>
+      cases coordinate with
+      | mk p =>
+          cases a with
+          | mk av =>
+              cases b with
+              | mk bv =>
+                  simp [hiddenShiftPoint]
+                  omega
+
+theorem hidden_shift_zero_is_identity
+    (field : StaticHiddenField) (point : HiddenPoint) :
+    hiddenSpatialShiftField field ⟨0⟩ point = field point := by
+  simp [hiddenSpatialShiftField, hiddenShiftPoint]
+
+theorem hidden_shift_composes_additively
+    (field : StaticHiddenField)
+    (a b : PureHiddenNumber) (point : HiddenPoint) :
+    hiddenSpatialShiftField
+        (hiddenSpatialShiftField field a) b point =
+      hiddenSpatialShiftField field
+        ⟨a.value + b.value⟩ point := by
+  unfold hiddenSpatialShiftField
+  rw [hidden_shift_point_composes_additively]
+  simp [hiddenShiftPoint, Int.add_comm]
+
+def hiddenSpatialEvolutionMassSquared
+    (coupling : PureHiddenNumber) (field : StaticHiddenField)
+    (displacement : PureHiddenNumber) (point : HiddenPoint) : Int :=
+  hiddenFieldFlowMassSquared coupling field point
+    (hiddenShiftPoint displacement point)
+
+theorem hidden_spatial_evolution_of_vacuum_has_zero_mass
+    (coupling vacuum displacement : PureHiddenNumber)
+    (point : HiddenPoint) :
+    hiddenSpatialEvolutionMassSquared coupling
+      (hiddenVacuumField vacuum) displacement point = 0 := by
+  simp [hiddenSpatialEvolutionMassSquared, hiddenFieldFlowMassSquared,
+    hiddenFieldFlow, hiddenVacuumField, hiddenProduct,
+    hiddenKernelQuadratic, hiddenKernelPairing_formula]
+
 end ProjectionPhysics

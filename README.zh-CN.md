@@ -136,7 +136,8 @@ ProjectionPhysics/
     ├── HIBSPhysicalBridges.lean # HIBS 适配：A1–A3、Higgs-Yukawa 型质量、
     │                            # 离散 beta、质量壳/零锥契约（HIBS1–HIBS5）
     ├── HiddenOnlyHiggs.lean     # 纯隐数、无时间的静态 Higgs/Yukawa 型质量桥
-    └── HiddenHiggsFlowInterface.lean # 独立流参数接口，不等同于时间
+    ├── HiddenHiggsFlowInterface.lean # 独立流参数接口，不等同于时间
+    └── HiddenAxisConversions.lean # H/R/I 全状态正交可逆转换标准
 ```
 
 ## 路线（下一步）

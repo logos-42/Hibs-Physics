@@ -22,6 +22,7 @@
 --   HIBSPhysicalBridges.lean HIBS 到 Higgs-Yukawa/离散 beta/质量壳接口（HIBS1–HIBS5）
 --   HiddenOnlyHiggs.lean 纯隐数、无时间的静态 Higgs 构造（HOH1–HOH5）
 --   HiddenHiggsFlowInterface.lean 可选流参数接口（独立于静态模型，HOH3）
+--   HiddenAxisConversions.lean H/R/I 全状态正交可逆转换标准
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -41,3 +42,4 @@ import ProjectionPhysics.HiddenSpacePhysics
 import ProjectionPhysics.HIBSPhysicalBridges
 import ProjectionPhysics.HiddenOnlyHiggs
 import ProjectionPhysics.HiddenHiggsFlowInterface
+import ProjectionPhysics.HiddenAxisConversions
