@@ -20,6 +20,7 @@
 --   ProjectionAlgebra.lean 投影代数：投影族/互补投影对/复合表半群/核像分层/量子测量骨架（PA1–PA6）
 --   HiddenSpacePhysics.lean 隐数物理桥梁：三轴/空间流/旋量阻抗质量/夸克自由度/涌现时间（HSP1–HSP5）
 --   HIBSPhysicalBridges.lean HIBS 到 Higgs-Yukawa/离散 beta/质量壳接口（HIBS1–HIBS5）
+--   HiddenOnlyHiggs.lean 纯隐数、无时间的静态 Higgs 构造（HOH1–HOH5）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -37,3 +38,4 @@ import ProjectionPhysics.Quaternion
 import ProjectionPhysics.ProjectionAlgebra
 import ProjectionPhysics.HiddenSpacePhysics
 import ProjectionPhysics.HIBSPhysicalBridges
+import ProjectionPhysics.HiddenOnlyHiggs

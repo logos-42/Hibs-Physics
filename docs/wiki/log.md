@@ -4,6 +4,7 @@
 
 | 日期 | 类型 | 主题 | 要点 |
 |---|---|---|---|
+| 2026-08-09 | 重新编译 + 形式化证明 | 纯隐数、无时间的静态 Higgs（HOH1–HOH5） | 新增 `HiddenOnlyHiggs.lean`：只用 HIBS hidden 标签、隐空间坐标和整数隐数，定义静态隐场、隐势 `|h²−v²|`、隐数 Yukawa 型质量 `|y·v|`；证明真空零势、零耦合/零真空质量为零、非零耦合与真空产生非零质量指标；无时间、实轴、虚轴、导数或 Minkowski 度规；`lake build` 通过 40 jobs。 |
 | 2026-08-09 | 重新编译 + 形式化桥接 | HIBS 物理桥梁（HIBS1–HIBS5） | 新增 `HIBSPhysicalBridges.lean`：镜像 HIBS A1–A3 标签对空间；在显式桥接结构下证明 real 输出到 Yukawa 型质量、离散 beta 非正/玩具耦合渐近到零、核容量到质量壳/零锥接口，并以流路径长度提供离散尺度；`lake build` 通过 38 jobs。完整 Higgs/Yukawa、QCD beta 与连续时空仍未支持。 |
 | 2026-08-09 | 重新编译 + 证明 | 隐数物理离散桥梁（HSP1–HSP5） | 登记并阅读 `/Users/apple/Downloads/lean/HIBS/gemini/` 7 个 Markdown 原始材料；新增 `HiddenSpacePhysics.lean`：隐数/实数/虚数三轴重构与正交、空间流向量、旋量阻抗质量指标、三夸克轴距渐近自由指数、路径长度涌现时间；`lake build` 通过 36 jobs。明确边界：离散模型不等于 Higgs/Yukawa、QCD beta 函数、连续时间或 Minkowski/Dirac 推导。 |
 | 2026-08-06 | 证明补充 | 核质量泄露定理化（PA7） | 核乘法不封闭：i² = -1 且 Re(i²) = -1 ≠ 0（`cI_sq_neg_one`/`kernel_mul_leaks_to_image`/`kernel_pair_mul_leaks`/`leak_product_in_image`）；`kernelLeak` 泄漏量 + `kernelLeak_i` = -1。核是加法子空间（K1）但非乘法理想——"Goldstone 被吃掉"与"质量从核涌现"的代数原型（SB 文档 i⊗i = -1 ∈ ℝ 的定理化）。 |

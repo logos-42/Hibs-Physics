@@ -19,6 +19,8 @@ status: current
 
 新模块 [HIBSPhysicalBridges.lean](../../ProjectionPhysics/HIBSPhysicalBridges.lean) 把 HIBS 的标签对空间作为适配层接入本仓库。它镜像 HIBS 仓库中的 `Hidden`、`Tag`、加法/减法、乘法和开方标签规则，但不直接依赖 sibling Lake 工程，避免两个工程的 namespace 和编译边界混在一起。
 
+如果只想保留 hidden 轴并删除时间，请见 [纯隐数、无时间的静态 Higgs 模型](./theory-hidden-only-higgs.md)。
+
 已编译通过的内容分为五组：
 
 - **HIBS1**：`HibsAxioms` 以及 `hibs_axioms_hold`，形式化实投影/虚投影的非单射性、加减进入 hidden 标签、乘法进入 real 标签、开方进入 imag 标签。
