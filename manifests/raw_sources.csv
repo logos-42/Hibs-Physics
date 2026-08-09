@@ -1,1 +1,8 @@
 source_id,company,vendor,kind,filename,raw_rel_path,status,compiled_into,notes
+gemini-3,local,HIBS,markdown,3.md,../HIBS/gemini/3.md,compiled,docs/wiki/theory-hidden-space-physics.md,"离散因果图、度规/相位涌现与核空间猜想"
+gemini-4,local,HIBS,markdown,4.md,../HIBS/gemini/4.md,compiled,docs/wiki/theory-hidden-space-physics.md,"核平移规范、Clifford/旋量与质量的代数几何提案"
+gemini-5,local,HIBS,markdown,5.md,../HIBS/gemini/5.md,compiled,docs/wiki/theory-hidden-space-physics.md,"扭量/旋量、Maxwell/Dirac 与质量生成提案"
+gemini-6,local,HIBS,markdown,6.md,../HIBS/gemini/6.md,compiled,docs/wiki/theory-hidden-space-physics.md,"离散因果图、能量动量与连续极限提案"
+gemini-7,local,HIBS,markdown,7.md,../HIBS/gemini/7.md,compiled,docs/wiki/theory-hidden-space-physics.md,"空间流动、物质生成与统一物理提案"
+gemini-2,local,HIBS,markdown,Gemini2.md,../HIBS/gemini/Gemini2.md,compiled,docs/wiki/theory-hidden-space-physics.md,"HIBS 结构与物理化方向"
+gemini-main,local,HIBS,markdown,gemini.md,../HIBS/gemini/gemini.md,compiled,docs/wiki/theory-hidden-space-physics.md,"HIBS 评析、不可逆乘法与空间/信息/物质统一讨论"

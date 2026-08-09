@@ -4,6 +4,7 @@
 
 | 日期 | 类型 | 主题 | 要点 |
 |---|---|---|---|
+| 2026-08-09 | 重新编译 + 证明 | 隐数物理离散桥梁（HSP1–HSP5） | 登记并阅读 `/Users/apple/Downloads/lean/HIBS/gemini/` 7 个 Markdown 原始材料；新增 `HiddenSpacePhysics.lean`：隐数/实数/虚数三轴重构与正交、空间流向量、旋量阻抗质量指标、三夸克轴距渐近自由指数、路径长度涌现时间；`lake build` 通过 36 jobs。明确边界：离散模型不等于 Higgs/Yukawa、QCD beta 函数、连续时间或 Minkowski/Dirac 推导。 |
 | 2026-08-06 | 证明补充 | 核质量泄露定理化（PA7） | 核乘法不封闭：i² = -1 且 Re(i²) = -1 ≠ 0（`cI_sq_neg_one`/`kernel_mul_leaks_to_image`/`kernel_pair_mul_leaks`/`leak_product_in_image`）；`kernelLeak` 泄漏量 + `kernelLeak_i` = -1。核是加法子空间（K1）但非乘法理想——"Goldstone 被吃掉"与"质量从核涌现"的代数原型（SB 文档 i⊗i = -1 ∈ ℝ 的定理化）。 |
 | 2026-08-06 | 证明补充 | 核上双线性形式（PA8，核张量化） | `cKernelBiForm`（B(x,y) = Im x·Im y）验证 BiForm 公理；`kernelBiForm_quad_kernel`：核张量二次型 Q(k) = κ(k) = kernelInvC（质量候选 m² = κ 的第一个物理连接）；`kernelBiForm_unit_norm`：B(i,i) = 1；`kernelBiForm_nondegenerate`：核上非退化（核张量是真度量）。核的张量描述就绪。 |
 | 2026-08-06 | 方向修正+证明 | 隐数投影代数：第一性 = P²=P，不是 i²=-1（PA1–PA6, D11） | leo 方向纠正：隐数 ≠ 复数的另一种写法，隐数是潜在状态空间，核心是投影幂等 P²=P（状态生成机制）；四元数/旋转降级为比较对象；路线改为 Hidden Space → Projection Algebra → State Space → Geometry。PA1 交换投影复合是投影；PA2 互补投影对（幂等/正交/完备）ℂ 实例 {Π_re, Π_im}；PA3 复合表 5 项 = 半群；PA4 核/像分层；PA5 半群而非群（Π_re 非单射，确定性来自信息损失）；PA6 PVM 骨架（无概率公理）。已删除未提交的 Rotation.lean。 |

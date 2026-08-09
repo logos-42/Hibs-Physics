@@ -129,8 +129,10 @@ ProjectionPhysics/
     │                        # rank-nullity（虚轴 = ker Re）、极化恒等式（L1–L6）
     ├── HiddenSpace.lean     # 隐数空间：无状态向量、Option 标签、状态生成（H1–H5）
     ├── Quaternion.lean      # 四元数（比较对象）：i²=j²=k²=ijk=-1 从 Clifford 涌现（Q1–Q7）
-    └── ProjectionAlgebra.lean # 隐数投影代数（主线）：互补投影、复合半群、
-                               # 核质量泄露、核张量（PA1–PA8）
+    ├── ProjectionAlgebra.lean # 隐数投影代数（主线）：互补投影、复合半群、
+    │                          # 核质量泄露、核张量（PA1–PA8）
+    └── HiddenSpacePhysics.lean # 新离散物理桥梁：三轴、空间流、旋量阻抗质量、
+                                # 三夸克自由度指数、路径长度时间（HSP1–HSP5）
 ```
 
 ## 路线（下一步）
