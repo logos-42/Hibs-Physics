@@ -31,7 +31,7 @@ status: current
 
 ## 2. Lean 中的最小模型
 
-新模块：[HiddenSpacePhysics.lean](../../ProjectionPhysics/HiddenSpacePhysics.lean)
+新模块：[HiddenSpacePhysics.lean](../../ProjectionPhysics/HiddenSpacePhysics.lean)。在此基础上，HIBS 到 Higgs-Yukawa、离散 beta 和质量壳/零锥的接口见 [theory-hibs-physical-bridges.md](./theory-hibs-physical-bridges.md)。
 
 ### 2.1 三轴与转换
 
@@ -130,7 +130,7 @@ Gemini 材料反复提出四条有价值的方向：
 
 - 隐数三轴还没有与现有 Pauli/Clifford 旋量表示建立同一个类型上的作用；当前 `SpinorResistance` 是独立的离散残差模型。
 - 没有连续空间、拓扑、联络、曲率和真正的旋转群表示。
-- 没有 Higgs 场、真空期望值、Yukawa 耦合，因此还不能推出电子质量 (m_e=y_e v/\sqrt{2})。
+- 已有一个显式假设 `m = y·v` 的 HIBS 离散 Higgs-Yukawa 桥，但没有标准模型 Higgs 场、真空势、规范表示和归一化，因此还不能推出电子质量 (m_e=y_e v/\sqrt{2})。
 - 没有强相互作用的 (SU(3)) 色荷、胶子、重整化群或 QCD beta 函数。
 - 没有从三轴内积推导 Minkowski `(1,3)` 签名；旧的 Gemini 推导在这里仍属于额外假设。
 

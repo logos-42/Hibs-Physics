@@ -14,4 +14,5 @@
 - [theory-hidden-quaternion.md](./theory-hidden-quaternion.md) — 隐数四元数（比较对象：i²=-1 从反交换涌现）
 - [theory-projection-algebra.md](./theory-projection-algebra.md) — 隐数投影代数（主线：P²=P 状态生成机制/半群/PVM 骨架）
 - [theory-hidden-space-physics.md](./theory-hidden-space-physics.md) — 隐数三轴/空间流/自旋阻抗/涌现质量/离散渐近自由/涌现时间
+- [theory-hibs-physical-bridges.md](./theory-hibs-physical-bridges.md) — HIBS 到 Higgs-Yukawa、离散 beta、质量壳/零锥的形式化桥梁
 - [log.md](./log.md)

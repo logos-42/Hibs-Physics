@@ -131,8 +131,10 @@ ProjectionPhysics/
     ├── Quaternion.lean      # 四元数（比较对象）：i²=j²=k²=ijk=-1 从 Clifford 涌现（Q1–Q7）
     ├── ProjectionAlgebra.lean # 隐数投影代数（主线）：互补投影、复合半群、
     │                          # 核质量泄露、核张量（PA1–PA8）
-    └── HiddenSpacePhysics.lean # 新离散物理桥梁：三轴、空间流、旋量阻抗质量、
-                                # 三夸克自由度指数、路径长度时间（HSP1–HSP5）
+    ├── HiddenSpacePhysics.lean # 新离散物理桥梁：三轴、空间流、旋量阻抗质量、
+    │                           # 三夸克自由度指数、路径长度时间（HSP1–HSP5）
+    └── HIBSPhysicalBridges.lean # HIBS 适配：A1–A3、Higgs-Yukawa 型质量、
+                                 # 离散 beta、质量壳/零锥契约（HIBS1–HIBS5）
 ```
 
 ## 路线（下一步）

@@ -30,3 +30,4 @@ def main : IO Unit := do
   IO.println "  completeness_complex               — |z|² = Re² + Im²: 信息 = Image二次型 + Kernel二次型"
   IO.println "草案声明 (仍待证): KernelRepresentation / KernelNullTheorem (后半段) / Metric签名"
   IO.println "隐数物理桥梁 (HSP1–HSP5): 三轴重构 / 空间流 / 旋量阻抗质量 / 三夸克渐近自由指数 / 涌现时间"
+  IO.println "HIBS 物理桥梁 (HIBS1–HIBS5): A1–A3 / Higgs-Yukawa / 离散 beta / 质量壳-零锥接口"
