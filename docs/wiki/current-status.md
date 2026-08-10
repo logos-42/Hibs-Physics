@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-08-09
+last_confirmed: 2026-08-10
 audience: self
 stage: draft
 schema_version: 2
@@ -18,5 +18,6 @@ status: current
 - **最近澄清**："除法 = 乘以逆元"——卡点在 ℂ 无 `Inv` 实例（ℤ[i]-型环非域），非"乘法之外除法独立缺失"；**破缺与差商不同路——核平移只需加法，ℤ[i] 满足，破缺比微积分更早可达**；**四元数 i²=j²=k²=ijk=-1 不是新公理——是 C1/C2/C6（反交换生成元）的必然表示，ij≠ji 证明隐数代数必然非交换**；**★ 隐数 ≠ 复数的另一种写法——第一性不是 i²=-1 而是投影幂等 P²=P（状态生成机制），四元数降级为比较对象；投影代数生成半群而非群（Π_re 非单射），确定性来自信息损失**
 - **最近澄清**：HSP 三轴把隐数轴作为专用内部轴，而不是复平面的普通第四轴；“互相转换”只承诺转换通道和三轴重构，不承诺投影可逆。旋量阻抗质量、三夸克自由度和路径时间目前是离散模型量，不是已识别的实验物理量。
 - **最近风险**：D4 签名来源无人证明；Gemini 的 ∂_μ、Dirac/KG/Higgs/QCD 推导含额外连续场论或规范场假设，不能直接从 HIBS A1–A3 计为已证
+- **胶球推进（2026-08-10）**：新增 `GlueballBridge.lean`，已形式化 G1–G4 的最小接口：纯胶子模式、`colorBalance=0` 色单态代理、规范不变量契约、纯胶子核场强平方质量候选、`0++` Higgs 门户和关闭 Higgs 后的解耦本征态；明确 `colorBalance`/`identityGaugeAction` 仍是代理，尚非 `SU(3)` Yang–Mills、禁闭或实验胶球质量
 - **最近推进**：扩展空间位移/场差质量并证明 `m_flow²(0→v_H)=m_H²`；新增 `HiddenAxisConversions.lean` 形式化 H/R/I 全状态正交双侧逆元；新增 `HiddenMassTimeEvents.lean`，证明每个非零质量事件追加一个离散涌现时间单位；新增 `HiddenEventClocks.lean`，区分事件计数、非零质量事件计数和局部离散钟权重，并证明它们对历史拼接的加法性，同时聚合路径位移；新增 `FlowConservation.lean`，证明 Flow 迭代链的加法组合律，并将动量守恒明确为额外不变量条件；HIBS `CompositeHiddenImage` 上已有双侧逆元，整体陪域仍因标签丢失不可逆；ProjectionPhysics `lake build` 通过 50 jobs，HIBS `lake build` 通过 14 targets。连续系数、极限、度规、量子算子和标准 Higgs 方程仍未引入
 - **线上状态**：本地 Lean 项目，无部署

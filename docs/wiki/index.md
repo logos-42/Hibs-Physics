@@ -16,4 +16,5 @@
 - [theory-hidden-space-physics.md](./theory-hidden-space-physics.md) — 隐数三轴/空间流/自旋阻抗/涌现质量/离散渐近自由/涌现时间
 - [theory-hibs-physical-bridges.md](./theory-hibs-physical-bridges.md) — HIBS 到 Higgs-Yukawa、离散 beta、质量壳/零锥的形式化桥梁
 - [theory-hidden-only-higgs.md](./theory-hidden-only-higgs.md) — 纯隐数、无时间的静态 Higgs/Yukawa 型质量桥
+- [theory-glueball-bridge.md](./theory-glueball-bridge.md) — 胶球/纯胶子复合态与隐核质量的兼容性评估
 - [log.md](./log.md)
