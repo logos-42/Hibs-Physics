@@ -26,7 +26,8 @@
 --   HiddenMassTimeEvents.lean 质量事件计数生成离散涌现时间
 --   HiddenEventClocks.lean 事件/质量事件、局部离散时钟与路径聚合
 --   FlowConservation.lean Flow 链组合律与条件式动量不变量
---   GlueballBridge.lean   C₃ 色代数/规范作用、纯胶子质量与 Higgs 门户
+--   SU3Bridge.lean       3×3 复矩阵、SU(3) 循环子群与伴随作用
+--   GlueballBridge.lean  SU(3) 色作用、纯胶子质量与 Higgs 门户
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -50,4 +51,5 @@ import ProjectionPhysics.HiddenAxisConversions
 import ProjectionPhysics.HiddenMassTimeEvents
 import ProjectionPhysics.HiddenEventClocks
 import ProjectionPhysics.FlowConservation
+import ProjectionPhysics.SU3Bridge
 import ProjectionPhysics.GlueballBridge

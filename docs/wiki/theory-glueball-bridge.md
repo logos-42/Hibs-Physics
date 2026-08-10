@@ -17,7 +17,7 @@ status: current
 
 ## 1. 结论
 
-当前路线与胶球**概念上相容，并已完成一个非平凡有限色作用的第一版桥梁**；但还没有完整 QCD 胶球定理。
+当前路线与胶球**概念上相容，并已完成一个由显式 SU(3) 矩阵实现的非平凡 C₃ 子群与伴随作用桥梁**；但还没有完整 QCD 胶球定理。
 
 相容点是：胶球是纯内部场自由度形成的复合态，而本项目已经有“核/隐空间内部结构经过非线性组合向可观测层泄露”的代数原型，以及核二次型和空间流质量候选。
 
@@ -32,22 +32,24 @@ status: current
 - `HiddenSpacePhysics.lean` 已有空间流、旋量阻抗和三夸克质量原型；但 `QuarkTriplet` 不能直接代表胶球，因为胶球不是三夸克态。
 - `HIBSPhysicalBridges.lean` 的 Yukawa、离散 beta 和质量壳均是显式桥接结构的后果；其中离散 beta 不是 QCD beta，质量壳字段也不是 HIBS A1–A3 的自动推论。
 
-新增 [GlueballBridge.lean](../../ProjectionPhysics/GlueballBridge.lean) 已把 G1–G4 的最小依赖链编译进 Lean：
+新增 [SU3Bridge.lean](../../ProjectionPhysics/SU3Bridge.lean) 与 [GlueballBridge.lean](../../ProjectionPhysics/GlueballBridge.lean) 已把 G1–G4 的最小依赖链编译进 Lean：
 
-- `ColorGaugeElement` / `colorGaugeCombine`：三元循环色代数 `C₃`，含单位元、三阶循环和非平凡作用；
+- `Mat3` / `SU3Matrix`：3×3 复矩阵、幺正性、行列式 1 与显式 `C₃` 矩阵子群；
+- `TracelessMat3` / `c3AdjointAction`：在 traceless 矩阵色空间上的共轭伴随作用，已证明单位元与组合律；
+- `SU3Element` / `su3ElementCombine`：由循环矩阵生成的三元 SU(3) 子群，含单位元、三阶循环和非平凡作用；
 - `GaugeAction` / `GaugeInvariant`：规范作用与固定点不变量接口；
 - `GluonMode` / `GluonConfiguration`：纯胶子模式和三色占据相等的色单态条件；
 - `pureGlueMassSquared`：对隐核场强平方求和的纯胶子质量平方候选；非零隐模式使其非零；
 - `GlueballChannel.scalar0pp`：只让 `0++` 通道进入 Higgs 门户；
 - `MassSquaredMatrix`：胶球—Higgs 二维质量矩阵；Higgs 耦合关闭时，纯胶球基态是本征态且质量候选保持不变。
 
-这一步证明的是非平凡离散色作用、结构链和解耦性质，不是 `SU(3)` Yang–Mills、禁闭或实验胶球质量。当前 `C₃` 仍是 `SU(3)` 的离散占位模型；下一步应把三元循环占据表示提升为 `SU(3)` 的八维伴随表示或等价的矩阵色代数。
+这一步证明的是显式矩阵子群上的非平凡色作用、traceless 矩阵伴随作用、结构链和解耦性质，不是连续 `SU(3)` Yang–Mills、禁闭或实验胶球质量。当前实现覆盖的是 `SU(3)` 中的离散 C₃ 子群；完整八维连续伴随表示、Lie 括号和场强动力学仍是后续工作。
 
 ## 3. 推荐的形式化路径
 
-### G1. 纯胶子复合态（已完成非平凡离散接口）
+### G1. 纯胶子复合态（已完成矩阵 C₃ 子群与伴随接口）
 
-已新增三元循环色代数 `C₃`：规范变换循环置换三种色占据，组合满足单位元和三阶循环；并证明该作用不是恒等作用。`ColorSinglet` 定义为三种色占据相等，因此在循环规范作用下保持不变。胶球数据结构只含胶子模式、不含夸克模式。
+已新增 `SU3Bridge.lean`：三个显式 3×3 复置换矩阵均满足幺正性与行列式 1，乘法闭合为 C₃ 子群；在 traceless 矩阵上用 `U X U†` 实现 `c3AdjointAction`，并证明保持 traceless、单位元作用和组合律。`GlueballBridge.lean` 仍用等价的三色占据投影检验 `ColorSinglet`，因此胶球数据结构只含胶子模式、不含夸克模式。
 
 ### G2. 胶球算符与量子数（已完成最小通道）
 

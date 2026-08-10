@@ -37,4 +37,4 @@ def main : IO Unit := do
   IO.println "质量-时间同步: 每个非零质量事件追加一个离散涌现时间单位"
   IO.println "事件时钟: 事件计数、非零质量事件计数、局部时钟权重与路径位移可分别聚合"
   IO.println "Flow/D5: 迭代链可加；动量守恒需额外的 Flow 不变量假设"
-  IO.println "胶球桥梁 (G1–G4): C₃ 非平凡色作用 / 纯胶子质量 / 0++ Higgs 门户 / 解耦本征态"
+  IO.println "胶球桥梁 (G1–G4): SU(3) 矩阵循环子群 / 伴随作用 / 纯胶子质量 / 0++ Higgs 门户"
