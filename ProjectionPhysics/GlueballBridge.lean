@@ -1,13 +1,14 @@
 -- ProjectionPhysics — pure-glue composite and Higgs portal bridge
 --
 -- This module formalizes the first honest glueball layer:
---   pure gluon modes -> color-singlet proxy + gauge-invariant contract
+--   pure gluon modes -> nontrivial cyclic color algebra + gauge invariance
 --   -> pure-glue mass candidate -> 0++ Higgs portal -> mass matrix.
 --
--- It deliberately does not claim a concrete SU(3) Yang-Mills construction.
--- `GaugeAction` is an explicit interface, and `colorBalance = 0` is a
--- minimal abelian proxy for a color-singlet condition. The purpose is to
--- prove the dependency structure before adding a richer color algebra.
+-- It deliberately does not claim a continuous SU(3) Yang-Mills construction.
+-- The color layer below is a nontrivial finite C3 model: gauge transformations
+-- cyclically permute the three color occupations, and singlets are fixed
+-- points with equal occupations. This is the discrete algebraic step before
+-- replacing C3 by the adjoint representation of SU(3).
 
 import ProjectionPhysics.HiddenOnlyHiggs
 
@@ -27,26 +28,121 @@ structure GaugeAction (State : Type) where
 def GaugeInvariant {State : Type} (action : GaugeAction State) (x : State) : Prop :=
   ∀ g : action.symmetry, action.act g x = x
 
-def identityGaugeAction (State : Type) : GaugeAction State :=
-  { symmetry := Unit
-    one := ()
-    combine := fun _ _ => ()
-    act := fun _ x => x
-    act_one := by intro x; rfl
-    act_combine := by intro g h x; rfl }
+/-! ### G1a. A nontrivial finite color algebra -/
+
+inductive ColorLabel : Type where
+  | c0
+  | c1
+  | c2
+  deriving DecidableEq
+
+inductive ColorGaugeElement : Type where
+  | identity
+  | cycle
+  | cycle2
+  deriving DecidableEq
+
+def colorGaugeCombine : ColorGaugeElement → ColorGaugeElement → ColorGaugeElement
+  | .identity, g => g
+  | g, .identity => g
+  | .cycle, .cycle => .cycle2
+  | .cycle, .cycle2 => .identity
+  | .cycle2, .cycle => .identity
+  | .cycle2, .cycle2 => .cycle
+
+theorem color_gauge_identity_left (g : ColorGaugeElement) :
+    colorGaugeCombine .identity g = g := by
+  cases g <;> rfl
+
+theorem color_gauge_identity_right (g : ColorGaugeElement) :
+    colorGaugeCombine g .identity = g := by
+  cases g <;> rfl
+
+theorem color_gauge_cycle_has_order_three :
+    colorGaugeCombine (colorGaugeCombine .cycle .cycle) .cycle = .identity := by
+  rfl
+
+theorem color_gauge_cycle2_has_order_three :
+    colorGaugeCombine (colorGaugeCombine .cycle2 .cycle2) .cycle2 = .identity := by
+  rfl
+
+structure ColorProfile where
+  c0 : Nat
+  c1 : Nat
+  c2 : Nat
+  deriving DecidableEq
+
+theorem ColorProfile.ext {p q : ColorProfile}
+    (h0 : p.c0 = q.c0) (h1 : p.c1 = q.c1) (h2 : p.c2 = q.c2) : p = q := by
+  cases p
+  cases q
+  cases h0
+  cases h1
+  cases h2
+  rfl
+
+def colorGaugeOnProfile : ColorGaugeElement → ColorProfile → ColorProfile
+  | .identity, p => p
+  | .cycle, p => ⟨p.c1, p.c2, p.c0⟩
+  | .cycle2, p => ⟨p.c2, p.c0, p.c1⟩
+
+def ColorSinglet (p : ColorProfile) : Prop :=
+  p.c0 = p.c1 ∧ p.c1 = p.c2
+
+def colorGaugeAction : GaugeAction ColorProfile :=
+  { symmetry := ColorGaugeElement
+    one := .identity
+    combine := colorGaugeCombine
+    act := colorGaugeOnProfile
+    act_one := by intro p; rfl
+    act_combine := by
+      intro g h p
+      cases g <;> cases h <;> rfl }
+
+theorem color_gauge_action_is_nontrivial :
+    ∃ p : ColorProfile,
+      colorGaugeAction.act ColorGaugeElement.cycle p ≠ p := by
+  refine ⟨⟨1, 0, 0⟩, ?_⟩
+  decide
+
+theorem color_singlet_is_gauge_invariant
+    (p : ColorProfile) (h : ColorSinglet p) :
+    GaugeInvariant colorGaugeAction p := by
+  intro g
+  rcases h with ⟨h01, h12⟩
+  cases g with
+  | identity => rfl
+  | cycle =>
+      change ColorProfile.mk p.c1 p.c2 p.c0 = p
+      apply ColorProfile.ext
+      · exact h01.symm
+      · exact h12.symm
+      · exact h01.trans h12
+  | cycle2 =>
+      change ColorProfile.mk p.c2 p.c0 p.c1 = p
+      apply ColorProfile.ext
+      · exact (h01.trans h12).symm
+      · exact h01
+      · exact h12
 
 structure GluonMode where
   hidden : PureHiddenNumber
-  colorCharge : Int
+  color : ColorLabel
 
-def colorBalance : List GluonMode → Int
-  | [] => 0
-  | mode :: rest => mode.colorCharge + colorBalance rest
+def colorProfileOfModes : List GluonMode → ColorProfile
+  | [] => ⟨0, 0, 0⟩
+  | mode :: rest =>
+      let tail := colorProfileOfModes rest
+      match mode.color with
+      | .c0 => ⟨tail.c0 + 1, tail.c1, tail.c2⟩
+      | .c1 => ⟨tail.c0, tail.c1 + 1, tail.c2⟩
+      | .c2 => ⟨tail.c0, tail.c1, tail.c2 + 1⟩
 
-/- A first color-singlet proxy: total abelianized color charge is zero. -/
 structure GluonConfiguration where
   modes : List GluonMode
-  color_singlet : colorBalance modes = 0
+  colorProfile : ColorProfile
+  profile_matches_modes : colorProfile = colorProfileOfModes modes
+  color_singlet : ColorSinglet colorProfile
 
 inductive GlueballChannel : Type where
   | scalar0pp
@@ -56,30 +152,34 @@ inductive GlueballChannel : Type where
 
 structure Glueball where
   configuration : GluonConfiguration
-  gaugeAction : GaugeAction GluonConfiguration
-  gauge_invariant : GaugeInvariant gaugeAction configuration
+  gaugeAction : GaugeAction ColorProfile
+  gauge_invariant : GaugeInvariant gaugeAction configuration.colorProfile
   channel : GlueballChannel
 
 theorem glueball_is_color_singlet (g : Glueball) :
-    colorBalance g.configuration.modes = 0 := by
+    ColorSinglet g.configuration.colorProfile := by
   exact g.configuration.color_singlet
 
 theorem glueball_is_gauge_invariant (g : Glueball) :
-    GaugeInvariant g.gaugeAction g.configuration := by
+    GaugeInvariant g.gaugeAction g.configuration.colorProfile := by
   exact g.gauge_invariant
 
-def pairedScalarGlueball (a b : PureHiddenNumber) : Glueball :=
+def tripletScalarGlueball
+    (a b c : PureHiddenNumber) : Glueball :=
   { configuration :=
-      { modes := [⟨a, 1⟩, ⟨b, -1⟩]
-        color_singlet := by simp [colorBalance] }
-    gaugeAction := identityGaugeAction GluonConfiguration
-    gauge_invariant := by intro g; rfl
+      { modes := [⟨a, .c0⟩, ⟨b, .c1⟩, ⟨c, .c2⟩]
+        colorProfile := ⟨1, 1, 1⟩
+        profile_matches_modes := by simp [colorProfileOfModes]
+        color_singlet := by simp [ColorSinglet] }
+    gaugeAction := colorGaugeAction
+    gauge_invariant := color_singlet_is_gauge_invariant
+      ⟨1, 1, 1⟩ (by simp [ColorSinglet])
     channel := GlueballChannel.scalar0pp }
 
-theorem paired_scalar_glueball_is_singlet
-    (a b : PureHiddenNumber) :
-    colorBalance (pairedScalarGlueball a b).configuration.modes = 0 := by
-  exact glueball_is_color_singlet (pairedScalarGlueball a b)
+theorem triplet_scalar_glueball_is_singlet
+    (a b c : PureHiddenNumber) :
+    ColorSinglet (tripletScalarGlueball a b c).configuration.colorProfile := by
+  exact glueball_is_color_singlet (tripletScalarGlueball a b c)
 
 /-! ### G2. Pure-glue field energy and mass candidate -/
 

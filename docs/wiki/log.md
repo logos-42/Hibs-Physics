@@ -4,7 +4,7 @@
 
 | 日期 | 类型 | 主题 | 要点 |
 |---|---|---|---|
-| 2026-08-10 | 形式化推进 + 概念回写 | 胶球 G1–G4 最小桥梁 | 新增 `GlueballBridge.lean`：定义规范作用/固定点不变量接口、纯胶子模式和色荷平衡代理、隐核场强平方质量候选、`0++` 门户及胶球-Higgs 质量矩阵；证明非零隐模式给出非零纯胶质量候选，Higgs 关闭时矩阵解耦且纯胶球本征态质量保留。明确代理层尚未等于 `SU(3)`、禁闭或 QCD 胶球谱。 |
+| 2026-08-10 | 形式化推进 + 概念回写 | 胶球 G1–G4 非平凡色作用 | 更新 `GlueballBridge.lean`：以三元循环色代数 `C₃` 和循环规范作用替换 `colorBalance`/恒等作用，证明单位元、三阶循环、非平凡作用和色单态固定点；保留纯胶子核场强平方质量、`0++` 门户及解耦本征态。明确 `C₃` 尚非 `SU(3)`、禁闭或 QCD 胶球谱。 |
 | 2026-08-10 | 兼容性评估 + 概念回写 | 胶球/纯胶子复合态与隐核质量 | 确认当前仓库没有胶子、色荷、规范不变量、禁闭能量或胶球谱；隐核泄露与纯内部复合态只构成概念桥梁。新增胶球路线：纯胶子色单态 → 场流/核二次型质量 → `0++` Higgs 门户/混合；明确胶球不能直接套用 Yukawa `y·v`，离散 beta 不能称为 QCD beta。 |
 | 2026-08-09 | 形式化修正 + 概念回写 | D5 Flow 组合律与动量守恒边界 | 新增 `FlowConservation.lean`：定义 `flowIterate`，证明 `Flow^(m+n)` 的加法组合律；定义 `flowMomentumInvariant`，证明一步不变量可推广到任意有限迭代；明确 `momentumOf = π ∘ Flow` 只是候选量，结合性不推出幂等性或动量守恒。Wiki/README 同步说明其与海森堡不确定性原理不冲突；量子算子、Hilbert 空间和连续动力学仍未形式化。 |
 | 2026-08-09 | 形式化扩展 | HIBS 逆元、空间流质量与质量-时间同步 | HIBS `Embedding.lean` 新增 `CompositeHiddenImage` 上的双侧逆元，并证明整体 `CompositeHidden` 因标签信息丢失不能满足右逆；ProjectionPhysics 新增 `HiddenMassTimeEvents.lean`：质量事件不携带时间字段，历史长度定义涌现时间，追加一个非零质量事件同步增加一个单位；`lake build` 分别通过 HIBS 14 targets 与 ProjectionPhysics 46 jobs。 |

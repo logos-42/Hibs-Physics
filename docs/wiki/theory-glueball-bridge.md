@@ -17,7 +17,7 @@ status: current
 
 ## 1. 结论
 
-当前路线与胶球**概念上相容，但还没有胶球定理**。
+当前路线与胶球**概念上相容，并已完成一个非平凡有限色作用的第一版桥梁**；但还没有完整 QCD 胶球定理。
 
 相容点是：胶球是纯内部场自由度形成的复合态，而本项目已经有“核/隐空间内部结构经过非线性组合向可观测层泄露”的代数原型，以及核二次型和空间流质量候选。
 
@@ -34,19 +34,20 @@ status: current
 
 新增 [GlueballBridge.lean](../../ProjectionPhysics/GlueballBridge.lean) 已把 G1–G4 的最小依赖链编译进 Lean：
 
+- `ColorGaugeElement` / `colorGaugeCombine`：三元循环色代数 `C₃`，含单位元、三阶循环和非平凡作用；
 - `GaugeAction` / `GaugeInvariant`：规范作用与固定点不变量接口；
-- `GluonMode` / `GluonConfiguration`：纯胶子模式和 `colorBalance = 0` 的色单态代理；
+- `GluonMode` / `GluonConfiguration`：纯胶子模式和三色占据相等的色单态条件；
 - `pureGlueMassSquared`：对隐核场强平方求和的纯胶子质量平方候选；非零隐模式使其非零；
 - `GlueballChannel.scalar0pp`：只让 `0++` 通道进入 Higgs 门户；
 - `MassSquaredMatrix`：胶球—Higgs 二维质量矩阵；Higgs 耦合关闭时，纯胶球基态是本征态且质量候选保持不变。
 
-这一步证明的是结构链和解耦性质，不是 `SU(3)` Yang–Mills、禁闭或实验胶球质量。当前 `colorBalance` 和 `identityGaugeAction` 都是明确标注的代理/接口，下一步必须替换为非平凡色代数和规范作用。
+这一步证明的是非平凡离散色作用、结构链和解耦性质，不是 `SU(3)` Yang–Mills、禁闭或实验胶球质量。当前 `C₃` 仍是 `SU(3)` 的离散占位模型；下一步应把三元循环占据表示提升为 `SU(3)` 的八维伴随表示或等价的矩阵色代数。
 
 ## 3. 推荐的形式化路径
 
-### G1. 纯胶子复合态（已完成最小接口）
+### G1. 纯胶子复合态（已完成非平凡离散接口）
 
-已新增抽象 `GaugeAction` 和 `GaugeInvariant`，定义 `GluonMode`、有限胶子组合和 `gaugeInvariant` 固定点条件。`colorBalance = 0` 证明了最小色单态代理，胶球数据结构只含胶子模式、不含夸克模式。
+已新增三元循环色代数 `C₃`：规范变换循环置换三种色占据，组合满足单位元和三阶循环；并证明该作用不是恒等作用。`ColorSinglet` 定义为三种色占据相等，因此在循环规范作用下保持不变。胶球数据结构只含胶子模式、不含夸克模式。
 
 ### G2. 胶球算符与量子数（已完成最小通道）
 
