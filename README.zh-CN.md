@@ -141,8 +141,8 @@ ProjectionPhysics/
     ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
     ├── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
     ├── FlowConservation.lean # Flow 链组合律与条件式动量不变量
-    └── MinimalCore.lean # ★ 最小核心：h∈K, Q(h)=h², m²:=Q(h) ⟹ h≠0 ⇒ m²≠0；
-                         # 胶球 m_G²=|a|²+|b|²+|c|²>0（MC1–MC2）
+    └── MinimalCore.lean # ★ 最小核心：质量=内部运动状态对空间运动的锚定
+                         # （旋量阻抗）⟹ m≠0；胶球 m_G²=|a|²+|b|²+|c|²>0（MC1–MC2）
 ```
 
 ## 路线（下一步）

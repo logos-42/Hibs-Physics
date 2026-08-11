@@ -250,8 +250,8 @@ ProjectionPhysics/
     ├── Quaternion.lean      # quaternions (comparison object): i²=j²=k²=ijk=-1 from Clifford (Q1–Q7)
     └── ProjectionAlgebra.lean # hidden projection algebra (main line): complementary projections,
                                # composition semigroup, kernel mass-melting, kernel tensor (PA1–PA8)
-    └── MinimalCore.lean       # ★ minimal core: h∈K, Q(h)=h², m²:=Q(h) ⟹ h≠0 ⇒ m²≠0;
-                               # glueball m_G²=|a|²+|b|²+|c|²>0 (MC1–MC2)
+    └── MinimalCore.lean       # ★ minimal core: mass = anchoring of internal motion against
+                               # space motion (spinor resistance) ⟹ m≠0; glueball m_G²=|a|²+|b|²+|c|²>0
 ```
 
 ## 7. Next steps
