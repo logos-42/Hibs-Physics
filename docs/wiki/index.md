@@ -18,5 +18,6 @@
 - [theory-hidden-only-higgs.md](./theory-hidden-only-higgs.md) — 纯隐数、无时间的静态 Higgs/Yukawa 型质量桥
 - [theory-glueball-bridge.md](./theory-glueball-bridge.md) — 胶球/纯胶子复合态与隐核质量的兼容性评估
 - [theory-minimal-core.md](./theory-minimal-core.md) — ★ 最小核心命题：质量=内部运动状态对空间运动的锚定（非场激发能量）；胶球 m_G²=|a|²+|b|²+|c|²
+- [theory-three-direction-spinor.md](./theory-three-direction-spinor.md) — 三方向空间运动假设：为什么是三个胶子/三个夸克（SU(3) 法向量 + √3·M₀ 匹配）
 - [theory-mass-anchoring-validation.md](./theory-mass-anchoring-validation.md) — 质量锚定假设的数值验证 v2（恒等式陷阱/胶球谱比 √N/旋量流）
 - [log.md](./log.md)

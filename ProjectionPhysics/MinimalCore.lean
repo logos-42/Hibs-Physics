@@ -190,4 +190,18 @@ theorem triplet_glueball_mass_squared_positive_of_any_nonzero
     pure_glue_mass_squared_is_nonnegative (minimalTripletGlueball a b c)
   omega
 
+/-- 三方向单位态：a=b=c=1（三个方向各贡献一个模式单位）
+    ⟹ m_G² = 3·M₀²（√3 因子）。
+    格点 m(0++) = 1.71 GeV 与 √3·M₀（M₀≈0.987 GeV≈1 GeV）精确相容。 -/
+theorem triplet_unit_mode_mass_squared_is_three :
+    pureGlueMassSquared (minimalTripletGlueball ⟨1⟩ ⟨1⟩ ⟨1⟩) = 3 := by
+  rw [triplet_glueball_mass_squared_formula]
+  native_decide
+
+/-- 三方向单位态质量平方为正（√3 > 0）。 -/
+theorem triplet_unit_mode_mass_squared_positive :
+    0 < pureGlueMassSquared (minimalTripletGlueball ⟨1⟩ ⟨1⟩ ⟨1⟩) := by
+  rw [triplet_unit_mode_mass_squared_is_three]
+  native_decide
+
 end ProjectionPhysics
