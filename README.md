@@ -254,6 +254,8 @@ ProjectionPhysics/
                                # space motion (spinor flow σψ) ⟹ m≠0; glueball m_G²=|a|²+|b|²+|c|²>0
     └── SpaceLightSpeed.lean   # ★ vector light speed: c = space's own equivalent velocity (new
                                # concept); photon = comoving ⟹ m=0; electron = spin ⟹ m>0 (SLS1–SLS3)
+    └── DiracBridge.lean       # ★ Dirac bridge: mass term = chiral coupling (DB4: γ⁰ψ=ψ ⟺ ψ_L=ψ_R;
+                               # DB5: m=0 ⟹ Weyl chiral symmetry = photon; DB6: γ anticommute)
 ```
 
 ## 7. Next steps

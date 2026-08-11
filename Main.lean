@@ -40,3 +40,4 @@ def main : IO Unit := do
   IO.println "胶球桥梁 (G1–G4): SU(3) 矩阵循环子群 / 伴随作用 / 纯胶子质量 / 0++ Higgs 门户"
   IO.println "最小核心 (MC1–MC2+MC1h): 质量=自旋旋量流(σψ)对空间运动的锚定 ⟹ m>0；隐数版 h²；胶球 m_G²=|a|²+|b|²+|c|²"
   IO.println "矢量光速 (SLS1–SLS3): 光速=空间本身的等效速度(非物质速度)；光子零锚定/电子自旋锚定"
+  IO.println "狄拉克桥 (DB1–DB6): 质量项=手征耦合 (γ⁰ψ=ψ ⟺ ψ_L=ψ_R)；零质量⟹手征对称(Weyl)"
