@@ -218,7 +218,7 @@ theorem adjoint_conjugation_trace_zero (g : SU3Element) (X : TracelessMat3) :
   cases g <;>
     apply ℂ.ext <;>
     simp [adjointConjugation, su3MatrixOf, su3Identity, su3Cycle, su3Cycle2,
-      su3IdentityMatrix, su3CycleMatrix, su3Cycle2Matrix, mat3Mul,
+      su3IdentityMatrix, su3CycleMatrix, su3Cycle2Matrix, mat3One, mat3Mul,
       mat3Adjoint, mat3Trace, complexConj] <;>
     omega
 

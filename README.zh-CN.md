@@ -140,7 +140,9 @@ ProjectionPhysics/
     ├── HiddenAxisConversions.lean # H/R/I 全状态正交可逆转换标准
     ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
     ├── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
-    └── FlowConservation.lean # Flow 链组合律与条件式动量不变量
+    ├── FlowConservation.lean # Flow 链组合律与条件式动量不变量
+    └── MinimalCore.lean # ★ 最小核心：h∈K, Q(h)=h², m²:=Q(h) ⟹ h≠0 ⇒ m²≠0；
+                         # 胶球 m_G²=|a|²+|b|²+|c|²>0（MC1–MC2）
 ```
 
 ## 路线（下一步）

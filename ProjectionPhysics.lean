@@ -28,6 +28,7 @@
 --   FlowConservation.lean Flow 链组合律与条件式动量不变量
 --   SU3Bridge.lean       3×3 复矩阵、SU(3) 循环子群与伴随作用
 --   GlueballBridge.lean  SU(3) 色作用、纯胶子质量与 Higgs 门户
+--   MinimalCore.lean     最小核心命题：h∈K, Q(h)=h², m²:=Q(h) ⟹ h≠0 ⇒ m²≠0
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -53,3 +54,4 @@ import ProjectionPhysics.HiddenEventClocks
 import ProjectionPhysics.FlowConservation
 import ProjectionPhysics.SU3Bridge
 import ProjectionPhysics.GlueballBridge
+import ProjectionPhysics.MinimalCore
