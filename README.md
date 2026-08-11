@@ -251,7 +251,9 @@ ProjectionPhysics/
     └── ProjectionAlgebra.lean # hidden projection algebra (main line): complementary projections,
                                # composition semigroup, kernel mass-melting, kernel tensor (PA1–PA8)
     └── MinimalCore.lean       # ★ minimal core: mass = anchoring of internal motion against
-                               # space motion (spinor resistance) ⟹ m≠0; glueball m_G²=|a|²+|b|²+|c|²>0
+                               # space motion (spinor flow σψ) ⟹ m≠0; glueball m_G²=|a|²+|b|²+|c|²>0
+    └── SpaceLightSpeed.lean   # ★ vector light speed: c = space's own equivalent velocity (new
+                               # concept); photon = comoving ⟹ m=0; electron = spin ⟹ m>0 (SLS1–SLS3)
 ```
 
 ## 7. Next steps

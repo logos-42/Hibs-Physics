@@ -94,6 +94,9 @@
 | PA8 | `cKernelBiForm` + `kernelBiForm_quad`/`kernelBiForm_quad_kernel`/`kernelBiForm_unit_norm`/`kernelBiForm_nondegenerate` | **核上双线性形式 B(x,y) = Im x·Im y**；二次型 Q(k) = κ(k) = kernelInvC；核上非退化 | ★ **核张量化**：ker π 上的 (0,2) 张量——质量候选 m² = κ(ζ_κ) 的第一个物理连接 |
 | MC1 | `spin_flow_anchor_mass_pos_of_spinor_nonzero` + `spin_flow_anchor_mass_zero_of_zero_spinor` | **内部运动状态 s（自旋 = Clifford σψ 旋量流）→ 空间运动 F → 质量 m := 锚定效果（旋量流分量范数）→ 自旋非零 ⟹ m > 0；零旋量 ⟹ m = 0** | ★ **最小核心命题（旋量流版）**：质量=物质抵抗空间本身运动的锚定效果，自旋本身就是运动状态（`MinimalCore.lean` MC1 + MC1h 隐数版） |
 | MC2 | `triplet_glueball_mass_squared_formula` + `triplet_glueball_mass_squared_positive_of_any_nonzero` + `triplet_unit_mode_mass_squared_is_three` | **G=(a,b,c), color profile=(1,1,1), m_G²=|a|²+|b|²+|c|²；至少一个非零 ⟹ m_G² > 0；a=b=c=1 ⟹ m_G²=3** | ★ **胶球最小版**：三胶子内部运动状态色单态；三方向假设 √3·M₀ 精确匹配格点 0++（`MinimalCore.lean`） |
+| SLS1 | `light_speed_is_universal_space_property` + `tri_directional_space_has_universal_speed` | **空间速度矢量（三方向）模 = 普适常数 c²；任何空间点等效速度模相同** | ★ **矢量光速新概念**：光速 = 空间本身的等效速度（非空间内物质速度）；三方向空间运动（`SpaceLightSpeed.lean`） |
+| SLS2 | `anchor_mass_zero_of_photon` | **无内部运动 + 完全随空间运动 ⟹ 零锚定 ⟹ 零质量** | 光子 = 完全随空间运动（去掉垂直方向向量）（`SpaceLightSpeed.lean`） |
+| SLS3 | `anchor_mass_positive_of_internal_motion` + `anchor_mass_positive_of_relative_motion` | **自旋非零 ⟹ 锚定为正；偏离空间运动也产生锚定** | 电子 = 自旋（法向旋转）⟹ 有质量（`SpaceLightSpeed.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

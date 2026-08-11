@@ -29,6 +29,7 @@
 --   SU3Bridge.lean       3×3 复矩阵、SU(3) 循环子群与伴随作用
 --   GlueballBridge.lean  SU(3) 色作用、纯胶子质量与 Higgs 门户
 --   MinimalCore.lean     最小核心命题：质量=自旋旋量流(σψ)对空间运动的锚定 + 隐数版
+--   SpaceLightSpeed.lean 矢量光速：空间本身的等效速度（新概念）+ 光子/电子锚定
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -55,3 +56,4 @@ import ProjectionPhysics.FlowConservation
 import ProjectionPhysics.SU3Bridge
 import ProjectionPhysics.GlueballBridge
 import ProjectionPhysics.MinimalCore
+import ProjectionPhysics.SpaceLightSpeed

@@ -141,8 +141,10 @@ ProjectionPhysics/
     ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
     ├── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
     ├── FlowConservation.lean # Flow 链组合律与条件式动量不变量
-    └── MinimalCore.lean # ★ 最小核心：质量=内部运动状态对空间运动的锚定
+    └── MinimalCore.lean # ★ 最小核心：质量=自旋旋量流对空间运动的锚定
                          # （旋量阻抗）⟹ m≠0；胶球 m_G²=|a|²+|b|²+|c|²>0（MC1–MC2）
+    └── SpaceLightSpeed.lean # ★ 矢量光速：光速=空间本身的等效速度（新概念）；
+                             # 光子=完全随空间⟹零锚定；电子=自旋⟹锚定为正（SLS1–SLS3）
 ```
 
 ## 路线（下一步）
