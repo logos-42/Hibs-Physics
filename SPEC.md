@@ -97,6 +97,8 @@
 | SLS1 | `light_speed_is_universal_space_property` + `tri_directional_space_has_universal_speed` | **空间速度矢量（三方向）模 = 普适常数 c²；任何空间点等效速度模相同** | ★ **矢量光速新概念**：光速 = 空间本身的等效速度（非空间内物质速度）；三方向空间运动（`SpaceLightSpeed.lean`） |
 | SLS2 | `anchor_mass_zero_of_photon` | **无内部运动 + 完全随空间运动 ⟹ 零锚定 ⟹ 零质量** | 光子 = 完全随空间运动（去掉垂直方向向量）（`SpaceLightSpeed.lean`） |
 | SLS3 | `anchor_mass_positive_of_internal_motion` + `anchor_mass_positive_of_relative_motion` | **自旋非零 ⟹ 锚定为正；偏离空间运动也产生锚定** | 电子 = 自旋（法向旋转）⟹ 有质量（`SpaceLightSpeed.lean`） |
+| SLS4 | `planar_directions_anticommute` + `normal_direction_emerges_from_plane` + `planar_motion_products_give_i` + `x_motion_spin_is_sigma1` + `x_motion_spin_flow_nonzero` | **σ₁σ₂+σ₂σ₁=0（平面圆周运动代数）；σ₃=i·σ₁σ₂（★法向量从平面涌现）；(σ₁σ₂)²=-1（i 涌现）；x 运动投影=σ₁；空间运动产生非零旋量流** | ★ **波法向量旋量（思路 B 落地）**：空间运动方向 → 自旋生成元 → 等效旋转角动量（`SpaceLightSpeed.lean`） |
+| SLS5 | `three_direction_three_glueball_bridge` | **空间三方向运动模² = 3 ∧ 三胶子质量平方 = 3** | ★ **三方向 ↔ 三胶子**：空间三方向 = 色三方向 = 三胶子，"三"是同一个三（`SpaceLightSpeed.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

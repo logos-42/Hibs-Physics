@@ -56,7 +56,42 @@ status: current
 - `anchor_mass_positive_of_relative_motion`：偏离空间运动也产生锚定
 - #eval：电子锚定质量 = 1；偏离 + 自旋 = 9
 
-## 3. 与最小核心的关系
+## 3. SLS4–SLS5：波法向量旋量 + 三方向↔三胶子（思路 B 落地）
+
+### SLS4. 空间运动方向 → 自旋生成元
+
+```text
+方向 n = (nx, ny, nz) → 自旋算子 n·σ = nx·σ₁ + ny·σ₂ + nz·σ₃
+旋量流 motionSpinFlow n ψ = (n·σ)ψ  = 等效旋转角动量
+```
+
+对应代码：[`ProjectionPhysics/SpaceLightSpeed.lean`](../../ProjectionPhysics/SpaceLightSpeed.lean)
+
+- `planar_directions_anticommute`：σ₁σ₂ + σ₂σ₁ = 0（C2 实例化）
+  ——**平面内圆周/椭圆运动的代数**，两个横向方向不可交换，
+  是旋量（半整数角动量）出现的根源
+- `normal_direction_emerges_from_plane`：**σ₃ = i·σ₁σ₂（C4 实例化）**
+  ——★"平面外的垂直向量"不是独立输入，是平面内两方向运动乘积的
+  必然结果。这精确对应"空间在平面外还有一个垂直向量"
+- `planar_motion_products_give_i`：(σ₁σ₂)² = -1（C3 实例化）
+  ——平面内圆周运动的两个半圈产生符号翻转（i 涌现）
+- `photon_direction_has_no_normal_component`：光子 = 去掉垂直方向向量
+- `x_motion_spin_is_sigma1`：x 方向运动的自旋投影 = σ₁
+- `x_motion_spin_flow_nonzero`：**空间运动在非零旋量上产生非零
+  角动量流**（胶子/电子随空间运动的等效旋转角动量）
+
+### SLS5. 三方向 ↔ 三胶子（形式化连接）
+
+```lean
+three_direction_three_glueball_bridge :
+    (空间三方向运动模² = 3) ∧ (三胶子质量平方 = 3)
+```
+
+**"三"是同一个三**：空间三方向（x,y,z）= 色三方向（c0,c1,c2）=
+三胶子。m_G² = 3 是"三个方向各贡献一个模式单位"的代数内容
+（数值：√3·M₀ 精确匹配格点 0++ = 1.71 GeV）。
+
+## 4. 与最小核心的关系
 
 | 概念 | 最小核心 (MC1) | 矢量光速 (SLS) |
 |---|---|---|
