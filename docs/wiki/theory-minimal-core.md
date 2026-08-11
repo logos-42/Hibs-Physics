@@ -91,3 +91,16 @@ m_G² = |a|² + |b|² + |c|²
 - [`HiddenOnlyHiggs.lean`](../../ProjectionPhysics/HiddenOnlyHiggs.lean)：m² = (yv)²（Yukawa 型，保留为扩展比较对象）
 - [`GlueballBridge.lean`](../../ProjectionPhysics/GlueballBridge.lean)：纯胶子质量候选非零且非负（MC2 的源）
 - [`theory-glueball-bridge.md`](./theory-glueball-bridge.md)：胶球物理边界详细评估
+
+## 7. 数值验证结果（2026-08-11，诚实报告）
+
+对"质量 = 自旋 × 空间阻抗"代入 CODATA/PDG 数值后（详见
+[`theory-mass-anchoring-validation.md`](./theory-mass-anchoring-validation.md)）：
+
+- **电子**：m_cand = S/(λ_c·c)、S/(r_e·c)、ℏ/(c·a₀) 全部是**恒等式重排**
+  （这些长度本身由 m_e 定义），无独立预言力。
+- **光子**：零锚定 → 零质量，与实验上限（<1e-18 eV）相容——唯一免校准预言。
+- **失败点**：异常磁矩 a_e 需 QED 圈图；m_p/m_e=1836 需内部结构；
+  **0++ 胶球 J=0 却有质量**与"质量=自旋阻抗"直接矛盾。
+- **结论**：当前是**自洽的序关系框架**（非零 ⟹ 非零），**不是数值预言理论**。
+  MC1/MC2 的代数定理不受影响，但物理解释降级为"候选存在性"。
