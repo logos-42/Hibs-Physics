@@ -2,8 +2,9 @@
 title: 理论概念：隐数三轴、空间流、自旋阻抗与涌现质量
 source: session + ../HIBS/gemini/
 source_note: 2026-08-09 重新编译用户提出的隐数物理假设；Gemini 原始材料已登记为 gemini-2、gemini-3、gemini-4、gemini-5、gemini-6、gemini-7、gemini-main
+source_hash: 25674a23feacb627
 created: 2026-08-09
-last_confirmed: 2026-08-09
+last_confirmed: 2026-08-11
 audience: self
 stage: current
 schema_version: 2

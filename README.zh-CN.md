@@ -147,6 +147,8 @@ ProjectionPhysics/
                              # 光子=完全随空间⟹零锚定；电子=自旋⟹锚定为正（SLS1–SLS3）
     └── DiracBridge.lean # ★ 狄拉克桥：质量项=手征耦合（DB4: γ⁰ψ=ψ⟺ψ_L=ψ_R；
                          # DB5: m=0⟹Weyl 手征对称=光子；DB6: γ 反交换）
+    └── SpaceLightSpeed.lean # ★ SLS6 相对论重构：惯性系=随空间流动；
+                             # 光速不变=空间流动普适（洛伦兹公式形式保持）
 ```
 
 ## 路线（下一步）

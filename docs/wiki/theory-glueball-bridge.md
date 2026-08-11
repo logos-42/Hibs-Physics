@@ -1,9 +1,10 @@
 ---
 title: 胶球桥接评估：纯胶子复合态与隐核质量
 source: session + external physics references
-source_note: 2026-08-10 对当前 HIBS/ProjectionPhysics 质量路线的胶球兼容性评估
+source_note: 2026-08-10 对当前 HIBS/ProjectionPhysics 质量路线的胶球兼容性评估；external physics references 为格点/QCD 文献引用（非本地 raw），source_hash 覆盖承载该编译的本地桥接代码 GlueballBridge.lean + SU3Bridge.lean
+source_hash: c4f7125064e0f1e4
 created: 2026-08-10
-last_confirmed: 2026-08-10
+last_confirmed: 2026-08-11
 audience: self
 stage: draft
 schema_version: 2

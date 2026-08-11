@@ -20,6 +20,7 @@
 - [theory-minimal-core.md](./theory-minimal-core.md) — ★ 最小核心命题：质量=内部运动状态对空间运动的锚定（非场激发能量）；胶球 m_G²=|a|²+|b|²+|c|²
 - [theory-space-light-speed.md](./theory-space-light-speed.md) — 矢量光速：光速=空间本身的等效速度（新概念，非空间内物质速度）
 - [theory-dirac-bridge.md](./theory-dirac-bridge.md) — 狄拉克方程桥：质量项=手征耦合（DB4: γ⁰ψ=ψ⟺ψ_L=ψ_R；DB5: m=0⟹Weyl）
+- [theory-relativity-rebuild.md](./theory-relativity-rebuild.md) — 相对论重构：公式形式不变、解释层全变（c=空间流动/惯性系=随空间/引力=流动非均匀）
 - [theory-three-direction-spinor.md](./theory-three-direction-spinor.md) — 三方向空间运动假设：为什么是三个胶子/三个夸克（SU(3) 法向量 + √3·M₀ 匹配）
 - [theory-mass-anchoring-validation.md](./theory-mass-anchoring-validation.md) — 质量锚定假设的数值验证 v2（恒等式陷阱/胶球谱比 √N/旋量流）
 - [log.md](./log.md)

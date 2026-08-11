@@ -2,8 +2,9 @@
 title: 纯隐数、无时间的静态 Higgs 模型
 source: session + ProjectionPhysics/HiddenOnlyHiggs.lean
 source_note: 2026-08-09 构造只使用 HIBS hidden 标签和隐空间坐标的静态 Higgs 版本
+source_hash: d17346a68f3837e6
 created: 2026-08-09
-last_confirmed: 2026-08-09
+last_confirmed: 2026-08-11
 audience: self
 stage: current
 schema_version: 2

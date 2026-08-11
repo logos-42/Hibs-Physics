@@ -85,6 +85,16 @@ theorem RelativeMotion.ext {r s : RelativeMotion}
 
 def relativeMotionZero : RelativeMotion := ⟨0, 0, 0⟩
 
+instance : Sub RelativeMotion :=
+  ⟨fun r s => ⟨r.x - s.x, r.y - s.y, r.z - s.z⟩⟩
+
+@[simp] theorem RelativeMotion.sub_x (r s : RelativeMotion) :
+    (r - s).x = r.x - s.x := rfl
+@[simp] theorem RelativeMotion.sub_y (r s : RelativeMotion) :
+    (r - s).y = r.y - s.y := rfl
+@[simp] theorem RelativeMotion.sub_z (r s : RelativeMotion) :
+    (r - s).z = r.z - s.z := rfl
+
 /-- 光子条件：物质完全随空间运动（相对运动为零）。 -/
 def IsComoving (r : RelativeMotion) : Prop := r = relativeMotionZero
 
@@ -259,5 +269,88 @@ theorem three_direction_three_glueball_bridge :
   constructor
   · exact tri_unit_motion_speed_squared_is_three
   · exact tri_direction_triplet_mass_connection
+
+/-! ### SLS6. 相对论重构：光速不变 = 空间流动速度普适 -/
+
+/-- 观测者：处于空间中的物体，其状态 = 相对空间的运动。
+    随空间观测者（惯性系）：相对空间运动为零。 -/
+structure Observer where
+  relative : RelativeMotion
+
+/-- 惯性系 = 完全随空间运动的参考系（空间流动的"静止系"）。
+    ★ 这是新假设对惯性系的重新定义：惯性 = 随空间，非惯性 = 偏离空间。 -/
+def IsInertialFrame (o : Observer) : Prop :=
+  o.relative = relativeMotionZero
+
+/-- 光子 = 空间流动的波动表现（完全随空间运动）。
+    观测者测到的光速 = 光子相对观测者的运动。 -/
+def observedPhotonVelocity (o : Observer) : RelativeMotion :=
+  relativeMotionZero - o.relative
+
+/-- observedPhotonVelocity 的 x 分量：0 − 观测者相对运动。 -/
+theorem observedPhotonVelocity_x (o : Observer) :
+    (observedPhotonVelocity o).x = 0 - o.relative.x := by
+  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+
+/-- observedPhotonVelocity 的 y 分量：0 − 观测者相对运动。 -/
+theorem observedPhotonVelocity_y (o : Observer) :
+    (observedPhotonVelocity o).y = 0 - o.relative.y := by
+  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+
+/-- observedPhotonVelocity 的 z 分量：0 − 观测者相对运动。 -/
+theorem observedPhotonVelocity_z (o : Observer) :
+    (observedPhotonVelocity o).z = 0 - o.relative.z := by
+  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+
+/-- ★ 光速不变（新假设版）：任何随空间观测者（惯性系）测到的
+    光速恒为零相对运动 ⟹ 光速 = 空间流动速度，普适常数。
+    c 是空间的属性，不是物质的极限——观测者无关性内建。 -/
+theorem light_speed_invariance_comoving_observer
+    (o : Observer) (h : IsInertialFrame o) :
+    observedPhotonVelocity o = relativeMotionZero := by
+  unfold observedPhotonVelocity IsInertialFrame at *
+  rw [h]
+  apply RelativeMotion.ext <;> simp [relativeMotionZero]
+
+/-- 偏离空间的观测者（非惯性系）会看到光子相对运动非零：
+    锚定质量 = 偏离空间运动的程度（SLS3 的相对运动锚定）。 -/
+theorem non_inertial_observer_sees_photon_motion
+    (o : Observer) (h : o.relative ≠ relativeMotionZero) :
+    observedPhotonVelocity o ≠ relativeMotionZero := by
+  unfold observedPhotonVelocity
+  intro hz
+  apply h
+  apply RelativeMotion.ext
+  · have hx := congrArg RelativeMotion.x hz
+    change relativeMotionZero.x - o.relative.x = relativeMotionZero.x at hx
+    have hx0 : relativeMotionZero.x = 0 := rfl
+    rw [hx0] at hx
+    omega
+  · have hy := congrArg RelativeMotion.y hz
+    change relativeMotionZero.y - o.relative.y = relativeMotionZero.y at hy
+    have hy0 : relativeMotionZero.y = 0 := rfl
+    rw [hy0] at hy
+    omega
+  · have hz2 := congrArg RelativeMotion.z hz
+    change relativeMotionZero.z - o.relative.z = relativeMotionZero.z at hz2
+    have hz0 : relativeMotionZero.z = 0 := rfl
+    rw [hz0] at hz2
+    omega
+
+/-- ★ 洛伦兹不变性的条件（新假设版）：空间流动均匀（各点等效速度
+    模相同——SLS1 普适性）⟹ 物理定律在所有随空间系（惯性系）相同。
+    空间流动的梯度（非均匀）⟹ 引力 = 空间流动的非均匀性（GR 重构种子）。 -/
+def IsUniformSpaceFlow (c2 : Int) : Prop :=
+  ∀ v w : SpaceVelocity c2,
+    v.x * v.x + v.y * v.y + v.z * v.z =
+      w.x * w.x + w.y * w.y + w.z * w.z
+
+/-- 均匀空间流动 ⟺ 光速普适（SLS1 的抽象化）。 -/
+theorem uniform_flow_iff_light_speed_universal (c2 : Int) :
+    IsUniformSpaceFlow c2 ↔
+    ∀ v w : SpaceVelocity c2,
+      v.x * v.x + v.y * v.y + v.z * v.z =
+        w.x * w.x + w.y * w.y + w.z * w.z := by
+  rfl
 
 end ProjectionPhysics

@@ -2,8 +2,9 @@
 title: HIBS 物理桥梁：Higgs-Yukawa、离散 beta 与质量壳接口
 source: session + ../HIBS/HIBS/
 source_note: 2026-08-09 将 HIBS 标签对空间的 A1-A3 结构接入 ProjectionPhysics，并形式化三条有限桥梁
+source_hash: b526ed52176ba6ee
 created: 2026-08-09
-last_confirmed: 2026-08-09
+last_confirmed: 2026-08-11
 audience: self
 stage: current
 schema_version: 2

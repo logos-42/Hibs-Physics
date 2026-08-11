@@ -256,6 +256,8 @@ ProjectionPhysics/
                                # concept); photon = comoving ⟹ m=0; electron = spin ⟹ m>0 (SLS1–SLS3)
     └── DiracBridge.lean       # ★ Dirac bridge: mass term = chiral coupling (DB4: γ⁰ψ=ψ ⟺ ψ_L=ψ_R;
                                # DB5: m=0 ⟹ Weyl chiral symmetry = photon; DB6: γ anticommute)
+    └── SpaceLightSpeed.lean   # ★ SLS6 relativity rebuild: inertia = comoving with space flow;
+                               # light-speed invariance = space-flow universality (Lorentz keeps form)
 ```
 
 ## 7. Next steps

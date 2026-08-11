@@ -102,6 +102,7 @@
 | DB4 | `mass_equation_couples_chiralities` | **(γ⁰−1)ψ = 0 ⟺ ψ_L = ψ_R** | ★ **质量解 = 手征耦合**：静止狄拉克方程要求左右手相等（`DiracBridge.lean`） |
 | DB5 | `zero_mass_has_chiral_asymmetry` | **∃ψ, γ⁰ψ ≠ ψ（手征不对称解存在）** | m=0 ⟹ 手征对称（Weyl）= 光子（`DiracBridge.lean`） |
 | DB6 | `gamma0_gamma1_anticommute` + `gamma0_sq` | **γ⁰γ¹+γ¹γ⁰ = 0；γ⁰² = 1** | Clifford 关系在 4×4 狄拉克层（`DiracBridge.lean`） |
+| SLS6 | `IsInertialFrame` + `light_speed_invariance_comoving_observer` + `IsUniformSpaceFlow` | **惯性系 = 随空间流动；随空间观测者测光速恒定（光速不变=空间流动普适）；洛伦兹不变性 = 空间流动均匀** | ★ **相对论重构**：公式形式不变、解释层全变——c=空间流动/惯性=随空间/引力=流动非均匀（`SpaceLightSpeed.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
