@@ -28,7 +28,7 @@
 --   FlowConservation.lean Flow 链组合律与条件式动量不变量
 --   SU3Bridge.lean       3×3 复矩阵、SU(3) 循环子群与伴随作用
 --   GlueballBridge.lean  SU(3) 色作用、纯胶子质量与 Higgs 门户
---   MinimalCore.lean     最小核心命题：质量=内部运动状态对空间运动的锚定（旋量阻抗）
+--   MinimalCore.lean     最小核心命题：质量=自旋旋量流(σψ)对空间运动的锚定 + 隐数版
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel

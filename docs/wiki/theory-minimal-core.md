@@ -30,21 +30,31 @@ status: current
 - 正反电子碰撞激发的光子，是**一瞬间摆脱了空间运动锚定**的激发场粒子
   ⟹ 零锚定 ⟹ 无质量。
 
-## 2. 最小命题
+## 2. 最小命题（旋量流版，2026-08-11 v2）
+
+自旋本身就是运动状态——不需要空间位移差来描述：
 
 ```text
-内部运动状态 s（自旋 / 内部关系：隐数内部流）
-→ 空间运动 F（空间本身的运动：space flow）
-→ 质量 m := 锚定效果（旋量阻抗：对空间运动的抵抗）
-→ 内部运动非零 ⟹ m ≠ 0
+内部运动状态 s（自旋：Clifford 生成元 σ 作用在旋量 ψ 上的流 σψ）
+→ 空间运动 F（空间本身的运动）
+→ 质量 m := 锚定效果（旋量流的分量范数：对空间运动的抵抗）
+→ 自旋非零 ⟹ m ≠ 0
 ```
 
 对应代码：[`ProjectionPhysics/MinimalCore.lean`](../../ProjectionPhysics/MinimalCore.lean)（MC1）
 
-- `anchorMassOf`：锚定质量候选 = 空间流产生的旋量阻抗
-- `anchor_mass_formula`：m = |隐流差| + |横向差|（旋量阻抗范数）
-- `anchor_mass_nonzero_of_internal_motion`：内部运动非零 ⟹ m ≠ 0
-- `anchor_mass_zero_of_no_internal_motion`：静止流 ⟹ m = 0（光子边界）
+- `spinFlow σ ψ`：自旋算子作用在旋量上 = 内部运动状态（旋量流）
+- `spinFlowAnchorMass`：锚定质量候选 = 旋量流四分量范数之和
+- `spin_flow_anchor_mass_pos_of_spinor_nonzero`：非零旋量 ⟹ 锚定质量 > 0
+- `spin_flow_anchor_mass_zero_of_zero_spinor`：零旋量 ⟹ m = 0（光子边界）
+
+**隐数实现**（MC1h，核方向表达）：
+
+- `hiddenSpinAnchorMassSquared h = h²`：自旋状态编码为核方向（隐数 h ∈ ker Re）
+- `hidden_spin_anchor_mass_squared_nonzero`：非零隐数 ⟹ 锚定质量平方 ≠ 0
+- `hidden_spin_anchor_mass_squared_zero_of_zero`：零隐数 ⟹ 0
+
+Lean #eval 落地：σ₁·(1,0)→1、σ₁·(0,1)→1、σ₁·(1,1)→2；隐数版 3→9、−4→16。
 
 ## 3. 胶球最小版本
 
@@ -92,15 +102,18 @@ m_G² = |a|² + |b|² + |c|²
 - [`GlueballBridge.lean`](../../ProjectionPhysics/GlueballBridge.lean)：纯胶子质量候选非零且非负（MC2 的源）
 - [`theory-glueball-bridge.md`](./theory-glueball-bridge.md)：胶球物理边界详细评估
 
-## 7. 数值验证结果（2026-08-11，诚实报告）
+## 7. 数值验证结果（2026-08-11，诚实报告 v2）
 
 对"质量 = 自旋 × 空间阻抗"代入 CODATA/PDG 数值后（详见
 [`theory-mass-anchoring-validation.md`](./theory-mass-anchoring-validation.md)）：
 
-- **电子**：m_cand = S/(λ_c·c)、S/(r_e·c)、ℏ/(c·a₀) 全部是**恒等式重排**
-  （这些长度本身由 m_e 定义），无独立预言力。
-- **光子**：零锚定 → 零质量，与实验上限（<1e-18 eV）相容——唯一免校准预言。
-- **失败点**：异常磁矩 a_e 需 QED 圈图；m_p/m_e=1836 需内部结构；
-  **0++ 胶球 J=0 却有质量**与"质量=自旋阻抗"直接矛盾。
-- **结论**：当前是**自洽的序关系框架**（非零 ⟹ 非零），**不是数值预言理论**。
-  MC1/MC2 的代数定理不受影响，但物理解释降级为"候选存在性"。
+- **电子**：m_cand = S/(λ_c·c)、S/(r_e·c)、ℏ/(c·a₀) 全部是**恒等式重排**，
+  无独立预言力（这些长度本身由 m_e 定义）。
+- **胶球谱（v2 最有价值的结果）**：格点 m(2++)/m(0++) = 1.4035 ≈ √2，
+  **m² = N·M₀²（N 整数模式数）与格点 0++(N=2)/2++(N=4) 相容**，
+  M₀ ≈ 1.21 GeV；0-+(N=5) 偏差 ~6%。谱形 √N 是结构预言。
+- **0++ 矛盾已修正**：J=0 是总角动量，内部是两个自旋-1 胶子 ⟹
+  内部运动非零，与"质量=内部运动锚定"**不矛盾**（v1 论证错误）。
+- **失败点**：异常磁矩 a_e 需 QED 圈图；m_p/m_e=1836 需内部结构。
+- **结论**：当前是**自洽的序关系框架**（非零 ⟹ 非零）+ 胶球谱比 √N
+  这个接近数值预言的唯一方向；MC1/MC2 代数定理不受影响。

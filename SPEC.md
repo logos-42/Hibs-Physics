@@ -92,8 +92,8 @@
 | PA6 | `pvm_skeleton` | 幂等 + 正交 + 完备 = 投影值分解 | ★ **量子测量（PVM）的代数骨架**，无概率公理 |
 | PA7 | `cI_sq_neg_one` + `kernelLeak`/`kernelLeak_i` + `kernel_mul_leaks_to_image` + `kernel_pair_mul_leaks` + `leak_product_in_image` | **i² = -1 且 Re(i²) = -1 ≠ 0：核乘法不封闭** | ★ **核质量泄露**：核是加法子空间（K1）但非乘法理想，"Goldstone 被吃掉"的代数原型 |
 | PA8 | `cKernelBiForm` + `kernelBiForm_quad`/`kernelBiForm_quad_kernel`/`kernelBiForm_unit_norm`/`kernelBiForm_nondegenerate` | **核上双线性形式 B(x,y) = Im x·Im y**；二次型 Q(k) = κ(k) = kernelInvC；核上非退化 | ★ **核张量化**：ker π 上的 (0,2) 张量——质量候选 m² = κ(ζ_κ) 的第一个物理连接 |
-| MC1 | `anchor_mass_nonzero_of_internal_motion` + `anchor_mass_zero_of_no_internal_motion` | **内部运动状态 s（自旋/内部关系）→ 空间运动 F → 质量 m := 锚定效果（旋量阻抗）→ 内部运动非零 ⟹ m ≠ 0；静止流 ⟹ m = 0** | ★ **最小核心命题（锚定版）**：质量=物质抵抗空间本身运动的锚定效果，非场的激发能量（`MinimalCore.lean`） |
-| MC2 | `triplet_glueball_mass_squared_formula` + `triplet_glueball_mass_squared_positive_of_any_nonzero` | **G=(a,b,c), color profile=(1,1,1), m_G²=|a|²+|b|²+|c|²；至少一个非零 ⟹ m_G² > 0** | ★ **胶球最小版**：三胶子内部运动状态色单态的锚定质量平方（`MinimalCore.lean`） |
+| MC1 | `spin_flow_anchor_mass_pos_of_spinor_nonzero` + `spin_flow_anchor_mass_zero_of_zero_spinor` | **内部运动状态 s（自旋 = Clifford σψ 旋量流）→ 空间运动 F → 质量 m := 锚定效果（旋量流分量范数）→ 自旋非零 ⟹ m > 0；零旋量 ⟹ m = 0** | ★ **最小核心命题（旋量流版）**：质量=物质抵抗空间本身运动的锚定效果，自旋本身就是运动状态（`MinimalCore.lean` MC1 + MC1h 隐数版） |
+| MC2 | `triplet_glueball_mass_squared_formula` + `triplet_glueball_mass_squared_positive_of_any_nonzero` | **G=(a,b,c), color profile=(1,1,1), m_G²=|a|²+|b|²+|c|²；至少一个非零 ⟹ m_G² > 0** | ★ **胶球最小版**：三胶子内部运动状态色单态；格点谱 m²=N·M₀²（0++:N=2, 2++:N=4）相容（`MinimalCore.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
