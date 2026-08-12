@@ -266,6 +266,8 @@ ProjectionPhysics/
                                # metric signature; anticommute; mass=chiral coupling) (DB1'–DB6')
     └── MinimalCoreMathlib.lean # Minimal core rewritten with mathlib: m²=|ψ₁|²+|ψ₀|² (spin-flow
                                # anchoring; nonzero spinor ⟹ m>0) (MC1'–MC4')
+    └── SpaceMetric.lean        # Space-flow metric (GR rebuild seed): photon comoving (dx=c·dt)
+                               # ⟹ dτ=0 (no time); massive deviation ⟹ dτ>0; time=deviation (SM1–SM6)
 ```
 
 ## 7. Next steps

@@ -157,6 +157,8 @@ ProjectionPhysics/
                           # 度规签名、反交换、质量=手征耦合）（DB1'–DB6'）
     └── MinimalCoreMathlib.lean # 最小核心的 mathlib 重写：m²=|ψ₁|²+|ψ₀|²
                                 # （旋量流锚定；非零旋量⟹m>0）（MC1'–MC4'）
+    └── SpaceMetric.lean # 空间流动度规（GR 重构种子）：光子随空间（dx=c·dt）
+                         # ⟹dτ=0 不花时间；质量偏离⟹dτ>0；时间=偏离程度（SM1–SM6）
 ```
 
 ## 路线（下一步）

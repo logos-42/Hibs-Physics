@@ -46,3 +46,4 @@ def main : IO Unit := do
   IO.println "Pauli mathlib 对照 (C1'–C4'): σ²=I；反交换；i 涌现；σ₃=-iσ₁σ₂ (simp+ring 即可)"
   IO.println "狄拉克 mathlib (DB1'–DB6'): 4×4 γ 矩阵；γ⁰²=1/γⁱ²=-1(度规签名)；反交换；质量=手征耦合"
   IO.println "最小核心 mathlib (MC1'–MC4'): m²=|a|²+|b|²(旋量流锚定)；非零旋量⟹m>0；零旋量⟹m=0"
+  IO.println "空间流动度规 (SM1–SM6): dτ²=dt²-dx²/c²；光子随空间(dx=c·dt)⟹dτ=0不花时间；质量偏离⟹dτ>0"

@@ -23,6 +23,7 @@
 - [theory-relativity-rebuild.md](./theory-relativity-rebuild.md) — 相对论重构：公式形式不变、解释层全变（c=空间流动/惯性系=随空间/引力=流动非均匀）
 - [theory-lorentz-rebuild.md](./theory-lorentz-rebuild.md) — 洛伦兹重构（mathlib）：boost 保持度规 η=diag(-1,1)、γ²-γ²β²=1、快度/速度加法、β<1
 - [theory-mathlib-rewrite.md](./theory-mathlib-rewrite.md) — 狄拉克桥+最小核心的 mathlib 重写：γⁱ²=-1（度规签名）、质量=手征耦合、m²=|a|²+|b|²
+- [theory-space-metric.md](./theory-space-metric.md) — 空间流动度规（GR 重构种子）：光子随空间⟹dτ=0 不花时间；质量偏离⟹dτ>0；时间=偏离空间流动
 - [theory-three-direction-spinor.md](./theory-three-direction-spinor.md) — 三方向空间运动假设：为什么是三个胶子/三个夸克（SU(3) 法向量 + √3·M₀ 匹配）
 - [theory-mass-anchoring-validation.md](./theory-mass-anchoring-validation.md) — 质量锚定假设的数值验证 v2（恒等式陷阱/胶球谱比 √N/旋量流）
 - [log.md](./log.md)
