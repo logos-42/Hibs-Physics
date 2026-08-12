@@ -44,3 +44,5 @@ def main : IO Unit := do
   IO.println "相对论重构 (SLS6): 公式形式不变/解释层全变 — c=空间流动, 惯性系=随空间, 引力=流动非均匀"
   IO.println "洛伦兹重构 (LR1–LR5, mathlib): boost 保持度规 η=diag(-1,1)；γ²-γ²β²=1；快度加法；速度加法；β<1"
   IO.println "Pauli mathlib 对照 (C1'–C4'): σ²=I；反交换；i 涌现；σ₃=-iσ₁σ₂ (simp+ring 即可)"
+  IO.println "狄拉克 mathlib (DB1'–DB6'): 4×4 γ 矩阵；γ⁰²=1/γⁱ²=-1(度规签名)；反交换；质量=手征耦合"
+  IO.println "最小核心 mathlib (MC1'–MC4'): m²=|a|²+|b|²(旋量流锚定)；非零旋量⟹m>0；零旋量⟹m=0"

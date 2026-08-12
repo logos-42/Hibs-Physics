@@ -153,6 +153,10 @@ ProjectionPhysics/
                             # γ²-γ²β²=1；快度加法；速度加法；β<1（LR1–LR5）
     └── PauliMathlib.lean # Clifford 核心的 mathlib 重写（σ²=I/反交换/i 涌现/
                           # σ₃=-iσ₁σ₂）——ext+fin_cases+ring 替代分量 omega（C1'–C4'）
+    └── DiracMathlib.lean # 狄拉克桥的 mathlib 重写：4×4 γ 矩阵（γ⁰²=1/γⁱ²=-1
+                          # 度规签名、反交换、质量=手征耦合）（DB1'–DB6'）
+    └── MinimalCoreMathlib.lean # 最小核心的 mathlib 重写：m²=|ψ₁|²+|ψ₀|²
+                                # （旋量流锚定；非零旋量⟹m>0）（MC1'–MC4'）
 ```
 
 ## 路线（下一步）

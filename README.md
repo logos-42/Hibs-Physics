@@ -262,6 +262,10 @@ ProjectionPhysics/
                                # γ²-γ²β²=1; rapidity additivity; velocity addition; β<1 (LR1–LR5)
     └── PauliMathlib.lean      # Clifford core rewritten with mathlib (σ²=I, anticommute, i emergence;
                                # σ₃=-iσ₁σ₂) — ext+fin_cases+ring instead of component omega (C1'–C4')
+    └── DiracMathlib.lean      # Dirac bridge rewritten with mathlib: 4×4 γ matrices (γ⁰²=1, γⁱ²=-1
+                               # metric signature; anticommute; mass=chiral coupling) (DB1'–DB6')
+    └── MinimalCoreMathlib.lean # Minimal core rewritten with mathlib: m²=|ψ₁|²+|ψ₀|² (spin-flow
+                               # anchoring; nonzero spinor ⟹ m>0) (MC1'–MC4')
 ```
 
 ## 7. Next steps

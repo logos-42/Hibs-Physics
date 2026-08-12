@@ -105,6 +105,8 @@
 | SLS6 | `IsInertialFrame` + `light_speed_invariance_comoving_observer` + `IsUniformSpaceFlow` | **惯性系 = 随空间流动；随空间观测者测光速恒定（光速不变=空间流动普适）；洛伦兹不变性 = 空间流动均匀** | ★ **相对论重构**：公式形式不变、解释层全变——c=空间流动/惯性=随空间/引力=流动非均匀（`SpaceLightSpeed.lean`） |
 | LR1–LR5 | `boost_is_lorentz` + `gamma_sq_minus_beta_sq` + `boost_mul_boost` + `rapidity_add_velocity_add` + `finite_rapidity_never_reaches_light` | **boost(θ) 保持 η=diag(−1,1)；γ²−γ²β²=1；快度加法；速度加法；β<1** | ★ **洛伦兹重构（mathlib）**：新假设下洛伦兹变换形式与标准一致，解释层改变（β=偏离空间流动）（`LorentzRebuild.lean`） |
 | C1'–C4' | `sigma1_sq`/`sigma2_sq`/`sigma3_sq` + `sigma1_sigma2_anticommute` + `sigma12_sq` + `sigma3_from_sigma12` | **σ²=I；σ₁σ₂+σ₂σ₁=0；(σ₁σ₂)²=−1；σ₃=−iσ₁σ₂** | Clifford 核心的 mathlib 重写（对照版，`ext`+`fin_cases`+`ring`）（`PauliMathlib.lean`） |
+| DB1'–DB6' | `gamma0_sq` + `gamma1_sq`/`gamma2_sq`/`gamma3_sq` + 反交换×6 + `mass_equation_couples_chiralities` + `zero_mass_has_chiral_asymmetry` | **γ⁰²=1；γⁱ²=−1（空间方向度规签名）；γ⁰γⁱ+γⁱγ⁰=0；γ⁰ψ=ψ⟺ψ_L=ψ_R；∃ψ 手征不对称** | 狄拉克桥的 mathlib 重写（4×4 矩阵 + Fin 4 旋量；质量=手征耦合）（`DiracMathlib.lean`） |
+| MC1'–MC4' | `anchorMassSq_pos_of_nonzero` + `anchorMassSq_zero_of_zero` + `anchorMassSq_component` | **非零旋量 ⟹ m²>0；零旋量 ⟹ m²=0；m²=|ψ₁|²+|ψ₀|²** | 最小核心的 mathlib 重写（`Complex.normSq`；自旋非零⟹质量非零）（`MinimalCoreMathlib.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

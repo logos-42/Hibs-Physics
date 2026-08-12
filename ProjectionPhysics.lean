@@ -33,6 +33,8 @@
 --   DiracBridge.lean     狄拉克方程桥：质量项 = 手征耦合（Weyl 分解, γ 矩阵反交换）
 --   LorentzRebuild.lean  洛伦兹重构（mathlib）：新假设下 boost 保持度规/快度加法/速度加法
 --   PauliMathlib.lean    Clifford 核心的 mathlib 重写（对照版，simp+ring 即可）
+--   DiracMathlib.lean    狄拉克桥的 mathlib 重写：4×4 γ 矩阵 + Fin 4 旋量（度规签名/反交换/质量=手征耦合）
+--   MinimalCoreMathlib.lean 最小核心的 mathlib 重写：旋量流锚定 m²=|a|²+|b|²（非零旋量 ⟹ m>0）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -63,3 +65,5 @@ import ProjectionPhysics.SpaceLightSpeed
 import ProjectionPhysics.DiracBridge
 import ProjectionPhysics.LorentzRebuild
 import ProjectionPhysics.PauliMathlib
+import ProjectionPhysics.DiracMathlib
+import ProjectionPhysics.MinimalCoreMathlib
