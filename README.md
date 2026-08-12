@@ -268,6 +268,8 @@ ProjectionPhysics/
                                # anchoring; nonzero spinor ⟹ m>0) (MC1'–MC4')
     └── SpaceMetric.lean        # Space-flow metric (GR rebuild seed): photon comoving (dx=c·dt)
                                # ⟹ dτ=0 (no time); massive deviation ⟹ dτ>0; time=deviation (SM1–SM6)
+    └── MinimalCoreMathlib.lean # MC6': triplet entanglement — m_G²=m₁²+m₂²+m₃² superposition
+                               # anchoring; (σ₁+σ₂+σ₃)ψ≠0 entangled flow (chaos threshold λ≥1.5)
 ```
 
 ## 7. Next steps

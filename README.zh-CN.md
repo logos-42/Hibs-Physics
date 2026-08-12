@@ -159,6 +159,8 @@ ProjectionPhysics/
                                 # （旋量流锚定；非零旋量⟹m>0）（MC1'–MC4'）
     └── SpaceMetric.lean # 空间流动度规（GR 重构种子）：光子随空间（dx=c·dt）
                          # ⟹dτ=0 不花时间；质量偏离⟹dτ>0；时间=偏离程度（SM1–SM6）
+    └── MinimalCoreMathlib.lean # MC6' 三胶子纠缠：m_G²=m₁²+m₂²+m₃² 叠加锚定；
+                                # (σ₁+σ₂+σ₃)ψ≠0 纠缠流（混沌阈值 λ≥1.5）
 ```
 
 ## 路线（下一步）

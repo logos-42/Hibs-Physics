@@ -16,6 +16,8 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 noncomputable section
 open Matrix
@@ -154,6 +156,57 @@ theorem core_proposition_mathlib :
   · intro ψ h
     exact anchorMassSq_pos_of_nonzero ψ h
   · exact anchorMassSq_zero_of_zero 0 rfl
+
+/-! ### 三胶子：三方向运动的纠缠（MC6'） -/
+
+/-- 三胶子质量平方 = 三个方向旋量流锚定的叠加：
+    m_G² = m₁² + m₂² + m₃²（对应项目 MC2 的 |a|²+|b|²+|c|²）。 -/
+def glueballMassSq3 (ψ₁ ψ₂ ψ₃ : Spinor) : ℝ :=
+  anchorMassSq ψ₁ + anchorMassSq ψ₂ + anchorMassSq ψ₃
+
+/-- ★ MC6'：三个方向都运动（纠缠）⟹ 胶球质量 > 0。
+    三个胶子的运动机制 = 电子机制 × 3（每个方向独立锚定），
+    叠加后质量平方 = 三方向之和——"三个胶子在运行"的代数形式。 -/
+theorem glueballMassSq3_pos (ψ₁ ψ₂ ψ₃ : Spinor)
+    (h1 : ψ₁ ≠ 0) (h2 : ψ₂ ≠ 0) (h3 : ψ₃ ≠ 0) :
+    0 < glueballMassSq3 ψ₁ ψ₂ ψ₃ := by
+  unfold glueballMassSq3
+  have p1 : 0 < anchorMassSq ψ₁ := anchorMassSq_pos_of_nonzero ψ₁ h1
+  have p2 : 0 < anchorMassSq ψ₂ := anchorMassSq_pos_of_nonzero ψ₂ h2
+  have p3 : 0 < anchorMassSq ψ₃ := anchorMassSq_pos_of_nonzero ψ₃ h3
+  linarith
+
+/-- ★ MC6'：三方向完全纠缠（σ₁+σ₂+σ₃ 联合旋量流）——
+    三个胶子不是独立运动，而是共享一个纠缠态 ψ 的三个方向分量。
+    定理：纠缠态非零 ⟹ 联合旋量流非零（三方向一起锚定）。 -/
+theorem entangled_triplet_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
+    (σ₁ + σ₂ + σ₃).mulVec ψ ≠ 0 := by
+  -- M = σ₁+σ₂+σ₃ = [[1, 1−i], [1+i, −1]]，det = −3 ≠ 0 ⟹ M 可逆
+  -- 若 Mψ = 0，则 ψ = M⁻¹·(Mψ) = M⁻¹·0 = 0 矛盾
+  have hdet : Matrix.det (σ₁ + σ₂ + σ₃) ≠ 0 := by
+    rw [Matrix.det_fin_two]
+    simp [σ₁, σ₂, σ₃]
+    -- det = 1·(−1) − (1−i)(1+i) = −1 − 2 = −3 ≠ 0
+    have h2 : (1 + -Complex.I) * (1 + Complex.I) = 2 := by
+      apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+    rw [h2]
+    norm_num
+  -- 矩阵可逆（det = −3 可逆 ⟹ Invertible）
+  letI : Invertible (Matrix.det (σ₁ + σ₂ + σ₃)) := invertibleOfNonzero hdet
+  letI : Invertible (σ₁ + σ₂ + σ₃) :=
+    Matrix.invertibleOfDetInvertible (σ₁ + σ₂ + σ₃)
+  intro hz
+  apply h
+  -- ψ = M⁻¹·(M·ψ)（M⁻¹·M = I）
+  calc
+    ψ = (σ₁ + σ₂ + σ₃)⁻¹.mulVec ((σ₁ + σ₂ + σ₃).mulVec ψ) := by
+      have : (σ₁ + σ₂ + σ₃)⁻¹.mulVec ((σ₁ + σ₂ + σ₃).mulVec ψ) =
+          ((σ₁ + σ₂ + σ₃)⁻¹ * (σ₁ + σ₂ + σ₃)).mulVec ψ := by
+        simp [Matrix.mulVec_mulVec]
+      rw [this]
+      simp
+    _ = (σ₁ + σ₂ + σ₃)⁻¹.mulVec 0 := by rw [hz]
+    _ = 0 := by simp [Matrix.mulVec]
 
 end MinimalCoreMathlib
 

@@ -110,6 +110,7 @@
 | SM1–SM6 | `photon_proper_time_zero` + `massive_proper_time_positive` + `photon_comoving_zero_deviation` + `proper_time_eq_metric` + `metric_det` + `proper_time_dilation` | **光子 dx=c·dt ⟹ dτ²=0（不花时间）；质量 |dx|<|c·dt| ⟹ dτ²>0；u=dx/dt−c（光子 u=0⟺dτ²=0）；dτ²=g_μνΔx^μΔx^ν；det=−1/c²；1−tanh²θ=1/cosh²θ** | ★ **GR 重构种子**：空间以 c 流动、光子=空间流动本身、时间=偏离空间流动的程度（`SpaceMetric.lean`） |
 | SM3c–SM3d | `mass_implies_deviation_from_flow` + `deviation_implies_mass` | **dτ²>0 ⟹ dx≠c·dt（质量⟹偏离空间流动）；|dx|<|c·dt| ⟹ dτ²>0（偏离⟹质量）** | ★ **"质量=无法随空间以等效光速运动"的精确代数形式**（`SpaceMetric.lean`） |
 | MC5' | `normal_direction_emerges` + `spin_normal_flow_nonzero` | **σ₃=−iσ₁σ₂（法向量从平面涌现）；自旋非零 ⟹ σ₃ψ≠0（自旋的法向量运动轨迹）⟹ 法向量锚定>0** | ★ **自旋法向量运动⟹质量**（leo 机制：法向量方向运动轨迹导致质量）（`MinimalCoreMathlib.lean`） |
+| MC6' | `glueballMassSq3_pos` + `entangled_triplet_flow_nonzero` | **三方向叠加锚定 m_G²=m₁²+m₂²+m₃²>0；(σ₁+σ₂+σ₃)ψ≠0（纠缠流，det=−3≠0 可逆）** | ★ **三胶子纠缠**：三个方向运动叠加锚定 + 纠缠流（数值：混沌阈值 λ≥1.5）（`MinimalCoreMathlib.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 
