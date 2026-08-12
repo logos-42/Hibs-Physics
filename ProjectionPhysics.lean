@@ -36,6 +36,7 @@
 --   DiracMathlib.lean    狄拉克桥的 mathlib 重写：4×4 γ 矩阵 + Fin 4 旋量（度规签名/反交换/质量=手征耦合）
 --   MinimalCoreMathlib.lean 最小核心的 mathlib 重写：旋量流锚定 m²=|a|²+|b|²（非零旋量 ⟹ m>0）
 --   SpaceMetric.lean      空间流动度规（GR 重构种子）：dτ²=dt²-dx²/c²；光子随空间⟹dτ=0；质量偏离⟹dτ>0
+--   RelativityDeviation.lean 相对论公式的差值项：光速不变=(c-v)被分母抵消；γ²用差值参数化
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -69,3 +70,4 @@ import ProjectionPhysics.PauliMathlib
 import ProjectionPhysics.DiracMathlib
 import ProjectionPhysics.MinimalCoreMathlib
 import ProjectionPhysics.SpaceMetric
+import ProjectionPhysics.RelativityDeviation

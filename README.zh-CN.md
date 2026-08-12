@@ -161,6 +161,8 @@ ProjectionPhysics/
                          # ⟹dτ=0 不花时间；质量偏离⟹dτ>0；时间=偏离程度（SM1–SM6）
     └── MinimalCoreMathlib.lean # MC6' 三胶子纠缠：m_G²=m₁²+m₂²+m₃² 叠加锚定；
                                 # (σ₁+σ₂+σ₃)ψ≠0 纠缠流（混沌阈值 λ≥1.5）
+    └── RelativityDeviation.lean # RD1–RD7 相对论差值项：光速不变=(c−v)被分母抵消；
+                                 # γ²(u)=1/(2u/c−u²/c²)；光子 u=0⟹dτ=0
 ```
 
 ## 路线（下一步）

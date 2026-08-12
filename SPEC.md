@@ -111,6 +111,7 @@
 | SM3c–SM3d | `mass_implies_deviation_from_flow` + `deviation_implies_mass` | **dτ²>0 ⟹ dx≠c·dt（质量⟹偏离空间流动）；|dx|<|c·dt| ⟹ dτ²>0（偏离⟹质量）** | ★ **"质量=无法随空间以等效光速运动"的精确代数形式**（`SpaceMetric.lean`） |
 | MC5' | `normal_direction_emerges` + `spin_normal_flow_nonzero` | **σ₃=−iσ₁σ₂（法向量从平面涌现）；自旋非零 ⟹ σ₃ψ≠0（自旋的法向量运动轨迹）⟹ 法向量锚定>0** | ★ **自旋法向量运动⟹质量**（leo 机制：法向量方向运动轨迹导致质量）（`MinimalCoreMathlib.lean`） |
 | MC6' | `glueballMassSq3_pos` + `entangled_triplet_flow_nonzero` | **三方向叠加锚定 m_G²=m₁²+m₂²+m₃²>0；(σ₁+σ₂+σ₃)ψ≠0（纠缠流，det=−3≠0 可逆）** | ★ **三胶子纠缠**：三个方向运动叠加锚定 + 纠缠流（数值：混沌阈值 λ≥1.5）（`MinimalCoreMathlib.lean`） |
+| RD1–RD7 | `photon_velocity_sum_invariant` + `galilean_vs_relativistic` + `gammaSq_eq_deviation_form` + `photon_gamma_diverges` + `rest_gamma_one` + `deviation_denominator` + `massive_deviation_positive_denominator` | **★ (c−v)/(1−cv/c²)=c（光速不变=差值被分母抵消）；γ²(c,c−u)=γ²_dev(c,u)=1/(2u/c−u²/c²)；光子 u=0⟹γ=∞⟹dτ=0；静止 u=c⟹γ=1；质量 0<u<c⟹分母>0** | ★ **相对论公式的差值项**：矢量光速−物质速度的差值进入速度加法与洛伦兹因子（`RelativityDeviation.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

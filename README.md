@@ -270,6 +270,8 @@ ProjectionPhysics/
                                # ⟹ dτ=0 (no time); massive deviation ⟹ dτ>0; time=deviation (SM1–SM6)
     └── MinimalCoreMathlib.lean # MC6': triplet entanglement — m_G²=m₁²+m₂²+m₃² superposition
                                # anchoring; (σ₁+σ₂+σ₃)ψ≠0 entangled flow (chaos threshold λ≥1.5)
+    └── RelativityDeviation.lean # RD1–RD7: velocity-difference term — (c−v)/(1−cv/c²)=c
+                               # (light-speed invariance = difference cancelled); γ²(u)=1/(2u/c−u²/c²)
 ```
 
 ## 7. Next steps
