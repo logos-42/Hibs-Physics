@@ -108,6 +108,8 @@
 | DB1'–DB6' | `gamma0_sq` + `gamma1_sq`/`gamma2_sq`/`gamma3_sq` + 反交换×6 + `mass_equation_couples_chiralities` + `zero_mass_has_chiral_asymmetry` | **γ⁰²=1；γⁱ²=−1（空间方向度规签名）；γ⁰γⁱ+γⁱγ⁰=0；γ⁰ψ=ψ⟺ψ_L=ψ_R；∃ψ 手征不对称** | 狄拉克桥的 mathlib 重写（4×4 矩阵 + Fin 4 旋量；质量=手征耦合）（`DiracMathlib.lean`） |
 | MC1'–MC4' | `anchorMassSq_pos_of_nonzero` + `anchorMassSq_zero_of_zero` + `anchorMassSq_component` | **非零旋量 ⟹ m²>0；零旋量 ⟹ m²=0；m²=|ψ₁|²+|ψ₀|²** | 最小核心的 mathlib 重写（`Complex.normSq`；自旋非零⟹质量非零）（`MinimalCoreMathlib.lean`） |
 | SM1–SM6 | `photon_proper_time_zero` + `massive_proper_time_positive` + `photon_comoving_zero_deviation` + `proper_time_eq_metric` + `metric_det` + `proper_time_dilation` | **光子 dx=c·dt ⟹ dτ²=0（不花时间）；质量 |dx|<|c·dt| ⟹ dτ²>0；u=dx/dt−c（光子 u=0⟺dτ²=0）；dτ²=g_μνΔx^μΔx^ν；det=−1/c²；1−tanh²θ=1/cosh²θ** | ★ **GR 重构种子**：空间以 c 流动、光子=空间流动本身、时间=偏离空间流动的程度（`SpaceMetric.lean`） |
+| SM3c–SM3d | `mass_implies_deviation_from_flow` + `deviation_implies_mass` | **dτ²>0 ⟹ dx≠c·dt（质量⟹偏离空间流动）；|dx|<|c·dt| ⟹ dτ²>0（偏离⟹质量）** | ★ **"质量=无法随空间以等效光速运动"的精确代数形式**（`SpaceMetric.lean`） |
+| MC5' | `normal_direction_emerges` + `spin_normal_flow_nonzero` | **σ₃=−iσ₁σ₂（法向量从平面涌现）；自旋非零 ⟹ σ₃ψ≠0（自旋的法向量运动轨迹）⟹ 法向量锚定>0** | ★ **自旋法向量运动⟹质量**（leo 机制：法向量方向运动轨迹导致质量）（`MinimalCoreMathlib.lean`） |
 
 ## 2.5 推导链：公理 → 矩阵 / 张量 / 自旋（已形式化）
 

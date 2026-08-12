@@ -31,6 +31,43 @@ abbrev Spinor : Type := Fin 2 → ℂ
 /-- σ₁ = [[0, 1], [1, 0]]（x 方向自旋生成元，同项目 Clifford）。 -/
 def σ₁ : Mat2C := !![ 0, 1; 1, 0 ]
 
+/-- σ₂ = [[0, -i], [i, 0]]（y 方向——"另一个方向"，含虚数单位）。 -/
+def σ₂ : Mat2C := !![ 0, -Complex.I; Complex.I, 0 ]
+
+/-- σ₃ = [[1, 0], [0, -1]]（z 方向——★ 法向量方向，平面外）。 -/
+def σ₃ : Mat2C := !![ 1, 0; 0, -1 ]
+
+/-- ★ 法向量从平面内运动涌现：σ₃ = −i·σ₁σ₂（对应 SpaceLightSpeed 的
+    normal_direction_emerges_from_plane，mathlib 版）。
+    平面内两个方向的运动（σ₁σ₂）产生平面外的法向量（σ₃）——
+    "第三个方向不是独立的，是从平面涌现的"。 -/
+theorem normal_direction_emerges :
+    σ₃ = (-Complex.I : ℂ) • (σ₁ * σ₂) := by
+  ext i j <;> fin_cases i <;> fin_cases j <;>
+    simp [σ₁, σ₂, σ₃, Matrix.mul_apply] <;> ring
+
+/-- ★ 自旋的法向量运动：自旋非零 ⟹ 法向量方向的旋量流非零（σ₃ψ ≠ 0）。
+    "自旋应该有一个法向量方向的运动轨迹导致质量产生"（leo）——
+    这正是它的代数形式：自旋在平面外（法向量）方向产生运动，
+    使粒子偏离空间平面内流动 ⟹ 锚定 ⟹ 质量。 -/
+theorem spin_normal_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
+    σ₃.mulVec ψ ≠ 0 := by
+  -- σ₃² = 1（Clifford），σ₃ 可逆 ⟹ 非零旋量映射到非零旋量
+  have hsq : σ₃ * σ₃ = 1 := by
+    ext i j <;> fin_cases i <;> fin_cases j <;>
+      simp [σ₃, Matrix.mul_apply] <;> ring
+  intro hz
+  apply h
+  -- ψ = σ₃(σ₃ψ) = σ₃ 0 = 0
+  calc
+    ψ = σ₃.mulVec (σ₃.mulVec ψ) := by
+      have : σ₃.mulVec (σ₃.mulVec ψ) = (σ₃ * σ₃).mulVec ψ := by
+        simp [Matrix.mulVec_mulVec]
+      rw [this, hsq]
+      simp [Matrix.mulVec]
+    _ = σ₃.mulVec 0 := by rw [hz]
+    _ = 0 := by simp [Matrix.mulVec]
+
 /-- 旋量流：σ₁ψ（空间运动在旋量上的作用）。 -/
 def spinFlow (ψ : Spinor) : Spinor := σ₁.mulVec ψ
 

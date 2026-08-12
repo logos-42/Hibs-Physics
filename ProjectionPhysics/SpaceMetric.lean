@@ -100,6 +100,25 @@ theorem photon_comoving_zero_deviation (c : ℝ) (dt dx : ℝ)
     linarith
   exact photon_proper_time_zero c dt dx hc hdx
 
+/-- ★ SM3c：质量（dτ² > 0）⟹ 偏离空间流动（dx ≠ c·dt）。
+    ★ 这是"质量 = 无法随空间以等效光速运动"的精确形式：
+    若物体完全随空间流动（dx = c·dt），则它无质量（dτ² = 0，SM1）。
+    故有质量物体必然偏离空间流动——"空间阻力"的代数内容。 -/
+theorem mass_implies_deviation_from_flow (c : ℝ) (dt dx : ℝ)
+    (hc : c ≠ 0) (h : 0 < properTimeSq c dt dx) :
+    dx ≠ c * dt := by
+  -- 反证：若 dx = c·dt，则 dτ² = 0，与 dτ² > 0 矛盾
+  intro hdx
+  have hz : properTimeSq c dt dx = 0 := photon_proper_time_zero c dt dx hc hdx
+  linarith
+
+/-- ★ SM3d：偏离空间流动 ⟹ 有质量（dτ² > 0 的充分条件版本）。
+    |dx| < |c·dt|（偏离但低于光速）⟹ dτ² > 0。 -/
+theorem deviation_implies_mass (c : ℝ) (dt dx : ℝ)
+    (hc : c ≠ 0) (h : |dx| < |c * dt|) :
+    0 < properTimeSq c dt dx :=
+  massive_proper_time_positive c dt dx hc h
+
 /-- ★ SM3b：质量粒子（偏离空间流动 u ≠ 0）在低于光速时花时间。 -/
 theorem massive_deviation_positive_time (c : ℝ) (dt dx : ℝ)
     (hc : c ≠ 0) (hdt : dt ≠ 0)
