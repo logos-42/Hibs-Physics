@@ -1,0 +1,18 @@
+# lefthook 配置：lean 编译成功才能 commit/push
+# 触发: pre-commit / pre-push 自动跑 lake build，失败即阻止
+
+pre-commit:
+  parallel: false
+  commands:
+    lean-build:
+      run: lake build
+      tags: [lean]
+      fail_text: "❌ Lean 编译失败——修复后再提交 (lake build)"
+
+pre-push:
+  parallel: false
+  commands:
+    lean-build:
+      run: lake build
+      tags: [lean]
+      fail_text: "❌ Lean 编译失败——修复后再推送 (lake build)"
