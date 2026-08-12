@@ -203,7 +203,7 @@ def main() -> int:
                         help="crystallized claims manifest (for crystallized_claims 校验)")
     args = parser.parse_args()
 
-    wiki_root = args.wiki_root
+    wiki_root = args.wiki_root.resolve()
     if not wiki_root.exists():
         print(f"wiki_lint: {wiki_root} does not exist")
         return 1

@@ -8,3 +8,8 @@ name = "ProjectionPhysics"
 [[lean_exe]]
 name = "projphys"
 root = "Main"
+
+[[require]]
+name = "mathlib"
+git = "/Users/apple/lm-principle/.lake/packages/mathlib"
+rev = "v4.28.0"

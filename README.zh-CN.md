@@ -149,6 +149,10 @@ ProjectionPhysics/
                          # DB5: m=0⟹Weyl 手征对称=光子；DB6: γ 反交换）
     └── SpaceLightSpeed.lean # ★ SLS6 相对论重构：惯性系=随空间流动；
                              # 光速不变=空间流动普适（洛伦兹公式形式保持）
+    └── LorentzRebuild.lean # ★ 洛伦兹重构（mathlib）：boost 保持度规 η=diag(-1,1)；
+                            # γ²-γ²β²=1；快度加法；速度加法；β<1（LR1–LR5）
+    └── PauliMathlib.lean # Clifford 核心的 mathlib 重写（σ²=I/反交换/i 涌现/
+                          # σ₃=-iσ₁σ₂）——ext+fin_cases+ring 替代分量 omega（C1'–C4'）
 ```
 
 ## 路线（下一步）

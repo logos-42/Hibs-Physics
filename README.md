@@ -258,6 +258,10 @@ ProjectionPhysics/
                                # DB5: m=0 ⟹ Weyl chiral symmetry = photon; DB6: γ anticommute)
     └── SpaceLightSpeed.lean   # ★ SLS6 relativity rebuild: inertia = comoving with space flow;
                                # light-speed invariance = space-flow universality (Lorentz keeps form)
+    └── LorentzRebuild.lean    # ★ Lorentz rebuild (mathlib): boost preserves Minkowski η=diag(-1,1);
+                               # γ²-γ²β²=1; rapidity additivity; velocity addition; β<1 (LR1–LR5)
+    └── PauliMathlib.lean      # Clifford core rewritten with mathlib (σ²=I, anticommute, i emergence;
+                               # σ₃=-iσ₁σ₂) — ext+fin_cases+ring instead of component omega (C1'–C4')
 ```
 
 ## 7. Next steps

@@ -31,6 +31,8 @@
 --   MinimalCore.lean     最小核心命题：质量=自旋旋量流(σψ)对空间运动的锚定 + 隐数版
 --   SpaceLightSpeed.lean 矢量光速：空间本身的等效速度（新概念）+ 光子/电子锚定
 --   DiracBridge.lean     狄拉克方程桥：质量项 = 手征耦合（Weyl 分解, γ 矩阵反交换）
+--   LorentzRebuild.lean  洛伦兹重构（mathlib）：新假设下 boost 保持度规/快度加法/速度加法
+--   PauliMathlib.lean    Clifford 核心的 mathlib 重写（对照版，simp+ring 即可）
 
 import ProjectionPhysics.Definitions
 import ProjectionPhysics.Kernel
@@ -59,3 +61,5 @@ import ProjectionPhysics.GlueballBridge
 import ProjectionPhysics.MinimalCore
 import ProjectionPhysics.SpaceLightSpeed
 import ProjectionPhysics.DiracBridge
+import ProjectionPhysics.LorentzRebuild
+import ProjectionPhysics.PauliMathlib

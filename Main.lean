@@ -42,3 +42,5 @@ def main : IO Unit := do
   IO.println "矢量光速 (SLS1–SLS3): 光速=空间本身的等效速度(非物质速度)；光子零锚定/电子自旋锚定"
   IO.println "狄拉克桥 (DB1–DB6): 质量项=手征耦合 (γ⁰ψ=ψ ⟺ ψ_L=ψ_R)；零质量⟹手征对称(Weyl)"
   IO.println "相对论重构 (SLS6): 公式形式不变/解释层全变 — c=空间流动, 惯性系=随空间, 引力=流动非均匀"
+  IO.println "洛伦兹重构 (LR1–LR5, mathlib): boost 保持度规 η=diag(-1,1)；γ²-γ²β²=1；快度加法；速度加法；β<1"
+  IO.println "Pauli mathlib 对照 (C1'–C4'): σ²=I；反交换；i 涌现；σ₃=-iσ₁σ₂ (simp+ring 即可)"

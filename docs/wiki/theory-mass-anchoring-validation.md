@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: verification
+entity_type: claim
 tags: [minimal-core, mass, electron, glueball, spinor-flow, numerical-check, honesty]
 status: current
 ---
