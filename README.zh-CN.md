@@ -163,6 +163,8 @@ ProjectionPhysics/
                                 # (σ₁+σ₂+σ₃)ψ≠0 纠缠流（混沌阈值 λ≥1.5）
     └── RelativityDeviation.lean # RD1–RD7 相对论差值项：光速不变=(c−v)被分母抵消；
                                  # γ²(u)=1/(2u/c−u²/c²)；光子 u=0⟹dτ=0
+    └── SphericalHarmonics.lean # SH1–SH5 胶球力=球谐函数猜想：(σ₁+σ₂+σ₃)²=3I
+                                # 球对称标量；三胶子=Y_1 三分量；GR 推广=角动量→质量源
 ```
 
 ## 路线（下一步）

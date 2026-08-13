@@ -272,6 +272,8 @@ ProjectionPhysics/
                                # anchoring; (σ₁+σ₂+σ₃)ψ≠0 entangled flow (chaos threshold λ≥1.5)
     └── RelativityDeviation.lean # RD1–RD7: velocity-difference term — (c−v)/(1−cv/c²)=c
                                # (light-speed invariance = difference cancelled); γ²(u)=1/(2u/c−u²/c²)
+    └── SphericalHarmonics.lean # SH1–SH5: glueball force = spherical harmonics —
+                               # (σ₁+σ₂+σ₃)²=3I (three-direction coupling = spherical scalar)
 ```
 
 ## 7. Next steps
