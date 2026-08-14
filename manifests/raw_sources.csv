@@ -14,3 +14,11 @@ session-20260814-helix,local,ProjectionPhysics,artifact,fig_flow_rotation.png,..
 session-20260814-helix,local,ProjectionPhysics,artifact,fig_heatmap.png,../artifacts/entanglement/fig_heatmap.png,generated,docs/wiki/theory-entanglement-helix.md,E差值热图
 session-20260814-helix,local,ProjectionPhysics,artifact,report.json,../artifacts/entanglement/report.json,generated,docs/wiki/theory-entanglement-helix.md,贝尔检验结构化报告JSON
 session-20260814-helix,local,ProjectionPhysics,artifact,report.md,../artifacts/entanglement/report.md,generated,docs/wiki/theory-entanglement-helix.md,贝尔检验报告MD
+session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_flow_structures.png,../artifacts/blackhole/fig_flow_structures.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞vs虫洞流场对比(单调过c vs 峰值<c)
+session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_photon_freeze.png,../artifacts/blackhole/fig_photon_freeze.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞光锥:向外光子视界处冻结
+session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_time_dilation.png,../artifacts/blackhole/fig_time_dilation.png,generated,docs/wiki/theory-blackhole-wormhole.md,时间膨胀√(1−r_s/r)在视界归零
+session-20260814-bhwh,local,ProjectionPhysics,artifact,blackhole_3d.png,../artifacts/blackhole/blackhole_3d.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞3D:内向流动漏斗+视界球+光子轨迹
+session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_3d.png,../artifacts/blackhole/wormhole_3d.png,generated,docs/wiki/theory-blackhole-wormhole.md,虫洞3D:双漏斗嵌入+喉部+流线
+session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_traverse.gif,../artifacts/blackhole/wormhole_traverse.gif,generated,docs/wiki/theory-blackhole-wormhole.md,光子穿越虫洞动画(dτ=0全程)
+session-20260814-bhwh,local,ProjectionPhysics,artifact,report.json,../artifacts/blackhole/report.json,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告JSON
+session-20260814-bhwh,local,ProjectionPhysics,artifact,report.md,../artifacts/blackhole/report.md,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告MD
