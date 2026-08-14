@@ -32,7 +32,7 @@ status: current
 
 ## 2. Lean 中的最小模型
 
-新模块：[HiddenSpacePhysics.lean](../../ProjectionPhysics/HiddenSpacePhysics.lean)。在此基础上，HIBS 到 Higgs-Yukawa、离散 beta 和质量壳/零锥的接口见 [theory-hibs-physical-bridges.md](./theory-hibs-physical-bridges.md)。
+新模块：[HiddenSpacePhysics.lean](../../ProjectionPhysics/Archive/HiddenSpacePhysics.lean)。在此基础上，HIBS 到 Higgs-Yukawa、离散 beta 和质量壳/零锥的接口见 [theory-hibs-physical-bridges.md](./theory-hibs-physical-bridges.md)。
 
 ### 2.1 三轴与转换
 

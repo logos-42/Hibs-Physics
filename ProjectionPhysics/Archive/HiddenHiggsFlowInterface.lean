@@ -4,7 +4,7 @@
 -- `HiddenFlowParameter` is an external algebraic index, not time. The static
 -- model remains unchanged when this optional interface is not imported.
 
-import ProjectionPhysics.HiddenOnlyHiggs
+import ProjectionPhysics.Archive.HiddenOnlyHiggs
 
 namespace ProjectionPhysics
 

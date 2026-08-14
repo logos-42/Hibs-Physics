@@ -15,7 +15,7 @@
 --   (A3) 2×2 复矩阵的乘法结合律（真实矩阵算法的验证）
 --   (A4) 矩阵乘法分配律（复合对加法的分配）
 
-import ProjectionPhysics.Definitions
+import ProjectionPhysics.Archive.Definitions
 
 namespace ProjectionPhysics
 

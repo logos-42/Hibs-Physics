@@ -15,7 +15,7 @@
 -- QCD 或连续时空的完整推导。特别是“渐近自由”在这里是一个离散
 -- proximity law，尚未等同于 QCD 的 beta 函数。
 
-import ProjectionPhysics.Clifford
+import ProjectionPhysics.Archive.Clifford
 
 namespace ProjectionPhysics
 

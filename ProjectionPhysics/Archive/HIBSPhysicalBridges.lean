@@ -13,7 +13,7 @@
 -- a continuous manifold. The theorems below prove the consequences of the
 -- stated bridge assumptions.
 
-import ProjectionPhysics.HiddenSpacePhysics
+import ProjectionPhysics.Archive.HiddenSpacePhysics
 
 namespace ProjectionPhysics
 

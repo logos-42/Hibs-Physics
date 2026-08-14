@@ -18,7 +18,7 @@ status: current
 
 ## 1. 这次完成了什么
 
-新模块 [HIBSPhysicalBridges.lean](../../ProjectionPhysics/HIBSPhysicalBridges.lean) 把 HIBS 的标签对空间作为适配层接入本仓库。它镜像 HIBS 仓库中的 `Hidden`、`Tag`、加法/减法、乘法和开方标签规则，但不直接依赖 sibling Lake 工程，避免两个工程的 namespace 和编译边界混在一起。
+新模块 [HIBSPhysicalBridges.lean](../../ProjectionPhysics/Archive/HIBSPhysicalBridges.lean) 把 HIBS 的标签对空间作为适配层接入本仓库。它镜像 HIBS 仓库中的 `Hidden`、`Tag`、加法/减法、乘法和开方标签规则，但不直接依赖 sibling Lake 工程，避免两个工程的 namespace 和编译边界混在一起。
 
 如果只想保留 hidden 轴并删除时间，请见 [纯隐数、无时间的静态 Higgs 模型](./theory-hidden-only-higgs.md)。
 

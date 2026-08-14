@@ -10,8 +10,8 @@
 -- three color occupations, while the matrix-level adjoint action is defined
 -- on traceless matrices in SU3Bridge.
 
-import ProjectionPhysics.HiddenOnlyHiggs
-import ProjectionPhysics.SU3Bridge
+import ProjectionPhysics.Archive.HiddenOnlyHiggs
+import ProjectionPhysics.Explorations.SU3Bridge
 
 namespace ProjectionPhysics
 

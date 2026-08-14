@@ -16,7 +16,7 @@
 --   (C4) σ₃ = -i·σ₁σ₂                （第三个生成元从前两个涌现）
 --   (C5) 自旋表示：Pauli 矩阵生成 Cℓ(3)（任意两个生成元决定第三个）
 
-import ProjectionPhysics.Algebra
+import ProjectionPhysics.Archive.Algebra
 
 namespace ProjectionPhysics
 

@@ -5,7 +5,7 @@
 -- while weighted clock accumulation models position/state-dependent discrete
 -- proper-time increments without introducing a continuous time coordinate.
 
-import ProjectionPhysics.HiddenOnlyHiggs
+import ProjectionPhysics.Archive.HiddenOnlyHiggs
 
 namespace ProjectionPhysics
 

@@ -10,7 +10,7 @@
 --   (K4) 非平凡核 ⟹ 存在内部自由度 —— Kernel Null 论证链第一步
 --   (K5) 单射嵌入 ⟹ 存在左逆投影  —— 投影的存在性来自嵌入的单射性
 
-import ProjectionPhysics.Definitions
+import ProjectionPhysics.Archive.Definitions
 
 namespace ProjectionPhysics
 

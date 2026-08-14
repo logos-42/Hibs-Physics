@@ -17,7 +17,7 @@
 -- 块归约引理（diag/cross 型）把反交换证明归约到低一层，
 -- 避免 8×8 的 64 分量展开。
 
-import ProjectionPhysics.DiracBridge
+import ProjectionPhysics.Archive.DiracBridge
 
 namespace ProjectionPhysics
 

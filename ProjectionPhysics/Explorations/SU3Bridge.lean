@@ -5,7 +5,7 @@
 -- the matrix-level SU(3) contract and an explicit nontrivial cyclic subgroup
 -- represented by determinant-one unitary 3x3 permutation matrices.
 
-import ProjectionPhysics.Algebra
+import ProjectionPhysics.Archive.Algebra
 
 namespace ProjectionPhysics
 

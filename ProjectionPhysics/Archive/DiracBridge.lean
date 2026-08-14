@@ -19,7 +19,7 @@
 -- 诚实边界：验证的是质量项的代数结构（手征耦合），
 -- 不是质量数值（m 仍是自由参数；数值来源需 Higgs/Yukawa 层）。
 
-import ProjectionPhysics.Clifford
+import ProjectionPhysics.Archive.Clifford
 
 namespace ProjectionPhysics
 

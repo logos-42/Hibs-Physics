@@ -33,7 +33,7 @@ status: current
 - `HiddenSpacePhysics.lean` 已有空间流、旋量阻抗和三夸克质量原型；但 `QuarkTriplet` 不能直接代表胶球，因为胶球不是三夸克态。
 - `HIBSPhysicalBridges.lean` 的 Yukawa、离散 beta 和质量壳均是显式桥接结构的后果；其中离散 beta 不是 QCD beta，质量壳字段也不是 HIBS A1–A3 的自动推论。
 
-新增 [SU3Bridge.lean](../../ProjectionPhysics/SU3Bridge.lean) 与 [GlueballBridge.lean](../../ProjectionPhysics/GlueballBridge.lean) 已把 G1–G4 的最小依赖链编译进 Lean：
+新增 [SU3Bridge.lean](../../ProjectionPhysics/Explorations/SU3Bridge.lean) 与 [GlueballBridge.lean](../../ProjectionPhysics/Explorations/GlueballBridge.lean) 已把 G1–G4 的最小依赖链编译进 Lean：
 
 - `Mat3` / `SU3Matrix`：3×3 复矩阵、幺正性、行列式 1 与显式 `C₃` 矩阵子群；
 - `TracelessMat3` / `c3AdjointAction`：在 traceless 矩阵色空间上的共轭伴随作用，已证明单位元与组合律；

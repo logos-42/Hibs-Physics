@@ -16,7 +16,7 @@
 --   已证:SB1 因子化势是核平移对称的 · SB2 核纤维都是真空 · SB3 破缺真空存在
 --   草案:SymmetryBreaking 结构(axiom-like,与 D1–D7 同级)
 
-import ProjectionPhysics.Kernel
+import ProjectionPhysics.Archive.Kernel
 
 namespace ProjectionPhysics
 

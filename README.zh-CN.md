@@ -116,57 +116,28 @@ ProjectionPhysics/
 ├── README.zh-CN.md         # 本文件（中文概览）
 ├── ProjectionPhysics.lean   # 根模块
 ├── Main.lean                # 可执行入口
-└── ProjectionPhysics/
-    ├── Definitions.lean     # 投影/核/像/信息守恒/不变量/二次型/ProjectionPair
-    ├── Kernel.lean          # 核的代数性质（K1–K6，全部已证）
-    ├── Completeness.lean    # 不变量因子化（已证）+ 完备性草案
-    ├── Mass.lean            # 核质量（平凡核情形已证）+ 核表示草案
-    ├── NullTheorem.lean     # Kernel Null 草案 + 代数核心
-    ├── Bridges.lean         # 五座桥梁的代数定义
-    ├── Algebra.lean         # 矩阵算法：加法群→自同态环→乘法结合律（A1–A4）
-    ├── Clifford.lean        # 自旋：Pauli 反交换 + i 涌现 + 完整乘法表（C1–C6）
-    ├── LinearAlgebra.lean   # 矢量/张量/kernel：向量空间公理、核子空间、
-    │                        # rank-nullity（虚轴 = ker Re）、极化恒等式（L1–L6）
-    ├── HiddenSpace.lean     # 隐数空间：无状态向量、Option 标签、状态生成（H1–H5）
-    ├── Quaternion.lean      # 四元数（比较对象）：i²=j²=k²=ijk=-1 从 Clifford 涌现（Q1–Q7）
-    ├── ProjectionAlgebra.lean # 隐数投影代数（主线）：互补投影、复合半群、
-    │                          # 核质量泄露、核张量（PA1–PA8）
-    ├── HiddenSpacePhysics.lean # 新离散物理桥梁：三轴、空间流、旋量阻抗质量、
-    │                           # 三夸克自由度指数、路径长度时间（HSP1–HSP5）
-    ├── HIBSPhysicalBridges.lean # HIBS 适配：A1–A3、Higgs-Yukawa 型质量、
-    │                            # 离散 beta、质量壳/零锥契约（HIBS1–HIBS5）
-    ├── HiddenOnlyHiggs.lean     # 纯隐数、无时间的静态 Higgs/Yukawa 型质量桥
-    ├── HiddenHiggsFlowInterface.lean # 独立流参数接口，不等同于时间
-    ├── HiddenAxisConversions.lean # H/R/I 全状态正交可逆转换标准
-    ├── HiddenMassTimeEvents.lean # 质量事件计数与离散涌现时间同步
-    ├── HiddenEventClocks.lean # 事件/质量事件区分、局部离散时钟与路径聚合
-    ├── FlowConservation.lean # Flow 链组合律与条件式动量不变量
-    └── MinimalCore.lean # ★ 最小核心：质量=自旋旋量流对空间运动的锚定
-                         # （旋量阻抗）⟹ m≠0；胶球 m_G²=|a|²+|b|²+|c|²>0（MC1–MC2）
-    └── SpaceLightSpeed.lean # ★ 矢量光速：光速=空间本身的等效速度（新概念）；
-                             # 光子=完全随空间⟹零锚定；电子=自旋⟹锚定为正（SLS1–SLS3）
-    └── DiracBridge.lean # ★ 狄拉克桥：质量项=手征耦合（DB4: γ⁰ψ=ψ⟺ψ_L=ψ_R；
-                         # DB5: m=0⟹Weyl 手征对称=光子；DB6: γ 反交换）
-    └── SpaceLightSpeed.lean # ★ SLS6 相对论重构：惯性系=随空间流动；
-                             # 光速不变=空间流动普适（洛伦兹公式形式保持）
-    └── LorentzRebuild.lean # ★ 洛伦兹重构（mathlib）：boost 保持度规 η=diag(-1,1)；
-                            # γ²-γ²β²=1；快度加法；速度加法；β<1（LR1–LR5）
-    └── PauliMathlib.lean # Clifford 核心的 mathlib 重写（σ²=I/反交换/i 涌现/
-                          # σ₃=-iσ₁σ₂）——ext+fin_cases+ring 替代分量 omega（C1'–C4'）
-    └── DiracMathlib.lean # 狄拉克桥的 mathlib 重写：4×4 γ 矩阵（γ⁰²=1/γⁱ²=-1
-                          # 度规签名、反交换、质量=手征耦合）（DB1'–DB6'）
-    └── MinimalCoreMathlib.lean # 最小核心的 mathlib 重写：m²=|ψ₁|²+|ψ₀|²
-                                # （旋量流锚定；非零旋量⟹m>0）（MC1'–MC4'）
-    └── SpaceMetric.lean # 空间流动度规（GR 重构种子）：光子随空间（dx=c·dt）
-                         # ⟹dτ=0 不花时间；质量偏离⟹dτ>0；时间=偏离程度（SM1–SM6）
-    └── MinimalCoreMathlib.lean # MC6' 三胶子纠缠：m_G²=m₁²+m₂²+m₃² 叠加锚定；
-                                # (σ₁+σ₂+σ₃)ψ≠0 纠缠流（混沌阈值 λ≥1.5）
-    └── RelativityDeviation.lean # RD1–RD7 相对论差值项：光速不变=(c−v)被分母抵消；
-                                 # γ²(u)=1/(2u/c−u²/c²)；光子 u=0⟹dτ=0
-    └── SphericalHarmonics.lean # SH1–SH5 胶球力=球谐函数猜想：(σ₁+σ₂+σ₃)²=3I
-                                # 球对称标量；三胶子=Y_1 三分量；GR 推广=角动量→质量源
-    └── SpaceGravity.lean # SG1–SG6 GR 从动量守恒推导：Gordon 度规
-                          # g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]；Φ=½v² 匹配弱场 GR
+└── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24
+    ├── SpaceLightSpeed.lean     # ★ 主线：矢量光速——c=空间本身的等效速度；光子随空间⟹m=0；电子自旋⟹m>0（SLS1–SLS6）
+    ├── SpaceMetric.lean         # ★ 主线：空间流动度规——dτ²=dt²−dx²/c²；光子 dx=c·dt⟹dτ=0；质量=偏离⟹dτ>0（SM1–SM6）
+    ├── SpaceGravity.lean        # ★ 主线：Gordon 度规——g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]；Φ=½v² 匹配弱场 GR（SG1–SG11）
+    ├── RelativityDeviation.lean # 主线：差值相对论——(c−v)/(1−cv/c²)=c；γ²(u)=1/(2u/c−u²/c²)（RD1–RD7）
+    ├── LorentzRebuild.lean      # 主线（mathlib）：洛伦兹重构——boost 保持度规/快度加法/速度加法/β<1（LR1–LR5）
+    ├── PauliMathlib.lean        # 主线（mathlib）：Clifford 重写（C1'–C4'）
+    ├── DiracMathlib.lean        # 主线（mathlib）：狄拉克桥——γ⁰²=1、γⁱ²=−1；质量=手征耦合（DB1'–DB6'）
+    ├── MinimalCoreMathlib.lean  # 主线（mathlib）：质量=锚定——m²=|ψ₁|²+|ψ₀|²；非零旋量⟹m>0（MC1'–MC6'）
+    ├── Explorations/            # 冻结（2026-08-14）：胶球/色结构——不再加定理
+    │   ├── SpinStatistics.lean      # 自旋统计硬约束（SS1–SS8）
+    │   ├── CliffordSix.lean         # Cℓ(6) 8 维表示（CS1–CS3）
+    │   ├── ColorOctetMathlib.lean   # 3⊗3=8⊕1 无迹分解（CM1–CM3）
+    │   ├── SphericalHarmonics.lean  # 胶球力=球谐（SH1–SH5）
+    │   ├── SU3Bridge.lean           # SU(3) 循环子群
+    │   └── GlueballBridge.lean      # SU(3) 色作用、胶球质量
+    └── Archive/                 # 弃用（08-06 前隐数路线 + core 双轨）：Definitions/Kernel/Completeness/
+                                # Mass/NullTheorem/Bridges/Algebra/Clifford/LinearAlgebra/Differential/
+                                # SymmetryBreaking/HiddenSpace/Quaternion/ProjectionAlgebra/HiddenSpacePhysics/
+                                # HIBSPhysicalBridges/HiddenOnlyHiggs/HiddenHiggsFlowInterface/
+                                # HiddenAxisConversions/HiddenMassTimeEvents/HiddenEventClocks/
+                                # FlowConservation/DiracBridge/MinimalCore
 ```
 
 ## 路线（下一步）

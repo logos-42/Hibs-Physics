@@ -1,5 +1,7 @@
 # Wiki 索引
 
+> **代码分层（2026-08-14 减法重组）**：主线 8 模块（空间流动假设=全部物理）→ `ProjectionPhysics/` 根目录；探索 6 模块（胶球/色，frozen）→ `ProjectionPhysics/Explorations/`；归档 24 模块（隐数前身路线+core 双轨，deprecated）→ `ProjectionPhysics/Archive/`。新模块准入：必须给内核 5 行（见 theory-space-light-speed.md）加不可约新内容。
+
 - [README.md](./README.md)
 - [SCHEMA.md](./SCHEMA.md)
 - [project-overview.md](./project-overview.md)

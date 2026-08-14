@@ -15,7 +15,7 @@
 --
 -- 本模块只使用 core Lean 4(无 mathlib),全部定理已证(零未完成项)。
 
-import ProjectionPhysics.LinearAlgebra
+import ProjectionPhysics.Archive.LinearAlgebra
 
 namespace ProjectionPhysics
 

@@ -18,9 +18,9 @@
 -- 诚实边界：以上是质量候选的代数锚定，不是实验质量、QCD 质量或
 -- MeV 数值。连续时空、规范场动力学、禁闭、色动力学均为后续扩展。
 
-import ProjectionPhysics.Clifford
-import ProjectionPhysics.HiddenOnlyHiggs
-import ProjectionPhysics.GlueballBridge
+import ProjectionPhysics.Archive.Clifford
+import ProjectionPhysics.Archive.HiddenOnlyHiggs
+import ProjectionPhysics.Explorations.GlueballBridge
 
 namespace ProjectionPhysics
 

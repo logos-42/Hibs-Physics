@@ -20,8 +20,8 @@
 -- 诚实边界：这是新概念的代数种子（结构 + 序关系定理），
 -- 不是连续时空，也不是狭义/广义相对论的形式化。
 
-import ProjectionPhysics.Clifford
-import ProjectionPhysics.MinimalCore
+import ProjectionPhysics.Archive.Clifford
+import ProjectionPhysics.Archive.MinimalCore
 
 namespace ProjectionPhysics
 

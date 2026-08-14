@@ -38,7 +38,7 @@
 --   逆元不改变 E9，但逆元让 E9 有了下一步——"位置无关"（加法，平凡）与
 --   "方向无关"（乘法，非平凡）在除法门前分界。
 
-import ProjectionPhysics.Clifford
+import ProjectionPhysics.Archive.Clifford
 
 namespace ProjectionPhysics
 

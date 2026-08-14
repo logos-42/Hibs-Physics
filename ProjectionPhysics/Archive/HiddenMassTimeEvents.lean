@@ -4,7 +4,7 @@
 -- spatial/kernel events, and its length is the emergent event time. The main
 -- theorem proves synchronization: appending one mass event adds one unit.
 
-import ProjectionPhysics.HiddenOnlyHiggs
+import ProjectionPhysics.Archive.HiddenOnlyHiggs
 
 namespace ProjectionPhysics
 

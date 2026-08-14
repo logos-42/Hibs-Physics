@@ -41,7 +41,7 @@ status: current
 → 自旋非零 ⟹ m ≠ 0
 ```
 
-对应代码：[`ProjectionPhysics/MinimalCore.lean`](../../ProjectionPhysics/MinimalCore.lean)（MC1）
+对应代码：[`ProjectionPhysics/Archive/MinimalCore.lean`](../../ProjectionPhysics/Archive/MinimalCore.lean)（MC1）
 
 - `spinFlow σ ψ`：自旋算子作用在旋量上 = 内部运动状态（旋量流）
 - `spinFlowAnchorMass`：锚定质量候选 = 旋量流四分量范数之和
@@ -66,7 +66,7 @@ m_G² = |a|² + |b|² + |c|²
 只要 a, b, c 中至少一个非零 ⟹ m_G² > 0
 ```
 
-对应代码：[`ProjectionPhysics/MinimalCore.lean`](../../ProjectionPhysics/MinimalCore.lean)（MC2）
+对应代码：[`ProjectionPhysics/Archive/MinimalCore.lean`](../../ProjectionPhysics/Archive/MinimalCore.lean)（MC2）
 
 - `minimalTripletGlueball`：三色占据相等的色单态胶球
 - `triplet_glueball_mass_squared_formula`：m_G² = |a|²+|b|²+|c|²
@@ -97,9 +97,9 @@ m_G² = |a|² + |b|² + |c|²
 
 ## 6. 与现有文件的关系
 
-- [`HiddenSpacePhysics.lean`](../../ProjectionPhysics/HiddenSpacePhysics.lean)：HSP3 "自旋 = 对空间运动的旋量阻抗"（锚定语言的现成结构，MC1 的源）
-- [`HiddenOnlyHiggs.lean`](../../ProjectionPhysics/HiddenOnlyHiggs.lean)：m² = (yv)²（Yukawa 型，保留为扩展比较对象）
-- [`GlueballBridge.lean`](../../ProjectionPhysics/GlueballBridge.lean)：纯胶子质量候选非零且非负（MC2 的源）
+- [`HiddenSpacePhysics.lean`](../../ProjectionPhysics/Archive/HiddenSpacePhysics.lean)：HSP3 "自旋 = 对空间运动的旋量阻抗"（锚定语言的现成结构，MC1 的源）
+- [`HiddenOnlyHiggs.lean`](../../ProjectionPhysics/Archive/HiddenOnlyHiggs.lean)：m² = (yv)²（Yukawa 型，保留为扩展比较对象）
+- [`GlueballBridge.lean`](../../ProjectionPhysics/Explorations/GlueballBridge.lean)：纯胶子质量候选非零且非负（MC2 的源）
 - [`theory-glueball-bridge.md`](./theory-glueball-bridge.md)：胶球物理边界详细评估
 
 ## 7. 数值验证结果（2026-08-11，诚实报告 v2）

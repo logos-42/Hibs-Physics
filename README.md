@@ -235,47 +235,36 @@ ProjectionPhysics/
 ├── README.zh-CN.md         # Chinese overview
 ├── ProjectionPhysics.lean   # root module
 ├── Main.lean                # executable
-└── ProjectionPhysics/
-    ├── Definitions.lean     # projection / kernel / image / invariants / quadratic forms
-    ├── Kernel.lean          # kernel algebra (K1–K6, all proved)
-    ├── Completeness.lean    # invariant factorization (proved) + completeness draft
-    ├── Mass.lean            # kernel mass (trivial-kernel case proved) + representation draft
-    ├── NullTheorem.lean     # Kernel Null draft + algebraic core
-    ├── Bridges.lean         # the five bridges (algebraic definitions)
-    ├── Algebra.lean         # matrix arithmetic: additive group → End ring → matMul assoc (A1–A4)
-    ├── Clifford.lean        # spin: Pauli matrices, anticommutation, i-emergence, spinor rep (C1–C6)
-    ├── LinearAlgebra.lean   # vectors/tensors/kernel: VecSpace axioms, kernel subspace,
-    │                        # rank-nullity (iR = ker Re), bilinear forms + polarization (L1–L6)
-    ├── HiddenSpace.lean     # the hidden space: state-less vectors, Option tags, state generation (H1–H5)
-    ├── Quaternion.lean      # quaternions (comparison object): i²=j²=k²=ijk=-1 from Clifford (Q1–Q7)
-    └── ProjectionAlgebra.lean # hidden projection algebra (main line): complementary projections,
-                               # composition semigroup, kernel mass-melting, kernel tensor (PA1–PA8)
-    └── MinimalCore.lean       # ★ minimal core: mass = anchoring of internal motion against
-                               # space motion (spinor flow σψ) ⟹ m≠0; glueball m_G²=|a|²+|b|²+|c|²>0
-    └── SpaceLightSpeed.lean   # ★ vector light speed: c = space's own equivalent velocity (new
-                               # concept); photon = comoving ⟹ m=0; electron = spin ⟹ m>0 (SLS1–SLS3)
-    └── DiracBridge.lean       # ★ Dirac bridge: mass term = chiral coupling (DB4: γ⁰ψ=ψ ⟺ ψ_L=ψ_R;
-                               # DB5: m=0 ⟹ Weyl chiral symmetry = photon; DB6: γ anticommute)
-    └── SpaceLightSpeed.lean   # ★ SLS6 relativity rebuild: inertia = comoving with space flow;
-                               # light-speed invariance = space-flow universality (Lorentz keeps form)
-    └── LorentzRebuild.lean    # ★ Lorentz rebuild (mathlib): boost preserves Minkowski η=diag(-1,1);
-                               # γ²-γ²β²=1; rapidity additivity; velocity addition; β<1 (LR1–LR5)
-    └── PauliMathlib.lean      # Clifford core rewritten with mathlib (σ²=I, anticommute, i emergence;
-                               # σ₃=-iσ₁σ₂) — ext+fin_cases+ring instead of component omega (C1'–C4')
-    └── DiracMathlib.lean      # Dirac bridge rewritten with mathlib: 4×4 γ matrices (γ⁰²=1, γⁱ²=-1
-                               # metric signature; anticommute; mass=chiral coupling) (DB1'–DB6')
-    └── MinimalCoreMathlib.lean # Minimal core rewritten with mathlib: m²=|ψ₁|²+|ψ₀|² (spin-flow
-                               # anchoring; nonzero spinor ⟹ m>0) (MC1'–MC4')
-    └── SpaceMetric.lean        # Space-flow metric (GR rebuild seed): photon comoving (dx=c·dt)
-                               # ⟹ dτ=0 (no time); massive deviation ⟹ dτ>0; time=deviation (SM1–SM6)
-    └── MinimalCoreMathlib.lean # MC6': triplet entanglement — m_G²=m₁²+m₂²+m₃² superposition
-                               # anchoring; (σ₁+σ₂+σ₃)ψ≠0 entangled flow (chaos threshold λ≥1.5)
-    └── RelativityDeviation.lean # RD1–RD7: velocity-difference term — (c−v)/(1−cv/c²)=c
-                               # (light-speed invariance = difference cancelled); γ²(u)=1/(2u/c−u²/c²)
-    └── SphericalHarmonics.lean # SH1–SH5: glueball force = spherical harmonics —
-                               # (σ₁+σ₂+σ₃)²=3I (three-direction coupling = spherical scalar)
-    └── SpaceGravity.lean      # SG1–SG6: GR from momentum conservation — Gordon metric
-                               # g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]; Φ=½v² matches weak-field GR
+└── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24
+    ├── SpaceLightSpeed.lean     # ★ main line: vector light speed — c = space's own
+    │                            #   equivalent velocity; photon=comoving⟹m=0; electron=spin⟹m>0 (SLS1–SLS6)
+    ├── SpaceMetric.lean         # ★ main line: space-flow metric — dτ²=dt²−dx²/c²; photon
+    │                            #   dx=c·dt ⟹ dτ=0 (no time); mass=deviation ⟹ dτ>0 (SM1–SM6)
+    ├── SpaceGravity.lean        # ★ main line: GR from momentum conservation — Gordon metric
+    │                            #   g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]; Φ=½v² matches weak-field GR (SG1–SG11)
+    ├── RelativityDeviation.lean # main line: velocity-difference term — (c−v)/(1−cv/c²)=c;
+    │                            #   γ²(u)=1/(2u/c−u²/c²) (RD1–RD7)
+    ├── LorentzRebuild.lean      # main line (mathlib): boost preserves Minkowski η; rapidity
+    │                            #   additivity; velocity addition; β<1 (LR1–LR5)
+    ├── PauliMathlib.lean        # main line (mathlib): Clifford rewrite (C1'–C4')
+    ├── DiracMathlib.lean        # main line (mathlib): Dirac bridge — γ⁰²=1, γⁱ²=−1;
+    │                            #   mass=chiral coupling (DB1'–DB6')
+    ├── MinimalCoreMathlib.lean  # main line (mathlib): mass=anchoring — m²=|ψ₁|²+|ψ₀|²;
+    │                            #   nonzero spinor ⟹ m>0 (MC1'–MC6')
+    ├── Explorations/            # frozen (2026-08-14): glueball/color structure — no new theorems
+    │   ├── SpinStatistics.lean      # spin-statistics hard constraint (SS1–SS8)
+    │   ├── CliffordSix.lean         # Cℓ(6) 8-dim representation (CS1–CS3)
+    │   ├── ColorOctetMathlib.lean   # 3⊗3=8⊕1 trace decomposition (CM1–CM3)
+    │   ├── SphericalHarmonics.lean  # glueball force = spherical harmonics (SH1–SH5)
+    │   ├── SU3Bridge.lean           # SU(3) cyclic subgroup
+    │   └── GlueballBridge.lean      # SU(3) color action, glueball mass
+    └── Archive/                 # deprecated (pre-08-06 hidden-number line + core dual-track):
+                                # Definitions/Kernel/Completeness/Mass/NullTheorem/Bridges/
+                                # Algebra/Clifford/LinearAlgebra/Differential/SymmetryBreaking/
+                                # HiddenSpace/Quaternion/ProjectionAlgebra/HiddenSpacePhysics/
+                                # HIBSPhysicalBridges/HiddenOnlyHiggs/HiddenHiggsFlowInterface/
+                                # HiddenAxisConversions/HiddenMassTimeEvents/HiddenEventClocks/
+                                # FlowConservation/DiracBridge/MinimalCore
 ```
 
 ## 7. Next steps

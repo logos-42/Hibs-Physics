@@ -9,8 +9,8 @@
 --   hidden coupling × hidden vacuum value -> nonnegative mass index.
 -- These are explicit model definitions, not consequences of HIBS A1-A3.
 
-import ProjectionPhysics.HIBSPhysicalBridges
-import ProjectionPhysics.ProjectionAlgebra
+import ProjectionPhysics.Archive.HIBSPhysicalBridges
+import ProjectionPhysics.Archive.ProjectionAlgebra
 
 namespace ProjectionPhysics
 

@@ -1,6 +1,6 @@
 ---
 title: 纯隐数、无时间的静态 Higgs 模型
-source: session + ProjectionPhysics/HiddenOnlyHiggs.lean
+source: session + ProjectionPhysics/Archive/HiddenOnlyHiggs.lean
 source_note: 2026-08-09 构造只使用 HIBS hidden 标签和隐空间坐标的静态 Higgs 版本
 source_hash: d17346a68f3837e6
 created: 2026-08-09
@@ -30,7 +30,7 @@ status: current
 
 ## 2. Lean 构造
 
-实现文件：[HiddenOnlyHiggs.lean](../../ProjectionPhysics/HiddenOnlyHiggs.lean)
+实现文件：[HiddenOnlyHiggs.lean](../../ProjectionPhysics/Archive/HiddenOnlyHiggs.lean)
 
 ### 2.1 纯隐数和隐空间
 
@@ -135,7 +135,7 @@ D(v_H, d_H)(q_H) = d_H,  q_H = 0
 
 ## 5. 可选流参数与可检验离散演化律
 
-文件 [HiddenHiggsFlowInterface.lean](../../ProjectionPhysics/HiddenHiggsFlowInterface.lean) 单独定义 `HiddenFlowParameter.step : Nat` 和流索引场。它只提供一个外部参数接口，未把该参数命名为时间，也没有把它导入 `StaticHiddenHiggsModel` 的定义。
+文件 [HiddenHiggsFlowInterface.lean](../../ProjectionPhysics/Archive/HiddenHiggsFlowInterface.lean) 单独定义 `HiddenFlowParameter.step : Nat` 和流索引场。它只提供一个外部参数接口，未把该参数命名为时间，也没有把它导入 `StaticHiddenHiggsModel` 的定义。
 
 当前增加了一个可检验的离散松弛律：
 
@@ -188,7 +188,7 @@ T x = T y  →  x = y
 4. 若要求正交转换，还要保持内积：`dot(Tx,Ty)=dot(x,y)`；
 5. 在当前整数系数下，转换矩阵还应是可逆的整系数矩阵，通常对应行列式 `±1` 的 unimodular 变换。
 
-新增 [HiddenAxisConversions.lean](../../ProjectionPhysics/HiddenAxisConversions.lean) 已形式化三条轴交换：H↔R、R↔I、I↔H。它们是自身的逆，并保持 `triAxisDot`，因此是正交可逆转换的最小实例。
+新增 [HiddenAxisConversions.lean](../../ProjectionPhysics/Archive/HiddenAxisConversions.lean) 已形式化三条轴交换：H↔R、R↔I、I↔H。它们是自身的逆，并保持 `triAxisDot`，因此是正交可逆转换的最小实例。
 
 原来的 `convertHiddenToRealAxis` 只把一个隐数嵌入实轴；`realProjection` 在这个受限轴上可以恢复数值，但对任意三轴状态不能恢复隐轴和虚轴分量。代码也证明了：实部投影在没有轴限制时存在不同原态映成同一值，因此不能把投影当作逆元。
 
@@ -196,7 +196,7 @@ T x = T y  →  x = y
 
 ## 8. 质量生成与涌现时间的同步
 
-新增 [HiddenMassTimeEvents.lean](../../ProjectionPhysics/HiddenMassTimeEvents.lean) 定义质量生成事件：
+新增 [HiddenMassTimeEvents.lean](../../ProjectionPhysics/Archive/HiddenMassTimeEvents.lean) 定义质量生成事件：
 
 ```text
 event = (coupling, fromState, toState, massSquared)
@@ -220,7 +220,7 @@ T_mass(H ++ [event]) = T_mass(H) + 1
 
 ## 9. 事件、质量事件、局部时钟与聚合方向
 
-上一节的 `HiddenMassGenerationEvent` 把每个事件预先限制为非零质量事件，适合表达“质量事件计数同步增加”的特例，但它不能回答“增加的基本对象究竟是质量还是事件”。为此新增 [HiddenEventClocks.lean](../../ProjectionPhysics/HiddenEventClocks.lean)，把三者显式分开。
+上一节的 `HiddenMassGenerationEvent` 把每个事件预先限制为非零质量事件，适合表达“质量事件计数同步增加”的特例，但它不能回答“增加的基本对象究竟是质量还是事件”。为此新增 [HiddenEventClocks.lean](../../ProjectionPhysics/Archive/HiddenEventClocks.lean)，把三者显式分开。
 
 ### 9.1 基本对象是事件，质量是事件的属性
 

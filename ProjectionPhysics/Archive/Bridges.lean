@@ -10,8 +10,8 @@
 --   Mass        m     ≡ 核空间的标量表示
 --   Interaction I     ≡ 代数乘法 ⊗
 
-import ProjectionPhysics.Definitions
-import ProjectionPhysics.Kernel
+import ProjectionPhysics.Archive.Definitions
+import ProjectionPhysics.Archive.Kernel
 
 namespace ProjectionPhysics
 

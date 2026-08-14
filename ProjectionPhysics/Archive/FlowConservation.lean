@@ -5,7 +5,7 @@
 -- This module does not introduce time, Hilbert-space operators, or a quantum
 -- uncertainty relation.
 
-import ProjectionPhysics.Bridges
+import ProjectionPhysics.Archive.Bridges
 
 namespace ProjectionPhysics
 

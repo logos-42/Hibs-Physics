@@ -6,8 +6,8 @@
 --   可证明（★）：平凡核 ⟹ 核质量项可归一化为零。
 --   草案：非平凡核的质量 m = Φ(κ(ker π)) 作为结构陈述。
 
-import ProjectionPhysics.Definitions
-import ProjectionPhysics.Kernel
+import ProjectionPhysics.Archive.Definitions
+import ProjectionPhysics.Archive.Kernel
 
 namespace ProjectionPhysics
 

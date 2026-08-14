@@ -15,8 +15,8 @@
 -- 本模块只使用 core Lean 4(无 mathlib),Int 为系数(ℤ 上的四元数环,
 -- 同 ℂ = ℤ[i]:无逆元,D7' 卡点的同类结构)。
 
-import ProjectionPhysics.LinearAlgebra
-import ProjectionPhysics.Clifford
+import ProjectionPhysics.Archive.LinearAlgebra
+import ProjectionPhysics.Archive.Clifford
 
 -- 该 linter 建议用 `simp at h` 替代 `simpa using h`;但 ground 矛盾等式
 -- (如 1 = -1)经 `simp at h` 化简为 False 时会自动关闭目标,后续 tactic

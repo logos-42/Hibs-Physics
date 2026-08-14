@@ -10,8 +10,8 @@
 --   草案：完整的 Representation Completeness（I = F(Q, κ)，
 --   κ 为核不变量）作为带假设的结构陈述 —— 证明留作研究目标。
 
-import ProjectionPhysics.Definitions
-import ProjectionPhysics.Kernel
+import ProjectionPhysics.Archive.Definitions
+import ProjectionPhysics.Archive.Kernel
 
 namespace ProjectionPhysics
 

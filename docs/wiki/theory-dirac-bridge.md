@@ -20,7 +20,7 @@ status: current
 
 ## 1. 结构（Weyl/手征表示，2×2 分块）
 
-对应代码：[`ProjectionPhysics/DiracBridge.lean`](../../ProjectionPhysics/DiracBridge.lean)（DB1–DB6）
+对应代码：[`ProjectionPhysics/Archive/DiracBridge.lean`](../../ProjectionPhysics/Archive/DiracBridge.lean)（DB1–DB6）
 
 ```text
 DiracSpinor ψ = (ψ_L, ψ_R)：左手 + 右手 2 分量旋量

@@ -4,7 +4,7 @@
 -- coordinates. This module formalizes the safer standard: convert the full
 -- three-axis state by a bijective orthogonal map, with both inverse laws.
 
-import ProjectionPhysics.HiddenSpacePhysics
+import ProjectionPhysics.Archive.HiddenSpacePhysics
 
 namespace ProjectionPhysics
 

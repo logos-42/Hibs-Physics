@@ -13,9 +13,9 @@
 --   可证明（★）：核平凡 ⟹ 无内部自由度、核质量为零。
 --   草案：完整 Kernel Null Theorem（C_κ → 0 ⇒ p 在零锥上）。
 
-import ProjectionPhysics.Definitions
-import ProjectionPhysics.Kernel
-import ProjectionPhysics.Mass
+import ProjectionPhysics.Archive.Definitions
+import ProjectionPhysics.Archive.Kernel
+import ProjectionPhysics.Archive.Mass
 
 namespace ProjectionPhysics
 

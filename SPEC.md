@@ -14,7 +14,7 @@
 
 隐藏空间 S（带加法 ⊕ 与乘法 ⊗），观测空间 V，非单射投影 π : S → V。
 
-- 核：`KernelOf π = { s : S // π s = 0 }`（Definitions.lean）
+- 核：`KernelOf π = { s : S // π s = 0 }`（Archive/Definitions.lean）
 - 像：`ImageOf π = { v : V // ∃ s, π s = v }`
 - 信息守恒（等变）：`π(σ_S s) = σ_V (π s)`（InfoPreserving）
 - 可观测量：在观测等价类上取常值 `IsObservable π I`
@@ -92,8 +92,8 @@
 | PA6 | `pvm_skeleton` | 幂等 + 正交 + 完备 = 投影值分解 | ★ **量子测量（PVM）的代数骨架**，无概率公理 |
 | PA7 | `cI_sq_neg_one` + `kernelLeak`/`kernelLeak_i` + `kernel_mul_leaks_to_image` + `kernel_pair_mul_leaks` + `leak_product_in_image` | **i² = -1 且 Re(i²) = -1 ≠ 0：核乘法不封闭** | ★ **核质量泄露**：核是加法子空间（K1）但非乘法理想，"Goldstone 被吃掉"的代数原型 |
 | PA8 | `cKernelBiForm` + `kernelBiForm_quad`/`kernelBiForm_quad_kernel`/`kernelBiForm_unit_norm`/`kernelBiForm_nondegenerate` | **核上双线性形式 B(x,y) = Im x·Im y**；二次型 Q(k) = κ(k) = kernelInvC；核上非退化 | ★ **核张量化**：ker π 上的 (0,2) 张量——质量候选 m² = κ(ζ_κ) 的第一个物理连接 |
-| MC1 | `spin_flow_anchor_mass_pos_of_spinor_nonzero` + `spin_flow_anchor_mass_zero_of_zero_spinor` | **内部运动状态 s（自旋 = Clifford σψ 旋量流）→ 空间运动 F → 质量 m := 锚定效果（旋量流分量范数）→ 自旋非零 ⟹ m > 0；零旋量 ⟹ m = 0** | ★ **最小核心命题（旋量流版）**：质量=物质抵抗空间本身运动的锚定效果，自旋本身就是运动状态（`MinimalCore.lean` MC1 + MC1h 隐数版） |
-| MC2 | `triplet_glueball_mass_squared_formula` + `triplet_glueball_mass_squared_positive_of_any_nonzero` + `triplet_unit_mode_mass_squared_is_three` | **G=(a,b,c), color profile=(1,1,1), m_G²=|a|²+|b|²+|c|²；至少一个非零 ⟹ m_G² > 0；a=b=c=1 ⟹ m_G²=3** | ★ **胶球最小版**：三胶子内部运动状态色单态；三方向假设 √3·M₀ 精确匹配格点 0++（`MinimalCore.lean`） |
+| MC1 | `spin_flow_anchor_mass_pos_of_spinor_nonzero` + `spin_flow_anchor_mass_zero_of_zero_spinor` | **内部运动状态 s（自旋 = Clifford σψ 旋量流）→ 空间运动 F → 质量 m := 锚定效果（旋量流分量范数）→ 自旋非零 ⟹ m > 0；零旋量 ⟹ m = 0** | ★ **最小核心命题（旋量流版）**：质量=物质抵抗空间本身运动的锚定效果，自旋本身就是运动状态（`Archive/MinimalCore.lean` MC1 + MC1h 隐数版） |
+| MC2 | `triplet_glueball_mass_squared_formula` + `triplet_glueball_mass_squared_positive_of_any_nonzero` + `triplet_unit_mode_mass_squared_is_three` | **G=(a,b,c), color profile=(1,1,1), m_G²=|a|²+|b|²+|c|²；至少一个非零 ⟹ m_G² > 0；a=b=c=1 ⟹ m_G²=3** | ★ **胶球最小版**：三胶子内部运动状态色单态；三方向假设 √3·M₀ 精确匹配格点 0++（`Archive/MinimalCore.lean`） |
 | SLS1 | `light_speed_is_universal_space_property` + `tri_directional_space_has_universal_speed` | **空间速度矢量（三方向）模 = 普适常数 c²；任何空间点等效速度模相同** | ★ **矢量光速新概念**：光速 = 空间本身的等效速度（非空间内物质速度）；三方向空间运动（`SpaceLightSpeed.lean`） |
 | SLS2 | `anchor_mass_zero_of_photon` | **无内部运动 + 完全随空间运动 ⟹ 零锚定 ⟹ 零质量** | 光子 = 完全随空间运动（去掉垂直方向向量）（`SpaceLightSpeed.lean`） |
 | SLS3 | `anchor_mass_positive_of_internal_motion` + `anchor_mass_positive_of_relative_motion` | **自旋非零 ⟹ 锚定为正；偏离空间运动也产生锚定** | 电子 = 自旋（法向旋转）⟹ 有质量（`SpaceLightSpeed.lean`） |

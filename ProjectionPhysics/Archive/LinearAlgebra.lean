@@ -13,8 +13,8 @@
 --        （i ∈ ker(Re)：虚轴是实部投影的核——HIBS A3 的 iR 就是它）
 --   (L7) 双线性形式（张量原语）+ 极化恒等式（Metric Representation 的前置）
 
-import ProjectionPhysics.Algebra
-import ProjectionPhysics.Completeness
+import ProjectionPhysics.Archive.Algebra
+import ProjectionPhysics.Archive.Completeness
 
 namespace ProjectionPhysics
 

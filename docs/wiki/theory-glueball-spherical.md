@@ -23,7 +23,7 @@ status: current
 ## 1. 核心发现
 
 对应代码：
-- [`ProjectionPhysics/SphericalHarmonics.lean`](../../ProjectionPhysics/SphericalHarmonics.lean)（SH1–SH5，mathlib）
+- [`ProjectionPhysics/Explorations/SphericalHarmonics.lean`](../../ProjectionPhysics/Explorations/SphericalHarmonics.lean)（SH1–SH5，mathlib）
 - [`scripts/verify_glueball_spherical.py`](../../scripts/verify_glueball_spherical.py)（数值）
 
 ```text
