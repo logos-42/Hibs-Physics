@@ -22,3 +22,9 @@ session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_3d.png,../artifa
 session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_traverse.gif,../artifacts/blackhole/wormhole_traverse.gif,generated,docs/wiki/theory-blackhole-wormhole.md,光子穿越虫洞动画(dτ=0全程)
 session-20260814-bhwh,local,ProjectionPhysics,artifact,report.json,../artifacts/blackhole/report.json,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告JSON
 session-20260814-bhwh,local,ProjectionPhysics,artifact,report.md,../artifacts/blackhole/report.md,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告MD
+session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_wavepacket.png,../artifacts/maxwell/fig_wavepacket.png,generated,docs/wiki/theory-maxwell-flow.md,基础麦克斯韦波包(leapfrog FDTD v=1.000c)
+session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_blackhole_flow.png,../artifacts/maxwell/fig_blackhole_flow.png,generated,docs/wiki/theory-maxwell-flow.md,|C|=c流场黑洞(流线入奇点)
+session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_redshift.png,../artifacts/maxwell/fig_redshift.png,generated,docs/wiki/theory-maxwell-flow.md,预言P2引力红移(流场vs GR弱场)
+session-20260814-maxwell,local,ProjectionPhysics,artifact,photon_infall.gif,../artifacts/maxwell/photon_infall.gif,generated,docs/wiki/theory-maxwell-flow.md,光子随流入黑洞动画(P1)
+session-20260814-maxwell,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwell/report.json,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告JSON
+session-20260814-maxwell,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwell/report.md,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告MD
