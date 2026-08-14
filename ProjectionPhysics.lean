@@ -98,3 +98,4 @@ import ProjectionPhysics.Explorations.EntanglementHelix
 import ProjectionPhysics.Explorations.BlackHoleWormhole
 import ProjectionPhysics.Explorations.MaxwellFlow
 import ProjectionPhysics.Explorations.MaxwellSpace
+import ProjectionPhysics.Explorations.SpaceField3D

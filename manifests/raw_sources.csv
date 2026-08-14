@@ -37,3 +37,5 @@ session-20260814-electron,local,ProjectionPhysics,artifact,electron_tornado.png,
 session-20260814-electron,local,ProjectionPhysics,artifact,coulomb_vs_sink.png,../artifacts/electron/coulomb_vs_sink.png,generated,docs/wiki/theory-maxwell-space.md,库仑场vs流动汇1/r²形状对应
 session-20260814-electron,local,ProjectionPhysics,artifact,self_energy.png,../artifacts/electron/self_energy.png,generated,docs/wiki/theory-maxwell-space.md,经典自能vs电子质量量级
 session-20260814-electron,local,ProjectionPhysics,artifact,report.json,../artifacts/electron/report.json,generated,docs/wiki/theory-maxwell-space.md,电子流动结构探讨报告
+session-20260814-spacefield3d,local,ProjectionPhysics,artifact,vortex_curl.png,../artifacts/spacefield3d/vortex_curl.png,generated,docs/wiki/theory-spacefield3d.md,涡旋C与B=curlC(磁场=自旋)
+session-20260814-spacefield3d,local,ProjectionPhysics,artifact,report.json,../artifacts/spacefield3d/report.json,generated,docs/wiki/theory-spacefield3d.md,3D向量微积分验证报告JSON
