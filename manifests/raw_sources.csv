@@ -28,3 +28,8 @@ session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_redshift.png,../ar
 session-20260814-maxwell,local,ProjectionPhysics,artifact,photon_infall.gif,../artifacts/maxwell/photon_infall.gif,generated,docs/wiki/theory-maxwell-flow.md,光子随流入黑洞动画(P1)
 session-20260814-maxwell,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwell/report.json,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告JSON
 session-20260814-maxwell,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwell/report.md,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告MD
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,three_fields.png,../artifacts/maxwellspace/three_fields.png,generated,docs/wiki/theory-maxwell-space.md,"三场同源:C波动⟹E=-∂tC,B=∂xC"
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,maxwell_residuals.png,../artifacts/maxwellspace/maxwell_residuals.png,generated,docs/wiki/theory-maxwell-space.md,麦克斯韦自动成立残差≈0
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,source_drives_C.png,../artifacts/maxwellspace/source_drives_C.png,generated,docs/wiki/theory-maxwell-space.md,MS5电荷驱动空间场
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwellspace/report.json,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告JSON
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwellspace/report.md,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告MD
