@@ -33,4 +33,5 @@
 - [theory-glueball-compositeness.md](./theory-glueball-compositeness.md) — 胶球构造学：纯胶球不能构造费米子（自旋统计硬约束）；Cℓ(6)旋量=8维=色八重态；SU(3)⊃SU(2) 3→2⊕1
 - [theory-three-direction-spinor.md](./theory-three-direction-spinor.md) — 三方向空间运动假设：为什么是三个胶子/三个夸克（SU(3) 法向量 + √3·M₀ 匹配）
 - [theory-mass-anchoring-validation.md](./theory-mass-anchoring-validation.md) — 质量锚定假设的数值验证 v2（恒等式陷阱/胶球谱比 √N/旋量流）
+- [theory-entanglement-helix.md](./theory-entanglement-helix.md) — 双螺旋纠缠（探索）：流动空间中的纠缠几何 + CHSH 贝尔检验（2 vs 2√2）
 - [log.md](./log.md)

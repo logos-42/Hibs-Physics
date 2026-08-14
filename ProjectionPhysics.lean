@@ -94,3 +94,4 @@ import ProjectionPhysics.SpaceMetric
 import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.SpaceGravity
+import ProjectionPhysics.Explorations.EntanglementHelix
