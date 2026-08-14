@@ -42,3 +42,5 @@ session-20260814-spacefield3d,local,ProjectionPhysics,artifact,report.json,../ar
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.tex,../paper/projection-physics.tex,generated,docs/wiki/current-status.md,首篇论文主文件(REVTeX prd preprint单栏,20页,tectonic编译)
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.bib,../paper/projection-physics.bib,generated,docs/wiki/current-status.md,论文参考文献18条(全真实)
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.pdf,../paper/projection-physics.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物20页零错误
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.tex,../paper/projection-physics-zh.tex,generated,docs/wiki/current-status.md,论文中文版(内容与英文版等同,REVTeX+ctex fandol,13页)
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物13页零错误
