@@ -71,6 +71,7 @@ def main():
     if not fast:
         for script in ["scripts/verify_maxwell_space.py",
                        "scripts/verify_spacefield3d.py",
+                       "scripts/verify_spin_from_space.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -98,6 +99,17 @@ def main():
               abs(res["curl_grad_zero_SF2"]["max|curl(grad f)|"]) < 1e-12)
         check("SF3D: 涡旋场 div B = 0",
               res["vortex_curl_SF5"]["涡旋场 max|div(B = curl C)|"] == 0.0)
+
+    sp = load_report("artifacts/spinspace/report.json")
+    if sp:
+        res = sp["results"]
+        ca = res["clifford_algebra"]
+        check("SFS: Clifford 代数 7 项全 true", all(ca[k] is True for k in ca if k != "note"))
+        check("SFS: e^{iπσ₁} = −I（旋转 π 变号）",
+              res["double_cover"]["e^{iπσ₁} = −I（旋转 π）"])
+        check("SFS: 2π 复原 / 4π 还原",
+              res["double_cover"]["e^{2iπσ₁} = +I（旋转 2π 复原）"] and
+              res["double_cover"]["旋量旋转 π 变号（费米子 2π 不还原，4π 还原）"])
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:

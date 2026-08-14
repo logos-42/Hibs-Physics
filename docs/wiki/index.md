@@ -38,4 +38,5 @@
 - [theory-maxwell-flow.md](./theory-maxwell-flow.md) — 麦克斯韦方程 × 空间流动假设（探索）：基础 ω=±ck → 更新 c=空间属性=1/√(μ₀ε₀)；黑洞公设版（光子=流线，逃逸不可能=公设推论）+ 预言 P1–P4
 - [theory-maxwell-space.md](./theory-maxwell-space.md) — 电磁 = 空间场的运动学（全新推导）：E=−∂_tC、B=∂_xC；法拉第自动/安培⟺C波动/源驱动；麦克斯韦 ⟺ C 波动方程
 - [theory-spacefield3d.md](./theory-spacefield3d.md) — 空间场 3D 向量微积分（三场接缝）：div(curl C)=0 自动（B 无散是 3D 恒等）/法拉第 3D/梯度无旋；磁场=自旋的代数位置
+- [theory-spin-from-space.md](./theory-spin-from-space.md) — 自旋 = 空间三方向结构的涌现（行动探索）：i=σ₁σ₂σ₃ 体积元/S²=¾(s=½)/SU(2) 双重覆盖 2π 变号；狄拉克之上第一性
 - [log.md](./log.md)

@@ -44,3 +44,6 @@ session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.bib,.
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.pdf,../paper/projection-physics.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物20页零错误
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.tex,../paper/projection-physics-zh.tex,generated,docs/wiki/current-status.md,论文中文版(内容与英文版等同,REVTeX+ctex fandol,13页)
 session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物13页零错误
+session-20260814-spinspace,local,ProjectionPhysics,artifact,double_cover.png,../artifacts/spinspace/double_cover.png,generated,docs/wiki/theory-spin-from-space.md,SU(2)双重覆盖:旋转2π变号
+session-20260814-spinspace,local,ProjectionPhysics,artifact,three_directions.png,../artifacts/spinspace/three_directions.png,generated,docs/wiki/theory-spin-from-space.md,三方向⟹σ
+session-20260814-spinspace,local,ProjectionPhysics,artifact,report.json,../artifacts/spinspace/report.json,generated,docs/wiki/theory-spin-from-space.md,自旋=三方向涌现验证报告
