@@ -72,3 +72,4 @@ import ProjectionPhysics.MinimalCoreMathlib
 import ProjectionPhysics.SpaceMetric
 import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.SphericalHarmonics
+import ProjectionPhysics.SpaceGravity

@@ -51,3 +51,4 @@ def main : IO Unit := do
   IO.println "三胶子纠缠 (MC6'): m_G²=m₁²+m₂²+m₃² 叠加锚定；(σ₁+σ₂+σ₃)ψ≠0 纠缠流；数值: 混沌阈值 λ≥1.5"
   IO.println "相对论差值项 (RD1–RD7): 光速不变=(c-v)被分母抵消；γ²(u)=1/(2u/c-u²/c²)；光子 u=0⟹dτ=0"
   IO.println "球谐函数猜想 (SH1–SH5): (σ₁+σ₂+σ₃)²=3I 球对称标量；三胶子=Y_1三分量(z,x±iy)；GR推广=角动量→质量源"
+  IO.println "GR从动量守恒推导 (SG1–SG6): Gordon度规g=[[1-v²/c²,v/c²],[v/c²,-1/c²]]；Φ=½v²匹配弱场GR；光子零质量g_tt+g_xx·c²=0"

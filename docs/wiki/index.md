@@ -27,6 +27,8 @@
 - [theory-glueball-chaos.md](./theory-glueball-chaos.md) — 三胶子运动纠缠（探索）：三方向耦合混沌（λ≥1.5 阈值）+ 叠加锚定质量 m_G²=m₁²+m₂²+m₃²
 - [theory-relativity-deviation.md](./theory-relativity-deviation.md) — 相对论公式的差值项：光速不变=(c-v)被分母抵消；γ²用差值参数化（光子 u=0⟹dτ=0）
 - [theory-glueball-spherical.md](./theory-glueball-spherical.md) — 胶球力=球谐函数猜想：(σ₁+σ₂+σ₃)²=3I 球对称标量；三胶子=Y_1三分量；GR推广=角动量→质量源
+- [theory-gravity-conservation.md](./theory-gravity-conservation.md) — 从动量守恒推导 GR：Gordon 度规 Φ=½v² 匹配弱场；光子零质量；牛顿极限
+- [theory-glueball-compositeness.md](./theory-glueball-compositeness.md) — 胶球构造学：纯胶球不能构造费米子（自旋统计硬约束）；Cℓ(6)旋量=8维=色八重态；SU(3)⊃SU(2) 3→2⊕1
 - [theory-three-direction-spinor.md](./theory-three-direction-spinor.md) — 三方向空间运动假设：为什么是三个胶子/三个夸克（SU(3) 法向量 + √3·M₀ 匹配）
 - [theory-mass-anchoring-validation.md](./theory-mass-anchoring-validation.md) — 质量锚定假设的数值验证 v2（恒等式陷阱/胶球谱比 √N/旋量流）
 - [log.md](./log.md)

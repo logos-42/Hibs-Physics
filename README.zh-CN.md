@@ -165,6 +165,8 @@ ProjectionPhysics/
                                  # γ²(u)=1/(2u/c−u²/c²)；光子 u=0⟹dτ=0
     └── SphericalHarmonics.lean # SH1–SH5 胶球力=球谐函数猜想：(σ₁+σ₂+σ₃)²=3I
                                 # 球对称标量；三胶子=Y_1 三分量；GR 推广=角动量→质量源
+    └── SpaceGravity.lean # SG1–SG6 GR 从动量守恒推导：Gordon 度规
+                          # g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]；Φ=½v² 匹配弱场 GR
 ```
 
 ## 路线（下一步）

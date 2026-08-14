@@ -274,6 +274,8 @@ ProjectionPhysics/
                                # (light-speed invariance = difference cancelled); γ²(u)=1/(2u/c−u²/c²)
     └── SphericalHarmonics.lean # SH1–SH5: glueball force = spherical harmonics —
                                # (σ₁+σ₂+σ₃)²=3I (three-direction coupling = spherical scalar)
+    └── SpaceGravity.lean      # SG1–SG6: GR from momentum conservation — Gordon metric
+                               # g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]; Φ=½v² matches weak-field GR
 ```
 
 ## 7. Next steps
