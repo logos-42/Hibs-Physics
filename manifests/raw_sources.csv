@@ -33,3 +33,7 @@ session-20260814-maxwellspace,local,ProjectionPhysics,artifact,maxwell_residuals
 session-20260814-maxwellspace,local,ProjectionPhysics,artifact,source_drives_C.png,../artifacts/maxwellspace/source_drives_C.png,generated,docs/wiki/theory-maxwell-space.md,MS5电荷驱动空间场
 session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwellspace/report.json,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告JSON
 session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwellspace/report.md,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告MD
+session-20260814-electron,local,ProjectionPhysics,artifact,electron_tornado.png,../artifacts/electron/electron_tornado.png,generated,docs/wiki/theory-maxwell-space.md,电子=空间流动龙卷风(源+涡旋)探讨图
+session-20260814-electron,local,ProjectionPhysics,artifact,coulomb_vs_sink.png,../artifacts/electron/coulomb_vs_sink.png,generated,docs/wiki/theory-maxwell-space.md,库仑场vs流动汇1/r²形状对应
+session-20260814-electron,local,ProjectionPhysics,artifact,self_energy.png,../artifacts/electron/self_energy.png,generated,docs/wiki/theory-maxwell-space.md,经典自能vs电子质量量级
+session-20260814-electron,local,ProjectionPhysics,artifact,report.json,../artifacts/electron/report.json,generated,docs/wiki/theory-maxwell-space.md,电子流动结构探讨报告
