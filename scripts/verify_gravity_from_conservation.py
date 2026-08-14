@@ -77,43 +77,42 @@ print("③ Christoffel 符号（协变守恒 ∇T = 0 的构件）")
 print("-" * 72)
 
 def christoffel(v, dvdx):
-    """1+1 维 Christoffel 符号 Γ^λ_μν（静态 v(x)）"""
-    # 度规: g_tt = 1-v², g_tx = g_xt = v, g_xx = -1
-    g_tt, g_tx, g_xx = 1 - v*v, v, -1.0
-    # 逆变度规: g^-1 = [[1, v], [v, -(1-v²)]] (c=1)
-    ginv_tt, ginv_tx, ginv_xx = 1.0, v, -(1 - v*v)
-    # 度规导数（只 ∂_x 非零）
-    dg_tt = -2 * v * dvdx
-    dg_tx = dvdx
-    dg_xx = 0.0
-    # Γ^λ_μν = ½ g^λσ (∂_μ g_σν + ∂_ν g_σμ − ∂_σ g_μν)
-    # 计算需要的分量
-    def Gamma(l, mu, nu):
-        s = 0.0
-        for sigma, ginv in [('t', ginv_tt), ('x', ginv_tx if sigma_help(l) else 0)]:
-            pass
-        return 0.0
-    # 手算: Γ^t_tt, Γ^t_tx, Γ^x_tt, Γ^x_tx
-    # Γ^t_tt = ½g^tσ(∂_t g_σt + ∂_t g_tσ − ∂_σ g_tt) = ½g^tx(−∂_x g_tt) = ½·v·(2v·dvdx)
-    G_ttt = 0.5 * ginv_tx * (-dg_tt)  # = ½·v·2v·v' = v²·v'
-    # Γ^x_tt = ½g^xσ(∂_t g_σt + ∂_t g_tσ − ∂_σ g_tt) = ½g^xx(−∂_x g_tt) = ½·(−(1−v²))·(−2v v')
-    G_xtt = 0.5 * ginv_xx * (-dg_tt)  # = (1−v²)·v·v'
-    # Γ^t_tx = ½g^tσ(∂_t g_σx + ∂_x g_tσ − ∂_σ g_tx) = ½[g^tt(∂_x g_tt) + g^tx(∂_x g_tx)]... 手算
-    # = ½[1·(−2vv') + v·v'] = ½(−2vv' + vv') = −½vv'
-    G_ttx = 0.5 * (ginv_tt * dg_tt + ginv_tx * dg_tx)
-    # Γ^x_tx = ½g^xσ(∂_t g_σx + ∂_x g_tσ − ∂_σ g_tx) = ½[g^xt(∂_x g_tt) + g^xx(∂_x g_tx)]
-    G_xtx = 0.5 * (ginv_tx * dg_tt + ginv_xx * dg_tx)
-    return {'G_ttt': G_ttt, 'G_xtt': G_xtt, 'G_ttx': G_ttx, 'G_xtx': G_xtx}
+    """1+1 维 Christoffel 符号 Γ^λ_μν（静态 v(x)），通用公式一次算出。
 
-def sigma_help(l):
-    return True
+    Γ^λ_μν = ½ g^λσ (∂_μ g_σν + ∂_ν g_σμ − ∂_σ g_μν)
+    度规 g = [[1−v², v], [v, −1]]（c=1）；静态 ⟹ ∂_t g = 0，只 ∂_x 非零。
+    修正记录（2026-08-14）：旧版手算 σ=x 项误用 ∂_x g_tx（应为 ∂_t g_xx = 0），
+    Γ^t_tx/Γ^x_tx 两个分量算错；通用公式与分量手算自动对照。
+    """
+    # g_μν, ∂_x g_μν（∂_t g = 0）, g^λσ（c=1）
+    g = [[1 - v*v, v], [v, -1.0]]
+    dgx = [[-2*v*dvdx, dvdx], [dvdx, 0.0]]
+    ginv = [[1.0, v], [v, -(1 - v*v)]]
+    G = {}
+    for lam in range(2):
+        for mu in range(2):
+            for nu in range(2):
+                s = 0.0
+                for sig in range(2):
+                    d1 = dgx[sig][nu] if mu == 1 else 0.0  # ∂_μ g_σν
+                    d2 = dgx[sig][mu] if nu == 1 else 0.0  # ∂_ν g_σμ
+                    d3 = dgx[mu][nu] if sig == 1 else 0.0  # ∂_σ g_μν
+                    s += ginv[lam][sig] * (d1 + d2 - d3)
+                G[(lam, mu, nu)] = 0.5 * s
+    return G
 
 x0 = 1.0
 v0, dv0 = v_flow(x0), -v_flow(x0) / 2.0  # v' = -v/L
 G = christoffel(v0, dv0)
 print(f"  x={x0}: v={v0:.4f}, v'={dv0:.4f}")
-for k, val in G.items():
-    print(f"    Γ{k} = {val:+.4f}")
+for (lam, mu, nu), val in sorted(G.items()):
+    if abs(val) > 1e-12:
+        print(f"    Γ^{lam}_{mu}{nu} = {val:+.4f}")
+# 手算对照（防止通用公式/索引再错）
+print(f"  对照: Γ^t_tt = v²v'      = {v0*v0*dv0:+.4f}  {'✓' if abs(G[(0,0,0)] - v0*v0*dv0) < 1e-12 else '✗'}")
+print(f"        Γ^x_tt = −(1−v²)vv' = {-(1-v0*v0)*v0*dv0:+.4f}  {'✓' if abs(G[(1,0,0)] - (-(1-v0*v0)*v0*dv0)) < 1e-12 else '✗'}")
+print(f"        Γ^t_tx = ½∂_x g_tt = {0.5*(-2*v0*dv0):+.4f}  {'✓' if abs(G[(0,0,1)] - 0.5*(-2*v0*dv0)) < 1e-12 else '✗'}")
+print(f"        Γ^x_tx = ½v·∂_x g_tt = {0.5*v0*(-2*v0*dv0):+.4f}  {'✓' if abs(G[(1,0,1)] - 0.5*v0*(-2*v0*dv0)) < 1e-12 else '✗'}")
 print("""
   ★ 非零 Christoffel ⟹ 度规弯曲 ⟹ 协变导数 ≠ 普通导数
   ★ 动量守恒从 ∂T = 0 升级为 ∇T = 0（引入联络）

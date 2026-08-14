@@ -54,11 +54,10 @@ def gordonMetric (v c : ℝ) : Mat2R :=
   !![ 1 - v*v/(c*c), v/(c*c); v/(c*c), -1/(c*c) ]
 
 /-- 平直空间（v=0）时 Gordon 度规 = 闵可夫斯基度规（时间+1, 空间−1/c²）。 -/
-theorem gordon_flat_is_minkowski (c : ℝ) (hc : c ≠ 0) :
+theorem gordon_flat_is_minkowski (c : ℝ) (_hc : c ≠ 0) :
     gordonMetric 0 c = !![ 1, 0; 0, -1/(c*c) ] := by
   unfold gordonMetric
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp <;> field_simp [hc] <;> ring
+  ext i j <;> fin_cases i <;> fin_cases j <;> simp
 
 /-- ★ SG2：det(g) = −1/c²——空间流动保体积（坐标变换层面）。
     与 SpaceMetric.metric_det 一致：流动是几何的重新参数化，
@@ -114,6 +113,57 @@ theorem photon_massless_metric_condition (c : ℝ) (hc : c ≠ 0) :
     SG8：静止质量（u=c）⟹ 能量 E=mc²（RD5 差值能量形式中已有）。 -/
 def massiveMomentum (m u c : ℝ) : Fin 2 → ℝ :=
   ![ m*c*c / Real.sqrt (2*c*u - u*u), m*(c-u)*c / Real.sqrt (2*c*u - u*u) ]
+
+/-! ### ④ Gordon 固有时间与光子零质量（非均匀流动验证） -/
+
+/-- Gordon 形式固有时间平方: dτ² = dt² − (dx − v·dt)²/c².
+    空间流动 v 的坐标中, 物质相对流动的运动 (dx − v·dt) 决定固有时。
+    v=0 退化为 SpaceMetric.properTimeSq（绝对框架）。 -/
+def gordonProperTimeSq (v c : ℝ) (dt dx : ℝ) : ℝ :=
+  dt^2 - (dx - v * dt)^2 / c^2
+
+/-- ★ SM4-Gordon: dτ²_gordon = g_μν Δx^μ Δx^ν（gordonMetric 双线性形式）。
+    确认 Gordon 形式固有时间 = Gordon 度规的二次型（SM4 在非零流动 v 下的对应）。 -/
+theorem gordon_proper_time_eq_metric (v c : ℝ) (dt dx : ℝ) (hc : c ≠ 0) :
+    gordonProperTimeSq v c dt dx =
+      (gordonMetric v c) ⟨0, by decide⟩ ⟨0, by decide⟩ * dt^2 +
+      (gordonMetric v c) ⟨0, by decide⟩ ⟨1, by decide⟩ * (dt * dx) +
+      (gordonMetric v c) ⟨1, by decide⟩ ⟨0, by decide⟩ * (dt * dx) +
+      (gordonMetric v c) ⟨1, by decide⟩ ⟨1, by decide⟩ * dx^2 := by
+  unfold gordonProperTimeSq gordonMetric
+  simp
+  field_simp [hc]
+  ring
+
+/-- ★ Gordon-光子零质量: 光子相对空间流动以 c 运动（dx − v·dt = c·dt）
+    ⟹ dτ² = 0（SM1 在非均匀流动 v ≠ 0 下的对应）。
+    建模坑: 光子条件是相对流动 |dx − v·dt| = c·dt, 不是随流动静止 dx = v·dt
+    （那会得 dτ² = dt² ≠ 0 的错误物理——Gordon 描述的是流动介质中的光）。 -/
+theorem gordon_photon_proper_time_zero (v c : ℝ) (dt dx : ℝ)
+    (hc : c ≠ 0) (h : dx - v * dt = c * dt) :
+    gordonProperTimeSq v c dt dx = 0 := by
+  unfold gordonProperTimeSq
+  rw [h]
+  field_simp [hc]
+  ring
+
+/-- ★ Gordon-光子（反向）: 光子逆着流动以 c 运动（dx − v·dt = −c·dt）⟹ dτ² = 0。 -/
+theorem gordon_photon_proper_time_zero_rev (v c : ℝ) (dt dx : ℝ)
+    (hc : c ≠ 0) (h : dx - v * dt = -c * dt) :
+    gordonProperTimeSq v c dt dx = 0 := by
+  unfold gordonProperTimeSq
+  rw [h]
+  field_simp [hc]
+  ring
+
+/-- ★ Gordon-弱场匹配（Φ = ½v² 定理化）: Gordon g_tt = 1 − v²/c²，
+    与弱场 GR g_tt = 1 − 2Φ/c² 精确一致, Φ = ½v²。
+    引力势 = 空间流动速度平方的一半。 -/
+theorem gordon_weak_field_matches_newton (v c : ℝ) (hc : c ≠ 0) :
+    (gordonMetric v c) ⟨0, by decide⟩ ⟨0, by decide⟩ = 1 - 2 * (v * v / 2) / (c * c) := by
+  unfold gordonMetric
+  simp
+  field_simp [hc]
 
 /-! ### ③ 推导链的诚实边界 -/
 

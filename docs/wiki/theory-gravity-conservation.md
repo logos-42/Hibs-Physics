@@ -51,17 +51,34 @@ Gordon 度规 g_tt = 1 − v²/c²        （空间流动假设, SG1）
 | SG1b | v=0 ⟹ 闵可夫斯基度规 | 平直空间=无流动 |
 | SG2 | det(g) = −1/c² | 流动保体积 |
 | SG4 | g⁻¹·g = I | 度规升降良定义 |
-| SG6 | g_tt + g_xx·c² = 0（光子） | 零质量条件（dτ=0） |
+| SG6 | g_tt + g_xx·c² = 0（光子） | 零质量条件（dτ=0，v=0 平直） |
+| SG8 | gordonProperTimeSq = dt² − (dx−v·dt)²/c² | Gordon 固有时间（v=0 退化 SM） |
+| SG9 | dτ²_gordon = g_μνΔx^μΔx^ν | ★ 度规一致性（SM4 的非零流动版） |
+| SG10 | 光子相对流动以 c 运动（dx−v·dt=±c·dt）⟹ dτ²=0 | ★ SM1 在非均匀流动 v≠0 下的对应 |
+| SG11 | g_tt = 1 − 2Φ/c²，Φ=½v² | ★ 弱场匹配定理化（引力势=½流动速度平方） |
+
+> 2026-08-14 验证补充（SG8–SG11，mathlib）：Gordon 度规 = SpaceMetric.lean 的
+> 下一步候选（非均匀流动 v(x)）已 Lean 验证——`gordon_photon_proper_time_zero(_rev)`
+> 是 SM1 光子 dτ=0 在非零流动下的对应，建模坑（skill 记录）：光子条件是相对流动
+> |dx − v·dt| = c·dt，不是随流动静止 dx = v·dt（那会得 dτ² = dt² ≠ 0 的错误物理）。
+> 6 个 example 组合验证（正向/反向光子、弱场 g_tt=91/100、度规一致性、质量偏离 dτ²>0、
+> 坑确认）全部通过；`lake build` 4118 jobs 零 sorry 零 warning。
 
 ## 4. 数值推导链（验证）
 
 ```text
 v(x) = v₀·e^(−x/L) 非均匀流动（= 引力场）
   ⟹ Gordon 度规 g(x) 随位置弯曲
-  ⟹ Christoffel Γ^x_tt = (1−v²)·v·v' 非零
+  ⟹ Christoffel Γ^x_tt = −(1−v²)·v·v' 非零
   ⟹ 测地线: d²x/dt² ≈ −Γ^x_tt ≈ −v·v' = −d(½v²)/dx
   ⟹ 牛顿极限: a = −∇Φ, Φ = ½v²  ✓ 与弱场 GR 精确一致
 ```
+
+> 2026-08-14 验证修正：旧版 Christoffel 是手算的，σ=x 项误用 ∂_x g_tx
+> （正确是 ∂_t g_xx = 0），Γ^t_tx/Γ^x_tx 两个分量算错（+0.0083/+0.0470，
+> 正确 +0.0166/+0.0030）。测地线关键分量 Γ^x_tt 正确，牛顿极限结论不受影响。
+> 已改为通用公式 Γ^λ_μν = ½g^λσ(∂_μ g_σν + ∂_ν g_σμ − ∂_σ g_μν) 一次算出全部
+> 8 个分量 + 4 项手算自动对照（全 ✓），删除死代码（Gamma() 空循环/sigma_help）。
 
 ## 5. 诚实边界
 
