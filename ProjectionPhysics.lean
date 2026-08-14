@@ -80,6 +80,9 @@ import ProjectionPhysics.Archive.HiddenEventClocks
 import ProjectionPhysics.Archive.FlowConservation
 import ProjectionPhysics.Explorations.SU3Bridge
 import ProjectionPhysics.Explorations.GlueballBridge
+import ProjectionPhysics.Explorations.SpinStatistics
+import ProjectionPhysics.Explorations.CliffordSix
+import ProjectionPhysics.Explorations.ColorOctetMathlib
 import ProjectionPhysics.Archive.MinimalCore
 import ProjectionPhysics.SpaceLightSpeed
 import ProjectionPhysics.Archive.DiracBridge
