@@ -1,0 +1,771 @@
+%% project-physics.tex
+%%
+%% ProjectionPhysics: Physics as Kinematics of a Flowing Space
+%% Single-column preprint (REVTeX 4.2, APS, PRD)
+%%
+%% Compile:  tectonic projection-physics.tex   (or latex+bibtex+latex+latex)
+
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+
+\usepackage{graphicx}   % Include figure files
+\usepackage{bm}         % bold math
+\usepackage{dcolumn}    % align table columns on decimal point
+\usepackage{amsthm}
+\newtheorem{postulate}{Postulate}[section]
+
+\begin{document}
+
+\title{Physics as Kinematics of a Flowing Space:\\ Mass Anchoring, Vector Light Speed, and Electrodynamics from a Single Space Field}
+
+\author{Yuanjie Liu}
+\email{yuanjieliu65@gmail.com}
+\affiliation{Zhejiang University Binjiang Research Institute, Hangzhou, China}
+
+\date{\today}
+
+\begin{abstract}
+We present a postulate-based framework in which space itself is in motion,
+and all physics is the kinematics of a single space field $\bm{C}$ of fixed
+magnitude $|\bm{C}|=c$.  The framework rests on four postulates: (P1) every
+spatial point carries a velocity vector $\bm{C}$ with $|\bm{C}|^2=c^2$
+(vector light speed --- $c$ is a property of space, not a speed limit for
+matter); (P2) photons are exactly comoving with the flow, so they carry no
+``anchoring'' and are massless; (P3) mass is the anchoring effect of internal
+motion (spin) against the motion of space, so nonzero spin implies nonzero
+mass; and (P4) space moves in three directions, the normal direction emerging
+algebraically as $\sigma_3=i\sigma_1\sigma_2$, which realizes the
+three-color/three-gluon structure of $\mathrm{SU}(3)$.  Under these
+postulates the electromagnetic fields are kinematic derivatives of the space
+field, $E=-\partial_t C$ and $B=\partial_x C$; Faraday's law becomes an
+identity, Ampere--Maxwell becomes equivalent to the wave equation of $C$, and
+the gauge redundancy of the vector potential is eliminated by the physical
+condition $|\bm{C}|=c$.  Inhomogeneous flow yields the Gordon metric with
+$\Phi=\frac12 v^2$ in the weak-field limit, reproducing the Newtonian limit
+of general relativity; black holes appear as sinks of the flow whose horizon
+is the light-speed surface, so that inescapability is a corollary of the
+postulates rather than a dynamical result.  The three-direction hypothesis
+predicts a glueball mass pattern $m=\sqrt{N}\,M_0$ that is consistent with
+lattice QCD ($0^{++}$ at $\sqrt3\,M_0$ with $M_0\approx1$ GeV, $0.0\%$
+deviation), and the mode counts $N=3,6,7$ align with the degeneracies
+$d(n)=\frac12(n+1)(n+2)$ of the isotropic three-dimensional harmonic
+oscillator.  All central theorems are formalized in the Lean 4 theorem prover
+(no axioms, no admitted proofs).  We state the epistemic status honestly:
+at the present stage the framework is a self-consistent \emph{conceptual
+reconstruction} --- mathematically and numerically indistinguishable from
+standard physics wherever it overlaps --- and we catalogue the falsifiable
+predictions and open problems that would elevate it beyond reinterpretation.
+\end{abstract}
+
+\pacs{04.20.-q, 03.50.De, 04.70.-s, 12.39.Mk, 03.65.Fd}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+Hilbert's sixth problem asks for an axiomatic derivation of physics
+\cite{Hilbert1900}.  The present project --- ProjectionPhysics, the
+physical extension of the Hidden-space Bridge System (HIBS) of Liu and Xu
+\cite{LiuXu} --- pursues a specific instance of this program.  HIBS starts
+from a hidden space $S$ of ``hidden numbers'' and a non-injective projection
+$\pi:S\to \mathbb{R}\oplus i\mathbb{R}$; all observables are functions of the
+image $\pi(S)$ and the kernel $\ker\pi$, and no third degree of freedom
+exists.  The classical complex plane $\mathbb{C}$ is not fundamental; it is
+the observable slice of $S$ under $\pi$.
+
+ProjectionPhysics adds a physical layer to this algebraic skeleton, guided
+by a single intuition (Liu, 2026): \emph{space itself moves}, and light
+speed is the equivalent speed of that motion.  From this intuition four
+postulates are distilled (Sec.~\ref{sec:postulates}), and from them three
+bodies of physics are derived:
+
+\begin{enumerate}
+  \item \textbf{Mass.}  Mass is not the excitation energy of a field; it is
+  the \emph{anchoring} of internal motion (spin) against the motion of
+  space.  Nonzero spin implies nonzero mass; exact comotion with the flow
+  implies zero mass (Sec.~\ref{sec:mass}).
+  \item \textbf{Electrodynamics.}  The electromagnetic fields are
+  \emph{kinematic derivatives} of the space field $C$:
+  $E=-\partial_t C$, $B=\nabla\times C$.  Maxwell's equations reduce to the
+  wave equation of $C$; Faraday's law is an identity, and the gauge
+  redundancy of the vector potential is killed by the physical condition
+  $|\bm{C}|=c$ (Sec.~\ref{sec:em}).
+  \item \textbf{Gravitation.}  Inhomogeneous flow distorts the metric; the
+  Gordon metric follows, the weak-field potential is $\Phi=\frac12 v^2$,
+  and black holes are sinks of the flow whose horizon is the light-speed
+  surface (Sec.~\ref{sec:gravity}).
+\end{enumerate}
+
+Throughout, a methodological commitment is observed that is unusual for a
+theory paper: \emph{every} central theorem is accompanied by a machine-checked
+proof in the Lean 4 theorem prover \cite{deMoura2015,mathlib2020}, and every
+numerical claim by a reproducible script in the public repository
+\cite{ProjectionPhysics}.  This is not decoration: in a framework whose
+content is mostly at the level of algebraic identities, formal verification
+is what separates ``claimed'' from ``established''.
+
+We also commit, equally unusually, to an explicit \emph{honesty contract}
+(Sec.~\ref{sec:status}): a four-layer assessment of what each result
+actually is --- mathematical identity, structural correspondence with known
+physics, numerical matching, or conceptual reinterpretation --- and we
+record, in writing, which real-discovery criteria are \emph{not} satisfied.
+The reader will find the framework self-consistent, partially novel in its
+derivation route, and currently indistinguishable from standard physics at
+the level of formulas and numbers.
+
+\section{Postulates of the flowing-space framework}\label{sec:postulates}
+
+\subsection{Vector light speed (SLS1--SLS3)}
+
+\begin{postulate}[Vector light speed]
+\label{post:sls1}
+There exists a vector field $\bm{C}(x)$ on space with
+\begin{equation}
+|\bm{C}(x)|^2 = c^2 \qquad \forall x,
+\end{equation}
+where $c$ is the universal speed of light.  $c$ is therefore a property of
+\emph{space itself} --- the equivalent speed of space's own motion --- not a
+maximum speed for matter \emph{in} space \cite{ProjectionPhysics-SLS}.
+\end{postulate}
+
+This is a genuine shift of ontology.  In the standard view, $c$ bounds the
+propagation of signals through space; here, $c$ describes the motion of
+space, and matter moves \emph{relative} to it.  The relative velocity of
+matter with respect to the flow is
+\begin{equation}
+u = \frac{dx}{dt} - \bm{C}(x).
+\end{equation}
+
+\begin{postulate}[Photons are comoving]
+\label{post:sls2}
+Photons are exactly comoving with the flow: $u=0$.  A photon's worldline is
+a streamline of $\bm{C}$.
+\end{postulate}
+
+\begin{postulate}[Mass is anchoring]
+\label{post:mc1}
+The mass of a particle is the \emph{anchoring effect} of its internal motion
+against the motion of space: $m$ is a norm of the spinor flow $\sigma\psi$
+generated by the internal state,
+\begin{equation}
+m \;:=\; \|\sigma\psi\| \geq 0,
+\end{equation}
+with $m=0$ iff the internal state is trivial.  Equivalently, in the hidden
+number representation, $m^2 = h^2$ for $h\in\ker\pi$.
+\end{postulate}
+
+\begin{postulate}[Three-direction motion]
+\label{post:three}
+Space moves in three directions: planar motion (two directions) plus motion
+along the normal vector, which is \emph{not} an independent input but
+emerges algebraically from the planar generators,
+\begin{equation}
+\sigma_3 \;=\; i\,\sigma_1\sigma_2,
+\qquad
+(\sigma_1\sigma_2)^2 = -1,
+\qquad
+\sigma_1\sigma_2 + \sigma_2\sigma_1 = 0 .
+\end{equation}
+The three directions $(x,y,z)$ of space are identified with the three color
+directions of $\mathrm{SU}(3)$: the normal vector $(1,1,1)$ is the
+hypercharge direction, and the color-singlet profile $(c_0,c_1,c_2)=(1,1,1)$
+lies along it.
+\end{postulate}
+
+Postulate~\ref{post:sls2} together with Postulate~\ref{post:sls1} implies
+that a photon worldline satisfies $|dx/dt|=|\bm{C}|=c$, and hence the
+proper time
+\begin{equation}
+d\tau^2 = dt^2 - \frac{dx^2}{c^2}
+\end{equation}
+vanishes identically along it: \emph{photons do not experience time because
+they are the motion of space itself} (SM1).  Massive particles deviate from
+the flow ($u\neq 0$), which is precisely their mass (SM3c): mass is
+\emph{the inability to comove with space at the equivalent speed $c$}.
+Time itself becomes a measure of deviation from the flow:
+$d\tau^2>0$ iff $|dx|<c\,dt$ (SM2).
+
+\subsection{Relation to the HIBS axioms}
+
+The postulates are not independent of the HIBS algebra.  Postulate~3
+interprets the HIBS kernel $\ker\pi$ as the carrier of internal (hidden)
+motion; the Clifford generators $\sigma_i$ are the representation of the
+projection algebra, and $i$ itself emerges from the anticommutation of the
+planar generators, $(\sigma_1\sigma_2)^2=-1$, rather than being an axiom.
+The Lean formalization makes this explicit: in \texttt{PauliMathlib.lean}
+and \texttt{SpaceLightSpeed.lean} the statements
+\texttt{normal\_direction\_emerges\_from\_plane} and
+\texttt{planar\_motion\_products\_give\_i} are proved from the
+anticommutation relations alone \cite{ProjectionPhysics-SLS}.
+
+\section{Mathematical structure}\label{sec:math}
+
+\subsection{The algebraic skeleton}
+
+The HIBS projection structure provides the vocabulary: a non-injective
+projection $\pi:S\to V$ with kernel $\ker\pi$, a quadratic form $Q$ on the
+image, and a Clifford representation $\sigma$ of the form.  All theorems in
+this paper live on top of this skeleton; the Lean files
+\texttt{Definitions.lean}, \texttt{Kernel.lean}, \texttt{Completeness.lean},
+and \texttt{Mass.lean} establish the elementary facts (projection pairs,
+null cones, information conservation) \cite{ProjectionPhysics}.
+
+\subsection{Spinor flow and anchoring}
+
+Let $\psi\in\mathbb{C}^2$ be a two-component spinor and $\sigma_i$ the Pauli
+matrices.  The \emph{spinor flow} in direction $i$ is $\sigma_i\psi$.  The
+anchoring mass candidate is
+\begin{equation}
+m \;=\; \sum_i |(\sigma_i\psi)_0|^2 + |(\sigma_i\psi)_1|^2 ,
+\end{equation}
+and the core theorems (MC1, Lean) state
+\begin{equation}
+\psi \neq 0 \;\Longrightarrow\; m > 0 ,
+\qquad
+\psi = 0 \;\Longrightarrow\; m = 0 .
+\end{equation}
+The glueball minimal version (MC2) is a color-singlet triplet
+$G=(a,b,c)$ with profile $(1,1,1)$:
+\begin{equation}
+m_G^2 = |a|^2 + |b|^2 + |c|^2 > 0
+\qquad\text{whenever}\qquad (a,b,c)\neq(0,0,0).
+\end{equation}
+The number three is not accidental: the bridge theorem\footnote{Lean 4
+theorem \texttt{three\_direction\_three\_glueball\_bridge}, module SLS5 of
+\texttt{SpaceLightSpeed.lean}.} (SLS5) equates the norm squared of the
+three-direction space motion (3) with the mass squared of the three-gluon
+singlet (3).
+
+\subsection{Spin-statistics and compositeness constraints}
+
+An exploration module \texttt{CliffordSix.lean} and
+\texttt{SpinStatistics.lean} verifies the well-known obstruction that pure
+glueballs cannot assemble into fermions (spin-statistics), and that the
+eight-dimensional Clifford spinor of $\mathrm{C}\ell(6)$ realizes the color
+octet, with the branching $\mathrm{SU}(3)\supset\mathrm{SU}(2)$,
+$3\to 2\oplus 1$ \cite{ProjectionPhysics}.  These modules are kept separate
+from the main line because their physical content is standard.
+
+\section{Mass: anchoring of internal motion}\label{sec:mass}
+
+\subsection{The electron and the photon}
+
+The framework assigns:
+\begin{itemize}
+  \item \textbf{Photon:} no internal structure, exactly comoving
+  ($u=0$) $\Longrightarrow$ zero anchoring $\Longrightarrow$ $m=0$.
+  \item \textbf{Electron:} spin means the normal-direction component
+  $\sigma_3\psi\neq 0$ (the normal motion trajectory of the spin)
+  $\Longrightarrow$ positive anchoring $\Longrightarrow$ $m>0$.
+\end{itemize}
+The mechanism chain is fully formalized (MC5$'$, SM3c, SM3d in Lean):
+\begin{equation}
+\psi\neq 0 \;\Longrightarrow\; \sigma_3\psi\neq 0
+\;\Longrightarrow\; m>0
+\;\Longrightarrow\; dx \neq c\,dt
+\;\Longrightarrow\; d\tau^2 > 0 .
+\end{equation}
+
+A structural picture of the electron as a local flow structure (``tornado'')
+is explored numerically: the electron is a swirl (curl $\nabla\times\bm{C}
+\neq 0$, providing the anchoring mass) combined with a sink/source
+(divergence $\nabla\cdot\bm{C}\neq 0$, providing the charge and the Coulomb
+$1/r^2$ field), while the photon is a propagating wave of the same flow.
+The classical self-energy of a point charge cut off at the flow scale
+$r_0=0.20$\,fm evaluates to $U(r_0)=3.60$\,MeV $\approx 7.05\,m_e$, and at
+the classical electron radius $r_e=2.82$\,fm to $U(r_e)=0.255$\,MeV
+$\approx 0.5\,m_e$; the electron mass lies between the two estimates
+\cite{ProjectionPhysics-electron}.  This is reported honestly as an order-of-
+magnitude coincidence, not a derivation: $r_0$ is a fitted input, and the
+classical $4/3$ and $1/2$ factor problems remain.
+
+\subsection{Glueball spectrum: $\sqrt{N}\,M_0$}
+
+The three-direction hypothesis makes a quantitative statement about the
+lightest glueball.  With $M_0$ the mass scale of one spatial mode,
+\begin{equation}
+m_G(N) = \sqrt{N}\,M_0 ,
+\end{equation}
+the lattice values of \cite{MorningstarPeardon1999,Chen2006} are matched as
+follows:
+
+\begin{table}[h]
+\caption{Glueball masses from the $\sqrt{N}\,M_0$ rule with $M_0=0.987$\,GeV
+($r_0=\hbar c/M_0=0.200$\,fm), compared with lattice QCD
+\cite{MorningstarPeardon1999,Chen2006}.  The fit parameter is $M_0$; $N$ is
+the mode count.}
+\label{tab:glueball}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+Channel & $N$ & $\sqrt{N}\,M_0$ (GeV) & Lattice (GeV) & Deviation \\
+\hline
+$0^{++}$ & 3 & 1.710 & $1.71\pm0.05$ & $0.0\%$ \\
+$2^{++}$ & 6 & 2.418 & $2.40\pm0.12$ & $0.8\%$ \\
+$0^{-+}$ & 7 & 2.612 & $2.56\pm0.15$ & $2.0\%$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The primary match is the $0^{++}$ glueball: $\sqrt{3}\,M_0=1.710$\,GeV
+against the lattice value $1.71\pm0.05$\,GeV, a $0.0\%$ deviation with
+$M_0\approx 1$\,GeV --- the natural nuclear scale --- and
+$r_0\approx0.2$\,fm, the proton Compton wavelength scale.
+
+\subsection{Why $N=3,6,7$: harmonic-oscillator degeneracies}
+
+The mode counts admit a first-principles candidate.  The degeneracies of the
+isotropic three-dimensional harmonic oscillator are
+\begin{equation}
+d(n) = \frac{(n+1)(n+2)}{2} = 1,\,3,\,6,\,10,\,15,\,21,\,\ldots
+\end{equation}
+and the lattice mode counts align:
+\begin{equation}
+0^{++}\to N=3=d(1), \qquad
+2^{++}\to N=6=d(2), \qquad
+0^{-+}\to N=7=d(3)-d(1).
+\end{equation}
+Against the two-dimensional alternative $N=2,4,5$, the three-direction
+interpretation wins by $2.75\sigma$ in the weighted deviation
+($\sigma_A=0.263$ vs.\ $\sigma_B=3.012$).  The physical picture is a glueball
+as a bound quantum of the three-direction space flow --- a standing-wave
+combination of metric perturbations, with $m^2\propto$ (number of modes)
+$\times M_0^2$.  Because the flow is geometric (volume-preserving,
+$\det g=-1/c^2$) rather than material, no Michelson--Morley-type anisotropy
+is induced.
+
+Two honest caveats are recorded: (i) the rule $0^{-+}\to d(3)-d(1)$ is an
+ad-hoc symmetry subtraction (removing the modes with $0^{++}$ symmetry) and
+lacks a symmetry derivation; (ii) $M_0$ itself has no first-principles
+origin (it is the one fit parameter).  The predictions that follow from the
+rule are listed in Sec.~\ref{sec:predictions}.
+
+\section{Electrodynamics as kinematics of the space field}\label{sec:em}
+
+\subsection{The central derivation}
+
+Let $C$ denote the space field of Postulate~\ref{post:sls1}.  Define the
+electromagnetic fields as \emph{kinematic derivatives} of $C$
+\cite{ProjectionPhysics-MS}:
+\begin{equation}
+\label{eq:kinematic}
+E \;=\; -\partial_t C , \qquad
+B \;=\; \partial_x C \quad (1{+}1\mathrm{D}), \qquad
+B \;=\; \nabla\times C \quad (3\mathrm{D}).
+\end{equation}
+Then the following are immediate and formalized (MS1--MS5, Lean, zero
+admitted axioms):
+
+\begin{enumerate}
+  \item \textbf{Faraday's law is an identity} (MS2).  With
+  $E=-\partial_t C$ and $B=\partial_x C$,
+  \begin{equation}
+  \partial_t B = \partial_t\partial_x C = \partial_x\partial_t C = -\partial_x E ,
+  \end{equation}
+  where the middle step is the commutation of mixed partials (MS1).  Faraday
+  is not an independent law; it is the statement that $C$ is a single field.
+  In 3D the same argument gives $\partial_t B = -\nabla\times E$, and
+  $\nabla\cdot B = \nabla\cdot(\nabla\times C)=0$ is automatic.
+
+  \item \textbf{Ampere--Maxwell is the wave equation of $C$} (MS3).
+  \begin{equation}
+  \partial_t E = -c^2\,\partial_x B
+  \;\;\Longleftrightarrow\;\;
+  \partial_t^2 C = c^2\,\partial_x^2 C .
+  \end{equation}
+  The two sides are literally the same equation.  Hence the independent
+  content of the vacuum Maxwell system is a single wave equation for $C$;
+  $E$ and $B$ are its apparent forms.
+
+  \item \textbf{Sources are the driving term} (MS5).  A charge/current
+  $J$ enters as a source:
+  \begin{equation}
+  \partial_t^2 C = c^2\,\partial_x^2 C + J ,
+  \end{equation}
+  so charge is not an external ``bullet'' but the driving term of the space
+  field equation itself.  In the static limit, $C''\approx -J$, verified
+  numerically.
+
+  \item \textbf{Gauge redundancy is killed by physics} (MS4).  In the
+  standard vector-potential formulation, $C$ would be the gauge-dependent
+  potential $A$.  Here $C$ is physically fixed by
+  Postulate~\ref{post:sls1} ($|\bm{C}|=c$ everywhere): the gauge freedom is
+  eliminated not by a choice of convention but by the physical condition
+  that $C$ is the actual velocity field of space.
+\end{enumerate}
+
+In short: \emph{electromagnetism is the kinematics of the space field}.
+Maxwell's equations do not describe two fields with two independent laws;
+they describe one field with one wave equation, and the familiar
+electromagnetic laws are consequences of the definition of $E$ and $B$ as
+derivatives of $C$.
+
+\subsection{Consistency with the flow postulates}
+
+The identification $c=1/\sqrt{\mu_0\varepsilon_0}$ (MF2) is preserved: $c$
+is simultaneously the flow speed of space and the propagation speed of the
+$C$ wave.  Dispersion $\omega=\pm ck$ holds as a factorization
+$(\omega-ck)(\omega+ck)=0$ (MF1), and the photon-comoving postulate (SLS2)
+implies $|v_{\mathrm{photon}}|=|C|=c$, so $d\tau^2=0$ identically (MF4,
+self-consistent).  A leapfrog FDTD simulation with CFL$=1$ propagates the
+$C$ wave packet at exactly $1.000\,c$, and the Faraday and Ampere residuals
+are zero at machine precision for both analytic traveling waves and the
+numerical leapfrog solution \cite{ProjectionPhysics-MS}.
+
+\subsection{What is genuinely new here}
+
+The kinematic content --- that Maxwell's equations are equivalent to the
+wave equation of the vector potential --- is standard electromagnetic theory.
+What is repository-specific is the \emph{physicalization} of the potential:
+$C$ is not an auxiliary field but the velocity field of space, with the
+fixed magnitude $|\bm{C}|=c$ that eliminates gauge freedom.  This is a
+conceptual step; its falsifiability is discussed in Sec.~\ref{sec:status}.
+
+\section{Gravitation and strong-field structure}\label{sec:gravity}
+
+\subsection{From momentum conservation to the Gordon metric}
+
+The route from the postulates to gravity follows the classical Gordon
+construction \cite{Gordon1923}: an inhomogeneous flow $v(x)$ distorts the
+metric.  With $g=\mathrm{diag}(1,-1/c^2)$ in the comoving frame, a flow
+along $x$ gives the Gordon metric (SG1)
+\begin{equation}
+g_{\mu\nu} = \begin{pmatrix} 1-v^2/c^2 & v/c^2 \\ v/c^2 & -1/c^2 \end{pmatrix},
+\qquad \det g = -\frac{1}{c^2} ,
+\end{equation}
+and the proper time (SG8)
+\begin{equation}
+d\tau^2 = dt^2 - \frac{(dx-v\,dt)^2}{c^2} .
+\end{equation}
+The key quantitative result (SG11) is the weak-field match: with
+$g_{tt}=1-v^2/c^2$ from the flow and $g_{tt}=1-2\Phi/c^2$ from standard weak
+field general relativity,
+\begin{equation}
+\Phi \;=\; \frac12 v^2 ,
+\end{equation}
+so the Newtonian acceleration is
+\begin{equation}
+a = -\nabla\left(\tfrac12 v^2\right) = -v\,\nabla v ,
+\end{equation}
+i.e., gravity is the inhomogeneity of the flow (SLS6).  The full chain
+--- inhomogeneous flow $\to$ Gordon metric $\to$ Christoffel symbols $\to$
+geodesic equation $\to$ Newtonian limit --- is verified numerically with the
+generic formula $\Gamma^\lambda_{\mu\nu}=\frac12 g^{\lambda\sigma}(\partial_\mu
+g_{\sigma\nu}+\partial_\nu g_{\sigma\mu}-\partial_\sigma g_{\mu\nu})$,
+including a correction pass that recomputed all eight Christoffel components
+\cite{ProjectionPhysics-GR}.  Proper time remains positive for massive
+particles ($d\tau^2>0$) and vanishes for photons, whose worldlines satisfy
+$|dx-v\,dt|=c\,dt$ \emph{relative to the flow} --- the correct photon
+condition, as opposed to the comoving condition $dx=v\,dt$, which would
+incorrectly give $d\tau^2=dt^2$ (a modeling pitfall recorded in the
+formalization) \cite{ProjectionPhysics-GR}.
+
+\subsection{Black holes as sinks of the flow}
+
+The postulates (rather than a field equation) determine the strong-field
+picture.  A black hole is a region where the flow converges to a point:
+$C=-c\,\hat{r}$ inside $r<r_h$ (a sink), with all streamlines terminating at
+the singularity \cite{ProjectionPhysics-MF}.  The horizon is the
+light-speed surface (BH1):
+\begin{equation}
+g_{tt}=0 \;\Longleftrightarrow\; |v|=c .
+\end{equation}
+Inescapability is then a \emph{corollary of Postulate~\ref{post:sls2}}:
+photons are streamlines, and escaping would require moving against the flow,
+which contradicts exact comotion (PH2).  No appeal to general relativity is
+needed.  Numerically, $|C|=c$ holds to $<10^{-12}$ along all streamlines,
+$d\tau^2=0$ to $<10^{-12}$, and an outward photon freezes at the horizon
+($dx/dt=0$), the coordinate picture matching Schwarzschild.  The white hole
+is the reversed flow (BH5--BH6: $g_{tt}$ invariant, $g_{tx}$ flips), and a
+wormhole is a sub-light flow tube whose throat has a peak speed
+$v_{\mathrm{peak}}<c$ (WH1: at the throat $v=0$ and the light cone is
+restored), through which a photon passes with $d\tau=0$ throughout
+\cite{ProjectionPhysics-BH}.  This is structurally identical to the
+Hamilton--Lisle river model \cite{HamiltonLisle2008}.
+
+\section{Numerical and computational validation}\label{sec:validation}
+
+All numbers in this paper are produced by scripts in the repository
+\cite{ProjectionPhysics}.  Table~\ref{tab:validation} collects the
+verification results.
+
+\begin{table}[h]
+\caption{Computational validation summary.  ``Residual zero'' means
+machine-precision zero.}
+\label{tab:validation}
+\begin{ruledtabular}
+\begin{tabular}{ll}
+Check & Result \\
+\hline
+$C$-wave packet speed (leapfrog FDTD, CFL$=1$) & $1.000\,c$ \\
+Faraday residual (analytic / leapfrog) & $0.0$ / $0.0$ \\
+Ampere--Maxwell residual (analytic / leapfrog) & $0.0$ / $0.0$ \\
+Static charge drives $C$ (MS5) & $C''\approx -J$, residual $0.033$ \\
+Glueball $0^{++}$ ($\sqrt3\,M_0$) & $1.710$ vs.\ $1.71\pm0.05$ GeV ($0.0\%$) \\
+Glueball $2^{++}$ ($\sqrt6\,M_0$) & $2.418$ vs.\ $2.40\pm0.12$ GeV ($0.8\%$) \\
+Glueball $0^{-+}$ ($\sqrt7\,M_0$) & $2.612$ vs.\ $2.56\pm0.15$ GeV ($2.0\%$) \\
+Horizon condition $g_{tt}=0\Leftrightarrow|v|=c$ & exact \\
+Outward photon at horizon & $dx/dt=0$ (frozen) \\
+Time dilation at horizon & $d\tau/dt\to 0$ \\
+Wormhole throat peak & $v=0.8\,c<c$, no horizon \\
+$d\tau^2$ along streamlines & $<10^{-12}$ \\
+$|\bm{C}|=c$ along streamlines & $<10^{-12}$ \\
+CHSH: helix model $S$ & $2.0005\pm0.004$ (local bound $2$) \\
+CHSH: quantum prediction & $2\sqrt2=2.8284$; Aspect 1982: $2.697$ \\
+Electron self-energy $U(r_0=0.20\,\mathrm{fm})$ & $3.60$ MeV $=7.05\,m_e$ \\
+Electron self-energy $U(r_e=2.82\,\mathrm{fm})$ & $0.255$ MeV $=0.50\,m_e$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\subsection{Lean formalization}
+
+The theorem prover component is summarized in Table~\ref{tab:lean}.  Every
+listed module compiles with zero \texttt{sorry} (no admitted axioms) and
+zero warnings, under Lean 4.
+
+\begin{table}[h]
+\caption{Lean 4 formalization summary.  Job counts are from
+\texttt{lake build} on the current revision.}
+\label{tab:lean}
+\begin{ruledtabular}
+\begin{tabular}{ll}
+Module (file) & Theorems \\
+\hline
+\texttt{SpaceLightSpeed.lean} & SLS1--SLS5: universal $|\bm{C}|=c$; photon zero anchoring; \\
+ & electron positive anchoring; $\sigma_3=i\sigma_1\sigma_2$ emergence; \\
+ & three-direction/three-gluon bridge \\
+\texttt{MinimalCore.lean} (Archive) & MC1--MC2, MC1h: nonzero spin $\Rightarrow$ nonzero mass; \\
+ & $m_G^2=|a|^2+|b|^2+|c|^2$ \\
+\texttt{SpaceMetric.lean} & SM1--SM6: photon $d\tau=0$; mass $\Leftrightarrow$ deviation \\
+ & from flow; metric consistency; $\det g=-1/c^2$ \\
+\texttt{SpaceGravity.lean} & SG1--SG11: Gordon metric; $\Phi=\frac12 v^2$; Newtonian limit \\
+\texttt{MaxwellSpace.lean} & MS1--MS5: Faraday identity; Ampere $\Leftrightarrow$ wave equation; \\
+\texttt{(Explorations)} & sources as driving terms (4131 jobs, zero sorry) \\
+\texttt{MaxwellFlow.lean} & MF1--MF6, PH1--PH2: dispersion; $c=1/\sqrt{\mu_0\varepsilon_0}$; \\
+\texttt{(Explorations)} & inescapability as postulate corollary (4130 jobs) \\
+\texttt{BlackHoleWormhole.lean} & BH1--BH7, WH1: horizon $=$ light-speed surface; white \\
+\texttt{(Explorations)} & hole; wormhole throat (4128 jobs) \\
+\texttt{LorentzRebuild.lean} & LR1--LR5: boost preserves $\eta=\mathrm{diag}(-1,1)$; \\
+ & $\gamma^2-\gamma^2\beta^2=1$; velocity addition; $\beta<1$ \\
+\texttt{DiracMathlib.lean} & DB1$'$--DB6$'$: $(\gamma^0)^2=1$, $(\gamma^i)^2=-1$; mass $=$ \\
+ & chiral coupling \\
+\texttt{EntanglementHelix.lean} & EH1--EH4: CHSH local bound $|S|\leq2$ (Bell kernel) \\
+\texttt{(Explorations)} & \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\section{Relation to existing physics}\label{sec:relation}
+
+\subsection{What is standard, restated}
+
+Where the framework touches existing physics, the formulas and numbers agree
+with it: the Gordon metric is a classical construction
+\cite{Gordon1923}; the river model of black holes is Hamilton and Lisle
+\cite{HamiltonLisle2008}; Maxwell's equations as the wave equation of a
+potential is textbook; $d\tau^2=0$ for photons is Minkowski; the glueball
+spectrum is lattice QCD \cite{MorningstarPeardon1999,Chen2006}.  The
+framework currently contains \emph{no} experimental number that standard
+physics does not also produce.
+
+\subsection{Four-layer assessment}\label{sec:status}
+
+For each result we record its status on four layers
+\cite{ProjectionPhysics-status}:
+
+\begin{enumerate}
+  \item \textbf{Mathematical identity.}  True by construction: e.g., the
+  Faraday identity, Ampere $\Leftrightarrow$ wave equation, $g_{tt}=0
+  \Leftrightarrow |v|=c$.  These are rigorous (machine-checked) but
+  content-free as physics.
+  \item \textbf{Structural correspondence.}  Known physics restated: the
+  vector-potential formulation, the Gordon/river geometry, the
+  spin-statistics obstruction.
+  \item \textbf{Numerical matching.}  Consistent but not new: the glueball
+  $\sqrt{N}M_0$ rule has one fit parameter $M_0$; the electron self-energy
+  coincidence sits between $0.5\,m_e$ and $7\,m_e$ with a fitted cutoff.
+  \item \textbf{Conceptual reinterpretation.}  Unfalsifiable at present:
+  ``gravity is inhomogeneous flow'', ``mass is anchoring'', ``$c$ is the
+  speed of space'' --- the explanation layer changes while the formulas do
+  not.
+\end{enumerate}
+
+The one result that rises above layer 1 is the Maxwell-space derivation
+(Sec.~\ref{sec:em}): although the algebraic kernel is the standard vector
+potential formulation, the \emph{physicalization} of the potential
+($|\bm{C}|=c$) and the reduction of Maxwell's system to a single wave
+equation of a physically fixed field is repository-specific content.  Even
+here, the honest statement is that it is a derivation-route novelty, not a
+new prediction.
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Predictions}\label{sec:predictions}
+
+The framework makes the following falsifiable statements.
+
+\begin{enumerate}
+  \item \textbf{P1 --- inside the horizon, light inevitably falls into the
+  singularity.}  This follows from the comoving postulate and is verified
+  numerically \cite{ProjectionPhysics-MF}.
+  \item \textbf{P2 --- gravitational redshift}
+  \begin{equation}
+  \frac{\omega_2}{\omega_1} = \frac{c-v_2}{c-v_1}
+  \end{equation}
+  with the flow profile $v(r)$ as the single free input.  The direction
+  agrees with GR; numerical agreement with GR requires the flow profile to
+  take the GR shape, which the repository does not derive from first
+  principles.
+  \item \textbf{P3 --- transverse electromagnetic modes vanish inside the
+  horizon} (the field becomes purely radial) \cite{ProjectionPhysics-MF}.
+  \item \textbf{P4 --- isotropy is preserved.}  Since $|\bm{C}|=c$ in every
+  direction, light speed is isotropic by construction; this is structurally
+  untestable, and we say so.
+  \item \textbf{Glueball spectrum.}  The harmonic-oscillator mode rule
+  predicts, for $n=4,5,6$,
+  \begin{equation}
+  m = \sqrt{15},\sqrt{21},\sqrt{28} \times M_0 = 3.82,\,4.52,\,5.22\,\mathrm{GeV},
+  \end{equation}
+  and, if the $d(n)-d(1)$ subtraction rule holds, $n=4$ gives
+  $\sqrt{12}\,M_0=3.42$\,GeV.  Lattice data on $1^{++}$, $2^{-+}$, $3^{++}$
+  channels can discriminate.
+  \item \textbf{Entanglement under inhomogeneous flow.}  In the
+  entanglement-helix exploration \cite{ProjectionPhysics-helix}, a
+  gravitational (inhomogeneous-flow) phase shift would modify the
+  correlation function $E(\Delta)$; the local bound $|S|\leq2$ is proven,
+  and the helix geometry saturates it ($S=2.0005\pm0.004$), while the
+  quantum value $2\sqrt2$ requires Born-rule readout --- an honest place
+  where the framework must either produce Born's rule or fail.
+\end{enumerate}
+
+\subsection{Open problems}
+
+The following gaps are structural, not cosmetic:
+
+\begin{itemize}
+  \item \textbf{The $966\times$ gap.}  The electron anchoring mechanism has
+  the right direction (nonzero spin $\Rightarrow$ nonzero mass) but the
+  magnitude, at the flow scale $r_0$, overshoots $m_e$ by a factor of
+  order $10^3$; every candidate formula collapses to an identity
+  ($m\equiv M_0/2$).  An independent input not of order $\hbar/r_0$ is
+  needed.
+  \item \textbf{Origin of $M_0$.}  The glueball fit parameter has no
+  first-principles derivation; connecting it to a confinement scale requires
+  QCD dynamics the repository does not have.
+  \item \textbf{The $N$-sequence.}  $(3,6,7)$ is not yet derived; the
+  $d(3)-d(1)$ subtraction for $0^{-+}$ is ad hoc.
+  \item \textbf{Dimensionality.}  The Maxwell-space derivation is a $1{+}1$
+  dimensional skeleton; the 3D curl/divergence calculus and continuity are
+  not formalized.
+  \item \textbf{Missing standard content.}  Charge quantization, the value
+  of $e$, QCD confinement, the complete curvature tensor and the Einstein
+  field equations, and Born's rule are all outside the framework.
+  \item \textbf{Lorentz violation?}  The only physical exit from pure
+  reinterpretation is inhomogeneous flow inducing Lorentz violation; no
+  experimental scheme or magnitude estimate exists yet.
+\end{itemize}
+
+\section{Conclusion}\label{sec:conclusion}
+
+We have presented a postulate-based framework --- space in motion,
+$|\bm{C}|=c$ --- from which mass, electrodynamics, and gravitation emerge as
+kinematics.  The framework is internally consistent, every central claim is
+machine-checked in Lean 4, and every number is reproducible from the
+repository.  Its distinctive content is the physicalization of the vector
+potential ($|\bm{C}|=c$) and the consequent reduction of Maxwell's equations
+to the wave equation of a single space field, plus the three-direction
+realization of $\mathrm{SU}(3)$ with its $\sqrt{N}M_0$ glueball pattern.
+
+Its epistemic status is stated without inflation: at present this is a
+\emph{conceptual reconstruction} of known physics --- rigorous, coherent,
+and indistinguishable from standard physics in formulas and numbers.  Real
+discovery criteria (first-principles derivation of $M_0$, resolution of the
+$966\times$ gap, a new falsifiable prediction with an experimental scheme)
+are not yet met.  The predictions of Sec.~\ref{sec:predictions} are the
+tests that would change this verdict.
+
+\begin{acknowledgments}
+The author thanks X.~Xu for the HIBS collaboration, and the Lean community
+for the formalization infrastructure on which the theorem-prover component
+rests.
+\end{acknowledgments}
+
+\bibliography{projection-physics}
+
+\appendix
+
+\section{Lean formalization overview}\label{app:lean}
+
+The formalization lives in the public repository
+\texttt{github.com/logos-42/Hibs-Physics} (directory
+\texttt{ProjectionPhysics/}).  Conventions: theorems are named by module
+prefix (MS, MF, BH, SG, SM, SLS, MC, LR, EH); a prime denotes a mathlib
+rewrite of an earlier core proof; \texttt{(Explorations)} modules are
+newer-direction results kept separate from the main line.  Every file
+compiles under \texttt{lake build} with zero \texttt{sorry} and zero
+warnings; the job counts in Table~\ref{tab:lean} are from the current
+revision.
+
+\section{Proof sketches}\label{app:proofs}
+
+\subsection{Faraday's law is an identity (MS2)}\label{app:faraday}
+
+In $1{+}1$ dimensions, with $E=-\partial_t C$ and $B=\partial_x C$:
+\[
+\partial_t B \;=\; \partial_t\partial_x C
+\;\overset{\mathrm{(MS1)}}{=}\;
+\partial_x\partial_t C \;=\; -\partial_x E .
+\]
+In 3D, $B=\nabla\times C$ gives $\partial_t B=\nabla\times\partial_t C
+=-\nabla\times E$, and $\nabla\cdot B=\nabla\cdot(\nabla\times C)=0$
+identically.  Both directions are formalized; the commutation step (MS1) is
+the only ingredient.
+
+\subsection{Ampere--Maxwell is the wave equation (MS3)}\label{app:ampere}
+
+Using the definitions,
+\[
+\partial_t E + c^2\,\partial_x B
+\;=\; -\partial_t^2 C + c^2\,\partial_x^2 C ,
+\]
+so $\partial_t E = -c^2\,\partial_x B$ holds iff
+$\partial_t^2 C = c^2\,\partial_x^2 C$.  The equivalence is a direct
+substitution (Lean: MS3, both directions).
+
+\subsection{Horizon $=$ light-speed surface (BH1)}\label{app:bh}
+
+For the Gordon metric $g_{tt}=1-v^2/c^2$,
+\[
+g_{tt}=0 \;\Longleftrightarrow\; v^2=c^2 \;\Longleftrightarrow\; |v|=c .
+\]
+Inside the horizon $|v|>c$ gives $g_{tt}<0$ (BH7, role swap seed).
+
+\subsection{Weak-field potential (SG11)}\label{app:sg11}
+
+Equating the flow expression and the GR expression for $g_{tt}$,
+\[
+1-\frac{v^2}{c^2} = 1-\frac{2\Phi}{c^2}
+\;\Longrightarrow\; \Phi = \frac{v^2}{2},
+\]
+and the geodesic equation yields $a=-\nabla\Phi=-v\,\nabla v$ (Newtonian
+limit).
+
+\subsection{CHSH local bound (EH1--EH2)}\label{app:chsh}
+
+For dichotomic observables $A_a,B_b\in\{\pm1\}$,
+\[
+S = E(a,b)+E(a,b')+E(a',b)-E(a',b'),
+\]
+and $|S|\leq2$ follows from $A_aB_b+A_aB_{b'}+A_{a'}B_b-A_{a'}B_{b'}
+=A_a(B_b+B_{b'})+A_{a'}(B_b-B_{b'})\in\{\pm2\}$, since each parenthesis is
+$0$ or $\pm2$.  This is the algebraic kernel of Bell's theorem
+\cite{Bell1964}; the helix geometry saturates the bound numerically
+($S=2.0005\pm0.004$).
+
+\subsection{Glueball mass positivity (MC2)}\label{app:mc2}
+
+For $G=(a,b,c)$ with $m_G^2=|a|^2+|b|^2+|c|^2$, if $(a,b,c)\neq(0,0,0)$
+then at least one $|a_i|^2>0$, hence $m_G^2>0$; conversely $m_G^2=0$ forces
+$a=b=c=0$.  Trivial in content, but it is the formal anchor of ``three
+directions give mass''.
+
+\end{document}

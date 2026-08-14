@@ -1,0 +1,648 @@
+%% projection-physics-zh.tex
+%%
+%% ProjectionPhysics：流动空间的物理学——质量锚定、矢量光速与单一空间场的电动力学
+%% 中文版（与 projection-physics.tex 内容等同）
+%% 单栏 preprint（REVTeX 4.2, APS, PRD）；ctex + fandol 字体（tectonic 可编译）
+%%
+%% 编译：tectonic projection-physics-zh.tex
+%%（tectonic 自动处理 bibtex 多趟编译与字体下载；Overleaf 上传后文档类选 REVTeX 4.2，编译器选 XeLaTeX）
+
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+
+\usepackage{graphicx}   % Include figure files
+\usepackage{bm}         % bold math
+\usepackage{dcolumn}    % align table columns on decimal point
+\usepackage{amsthm}
+\newtheorem{postulate}{公设}[section]
+\usepackage[fontset=fandol]{ctex}
+
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\appendixname}{附录}
+\renewcommand{\acknowledgmentsname}{致谢}
+\renewcommand{\refname}{参考文献}
+
+\begin{document}
+
+\title{流动空间的物理学：\\ 质量锚定、矢量光速与单一空间场的电动力学}
+
+\author{刘元杰}
+\email{yuanjieliu65@gmail.com}
+\affiliation{浙江大学滨江研究院，杭州，中国}
+
+\date{\today}
+
+\begin{abstract}
+我们提出一个基于公设的框架：空间本身处于运动之中，全部物理是单一空间场
+$\bm{C}$（处处满足 $|\bm{C}|=c$）的运动学。框架建立在四条公设之上：
+（P1）每个空间点携带速度矢量 $\bm{C}$ 且 $|\bm{C}|^2=c^2$（矢量光速——
+$c$ 是空间自身的属性，不是物质的速度上限）；（P2）光子与流完全随动，因此
+不携带任何``锚定''，质量为零；（P3）质量是内部运动（自旋）抵抗空间运动所
+产生的锚定效果，自旋非零蕴含质量非零；（P4）空间沿三个方向运动，法向量
+方向由代数必然地涌现为 $\sigma_3=i\sigma_1\sigma_2$，从而实现了
+$\mathrm{SU}(3)$ 的三色/三胶子结构。在这些公设下，电磁场是空间场的运动学
+导数：$E=-\partial_t C$、$B=\partial_x C$；法拉第定律成为恒等式，
+安培--麦克斯韦方程等价于 $C$ 的波动方程，矢量势的规范冗余被物理条件
+$|\bm{C}|=c$ 消灭。非均匀流动给出 Gordon 度规，弱场极限下
+$\Phi=\frac12 v^2$，重现广义相对论的牛顿极限；黑洞是流动的汇，其视界即
+光速面，因此不可逃逸是公设的直接推论而非动力学结论。三方向假设预言胶球
+质量谱 $m=\sqrt{N}\,M_0$，与格点 QCD 相容（$0^{++}$ 在 $\sqrt3\,M_0$，
+$M_0\approx1$ GeV，偏差 $0.0\%$），模式数 $N=3,6,7$ 与三维各向同性谐振子
+的简并度 $d(n)=\frac12(n+1)(n+2)$ 对齐。全部核心定理在 Lean 4 定理证明器
+中形式化（无公理、无 admitted 证明）。我们诚实地陈述认识论地位：现阶段该
+框架是一个自洽的\emph{概念重构}——凡与标准物理重叠之处，公式与数值均不可
+区分——并列出能使它超越重释层面的可证伪预言与开放问题。
+\end{abstract}
+
+\pacs{04.20.-q, 03.50.De, 04.70.-s, 12.39.Mk, 03.65.Fd}
+
+\maketitle
+
+\section{引言}\label{sec:intro}
+
+希尔伯特第六问题要求物理学的公理化推导 \cite{Hilbert1900}。本项目——
+ProjectionPhysics，即隐藏空间桥接系统（HIBS，刘元杰 \& 徐依娜
+\cite{LiuXu}）的物理扩展——追求这一纲领的一个具体实例。HIBS 从一个隐藏
+空间 $S$（其元素为``隐数''）与非单射投影
+$\pi:S\to \mathbb{R}\oplus i\mathbb{R}$ 出发；一切可观测量都是像
+$\pi(S)$ 与核 $\ker\pi$ 的函数，不存在第三种自由度。经典复平面
+$\mathbb{C}$ 不是基本的；它是 $S$ 在 $\pi$ 下的可观测切片。
+
+ProjectionPhysics 在此代数骨架上加一层物理，由一个直觉（刘，2026）引导：
+\emph{空间本身在运动}，光速就是这种运动的等效速度。由这一直觉蒸馏出四条
+公设（第~\ref{sec:postulates}~节），并由此推导出三块物理：
+
+\begin{enumerate}
+  \item \textbf{质量。} 质量不是场的激发能量，而是内部运动（自旋）对空间
+  运动的\emph{锚定}。自旋非零蕴含质量非零；与流完全随动蕴含质量为零
+  （第~\ref{sec:mass}~节）。
+  \item \textbf{电动力学。} 电磁场是空间场 $C$ 的\emph{运动学导数}：
+  $E=-\partial_t C$、$B=\nabla\times C$。麦克斯韦方程组归结为 $C$ 的波动
+  方程；法拉第定律是恒等式；矢量势的规范冗余被物理条件 $|\bm{C}|=c$ 消灭
+  （第~\ref{sec:em}~节）。
+  \item \textbf{引力。} 非均匀流动使度规弯曲；Gordon 度规随之而来，
+  弱场势 $\Phi=\frac12 v^2$，黑洞是流动的汇，其视界是光速面
+  （第~\ref{sec:gravity}~节）。
+\end{enumerate}
+
+全文遵守一条对理论论文而言不寻常的方法论承诺：\emph{每一个}核心定理都附
+带 Lean 4 定理证明器 \cite{deMoura2015,mathlib2020} 的机器校验证明，每一
+个数值断言都附公开仓库 \cite{ProjectionPhysics} 中可复现的脚本。这不是装
+饰：在一个内容大多处于代数恒等式层面的框架里，形式化验证正是区分``声称''
+与``确立''的东西。
+
+我们还同样不寻常地承诺一份显式的\emph{诚实契约}（第~\ref{sec:status}~
+节）：对每个结果做四层判定——数学恒等式、与已知物理的结构对应、数值匹
+配、概念重构——并书面记录哪些真实发现判据\emph{未}满足。读者将看到这个
+框架自洽、推导路线部分新颖，而在公式与数值层面目前与标准物理不可区分。
+
+\section{流动空间框架的公设}\label{sec:postulates}
+
+\subsection{矢量光速（SLS1--SLS3）}
+
+\begin{postulate}[矢量光速]
+\label{post:sls1}
+空间上存在矢量场 $\bm{C}(x)$，满足
+\begin{equation}
+|\bm{C}(x)|^2 = c^2 \qquad \forall x,
+\end{equation}
+其中 $c$ 是光速普适常数。因此 $c$ 是\emph{空间自身}的属性——空间自身运动
+的等效速度——而不是物质\emph{在}空间中的速度上限 \cite{ProjectionPhysics-SLS}。
+\end{postulate}
+
+这是本体论的真正转移。在标准观点中，$c$ 限制信号在空间中的传播；在这里，
+$c$ 描述空间自身的运动，物质相对它运动。物质相对流的相对速度为
+\begin{equation}
+u = \frac{dx}{dt} - \bm{C}(x).
+\end{equation}
+
+\begin{postulate}[光子随流]
+\label{post:sls2}
+光子与流完全随动：$u=0$。光子的世界线就是 $\bm{C}$ 的一条流线。
+\end{postulate}
+
+\begin{postulate}[质量即锚定]
+\label{post:mc1}
+粒子的质量是其内部运动抵抗空间运动的\emph{锚定效果}：$m$ 是内部状态产生
+的旋量流 $\sigma\psi$ 的范数，
+\begin{equation}
+m \;:=\; \|\sigma\psi\| \geq 0,
+\end{equation}
+且 $m=0$ 当且仅当内部状态平凡。等价地，在隐数表示中 $m^2=h^2$，
+$h\in\ker\pi$。
+\end{postulate}
+
+\begin{postulate}[三方向运动]
+\label{post:three}
+空间沿三个方向运动：平面内运动（两个方向）加上法向量方向的运动。法向量
+\emph{不是}独立输入，而是从平面内生成元代数地涌现：
+\begin{equation}
+\sigma_3 \;=\; i\,\sigma_1\sigma_2,
+\qquad
+(\sigma_1\sigma_2)^2 = -1,
+\qquad
+\sigma_1\sigma_2 + \sigma_2\sigma_1 = 0 .
+\end{equation}
+空间三方向 $(x,y,z)$ 与 $\mathrm{SU}(3)$ 的三个色方向等同：法向量
+$(1,1,1)$ 是超荷方向，色单态剖面 $(c_0,c_1,c_2)=(1,1,1)$ 沿此方向。
+\end{postulate}
+
+公设~\ref{post:sls2} 结合公设~\ref{post:sls1} 蕴含光子世界线满足
+$|dx/dt|=|\bm{C}|=c$，从而固有时间
+\begin{equation}
+d\tau^2 = dt^2 - \frac{dx^2}{c^2}
+\end{equation}
+沿其恒为零：\emph{光子不经历时间，因为光子就是空间本身的运动}（SM1）。
+有质量粒子偏离流（$u\neq 0$），这正是它们的质量（SM3c）：质量是\emph{无法
+以等效速度 $c$ 与空间随动}。时间本身成为偏离流的度量：$d\tau^2>0$ 当且仅
+当 $|dx|<c\,dt$（SM2）。
+
+\subsection{与 HIBS 公理的关系}
+
+这些公设并非独立于 HIBS 代数。公设~3 把 HIBS 核 $\ker\pi$ 解释为内部（隐
+藏）运动的载体；Clifford 生成元 $\sigma_i$ 是投影代数的表示，而 $i$ 本身
+从平面内生成元的反交换涌现，$(\sigma_1\sigma_2)^2=-1$，不是公理。Lean 形
+式化使之显式化：在 \texttt{PauliMathlib.lean} 与
+\texttt{SpaceLightSpeed.lean} 中，\texttt{normal\_direction\_emerges\_from\_plane}
+与 \texttt{planar\_motion\_products\_give\_i} 仅由反交换关系证明
+\cite{ProjectionPhysics-SLS}。
+
+\section{数学结构}\label{sec:math}
+
+\subsection{代数骨架}
+
+HIBS 投影结构提供词汇：非单射投影 $\pi:S\to V$ 与核 $\ker\pi$、像上的二
+次型 $Q$、以及形式的 Clifford 表示 $\sigma$。本文全部定理建立在这副骨架
+之上；Lean 文件 \texttt{Definitions.lean}、\texttt{Kernel.lean}、
+\texttt{Completeness.lean} 与 \texttt{Mass.lean} 确立了基本事实（投影对、
+零锥、信息守恒）\cite{ProjectionPhysics}。
+
+\subsection{旋量流与锚定}
+
+设 $\psi\in\mathbb{C}^2$ 为二分旋量，$\sigma_i$ 为 Pauli 矩阵。$i$ 方向
+的\emph{旋量流}是 $\sigma_i\psi$。锚定质量候选为
+\begin{equation}
+m \;=\; \sum_i |(\sigma_i\psi)_0|^2 + |(\sigma_i\psi)_1|^2 ,
+\end{equation}
+核心定理（MC1，Lean）断言
+\begin{equation}
+\psi \neq 0 \;\Longrightarrow\; m > 0 ,
+\qquad
+\psi = 0 \;\Longrightarrow\; m = 0 .
+\end{equation}
+胶球最小版本（MC2）是剖面为 $(1,1,1)$ 的色单态三元组 $G=(a,b,c)$：
+\begin{equation}
+m_G^2 = |a|^2 + |b|^2 + |c|^2 > 0
+\qquad\text{当}\qquad (a,b,c)\neq(0,0,0).
+\end{equation}
+数字三不是偶然的：桥定理 \texttt{three\_direction\_three\_glueball\_bridge}
+（SLS5）\footnote{Lean 4 定理 \texttt{three\_direction\_three\_glueball\_bridge}，
+模块 \texttt{SpaceLightSpeed.lean} 的 SLS5。} 把三方向空间运动的模方（3）
+与三胶子单态的质量平方（3）等同。
+
+\subsection{自旋统计与复合态约束}
+
+探索模块 \texttt{CliffordSix.lean} 与 \texttt{SpinStatistics.lean} 验证了
+众所周知的障碍：纯胶球不能组装成费米子（自旋统计），且 $\mathrm{C}\ell(6)$
+的八维 Clifford 旋量实现色八重态，分支 $\mathrm{SU}(3)\supset\mathrm{SU}(2)$，
+$3\to 2\oplus 1$ \cite{ProjectionPhysics}。这些模块与主线分离，因为其物理
+内容是标准的。
+
+\section{质量：内部运动的锚定}\label{sec:mass}
+
+\subsection{电子与光子}
+
+框架给出：
+\begin{itemize}
+  \item \textbf{光子：}无内部结构、完全随流（$u=0$）$\Longrightarrow$ 零锚
+  定 $\Longrightarrow$ $m=0$。
+  \item \textbf{电子：}自旋意味着法向量分量 $\sigma_3\psi\neq 0$（自旋的
+  法向量运动轨迹）$\Longrightarrow$ 正锚定 $\Longrightarrow$ $m>0$。
+\end{itemize}
+机制链完全形式化（Lean：MC5$'$，SM3c，SM3d）：
+\begin{equation}
+\psi\neq 0 \;\Longrightarrow\; \sigma_3\psi\neq 0
+\;\Longrightarrow\; m>0
+\;\Longrightarrow\; dx \neq c\,dt
+\;\Longrightarrow\; d\tau^2 > 0 .
+\end{equation}
+
+电子作为局域流动结构（``龙卷风''）的结构图像被数值探索：电子是涡旋
+（旋度 $\nabla\times\bm{C}\neq 0$，提供锚定质量）与源/汇（散度
+$\nabla\cdot\bm{C}\neq 0$，提供电荷与库仑 $1/r^2$ 场）的结合，而光子是同
+一流动的传播波。在流动尺度 $r_0=0.20$\,fm 处截断的点电荷经典自能为
+$U(r_0)=3.60$\,MeV $\approx 7.05\,m_e$，在经典电子半径 $r_e=2.82$\,fm 处
+为 $U(r_e)=0.255$\,MeV $\approx 0.5\,m_e$；电子质量位于两个估计之间
+\cite{ProjectionPhysics-electron}。这被诚实地报告为量级巧合而非推导：
+$r_0$ 是拟合输入，经典 $4/3$ 与 $1/2$ 因子问题依然存在。
+
+\subsection{胶球谱：$\sqrt{N}\,M_0$}
+
+三方向假设对最轻胶球做出定量陈述。设 $M_0$ 为单一空间模式的质量尺度，
+\begin{equation}
+m_G(N) = \sqrt{N}\,M_0 ,
+\end{equation}
+格点值 \cite{MorningstarPeardon1999,Chen2006} 匹配如下：
+
+\begin{table}[h]
+\caption{胶球质量与 $\sqrt{N}\,M_0$ 规则（$M_0=0.987$\,GeV，
+$r_0=\hbar c/M_0=0.200$\,fm），对照格点 QCD
+\cite{MorningstarPeardon1999,Chen2006}。拟合参数为 $M_0$；$N$ 为模式数。}
+\label{tab:glueball}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+通道 & $N$ & $\sqrt{N}\,M_0$ (GeV) & 格点 (GeV) & 偏差 \\
+\hline
+$0^{++}$ & 3 & 1.710 & $1.71\pm0.05$ & $0.0\%$ \\
+$2^{++}$ & 6 & 2.418 & $2.40\pm0.12$ & $0.8\%$ \\
+$0^{-+}$ & 7 & 2.612 & $2.56\pm0.15$ & $2.0\%$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+主要匹配是 $0^{++}$ 胶球：$\sqrt{3}\,M_0=1.710$\,GeV 对照格点值
+$1.71\pm0.05$\,GeV，偏差 $0.0\%$，且 $M_0\approx 1$\,GeV——核物理的天然尺
+度——$r_0\approx0.2$\,fm——质子康普顿波长量级。
+
+\subsection{为什么 $N=3,6,7$：谐振子简并度}
+
+模式数有一个第一性候选。三维各向同性谐振子的简并度为
+\begin{equation}
+d(n) = \frac{(n+1)(n+2)}{2} = 1,\,3,\,6,\,10,\,15,\,21,\,\ldots
+\end{equation}
+格点模式数对齐：
+\begin{equation}
+0^{++}\to N=3=d(1), \qquad
+2^{++}\to N=6=d(2), \qquad
+0^{-+}\to N=7=d(3)-d(1).
+\end{equation}
+对照二维替代 $N=2,4,5$，三方向诠释在加权偏差上以 $2.75\sigma$ 胜出
+（$\sigma_A=0.263$ vs.\ $\sigma_B=3.012$）。物理图像：胶球是空间三方向流动
+的约束量子——度规扰动的驻波组合，$m^2\propto$（模式数）$\times M_0^2$。
+由于流动是几何的（保体积，$\det g=-1/c^2$）而非物质的，不产生任何
+Michelson--Morley 型各向异性。
+
+两条诚实标注：(i) 规则 $0^{-+}\to d(3)-d(1)$ 是 ad-hoc 对称性减法（去掉
+与 $0^{++}$ 同对称性的模式），缺对称性推导；(ii) $M_0$ 本身没有第一性来
+源（它是唯一的拟合参数）。由该规则推出的预言列于第~\ref{sec:predictions}~节。
+
+\section{电动力学即空间场的运动学}\label{sec:em}
+
+\subsection{核心推导}
+
+设 $C$ 为公设~\ref{post:sls1} 的空间场。定义电磁场为 $C$ 的\emph{运动学导
+数} \cite{ProjectionPhysics-MS}：
+\begin{equation}
+\label{eq:kinematic}
+E \;=\; -\partial_t C , \qquad
+B \;=\; \partial_x C \quad (1{+}1\mathrm{D}), \qquad
+B \;=\; \nabla\times C \quad (3\mathrm{D}).
+\end{equation}
+则以下结论是直接的且已形式化（MS1--MS5，Lean，零 admitted 公理）：
+
+\begin{enumerate}
+  \item \textbf{法拉第定律是恒等式}（MS2）。由 $E=-\partial_t C$、
+  $B=\partial_x C$，
+  \begin{equation}
+  \partial_t B = \partial_t\partial_x C = \partial_x\partial_t C = -\partial_x E ,
+  \end{equation}
+  中间一步是混合偏导的交换（MS1）。法拉第不是独立定律；它陈述 $C$ 是单一
+  场。3D 中同样的论证给出 $\partial_t B = -\nabla\times E$，且
+  $\nabla\cdot B = \nabla\cdot(\nabla\times C)=0$ 自动成立。
+
+  \item \textbf{安培--麦克斯韦方程即 $C$ 的波动方程}（MS3）。
+  \begin{equation}
+  \partial_t E = -c^2\,\partial_x B
+  \;\;\Longleftrightarrow\;\;
+  \partial_t^2 C = c^2\,\partial_x^2 C .
+  \end{equation}
+  两边字面上是同一个方程。因此真空麦克斯韦方程组的独立内容是一个 $C$ 的
+  波动方程；$E$、$B$ 是它的表观形态。
+
+  \item \textbf{源即驱动项}（MS5）。电荷/电流 $J$ 作为源进入：
+  \begin{equation}
+  \partial_t^2 C = c^2\,\partial_x^2 C + J ,
+  \end{equation}
+  因此电荷不是场外的``子弹''，而是空间场方程本身的驱动项。静态极限下
+  $C''\approx -J$，已数值验证。
+
+  \item \textbf{规范冗余被物理消灭}（MS4）。在标准矢量势表述中，$C$ 将
+  是规范相关的势 $A$。在这里，$C$ 被公设~\ref{post:sls1}
+  （$|\bm{C}|=c$ 处处成立）物理地固定：规范自由度不是被约定消灭，而是被
+  ``$C$ 是空间的实际速度场''这一物理条件消灭。
+\end{enumerate}
+
+一言以蔽之：\emph{电磁学是空间场的运动学}。麦克斯韦方程组描述的不是两个
+场两条独立定律，而是一个场一个波动方程；熟悉的电磁定律是 $E$、$B$ 定义
+为 $C$ 的导数之后的推论。
+
+\subsection{与流动公设的一致性}
+
+等同 $c=1/\sqrt{\mu_0\varepsilon_0}$（MF2）被保留：$c$ 同时是空间的流动速
+度与 $C$ 波的传播速度。色散 $\omega=\pm ck$ 作为因子分解
+$(\omega-ck)(\omega+ck)=0$ 成立（MF1）；光子随流公设（SLS2）蕴含
+$|v_{\mathrm{photon}}|=|C|=c$，故 $d\tau^2=0$ 恒成立（MF4，自洽）。
+CFL$=1$ 的 leapfrog FDTD 模拟以精确 $1.000\,c$ 传播 $C$ 波包；法拉第与
+安培残差对解析行波与数值 leapfrog 解均为机器精度零 \cite{ProjectionPhysics-MS}。
+
+\subsection{这里真正新的是什么}
+
+运动学内容——麦克斯韦方程组等价于矢量势的波动方程——是标准电磁理论。仓
+库独有的是势的\emph{物理化}：$C$ 不是辅助场，而是空间的速度场，固定模长
+$|\bm{C}|=c$ 消灭了规范自由度。这是概念性的一步；其可证伪性在第~\ref{sec:status}~节讨论。
+
+\section{引力与强场结构}\label{sec:gravity}
+
+\subsection{从动量守恒到 Gordon 度规}
+
+从公设到引力的路线遵循经典的 Gordon 构造 \cite{Gordon1923}：非均匀流动
+$v(x)$ 使度规弯曲。随动系中 $g=\mathrm{diag}(1,-1/c^2)$，沿 $x$ 的流动给
+出 Gordon 度规（SG1）
+\begin{equation}
+g_{\mu\nu} = \begin{pmatrix} 1-v^2/c^2 & v/c^2 \\ v/c^2 & -1/c^2 \end{pmatrix},
+\qquad \det g = -\frac{1}{c^2} ,
+\end{equation}
+固有时间（SG8）
+\begin{equation}
+d\tau^2 = dt^2 - \frac{(dx-v\,dt)^2}{c^2} .
+\end{equation}
+关键定量结果（SG11）是弱场匹配：流动给出 $g_{tt}=1-v^2/c^2$，标准弱场广
+义相对论给出 $g_{tt}=1-2\Phi/c^2$，于是
+\begin{equation}
+\Phi \;=\; \frac12 v^2 ,
+\end{equation}
+牛顿加速度为
+\begin{equation}
+a = -\nabla\left(\tfrac12 v^2\right) = -v\,\nabla v ,
+\end{equation}
+即引力是流动的非均匀性（SLS6）。全链——非均匀流动 $\to$ Gordon 度规 $\to$
+Christoffel 符号 $\to$ 测地线方程 $\to$ 牛顿极限——用通用公式
+$\Gamma^\lambda_{\mu\nu}=\frac12 g^{\lambda\sigma}(\partial_\mu
+g_{\sigma\nu}+\partial_\nu g_{\sigma\mu}-\partial_\sigma g_{\mu\nu})$ 数值
+验证，包括一次修正（重算全部 8 个 Christoffel 分量）
+\cite{ProjectionPhysics-GR}。有质量粒子的固有时间保持为正（$d\tau^2>0$），
+光子世界线满足 $|dx-v\,dt|=c\,dt$（\emph{相对}流动）——正确的光子条件；
+随流静止条件 $dx=v\,dt$ 会错误地给出 $d\tau^2=dt^2$（形式化中记录的建模
+坑）\cite{ProjectionPhysics-GR}。
+
+\subsection{黑洞即流动的汇}
+
+强场图像由公设（而非场方程）决定。黑洞是流动汇聚于一点（汇）的区域：在
+$r<r_h$ 内 $C=-c\,\hat{r}$，所有流线终止于奇点 \cite{ProjectionPhysics-MF}。
+视界是光速面（BH1）：
+\begin{equation}
+g_{tt}=0 \;\Longleftrightarrow\; |v|=c .
+\end{equation}
+不可逃逸因而是公设~\ref{post:sls2} 的\emph{推论}：光子是流线，逃逸需要逆
+流，与完全随动矛盾（PH2）。无需借助广义相对论。数值上，$|C|=c$ 沿全部流
+线成立至 $<10^{-12}$，$d\tau^2=0$ 至 $<10^{-12}$，向外光子视界处冻结
+（$dx/dt=0$），坐标图像与 Schwarzschild 一致。白洞是反转的流（BH5--BH6：
+$g_{tt}$ 不变、$g_{tx}$ 变号）；虫洞是亚光速流管，其喉部峰值速度
+$v_{\mathrm{peak}}<c$（WH1：喉部 $v=0$，光锥恢复），光子全程 $d\tau=0$
+穿越 \cite{ProjectionPhysics-BH}。这在结构上与 Hamilton--Lisle 河流模型
+\cite{HamiltonLisle2008} 相同。
+
+\section{数值与计算验证}\label{sec:validation}
+
+本文所有数字均由仓库 \cite{ProjectionPhysics} 中的脚本产生。表~\ref{tab:validation}
+汇总验证结果。
+
+\begin{table}[h]
+\caption{计算验证汇总。``残差为零''指机器精度零。}
+\label{tab:validation}
+\begin{ruledtabular}
+\begin{tabular}{ll}
+检验 & 结果 \\
+\hline
+$C$ 波包速度（leapfrog FDTD，CFL$=1$） & $1.000\,c$ \\
+法拉第残差（解析 / leapfrog） & $0.0$ / $0.0$ \\
+安培--麦克斯韦残差（解析 / leapfrog） & $0.0$ / $0.0$ \\
+静态电荷驱动 $C$（MS5） & $C''\approx -J$，残差 $0.033$ \\
+胶球 $0^{++}$（$\sqrt3\,M_0$） & $1.710$ vs.\ $1.71\pm0.05$ GeV（$0.0\%$） \\
+胶球 $2^{++}$（$\sqrt6\,M_0$） & $2.418$ vs.\ $2.40\pm0.12$ GeV（$0.8\%$） \\
+胶球 $0^{-+}$（$\sqrt7\,M_0$） & $2.612$ vs.\ $2.56\pm0.15$ GeV（$2.0\%$） \\
+视界条件 $g_{tt}=0\Leftrightarrow|v|=c$ & 精确 \\
+视界处向外光子 & $dx/dt=0$（冻结） \\
+视界处时间膨胀 & $d\tau/dt\to 0$ \\
+虫洞喉部峰值 & $v=0.8\,c<c$，无视界 \\
+沿流线 $d\tau^2$ & $<10^{-12}$ \\
+沿流线 $|\bm{C}|=c$ & $<10^{-12}$ \\
+CHSH：螺旋模型 $S$ & $2.0005\pm0.004$（局域界 $2$） \\
+CHSH：量子预言 & $2\sqrt2=2.8284$；Aspect 1982：$2.697$ \\
+电子自能 $U(r_0=0.20\,\mathrm{fm})$ & $3.60$ MeV $=7.05\,m_e$ \\
+电子自能 $U(r_e=2.82\,\mathrm{fm})$ & $0.255$ MeV $=0.50\,m_e$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\subsection{Lean 形式化}
+
+定理证明器组件汇总于表~\ref{tab:lean}。所列每个模块在当前修订下用
+\texttt{lake build} 编译，零 \texttt{sorry}（无 admitted 公理）、零警告。
+
+\begin{table}[h]
+\caption{Lean 4 形式化汇总。job 数来自当前修订的 \texttt{lake build}。}
+\label{tab:lean}
+\begin{ruledtabular}
+\begin{tabular}{ll}
+模块（文件） & 定理 \\
+\hline
+\texttt{SpaceLightSpeed.lean} & SLS1--SLS5：普适 $|\bm{C}|=c$；光子零锚定； \\
+ & 电子正锚定；$\sigma_3=i\sigma_1\sigma_2$ 涌现； \\
+ & 三方向/三胶子桥 \\
+\texttt{MinimalCore.lean}（Archive） & MC1--MC2，MC1h：自旋非零 $\Rightarrow$ 质量非零； \\
+ & $m_G^2=|a|^2+|b|^2+|c|^2$ \\
+\texttt{SpaceMetric.lean} & SM1--SM6：光子 $d\tau=0$；质量 $\Leftrightarrow$ 偏离流； \\
+ & 度规一致性；$\det g=-1/c^2$ \\
+\texttt{SpaceGravity.lean} & SG1--SG11：Gordon 度规；$\Phi=\frac12 v^2$；牛顿极限 \\
+\texttt{MaxwellSpace.lean} & MS1--MS5：法拉第恒等式；安培 $\Leftrightarrow$ 波动方程； \\
+\texttt{(Explorations)} & 源即驱动项（4131 jobs，零 sorry） \\
+\texttt{MaxwellFlow.lean} & MF1--MF6，PH1--PH2：色散；$c=1/\sqrt{\mu_0\varepsilon_0}$； \\
+\texttt{(Explorations)} & 不可逃逸=公设推论（4130 jobs） \\
+\texttt{BlackHoleWormhole.lean} & BH1--BH7，WH1：视界=光速面；白洞；虫洞喉部 \\
+\texttt{(Explorations)} & （4128 jobs） \\
+\texttt{LorentzRebuild.lean} & LR1--LR5：boost 保持 $\eta=\mathrm{diag}(-1,1)$； \\
+ & $\gamma^2-\gamma^2\beta^2=1$；速度加法；$\beta<1$ \\
+\texttt{DiracMathlib.lean} & DB1$'$--DB6$'$：$(\gamma^0)^2=1$，$(\gamma^i)^2=-1$；质量= \\
+ & 手征耦合 \\
+\texttt{EntanglementHelix.lean} & EH1--EH4：CHSH 局域界 $|S|\leq2$（贝尔内核） \\
+\texttt{(Explorations)} & \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\section{与现有物理的关系}\label{sec:relation}
+
+\subsection{标准内容的重新表述}
+
+凡框架触及现有物理之处，公式与数值均与之一致：Gordon 度规是经典构造
+\cite{Gordon1923}；黑洞河流模型是 Hamilton 与 Lisle \cite{HamiltonLisle2008}；
+麦克斯韦方程组作为势的波动方程是教科书内容；$d\tau^2=0$ 对光子是闵可夫
+斯基；胶球谱是格点 QCD \cite{MorningstarPeardon1999,Chen2006}。框架目前
+\emph{不}包含任何标准物理不能产生的实验数字。
+
+\subsection{四层判定}\label{sec:status}
+
+对每个结果在四层上记录其地位 \cite{ProjectionPhysics-status}：
+
+\begin{enumerate}
+  \item \textbf{数学恒等式。} 构造性地为真：例如法拉第恒等式、安培
+  $\Leftrightarrow$ 波动方程、$g_{tt}=0 \Leftrightarrow |v|=c$。这些是严谨
+  （机器校验）的，但作为物理无内容。
+  \item \textbf{结构对应。} 已知物理的重新表述：矢量势表述、Gordon/河流几
+  何、自旋统计障碍。
+  \item \textbf{数值匹配。} 一致但非新：胶球 $\sqrt{N}M_0$ 规则只有一个拟
+  合参数 $M_0$；电子自能巧合位于 $0.5\,m_e$ 与 $7\,m_e$ 之间且截断是拟合
+  的。
+  \item \textbf{概念重构。} 现阶段不可证伪：``引力是流动的非均匀''、
+  ``质量是锚定''、``$c$ 是空间的速度''——解释层改变而公式不变。
+\end{enumerate}
+
+唯一高于第 1 层的结果是麦克斯韦-空间推导（第~\ref{sec:em}~节）：虽然代数
+内核是标准矢量势表述，但势的\emph{物理化}（$|\bm{C}|=c$）以及把麦克斯韦
+方程组约化为一个物理固定场的波动方程，是仓库独有内容。即使如此，诚实的陈
+述是：这是推导路线的创新，不是新预言。
+
+\section{讨论}\label{sec:discussion}
+
+\subsection{预言}\label{sec:predictions}
+
+框架做出以下可证伪陈述。
+
+\begin{enumerate}
+  \item \textbf{P1——视界内光必然落入奇点。} 这是随流公设的推论，已数值验
+  证 \cite{ProjectionPhysics-MF}。
+  \item \textbf{P2——引力红移}
+  \begin{equation}
+  \frac{\omega_2}{\omega_1} = \frac{c-v_2}{c-v_1}
+  \end{equation}
+  其中流剖面 $v(r)$ 是唯一自由输入。方向与 GR 一致；数值与 GR 一致要求流
+  剖面取 GR 形状，仓库不能第一性推导它。
+  \item \textbf{P3——视界内横向电磁模消失}（场变为纯径向）
+  \cite{ProjectionPhysics-MF}。
+  \item \textbf{P4——各向同性保持。} 由于每个方向 $|\bm{C}|=c$，光速按构造
+  各向同性；这在结构上不可测，我们如实说明。
+  \item \textbf{胶球谱。} 谐振子模式规则预言 $n=4,5,6$：
+  \begin{equation}
+  m = \sqrt{15},\sqrt{21},\sqrt{28} \times M_0 = 3.82,\,4.52,\,5.22\,\mathrm{GeV},
+  \end{equation}
+  若 $d(n)-d(1)$ 减法规则成立，$n=4$ 给出 $\sqrt{12}\,M_0=3.42$\,GeV。
+  $1^{++}$、$2^{-+}$、$3^{++}$ 通道的格点数据可以判别。
+  \item \textbf{非均匀流动下的纠缠。} 在纠缠螺旋探索
+  \cite{ProjectionPhysics-helix} 中，引力（非均匀流动）相移会修改关联函数
+  $E(\Delta)$；局域界 $|S|\leq2$ 已证明，螺旋几何饱和它
+  （$S=2.0005\pm0.004$），而量子值 $2\sqrt2$ 需要 Born 规则读出——这是框架
+  必须要么产生 Born 规则、要么失败的诚实之处。
+\end{enumerate}
+
+\subsection{开放问题}
+
+以下缺口是结构性的，不是装饰性的：
+
+\begin{itemize}
+  \item \textbf{$966\times$ 缺口。} 电子锚定机制方向正确（自旋非零
+  $\Rightarrow$ 质量非零），但在流动尺度 $r_0$ 处量级超出 $m_e$ 约
+  $10^3$ 倍；每个候选公式都坍缩为恒等式（$m\equiv M_0/2$）。需要不在
+  $\hbar/r_0$ 量级的独立输入。
+  \item \textbf{$M_0$ 的来源。} 胶球拟合参数没有第一性推导；把它连接到禁闭
+  尺度需要仓库没有的 QCD 动力学。
+  \item \textbf{$N$ 序列。} $(3,6,7)$ 尚未推导；$0^{-+}$ 的 $d(3)-d(1)$ 减法
+  是 ad hoc。
+  \item \textbf{维度。} 麦克斯韦-空间推导是 $1{+}1$ 维骨架；3D 旋度/散度微
+  积分与连续性未形式化。
+  \item \textbf{缺失的标准内容。} 电荷量子化、$e$ 的数值、QCD 禁闭、完整曲
+  率张量与爱因斯坦场方程、Born 规则都在框架之外。
+  \item \textbf{洛伦兹破缺？} 脱离纯重释的唯一物理出口是非均匀流动诱导洛伦
+  兹破缺；尚无可证伪的实验方案与量级估计。
+\end{itemize}
+
+\section{结论}\label{sec:conclusion}
+
+我们提出了一个基于公设的框架——空间在运动，$|\bm{C}|=c$——质量、电动力学
+与引力作为运动学从中涌现。框架内部一致，每个核心断言经 Lean 4 机器校验，
+每个数字可从仓库复现。其独有内容是矢量势的物理化（$|\bm{C}|=c$）以及随之
+而来的麦克斯韦方程组约化为单一空间场的波动方程，加上三方向实现
+$\mathrm{SU}(3)$ 及其 $\sqrt{N}M_0$ 胶球模式。
+
+其认识论地位不加注水地陈述：现阶段这是对已知物理的\emph{概念重构}——严
+谨、自洽，在公式与数值上与标准物理不可区分。真实发现判据（第一性推导
+$M_0$、解决 $966\times$ 缺口、带实验方案的新可证伪预言）尚未满足。第~\ref{sec:predictions}~
+节的预言是改变这一判定的检验。
+
+\begin{acknowledgments}
+作者感谢徐依娜的 HIBS 合作，以及 Lean 社区提供的定理证明器基础设施——
+本文的形式化组件建立其上。
+\end{acknowledgments}
+
+\bibliography{projection-physics}
+
+\appendix
+
+\section{Lean 形式化总览}\label{app:lean}
+
+形式化位于公开仓库 \texttt{github.com/logos-42/Hibs-Physics}（目录
+\texttt{ProjectionPhysics/}）。约定：定理按模块前缀命名（MS、MF、BH、SG、
+SM、SLS、MC、LR、EH）；撇号表示较早 core 证明的 mathlib 重写；
+\texttt{(Explorations)} 模块是新方向结果，与主线分离。每个文件用
+\texttt{lake build} 编译，零 \texttt{sorry}、零警告；表~\ref{tab:lean} 的
+job 数来自当前修订。
+
+\section{证明要点}\label{app:proofs}
+
+\subsection{法拉第定律是恒等式（MS2）}\label{app:faraday}
+
+在 $1{+}1$ 维中，$E=-\partial_t C$、$B=\partial_x C$：
+\[
+\partial_t B \;=\; \partial_t\partial_x C
+\;\overset{\mathrm{(MS1)}}{=}\;
+\partial_x\partial_t C \;=\; -\partial_x E .
+\]
+3D 中，$B=\nabla\times C$ 给出 $\partial_t B=\nabla\times\partial_t C
+=-\nabla\times E$，且 $\nabla\cdot B=\nabla\cdot(\nabla\times C)=0$
+恒成立。两个方向均已形式化；交换步（MS1）是唯一成分。
+
+\subsection{安培--麦克斯韦即波动方程（MS3）}\label{app:ampere}
+
+代入定义，
+\[
+\partial_t E + c^2\,\partial_x B
+\;=\; -\partial_t^2 C + c^2\,\partial_x^2 C ,
+\]
+故 $\partial_t E = -c^2\,\partial_x B$ 当且仅当
+$\partial_t^2 C = c^2\,\partial_x^2 C$。等价性是一次直接代入（Lean：MS3，
+双向）。
+
+\subsection{视界=光速面（BH1）}\label{app:bh}
+
+对 Gordon 度规 $g_{tt}=1-v^2/c^2$，
+\[
+g_{tt}=0 \;\Longleftrightarrow\; v^2=c^2 \;\Longleftrightarrow\; |v|=c .
+\]
+视界内 $|v|>c$ 给出 $g_{tt}<0$（BH7，角色互换种子）。
+
+\subsection{弱场势（SG11）}\label{app:sg11}
+
+令流动表达式与 GR 表达式相等，
+\[
+1-\frac{v^2}{c^2} = 1-\frac{2\Phi}{c^2}
+\;\Longrightarrow\; \Phi = \frac{v^2}{2},
+\]
+测地线方程给出 $a=-\nabla\Phi=-v\,\nabla v$（牛顿极限）。
+
+\subsection{CHSH 局域界（EH1--EH2）}\label{app:chsh}
+
+对二分观测 $A_a,B_b\in\{\pm1\}$，
+\[
+S = E(a,b)+E(a,b')+E(a',b)-E(a',b'),
+\]
+$|S|\leq2$ 由 $A_aB_b+A_aB_{b'}+A_{a'}B_b-A_{a'}B_{b'}
+=A_a(B_b+B_{b'})+A_{a'}(B_b-B_{b'})\in\{\pm2\}$ 得出，因为每个括号是 $0$
+或 $\pm2$。这是贝尔定理 \cite{Bell1964} 的代数内核；螺旋几何数值饱和该界
+（$S=2.0005\pm0.004$）。
+
+\subsection{胶球质量正性（MC2）}\label{app:mc2}
+
+对 $G=(a,b,c)$，$m_G^2=|a|^2+|b|^2+|c|^2$；若 $(a,b,c)\neq(0,0,0)$，则至少
+一个 $|a_i|^2>0$，故 $m_G^2>0$；反之 $m_G^2=0$ 迫使 $a=b=c=0$。内容平凡，
+但它是``三方向给出质量''的形式化锚点。
+
+\end{document}

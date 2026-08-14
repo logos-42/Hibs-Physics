@@ -39,3 +39,6 @@ session-20260814-electron,local,ProjectionPhysics,artifact,self_energy.png,../ar
 session-20260814-electron,local,ProjectionPhysics,artifact,report.json,../artifacts/electron/report.json,generated,docs/wiki/theory-maxwell-space.md,电子流动结构探讨报告
 session-20260814-spacefield3d,local,ProjectionPhysics,artifact,vortex_curl.png,../artifacts/spacefield3d/vortex_curl.png,generated,docs/wiki/theory-spacefield3d.md,涡旋C与B=curlC(磁场=自旋)
 session-20260814-spacefield3d,local,ProjectionPhysics,artifact,report.json,../artifacts/spacefield3d/report.json,generated,docs/wiki/theory-spacefield3d.md,3D向量微积分验证报告JSON
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.tex,../paper/projection-physics.tex,generated,docs/wiki/current-status.md,首篇论文主文件(REVTeX prd preprint单栏,20页,tectonic编译)
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.bib,../paper/projection-physics.bib,generated,docs/wiki/current-status.md,论文参考文献18条(全真实)
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.pdf,../paper/projection-physics.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物20页零错误

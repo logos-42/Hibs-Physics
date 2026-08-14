@@ -7,6 +7,9 @@ momentum, mass, spin) are *necessary representations* of a non-injective
 projection π and its kernel ker π, not objects we are free to define.
 
 - **中文版**: [README.zh-CN.md](README.zh-CN.md) · 数学草案细节: [SPEC.md](SPEC.md)
+- **Paper**: [paper/projection-physics.tex](paper/projection-physics.tex) —
+  single-column REVTeX preprint (PRD style), 20 pp; Chinese version:
+  [projection-physics-zh.tex](paper/projection-physics-zh.tex)
 - **Repository**: [github.com/logos-42/Hibs-Physics](https://github.com/logos-42/Hibs-Physics)
 - **Source material**: HIBS paper (Liu & Xu) + a six-round derivation dialogue
   with Gemini (archived at `../HIBS/gemini/` in the sibling repository).
@@ -233,6 +236,10 @@ ProjectionPhysics/
 ├── SPEC.md                 # detailed math spec (Chinese): theorem inventory, proof status
 ├── README.md               # this file (English)
 ├── README.zh-CN.md         # Chinese overview
+├── paper/                  # 2026-08-14: first paper (REVTeX 4.2, single-column preprint)
+│   ├── projection-physics.tex    # English version (20 pp, tectonic-compiled PDF included)
+│   ├── projection-physics-zh.tex # Chinese version (content-equivalent)
+│   └── projection-physics.bib    # references (18 real entries)
 ├── ProjectionPhysics.lean   # root module
 ├── Main.lean                # executable
 └── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24

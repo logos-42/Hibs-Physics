@@ -9,7 +9,9 @@
 > 投影 π 出发，所有物理量（度规、能量、动量、质量、自旋）都是
 > **Image 二次型 Q 与 Kernel 标量 K 的必然表示**，而非人为定义。
 >
-> English: [README.md](README.md) · 数学草案细节: [SPEC.md](SPEC.md)
+> English: [README.md](README.md) · 数学草案细节: [SPEC.md](SPEC.md) ·
+> **论文**: [paper/projection-physics.tex](paper/projection-physics.tex)（英文版，
+> REVTeX 单栏 preprint）+ [projection-physics-zh.tex](paper/projection-physics-zh.tex)（中文版）
 
 ## 核心主张
 
@@ -114,6 +116,10 @@ ProjectionPhysics/
 ├── SPEC.md                 # 数学草案：定理清单、证明状态、诚实声明（中文）
 ├── README.md               # 英文详细说明
 ├── README.zh-CN.md         # 本文件（中文概览）
+├── paper/                  # 2026-08-14: 首篇论文（REVTeX 4.2，单栏 preprint）
+│   ├── projection-physics.tex    # 英文版（20 页，附 tectonic 编译 PDF）
+│   ├── projection-physics-zh.tex # 中文版（内容等同）
+│   └── projection-physics.bib    # 参考文献（18 条全真实）
 ├── ProjectionPhysics.lean   # 根模块
 ├── Main.lean                # 可执行入口
 └── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24
