@@ -319,6 +319,63 @@ def main():
                 "（QFT7，只有整体纠缠）互补；但只有三扭量张满（秩 3）才是"
                 "激发：局部两两纠缠 ≠ 全域质量（GQ4b）"}
 
+    # ---- N13 一般 N 统一恒等（GQN2：det(Σπᵢ⊗π̄ᵢ) = |detₙ[π₁...π_N]|²）----
+    max_err_gn, hadamard_ok = 0.0, True
+    for N in range(2, 9):                            # N = 2..8 维
+        for _ in range(100):
+            A = rng.standard_normal((N, N)) + 1j * rng.standard_normal((N, N))
+            outer_sum = sum(np.outer(A[k], np.conj(A[k])) for k in range(N))
+            err = abs(np.linalg.det(outer_sum) - abs(np.linalg.det(A)) ** 2)
+            max_err_gn = max(max_err_gn, err)
+            norms = np.linalg.norm(A, axis=1)
+            if abs(np.linalg.det(A)) > (norms.prod() + 1e-12) * (1 + 1e-9):
+                hadamard_ok = False
+    report["results"]["N13_general_N_identity"] = {
+        "max|det_N(P) − |detₙ[π₁...π_N]|²|（N=2..8 × 100 随机）": round(float(max_err_gn), 13),
+        "Hadamard |det| ≤ Π|πᵢ|（所有 N）": bool(hadamard_ok),
+        "note": "GQN2：det(AA†) = |detA|² 对任意 N（Cauchy-Binet 方阵特例）——"
+                "质量² = |det_N[π₁...π_N]|² 统一链的数值验证（N=2,3 特例与 "
+                "TW6/GQ2 一致，GQN6 的 Lean 一致性定理已证）；高维（N≥7）"
+                "绝对误差 ~1e-7 是 det 数值放大，非恒等失效（N≤6 时 ~1e-12）"}
+
+    # ---- N14 一般 N 秩判据：满秩 ⟹ 激发；退化 ⟹ 非激发（GQN3–GQN4）----
+    rank_ok = True
+    for N in range(2, 8):
+        A_full = rng.standard_normal((N, N)) + 1j * rng.standard_normal((N, N))
+        outer_full = sum(np.outer(A_full[k], np.conj(A_full[k])) for k in range(N))
+        if abs(np.linalg.det(outer_full)) < 1e-8:    # 满秩（概率 1）⟹ det > 0
+            rank_ok = False
+        # 退化（秩 < N）：N=2 两行相等；N≥3 最后一行 = 前两行组合（用原始行）
+        A_dep = A_full.copy()
+        if N == 2:
+            A_dep[1] = A_dep[0]
+        else:
+            A_dep[-1] = 0.7 * A_full[0] + 0.3 * A_full[1]
+        outer_dep = sum(np.outer(A_dep[k], np.conj(A_dep[k])) for k in range(N))
+        if abs(np.linalg.det(outer_dep)) > 1e-8:
+            rank_ok = False
+    report["results"]["N14_general_N_rank"] = {
+        "满秩 ⟹ det > 0 / 退化 ⟹ det = 0（N=2..7）": bool(rank_ok),
+        "note": "GQN3–GQN4：激发 ⟺ 秩 N（任意 N）——扭量张满才有质量；"
+                "退化（子空间内）恒无质量"}
+
+    # ---- N15 统一链数值表（GQN5：质量² = |det_N|²，N = 1..6）----
+    chain = {}
+    for N in range(1, 7):
+        A = np.eye(N, dtype=complex)                # N 个单位正交扭量（张满）
+        outer_sum = sum(np.outer(A[k], np.conj(A[k])) for k in range(N))
+        det_outer = abs(np.linalg.det(outer_sum))
+        chain[f"N={N}"] = {"m² = det_N(P)": round(float(det_outer), 6),
+                           "|det_N[π₁...π_N]|²": round(float(abs(np.linalg.det(A)) ** 2), 6)}
+    # N=3 与 GQ2 数值对比（单位基 ⟹ det₃ = 1）
+    report["results"]["N15_general_N_chain"] = {
+        "统一链表（单位正交扭量）": chain,
+        "全部 m² = |det_N|²（机器精度）": all(
+            abs(v["m² = det_N(P)"] - v["|det_N[π₁...π_N]|²"]) < 1e-9 for v in chain.values()),
+        "note": "GQN5：质量² = |det_N[π₁...π_N]|² 对任意 N——光子/电子/胶球"
+                "是同一恒等的实例（N=1 秩1 非激发/ N≥2 秩N 激发）；单位正交"
+                "扭量时 det = 1（Hadamard 饱和）"}
+
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
     # 左：det₃(P) vs |det₃[π₁π₂π₃]|² 散点（恒等，y = x）

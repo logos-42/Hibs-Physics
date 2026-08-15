@@ -412,6 +412,141 @@ theorem excitation_rank_unified (z a₁ b₁ a₂ b₂ : ℂ) (a b c : TriTwisto
 --      体积给出的是结构判据（秩 ⟺ 质量），√3·M₀ 格点谱仍由
 --      方向锚定相加（MC6'）负责——两者是互补而非竞争。
 
+/-! ### GQN1–GQN6. 一般 N 扭量：det(AA†) = |det A|²（Cauchy-Binet 方阵特例） -/
+
+-- leo（2026-08-15 第三轮）：把 GQ2（N=3）推广到一般 N——N 个 N 维扭量的
+-- 外积和 P = Σᵢ πᵢ⊗π̄ᵢ，det(P) = |det[π₁...π_N]|²。
+-- 数学状态（诚实）：mathlib 无完整 Cauchy-Binet（矩形 m×n 的子式平方和），
+-- 本轮形式化方阵特例 det(AA†) = |det A|²（Cauchy-Binet 在 m = n 时只剩
+-- 唯一一项）——这正是"扭量数 = 空间维数"的激发条件；m < n 时 det = 0
+-- （秩不足，非激发），m > n 的完整子式和未形式化（诚实标注）。
+-- 物理统一链：质量² = |det_N[π₁...π_N]|² 对任意 N——光子（N=1，秩 1）、
+-- 电子（N=2，秩 2）、胶球（N=3，秩 3）都是同一恒等的实例。
+
+variable {N : Type*} [Fintype N] [DecidableEq N]
+
+/-- N 个 N 维扭量的外积和（分量空间矩阵）：Pᵢⱼ = Σₖ πₖᵢ·conj(πₖⱼ)。 -/
+def outerSumN (f : N → N → ℂ) : Matrix N N ℂ :=
+  fun i j => ∑ k : N, f k i * star (f k j)
+
+/-- 扭量矩阵（行 = N 个扭量）：A i j = 第 i 个扭量的第 j 分量。 -/
+def twistorMat (f : N → N → ℂ) : Matrix N N ℂ :=
+  fun i j => f i j
+
+/-! ### GQN1. 一般 N：外积和 = Aᵀ(Aᵀ)ᴴ -/
+
+/-- ★ GQN1：N 扭量外积和 = 扭量矩阵与其共轭转置之积（一般 N）。
+    P = Aᵀ·(Aᵀ)ᴴ（A i j = 第 i 个扭量的第 j 分量）——GQ1（N=3）
+    是一般情形的特例；这是 det 恒等（GQN2）的前提。 -/
+theorem outer_sum_eq_conj_mul (f : N → N → ℂ) :
+    outerSumN f =
+      (twistorMat f).transpose * (twistorMat f).transpose.conjTranspose := by
+  ext i j
+  simp [outerSumN, twistorMat, Matrix.mul_apply, Matrix.conjTranspose]
+
+/-! ### GQN2. 一般 N：det(P) = |det A|²（Cauchy-Binet 方阵特例） -/
+
+/-- ★ GQN2：一般 N 统一恒等——det(Σᵢ πᵢ⊗π̄ᵢ) = det A · conj(det A) =
+    |detₙ[π₁...π_N]|²（det(AA†) = |det A|²，Cauchy-Binet 在 m = n 时的
+    唯一项）。质量² = |N 阶行列式|² 对任意 N：光子（N=1）、电子（N=2，
+    TW6）、胶球（N=3，GQ2）都是这一恒等的实例。 -/
+theorem outer_sum_det (f : N → N → ℂ) :
+    Matrix.det (outerSumN f) =
+      Matrix.det (twistorMat f) * star (Matrix.det (twistorMat f)) := by
+  rw [outer_sum_eq_conj_mul]
+  rw [Matrix.det_mul]
+  rw [Matrix.det_conjTranspose, Matrix.det_transpose]
+
+/-! ### GQN3. 一般 N：质量 ≠ 0 ⟺ det ≠ 0 -/
+
+/-- ★ GQN3：质量平方 ≠ 0 ⟺ detₙ[π₁...π_N] ≠ 0（ℂ 是域）。
+    无质量（非激发）⟺ det 为零；有质量（激发）⟺ det 非零——任意 N。 -/
+theorem outer_sum_det_ne_zero_iff (f : N → N → ℂ) :
+    Matrix.det (outerSumN f) ≠ 0 ↔
+      Matrix.det (twistorMat f) ≠ 0 := by
+  rw [outer_sum_det]
+  constructor
+  · intro h hd
+    apply h
+    rw [hd]
+    simp
+  · intro hd
+    have hs : star (Matrix.det (twistorMat f)) ≠ 0 := star_ne_zero.mpr hd
+    exact mul_ne_zero hd hs
+
+/-! ### GQN4. 一般 N：激发 ⟺ 秩 N -/
+
+/-- ★ GQN4a：激发（质量 ≠ 0）⟹ N 扭量线性无关（秩 N）——任意 N。
+    电子 = 两扭量独立（秩 2）、胶球 = 三扭量独立（秩 3）是 N = 2, 3 特例；
+    统一判据：扭量张满 ⟹ 激发（质量）。 -/
+theorem excited_implies_independent_N (f : N → N → ℂ)
+    (h : Matrix.det (outerSumN f) ≠ 0) :
+    LinearIndependent ℂ (fun i : N => (twistorMat f) i) := by
+  rw [outer_sum_det_ne_zero_iff] at h
+  exact Matrix.linearIndependent_rows_of_det_ne_zero h
+
+/-- ★ GQN4b：N 扭量线性相关（秩 < N）⟹ 非激发（质量 = 0）——任意 N。
+    退化方向：扭量不全独立 ⟹ 无质量（GQ4b 的一般化）。 -/
+theorem dependent_implies_massless_N (f : N → N → ℂ)
+    (h : ¬ LinearIndependent ℂ (fun i : N => (twistorMat f) i)) :
+    Matrix.det (outerSumN f) = 0 := by
+  rw [outer_sum_det]
+  have hd : Matrix.det (twistorMat f) = 0 :=
+    Matrix.det_eq_zero_of_not_linearIndependent_rows h
+  rw [hd]
+  simp
+
+/-! ### GQN5. 统一链（N = 1, 2, 一般 N） -/
+
+/-- ★ GQN5：统一秩判据表——质量² = |det_N[π₁...π_N]|²：
+    N=1（光子）：det₁ = π₁π̄₁ = |π₁|²（秩 1，非激发）；
+    N=2（电子）：det₂ = |⟨π₁,π₂⟩|²（秩 2，激发，pairDet/QFT8）；
+    一般 N：detₙ = |detₙ[π₁...π_N]|²（秩 N，激发，GQN2）。
+    一条链（任意 N）：质量 ⟺ 激发 ⟺ 扭量独立（秩 = 扭量数）。 -/
+theorem rank_unified_general (z a₁ b₁ a₂ b₂ : ℂ) (f : N → N → ℂ) :
+    (Matrix.det !![z] = z) ∧
+    (pairDet a₁ b₁ a₂ b₂ =
+      (a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁)) ∧
+    (Matrix.det (outerSumN f) =
+      Matrix.det (twistorMat f) * star (Matrix.det (twistorMat f))) := by
+  constructor
+  · exact Matrix.det_fin_one_of z
+  constructor
+  · rfl
+  · exact outer_sum_det f
+
+/-! ### GQN6. 一致性：GQ2（N=3 特例）= GQN2（一般 N） -/
+
+/-- ★ GQN6a：三扭量外积和 = 一般 N 外积和的 N=3 实例（triMatrix 对应）。
+    验证一般定理覆盖特例：GQN2 在 N=3 时精确还原 GQ2。 -/
+theorem triple_outer_eq_general (a b c : TriTwistor) :
+    tripleOuterSum a b c =
+      outerSumN (fun i j => triMatrix a b c i j) := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [tripleOuterSum, outerSumN, triMatrix, Matrix.vecMulVec, Fin.sum_univ_three] <;> ring
+
+/-- ★ GQN6b：det 一致性——GQ2 的 det₃ = 一般 N 恒等在 N=3 时的值。
+    形式化验证："一般定理 ⟹ 特例"（GQN2 蕴含 GQ2）。 -/
+theorem triple_det_eq_general_det (a b c : TriTwistor) :
+    Matrix.det (tripleOuterSum a b c) =
+      Matrix.det (outerSumN (fun i j => triMatrix a b c i j)) := by
+  rw [triple_outer_eq_general]
+
+/-! ### 结论注释（一般 N 扭量） -/
+
+-- GQN1–GQN6 合读（Cauchy-Binet 方阵特例的判定）：
+--   1. ★ 一般 N 统一恒等（GQN2）：det(Σᵢ πᵢ⊗π̄ᵢ) = |detₙ[π₁...π_N]|²——
+--      det(AA†) = |det A|² 对任意 N；GQ2（N=3）、TW6（N=2）、det₁（N=1）
+--      都是特例（GQN6 形式化验证 N=3 一致性）。
+--   2. ★ 统一链（GQN3–GQN5）：质量² = |det_N|²，激发 ⟺ 秩 N——光子/电子/
+--      胶球是同一恒等的三个实例（"激发 ⟺ 秩 = 扭量数"对任意 N）。
+--   3. 诚实边界：mathlib 无完整 Cauchy-Binet（矩形 m×n 子式平方和），
+--      本轮证 m = n 方阵特例；m < n（扭量数 < 维数）时 det(P) = 0（秩不足
+--      非激发），m > n 的完整子式和未形式化——"扭量数 ≥ 维数且满秩"是
+--      激发（质量）的必要条件，m = n 是 Cauchy-Binet 单项目恰好给出
+--      |det A|² 的情形。
+
 end ProjectionPhysics.QFTFlow
 
 end

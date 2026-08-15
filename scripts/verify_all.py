@@ -243,6 +243,14 @@ def main():
         check("GQ4b: W 型两两纠缠 ≠ 全域激发（共面 det₃ = 0）",
               n12["随机独立三扭量：三对 Plücker 全非零（W 型，200/200）"] and
               n12["共面三扭量：两两不平行但 det₃ = 0（局部纠缠 ≠ 激发）"])
+        n13 = res["N13_general_N_identity"]
+        check("GQN2: 一般 N 恒等 det = |detₙ|²（N=2..8）",
+              n13["max|det_N(P) − |detₙ[π₁...π_N]|²|（N=2..8 × 100 随机）"] < 1e-5)
+        check("GQN2: Hadamard（所有 N）", n13["Hadamard |det| ≤ Π|πᵢ|（所有 N）"])
+        check("GQN3–4: 满秩 ⟹ 激发 / 退化 ⟹ 非激发（N=2..7）",
+              res["N14_general_N_rank"]["满秩 ⟹ det > 0 / 退化 ⟹ det = 0（N=2..7）"])
+        n15 = res["N15_general_N_chain"]
+        check("GQN5: 统一链 N=1..6（m² = |det_N|²）", n15["全部 m² = |det_N|²（机器精度）"])
 
     # 4. 产物完整性
     artifacts = {
