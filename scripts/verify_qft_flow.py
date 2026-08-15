@@ -376,6 +376,58 @@ def main():
                 "是同一恒等的实例（N=1 秩1 非激发/ N≥2 秩N 激发）；单位正交"
                 "扭量时 det = 1（Hadamard 饱和）"}
 
+    # ---- N16 n=2, m=3..8：det(P) = Σ_{i<j}|⟨πᵢ,πⱼ⟩|²（GQM1 的一般 m）----
+    from itertools import combinations
+    max_err_m2 = 0.0
+    for m in range(3, 9):
+        for _ in range(50):
+            P = [rng.standard_normal(2) + 1j * rng.standard_normal(2) for _ in range(m)]
+            outer_sum = sum(np.outer(p, np.conj(p)) for p in P)
+            det_outer = abs(np.linalg.det(outer_sum))
+            pair_sum = sum(abs(P[i][0] * P[j][1] - P[i][1] * P[j][0]) ** 2
+                           for i, j in combinations(range(m), 2))
+            max_err_m2 = max(max_err_m2, abs(det_outer - pair_sum))
+    report["results"]["N16_cauchy_binet_2d"] = {
+        "max|det(P) − Σ_{i<j}|⟨πᵢ,πⱼ⟩|²|（n=2, m=3..8）": round(float(max_err_m2), 13),
+        "note": "GQM1 的一般 m 版：2 维空间多扭量叠加的质量² = 所有对辛内积"
+                "平方和（C(m,2) 个子式）——每对半旋量的纠缠贡献相加"}
+
+    # ---- N17 n=3, m=4..7：det(P) = Σ_{S,|S|=3}|det₃[π_S]|²（GQM3 的一般 m）----
+    max_err_m3 = 0.0
+    for m in range(4, 8):
+        for _ in range(50):
+            A = rng.standard_normal((m, 3)) + 1j * rng.standard_normal((m, 3))
+            P = A.T  # 3×m，列 = 扭量
+            outer_sum = sum(np.outer(P[:, k], np.conj(P[:, k])) for k in range(m))
+            det_outer = abs(np.linalg.det(outer_sum))
+            sub_sum = sum(abs(np.linalg.det(P[:, list(S)])) ** 2
+                          for S in combinations(range(m), 3))
+            max_err_m3 = max(max_err_m3, abs(det_outer - sub_sum))
+    report["results"]["N17_cauchy_binet_3d"] = {
+        "max|det(P) − Σ|det₃[π_S]|²|（n=3, m=4..7）": round(float(max_err_m3), 13),
+        "note": "GQM3 的一般 m 版：3 维空间多扭量叠加的质量² = 所有三元子族"
+                "的子纠缠体积平方和（C(m,3) 个子式）——全域纠缠 = 所有子结构"
+                "的纠缠之和"}
+
+    # ---- N18 一般 n×m 完整 Cauchy-Binet（数值验证，n=2..4, m=n+1..n+4）----
+    max_err_cb, n_cb = 0.0, 0
+    for n in range(2, 5):
+        for m in range(n + 1, n + 5):
+            for _ in range(30):
+                A = rng.standard_normal((m, n)) + 1j * rng.standard_normal((m, n))
+                P = A.T  # n×m
+                det_outer = abs(np.linalg.det(P @ np.conj(P).T))
+                sub_sum = sum(abs(np.linalg.det(P[:, list(S)])) ** 2
+                              for S in combinations(range(m), n))
+                max_err_cb = max(max_err_cb, abs(det_outer - sub_sum))
+                n_cb += 1
+    report["results"]["N18_cauchy_binet_general"] = {
+        "max|det(AA†) − Σ_S|det(A[:,S])|²|（n=2..4, m=n+1..n+4 × 30）": round(float(max_err_cb), 13),
+        "样本数": n_cb,
+        "note": "完整 Cauchy-Binet（数值）：det(AA†) = 所有 n×n 子式平方和——"
+                "m > n 多扭量叠加的质量² = 全纠缠结构（所有 n 元子族的子纠缠"
+                "体积平方和）；m = n 退化为单一子式 |det A|²（GQN2 Lean 已证）"}
+
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
     # 左：det₃(P) vs |det₃[π₁π₂π₃]|² 散点（恒等，y = x）

@@ -547,6 +547,160 @@ theorem triple_det_eq_general_det (a b c : TriTwistor) :
 --      激发（质量）的必要条件，m = n 是 Cauchy-Binet 单项目恰好给出
 --      |det A|² 的情形。
 
+/-! ### GQM1–GQM3. 多扭量叠加（m > n）：Cauchy-Binet 子式平方和 -/
+
+-- leo（2026-08-15 第四轮）：m = n 已证（GQN2）；现在 m > n——m 个扭量
+-- 叠加在 n 维空间，det(P) = 所有 n×n 子式的模平方和（Cauchy-Binet）：
+--   det(AA†) = Σ_{S ⊆ [m], |S| = n} |det(A[:, S])|²
+-- 物理（我们的假设）：多扭量叠加的质量² = 所有 n 元子族的"子纠缠体积"
+-- 平方和——全域纠缠 = 所有子结构的纠缠之和。
+-- 数学状态（诚实）：mathlib 无完整 Cauchy-Binet（一般 Finset 版未形式化，
+-- 数值 N16–N18 全维验证）；本轮形式化显式版：
+--   GQM1 ★ n=2, m=3：det(p₁+p₂+p₃) = |⟨π₁,π₂⟩|²+|⟨π₁,π₃⟩|²+|⟨π₂,π₃⟩|²
+--       （C(3,2) = 3 个子式——质量² = 每对半旋量的纠缠贡献之和）
+--   GQM2 ★ n=2, m=3 激发判据：det ≠ 0 ⟺ 至少一对不平行
+--   GQM3 n=3, m=4：det(P) = Σ_{4 个三元子族} |det₃[π_S]|²（分量展开）
+
+/-- 三扭量（2 维）外积和：p = π₁π₁† + π₂π₂† + π₃π₃†（2×2 分量空间矩阵）。 -/
+def tripleOuter2D (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) : Matrix (Fin 2) (Fin 2) ℂ :=
+  !![ a₁ * star a₁ + a₂ * star a₂ + a₃ * star a₃,
+      a₁ * star b₁ + a₂ * star b₂ + a₃ * star b₃ ;
+      b₁ * star a₁ + b₂ * star a₂ + b₃ * star a₃,
+      b₁ * star b₁ + b₂ * star b₂ + b₃ * star b₃ ]
+
+/-- 三对辛内积平方和（C(3,2) = 3 个 2×2 子式）。 -/
+def pairDetSum (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) : ℂ :=
+  (a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁) +
+  (a₁ * b₃ - a₃ * b₁) * star (a₁ * b₃ - a₃ * b₁) +
+  (a₂ * b₃ - a₃ * b₂) * star (a₂ * b₃ - a₃ * b₂)
+
+/-- 辅助：s·star s = (normSq s : ℂ)——ℂ 值模平方 = 非负实数嵌入。 -/
+lemma mul_star_self_ofReal_normSq (s : ℂ) :
+    s * star s = (Complex.normSq s : ℂ) := by
+  apply Complex.ext <;> simp [Complex.normSq] <;> ring
+
+/-- 辅助：非零 ⟹ s·star s ≠ 0（模平方的 ℂ 值非零）。 -/
+lemma mul_star_self_ne_zero_of_ne_zero (s : ℂ) (h : s ≠ 0) : s * star s ≠ 0 := by
+  rw [mul_star_self_ofReal_normSq]
+  exact Complex.ofReal_ne_zero.mpr (ne_of_gt (Complex.normSq_pos.mpr h))
+
+/-- 辅助：三项非负实数，一项 > 0 ⟹ 和 ≠ 0。 -/
+lemma normSq_sum_ne_zero_of_one_pos {x y z : ℝ} (hx : 0 < x)
+    (hy : 0 ≤ y) (hz : 0 ≤ z) : x + y + z ≠ 0 := by
+  linarith
+
+/-- ★ GQM1：n=2, m=3 显式 Cauchy-Binet——det(p₁+p₂+p₃) =
+    |⟨π₁,π₂⟩|² + |⟨π₁,π₃⟩|² + |⟨π₂,π₃⟩|²（C(3,2) = 3 个子式平方和）。
+    多扭量叠加（2 维）的质量² = 所有对（i<j）的辛内积平方和——
+    每对半旋量的纠缠贡献相加（QFT4"叠加质量加法"的纠缠版）。
+    与 m = n（GQN2 单子式）对照：m > n 是子式平方和，m = n 是唯一项。 -/
+theorem triple_outer_2d_det (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) :
+    Matrix.det (tripleOuter2D a₁ b₁ a₂ b₂ a₃ b₃) =
+      pairDetSum a₁ b₁ a₂ b₂ a₃ b₃ := by
+  unfold tripleOuter2D pairDetSum
+  rw [Matrix.det_fin_two]
+  simp
+  ring
+
+/-- ★ GQM2：n=2, m=3 激发判据——det ≠ 0 ⟺ 至少一对辛内积非零
+    （至少一对不平行）。多扭量叠加（2 维）的激发条件 = 任意一对
+    半旋量纠缠：一对非零 ⟹ 质量 > 0；全部平行 ⟹ 无质量。 -/
+theorem triple_outer_2d_excited_iff (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) :
+    Matrix.det (tripleOuter2D a₁ b₁ a₂ b₂ a₃ b₃) ≠ 0 ↔
+      (a₁ * b₂ - a₂ * b₁ ≠ 0) ∨ (a₁ * b₃ - a₃ * b₁ ≠ 0) ∨
+        (a₂ * b₃ - a₃ * b₂ ≠ 0) := by
+  rw [triple_outer_2d_det]
+  unfold pairDetSum
+  constructor
+  · intro h
+    by_contra hnone
+    push_neg at hnone
+    have hz : (a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁) +
+        (a₁ * b₃ - a₃ * b₁) * star (a₁ * b₃ - a₃ * b₁) +
+        (a₂ * b₃ - a₃ * b₂) * star (a₂ * b₃ - a₃ * b₂) = 0 := by
+      rw [hnone.1, hnone.2.1, hnone.2.2]
+      simp
+    exact h hz
+  · intro h
+    rcases h with h1 | h2 | h3
+    · rw [mul_star_self_ofReal_normSq, mul_star_self_ofReal_normSq,
+          mul_star_self_ofReal_normSq]
+      have hn1 : 0 < Complex.normSq (a₁ * b₂ - a₂ * b₁) := Complex.normSq_pos.mpr h1
+      have hn2 : 0 ≤ Complex.normSq (a₁ * b₃ - a₃ * b₁) := Complex.normSq_nonneg _
+      have hn3 : 0 ≤ Complex.normSq (a₂ * b₃ - a₃ * b₂) := Complex.normSq_nonneg _
+      have hs := normSq_sum_ne_zero_of_one_pos hn1 hn2 hn3
+      simpa using (Complex.ofReal_ne_zero.mpr hs : ((Complex.normSq (a₁ * b₂ - a₂ * b₁) +
+        Complex.normSq (a₁ * b₃ - a₃ * b₁) + Complex.normSq (a₂ * b₃ - a₃ * b₂) : ℝ) : ℂ) ≠ 0)
+    · rw [mul_star_self_ofReal_normSq, mul_star_self_ofReal_normSq,
+          mul_star_self_ofReal_normSq]
+      have hn2 : 0 < Complex.normSq (a₁ * b₃ - a₃ * b₁) := Complex.normSq_pos.mpr h2
+      have hn1 : 0 ≤ Complex.normSq (a₁ * b₂ - a₂ * b₁) := Complex.normSq_nonneg _
+      have hn3 : 0 ≤ Complex.normSq (a₂ * b₃ - a₃ * b₂) := Complex.normSq_nonneg _
+      have hs := normSq_sum_ne_zero_of_one_pos hn2 hn1 hn3
+      simpa [add_comm, add_left_comm, add_assoc] using
+        (Complex.ofReal_ne_zero.mpr hs : ((Complex.normSq (a₁ * b₃ - a₃ * b₁) +
+          Complex.normSq (a₁ * b₂ - a₂ * b₁) + Complex.normSq (a₂ * b₃ - a₃ * b₂) : ℝ) : ℂ) ≠ 0)
+    · rw [mul_star_self_ofReal_normSq, mul_star_self_ofReal_normSq,
+          mul_star_self_ofReal_normSq]
+      have hn3 : 0 < Complex.normSq (a₂ * b₃ - a₃ * b₂) := Complex.normSq_pos.mpr h3
+      have hn1 : 0 ≤ Complex.normSq (a₁ * b₂ - a₂ * b₁) := Complex.normSq_nonneg _
+      have hn2 : 0 ≤ Complex.normSq (a₁ * b₃ - a₃ * b₁) := Complex.normSq_nonneg _
+      have hs := normSq_sum_ne_zero_of_one_pos hn3 hn1 hn2
+      simpa [add_comm, add_left_comm, add_assoc] using
+        (Complex.ofReal_ne_zero.mpr hs : ((Complex.normSq (a₂ * b₃ - a₃ * b₂) +
+          Complex.normSq (a₁ * b₂ - a₂ * b₁) + Complex.normSq (a₁ * b₃ - a₃ * b₁) : ℝ) : ℂ) ≠ 0)
+
+/-! ### GQM3. n=3, m=4：四扭量叠加（3 维）— 4 个三元子式平方和 -/
+
+/-- 四扭量（3 维）外积和（3×3）：P = Σᵢ₌₁⁴ πᵢπᵢ†。 -/
+def quadOuter3D (a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄ : ℂ) :
+    Matrix (Fin 3) (Fin 3) ℂ :=
+  !![ a₁ * star a₁ + a₂ * star a₂ + a₃ * star a₃ + a₄ * star a₄,
+      a₁ * star b₁ + a₂ * star b₂ + a₃ * star b₃ + a₄ * star b₄,
+      a₁ * star c₁ + a₂ * star c₂ + a₃ * star c₃ + a₄ * star c₄ ;
+      b₁ * star a₁ + b₂ * star a₂ + b₃ * star a₃ + b₄ * star a₄,
+      b₁ * star b₁ + b₂ * star b₂ + b₃ * star b₃ + b₄ * star b₄,
+      b₁ * star c₁ + b₂ * star c₂ + b₃ * star c₃ + b₄ * star c₄ ;
+      c₁ * star a₁ + c₂ * star a₂ + c₃ * star a₃ + c₄ * star a₄,
+      c₁ * star b₁ + c₂ * star b₂ + c₃ * star b₃ + c₄ * star b₄,
+      c₁ * star c₁ + c₂ * star c₂ + c₃ * star c₃ + c₄ * star c₄ ]
+
+/-- 3×3 行列式（Sarrus 展开，行 = 三个扭量）。 -/
+def det₃ (a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ : ℂ) : ℂ :=
+  a₁ * (b₂ * c₃ - c₂ * b₃) - b₁ * (a₂ * c₃ - c₂ * a₃) + c₁ * (a₂ * b₃ - b₂ * a₃)
+
+/-- 四个 3×3 子式平方和（C(4,3) = 4 个子族）。 -/
+def tripleDetSum4 (a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄ : ℂ) : ℂ :=
+  (det₃ a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃) * star (det₃ a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃) +
+  (det₃ a₁ b₁ c₁ a₂ b₂ c₂ a₄ b₄ c₄) * star (det₃ a₁ b₁ c₁ a₂ b₂ c₂ a₄ b₄ c₄) +
+  (det₃ a₁ b₁ c₁ a₃ b₃ c₃ a₄ b₄ c₄) * star (det₃ a₁ b₁ c₁ a₃ b₃ c₃ a₄ b₄ c₄) +
+  (det₃ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄) * star (det₃ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄)
+
+/-- ★ GQM3：n=3, m=4 显式 Cauchy-Binet——det(P) =
+    Σ_{S ⊆ {1..4}, |S|=3} |det₃[π_S]|²（C(4,3) = 4 个子式平方和）。
+    四扭量叠加（3 维）的质量² = 所有三元子族的"子纠缠体积"平方和——
+    全域纠缠 = 所有子结构的纠缠之和。 -/
+theorem quad_outer_3d_det (a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄ : ℂ) :
+    Matrix.det (quadOuter3D a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄) =
+      tripleDetSum4 a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b₄ c₄ := by
+  unfold quadOuter3D tripleDetSum4 det₃
+  rw [Matrix.det_fin_three]
+  simp
+  ring
+
+/-! ### 结论注释（多扭量叠加 Cauchy-Binet） -/
+
+-- GQM1–GQM3 合读（m > n 的判定）：
+--   1. ★ 显式 Cauchy-Binet（GQM1/GQM3）：多扭量叠加的质量² = 所有 n 元
+--      子族的子式平方和——n=2, m=3 为三对辛内积和；n=3, m=4 为四个
+--      三元体积平方和。m = n（GQN2）是唯一子式的特例。
+--   2. ★ 激发判据（GQM2）：n=2, m=3 时 det ≠ 0 ⟺ 至少一对不平行——
+--      叠加中任意一对半旋量纠缠即激发；全平行 ⟹ 无质量。
+--   3. 诚实边界：一般 m,n 的 Finset 版 Cauchy-Binet mathlib 无且未形式化
+--      （数值 N16–N18 全维验证）；GQM3 若分量展开过慢则降级为数值 +
+--      注释（减法原则）。物理上这是标准线性代数恒等——框架贡献 =
+--      "质量² = 全纠缠结构（所有子族体积平方和）"的解释层重述。
+
 end ProjectionPhysics.QFTFlow
 
 end

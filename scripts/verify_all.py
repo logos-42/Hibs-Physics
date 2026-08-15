@@ -251,6 +251,15 @@ def main():
               res["N14_general_N_rank"]["满秩 ⟹ det > 0 / 退化 ⟹ det = 0（N=2..7）"])
         n15 = res["N15_general_N_chain"]
         check("GQN5: 统一链 N=1..6（m² = |det_N|²）", n15["全部 m² = |det_N|²（机器精度）"])
+        n16 = res["N16_cauchy_binet_2d"]
+        check("GQM1: n=2, m=3..8 Cauchy-Binet（Σ|⟨πᵢ,πⱼ⟩|²）",
+              n16["max|det(P) − Σ_{i<j}|⟨πᵢ,πⱼ⟩|²|（n=2, m=3..8）"] < 1e-8)
+        n17 = res["N17_cauchy_binet_3d"]
+        check("GQM3: n=3, m=4..7 Cauchy-Binet（Σ|det₃[π_S]|²）",
+              n17["max|det(P) − Σ|det₃[π_S]|²|（n=3, m=4..7）"] < 1e-8)
+        n18 = res["N18_cauchy_binet_general"]
+        check("GQM: 一般 n×m 完整 Cauchy-Binet（360 样本）",
+              n18["max|det(AA†) − Σ_S|det(A[:,S])|²|（n=2..4, m=n+1..n+4 × 30）"] < 1e-6)
 
     # 4. 产物完整性
     artifacts = {
