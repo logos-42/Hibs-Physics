@@ -11,7 +11,9 @@
 >
 > English: [README.md](README.md) · 数学草案细节: [SPEC.md](SPEC.md) ·
 > **论文**: [paper/projection-physics.tex](paper/projection-physics.tex)（英文版，
-> REVTeX 单栏 preprint）+ [projection-physics-zh.tex](paper/projection-physics-zh.tex)（中文版）
+> REVTeX 单栏 preprint）+ [projection-physics-zh.tex](paper/projection-physics-zh.tex)（中文版）；
+> 两版均已加 §8 探索汇总（自旋涌现/双缝谐波/分形 KBC/胶球耦合）。
+> **许可证**: [MIT](LICENSE)
 
 ## 核心主张
 
@@ -101,28 +103,44 @@ KernelNullTheorem            核平凡 ⟹ 动量在零锥上 Q(p) = 0（前半�
 4. **数字命理学已剔除**：π 幂次"匹配"粒子质量比（如 6π⁵ ≈ 1836.118）是凑数，
    不属于本仓库。
 
-## 构建
+## 构建与验证
 
 ```bash
-elan override set v4.28.0
-lake build            # 34 jobs, 无 error 无 sorry
-.lake/build/bin/projphys
+lake build                  # ~4140 jobs，无 error，零 sorry/admit
+make test                   # 统一门禁：lake build + 8 个验证脚本重跑
+                            #   + 回归锚点断言（报告在 artifacts/ 各目录）
+make fast                   # 门禁（跳过数值脚本重跑，只读既有报告）
+python3 scripts/wiki_check.py   # wiki 完整性（链接 + frontmatter）
 ```
 
 ## 目录
 
-```
+```text
 ProjectionPhysics/
+├── LICENSE                 # MIT 开源协议
 ├── SPEC.md                 # 数学草案：定理清单、证明状态、诚实声明（中文）
 ├── README.md               # 英文详细说明
 ├── README.zh-CN.md         # 本文件（中文概览）
-├── paper/                  # 2026-08-14: 首篇论文（REVTeX 4.2，单栏 preprint）
-│   ├── projection-physics.tex    # 英文版（20 页，附 tectonic 编译 PDF）
+├── Makefile                # 统一门禁入口（make test → scripts/verify_all.py）
+├── paper/                  # 论文（REVTeX 4.2，单栏 preprint，中英双版）
+│   ├── projection-physics.tex    # 英文版（含 §8 探索汇总，tectonic 编译 PDF）
 │   ├── projection-physics-zh.tex # 中文版（内容等同）
 │   └── projection-physics.bib    # 参考文献（18 条全真实）
+├── scripts/                # 验证与可视化（8 个 verify_*.py 进门禁）
+│   ├── verify_all.py            # 统一门禁（lake build + 零 sorry 扫描 + 脚本 + 断言）
+│   ├── verify_maxwell_space.py  # 电磁 = 空间场 C 的运动学（MS1–MS5）
+│   ├── verify_spacefield3d.py   # 3D 向量微积分：div(curl C)=0 自动（SF1–SF5）
+│   ├── verify_spin_from_space.py# 自旋 = 三方向结构涌现（SFS1–SFS5）
+│   ├── verify_fractal_flow.py   # 分形宇宙：KBC 空洞 + Hubble 悖论（δ* = −0.25）
+│   ├── verify_double_slit.py    # 双缝 = 空间螺旋谐波干涉（DS1–DS4）
+│   ├── verify_glueball_coupling.py # 胶球三方向耦合 + 质量化（GC1–GC4）
+│   ├── verify_maxwell_flow.py   # 麦克斯韦 × 流动公设（MF1–MF6, P1–P4）
+│   ├── verify_entanglement_helix.py # CHSH 局域界（EH1–EH4）
+│   ├── verify_blackhole_wormhole.py # Gordon 黑洞/虫洞（BH1–WH1）
+│   └── wiki_check.py            # wiki 完整性检查
 ├── ProjectionPhysics.lean   # 根模块
 ├── Main.lean                # 可执行入口
-└── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24
+└── ProjectionPhysics/                    # 主线 + 探索（见英文 README 正文）
     ├── SpaceLightSpeed.lean     # ★ 主线：矢量光速——c=空间本身的等效速度；光子随空间⟹m=0；电子自旋⟹m>0（SLS1–SLS6）
     ├── SpaceMetric.lean         # ★ 主线：空间流动度规——dτ²=dt²−dx²/c²；光子 dx=c·dt⟹dτ=0；质量=偏离⟹dτ>0（SM1–SM6）
     ├── SpaceGravity.lean        # ★ 主线：Gordon 度规——g=[[1−v²/c²,v/c²],[v/c²,−1/c²]]；Φ=½v² 匹配弱场 GR（SG1–SG11）
@@ -131,13 +149,21 @@ ProjectionPhysics/
     ├── PauliMathlib.lean        # 主线（mathlib）：Clifford 重写（C1'–C4'）
     ├── DiracMathlib.lean        # 主线（mathlib）：狄拉克桥——γ⁰²=1、γⁱ²=−1；质量=手征耦合（DB1'–DB6'）
     ├── MinimalCoreMathlib.lean  # 主线（mathlib）：质量=锚定——m²=|ψ₁|²+|ψ₀|²；非零旋量⟹m>0（MC1'–MC6'）
-    ├── Explorations/            # 冻结（2026-08-14）：胶球/色结构——不再加定理
-    │   ├── SpinStatistics.lean      # 自旋统计硬约束（SS1–SS8）
-    │   ├── CliffordSix.lean         # Cℓ(6) 8 维表示（CS1–CS3）
-    │   ├── ColorOctetMathlib.lean   # 3⊗3=8⊕1 无迹分解（CM1–CM3）
-    │   ├── SphericalHarmonics.lean  # 胶球力=球谐（SH1–SH5）
-    │   ├── SU3Bridge.lean           # SU(3) 循环子群
-    │   └── GlueballBridge.lean      # SU(3) 色作用、胶球质量
+    ├── Explorations/            # 探索线（2026-08-14 后活跃）：新方向结果
+    │   ├── EntanglementHelix.lean    # 双螺旋纠缠局域界（EH1–EH4）
+    │   ├── BlackHoleWormhole.lean    # Gordon 黑洞/虫洞（BH1–WH1）
+    │   ├── MaxwellFlow.lean          # 麦克斯韦 × 流动公设（MF1–MF6, PH1–PH2）
+    │   ├── MaxwellSpace.lean         # 电磁 = 空间场运动学（MS1–MS5）
+    │   ├── SpaceField3D.lean         # 3D 向量微积分（SF1–SF5）
+    │   ├── SpinFromSpace.lean        # 自旋 = 三方向涌现（SFS1–SFS5）
+    │   ├── DoubleSlit.lean           # 双缝 = 螺旋谐波干涉（DS1–DS4）
+    │   ├── GlueballCoupling.lean     # 胶球三方向耦合（GC1–GC4）
+    │   ├── SpinStatistics.lean       # 自旋统计硬约束（SS1–SS8）
+    │   ├── CliffordSix.lean          # Cℓ(6) 8 维表示（CS1–CS3）
+    │   ├── ColorOctetMathlib.lean    # 3⊗3=8⊕1 无迹分解（CM1–CM3）
+    │   ├── SphericalHarmonics.lean   # 胶球力=球谐（SH1–SH5）
+    │   ├── SU3Bridge.lean            # SU(3) 循环子群
+    │   └── GlueballBridge.lean       # SU(3) 色作用、胶球质量
     └── Archive/                 # 弃用（08-06 前隐数路线 + core 双轨）：Definitions/Kernel/Completeness/
                                 # Mass/NullTheorem/Bridges/Algebra/Clifford/LinearAlgebra/Differential/
                                 # SymmetryBreaking/HiddenSpace/Quaternion/ProjectionAlgebra/HiddenSpacePhysics/
@@ -150,9 +176,10 @@ ProjectionPhysics/
 
 1. **核表示论**：有限核 Aut(ker) 的标量不变量唯一性——质量解析缺的另一半（D2）
 2. **度量签名（D4）**：最薄弱环节，尚无诚实的 Minkowski 减号推导
-3. **系数环升级**（ℤ[i] → ℚ[i]/ℝ）：解锁差商（D7'）、3D 旋转、连续物理
-4. **多投影族**：Fin n 指标集、投影秩，连接 rank-nullity（L5/L6）
+3. **"第二输入"（最深开放问题）**：ℏ、e、M₀ 的数值与电子对二维表示的选择——仍是输入而非结论（见论文 §9）
+4. **连续 3D 微积分**：离散 3D curl/div 恒等（SF1–SF5）已形式化；连续版本与连续性仍开放
+5. **摆脱重释的可检验出口**：非均匀流动 ⟹ 洛伦兹破缺；格点检验胶球 √N·M₀ 高通道（n=4,5,6）
 
 ---
 
-*Lean 4 (core, 无 mathlib) 形式化。证明手段：omega / simp / rw / ac_rfl / 经典选择。*
+*Lean 4 (mathlib) 形式化。证明手段：omega / simp / rw / ac_rfl / ring / nlinarith。*
