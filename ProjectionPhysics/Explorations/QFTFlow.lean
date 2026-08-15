@@ -39,7 +39,9 @@ import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.LinearIndependent.Defs
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -259,6 +261,156 @@ theorem unified_rank_entanglement (a₁ b₁ a₂ b₂ : ℂ) :
 --      双扭量）的代数化 + 已有公设（SM/MC）重述；框架贡献 = 概念
 --      统一（解释层）。"全域纠缠无距离衰减"的数值验证见
 --      scripts/verify_qft_flow.py（E(Δ) 与传播距离无关）。
+
+/-! ### GQ1–GQ6. 三扭量胶球：激发 ⟺ 秩 3 纠缠（QFT8–9 的三方向推广） -/
+
+-- leo（2026-08-15 第二轮）：把"电子 = 双扭量秩 2"推广到三方向胶球——
+-- 三扭量（3 维旋量，色空间）P = π₁⊗π̄₁ + π₂⊗π̄₂ + π₃⊗π̄₃。
+-- 核心恒等（Cauchy-Binet / det(AA†) = |det A|² 特例）：
+--   det₃(P) = |det₃[π₁ π₂ π₃]|² —— 胶球质量平方 = 三扭量体积形式。
+-- 统一秩判据（质量 ⟺ 激发 ⟺ 秩）：
+--   N=1 光子：det₁ = |π₁|²（秩 1，非激发）
+--   N=2 电子：det₂ = |⟨π₁,π₂⟩|²（秩 2，激发，QFT8）
+--   N=3 胶球：det₃ = |det₃[π₁π₂π₃]|²（秩 3，激发——三扭量线性无关）
+-- 诚实边界：2×2 的 det ≤ tr²/4 装不下"三秩"（两秩上限），故三方向胶球
+-- 必须用 3×3（色空间）——这本身是"为什么胶子生活在 SU(3) 色空间"的
+-- 代数线索；数值上 det₃ ≤ 1（单位旋量，Hadamard），与 √3·M₀ 的关系
+-- 是结构对应而非数值匹配（方向锚定相加 MC6' 仍负责格点谱）。
+
+/-- 3 维扭量（色空间旋量）。 -/
+abbrev TriTwistor : Type := Fin 3 → ℂ
+
+/-- 三扭量外积和（3×3 分量空间矩阵）：P = π₁⊗π̄₁ + π₂⊗π̄₂ + π₃⊗π̄₃。 -/
+def tripleOuterSum (a b c : TriTwistor) : Matrix (Fin 3) (Fin 3) ℂ :=
+  Matrix.vecMulVec a (star a) + Matrix.vecMulVec b (star b) +
+    Matrix.vecMulVec c (star c)
+
+/-- 扭量矩阵（行 = 三个扭量）：A i j = 第 i 个扭量的第 j 分量。 -/
+def triMatrix (a b c : TriTwistor) : Matrix (Fin 3) (Fin 3) ℂ :=
+  fun i j => (match i with
+    | ⟨0, _⟩ => a j
+    | ⟨1, _⟩ => b j
+    | _ => c j)
+
+/-! ### GQ1. 三扭量外积和 = Aᵀ(Aᵀ)ᴴ -/
+
+/-- ★ GQ1：三扭量外积和 = 列扭量矩阵与其共轭转置之积：
+    P = Aᵀ·(Aᵀ)ᴴ（A 的行 = 三个扭量）。这使 det(P) 能写成
+    det(A)·conj(det A) = |det₃[π₁ π₂ π₃]|²（GQ2）。 -/
+theorem triple_outer_eq_conj_mul (a b c : TriTwistor) :
+    tripleOuterSum a b c =
+      (triMatrix a b c).transpose * (triMatrix a b c).transpose.conjTranspose := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [tripleOuterSum, triMatrix, Matrix.vecMulVec, Matrix.mul_apply,
+          Matrix.conjTranspose, Fin.sum_univ_three] <;> ring
+
+/-! ### GQ2. 三扭量 det 恒等（胶球质量 = 体积形式） -/
+
+/-- ★ GQ2：三扭量 det 恒等——det₃(Σπᵢ⊗π̄ᵢ) = det A · conj(det A) =
+    |det₃[π₁ π₂ π₃]|²（det(AA†) = |det A|²，Cauchy-Binet 的 N=3 特例）。
+    胶球质量平方 = 三扭量的体积形式：三方向张满 ⟹ 非零。
+    与电子的 det₂ = |⟨π₁,π₂⟩|²（TW6）同构：N 个扭量的 N×N 外积和
+    的 det = |N 阶行列式|²——质量 = 扭量的 N 维辛体积。 -/
+theorem triple_outer_det (a b c : TriTwistor) :
+    Matrix.det (tripleOuterSum a b c) =
+      Matrix.det (triMatrix a b c) * star (Matrix.det (triMatrix a b c)) := by
+  rw [triple_outer_eq_conj_mul]
+  rw [Matrix.det_mul]
+  rw [Matrix.det_conjTranspose, Matrix.det_transpose]
+
+/-! ### GQ3. 质量 ≠ 0 ⟺ 扭量矩阵 det ≠ 0 -/
+
+/-- ★ GQ3：胶球质量平方 ≠ 0 ⟺ det₃[π₁ π₂ π₃] ≠ 0
+    （ℂ 是域：det A · conj(det A) ≠ 0 ⟺ det A ≠ 0）。
+    无质量（非激发）⟺ det 为零；有质量（激发）⟺ det 非零。 -/
+theorem triple_mass_ne_zero_iff_det (a b c : TriTwistor) :
+    Matrix.det (tripleOuterSum a b c) ≠ 0 ↔
+      Matrix.det (triMatrix a b c) ≠ 0 := by
+  rw [triple_outer_det]
+  constructor
+  · intro h hd
+    apply h
+    rw [hd]
+    simp
+  · intro hd
+    have hs : star (Matrix.det (triMatrix a b c)) ≠ 0 := star_ne_zero.mpr hd
+    exact mul_ne_zero hd hs
+
+/-! ### GQ4. 激发 ⟺ 三扭量线性无关（秩 3 判据） -/
+
+/-- ★ GQ4a：胶球激发（质量 ≠ 0）⟹ 三扭量线性无关（秩 3）——
+    det₃ ≠ 0 ⟹ 行独立（mathlib）。三方向胶球的"激发 ⟹ 秩"判据：
+    电子 = 两旋量独立（秩 2），胶球 = 三扭量独立（秩 3）。
+    扭量张满 ⟹ 激发（质量）。 -/
+theorem triple_excited_implies_independent (a b c : TriTwistor)
+    (h : Matrix.det (tripleOuterSum a b c) ≠ 0) :
+    LinearIndependent ℂ (fun i : Fin 3 => (triMatrix a b c) i) := by
+  rw [triple_mass_ne_zero_iff_det] at h
+  exact Matrix.linearIndependent_rows_of_det_ne_zero h
+
+/-- ★ GQ4b：三扭量线性相关（秩 < 3）⟹ 非激发（质量 = 0）——
+    ¬LI ⟹ det₃ = 0（mathlib）。退化方向：扭量不全独立 ⟹ 无质量。 -/
+theorem triple_dependent_implies_massless (a b c : TriTwistor)
+    (h : ¬ LinearIndependent ℂ (fun i : Fin 3 => (triMatrix a b c) i)) :
+    Matrix.det (tripleOuterSum a b c) = 0 := by
+  rw [triple_outer_det]
+  have hd : Matrix.det (triMatrix a b c) = 0 :=
+    Matrix.det_eq_zero_of_not_linearIndependent_rows h
+  rw [hd]
+  simp
+
+/-! ### GQ5. 退化（两扭量相等）⟹ 无质量 -/
+
+/-- ★ GQ5：两扭量相等（π₃ = π₂）⟹ det₃ = 0 ⟹ 无质量——
+    三扭量退化到两扭量结构（秩 ≤ 2），"第三方向"不独立 = 非激发。
+    胶球需要三个独立方向（秩 3）才有质量。 -/
+theorem triple_degenerate_massless (a b : TriTwistor) :
+    Matrix.det (tripleOuterSum a b b) = 0 := by
+  rw [triple_outer_det]
+  have hd : Matrix.det (triMatrix a b b) = 0 := by
+    rw [Matrix.det_fin_three]
+    simp [triMatrix]
+    ring
+  rw [hd]
+  simp
+
+/-! ### GQ6. 统一秩判据表（N = 1, 2, 3） -/
+
+/-- ★ GQ6：统一秩判据——质量² = |det_N[π₁...π_N]|²：
+    N=1（光子）：det₁[π₁⊗π̄₁] = π₁π̄₁ = |π₁|²（秩 1，非激发）；
+    N=2（电子）：det₂ = |⟨π₁,π₂⟩|²（秩 2，激发，pairDet/QFT8）；
+    N=3（胶球）：det₃ = |det₃[π₁π₂π₃]|²（秩 3，激发，GQ2）。
+    一条链：质量 ⟺ 激发 ⟺ 扭量独立（秩 = 扭量数）——电子与胶球
+    是同一判据的两个实例（2 维辛体积 vs 3 维体积形式）。 -/
+theorem excitation_rank_unified (z a₁ b₁ a₂ b₂ : ℂ) (a b c : TriTwistor) :
+    (Matrix.det !![z] = z) ∧
+    (pairDet a₁ b₁ a₂ b₂ =
+      (a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁)) ∧
+    (Matrix.det (tripleOuterSum a b c) =
+      Matrix.det (triMatrix a b c) *
+        star (Matrix.det (triMatrix a b c))) := by
+  constructor
+  · exact Matrix.det_fin_one_of z
+  constructor
+  · rfl
+  · exact triple_outer_det a b c
+
+/-! ### 结论注释（三扭量胶球） -/
+
+-- GQ1–GQ6 合读（三秩纠缠的判定）：
+--   1. ★ 三扭量 det 恒等（GQ2）：det₃(Σπᵢ⊗π̄ᵢ) = |det₃[π₁ π₂ π₃]|²——
+--      Cauchy-Binet 的 N=3 特例；胶球质量平方 = 三扭量体积形式。
+--   2. ★ 秩判据（GQ3–GQ4）：激发 ⟺ det ≠ 0 ⟺ 三扭量线性无关（秩 3）；
+--      退化（两扭量相等）⟹ 无质量（GQ5）。与电子（秩 2，QFT8）同构。
+--   3. ★ 统一链（GQ6）：质量² = |det_N[π₁...π_N]|² 对 N = 1（光子）、
+--      2（电子）、3（胶球）——"激发 ⟺ 秩 2"是"激发 ⟺ 秩 = 扭量数"
+--      的特例；胶球 = 三扭量全纠缠（W 型：三对辛内积都贡献，数值 N13）。
+--   4. 诚实边界：2×2 矩阵秩 ≤ 2，装不下三个独立方向——三方向胶球
+--      必须用 3×3（色空间），这是"胶子生活在 SU(3)"的代数线索；
+--      det₃ ≤ |π₁||π₂||π₃|（Hadamard，单位旋量时 ≤ 1）⟹ 三扭量
+--      体积给出的是结构判据（秩 ⟺ 质量），√3·M₀ 格点谱仍由
+--      方向锚定相加（MC6'）负责——两者是互补而非竞争。
 
 end ProjectionPhysics.QFTFlow
 

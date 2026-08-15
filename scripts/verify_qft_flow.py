@@ -59,6 +59,8 @@ def _py(v):
         return {k: _py(x) for k, x in v.items()}
     if isinstance(v, (list, tuple)):
         return [_py(x) for x in v]
+    if isinstance(v, np.ndarray):
+        return [_py(x) for x in v.tolist()]
     return v
 
 
@@ -234,6 +236,119 @@ def main():
         "note": "QFT9：QFT1–2（激发=锚定偏离）× QFT8（秩判据）组合——"
                 "激发与纠缠同源（解释层统一，非新物理预言）"}
 
+    # ---- N9 ★ 三扭量 det₃ 恒等（GQ2：det₃(Σπᵢ⊗π̄ᵢ) = |det₃[π₁π₂π₃]|²）----
+    max_err_tri, max_hadamard_ratio = 0.0, 0.0
+    for _ in range(200):
+        P = [rng.standard_normal(3) + 1j * rng.standard_normal(3) for _ in range(3)]
+        A = np.array(P, dtype=complex)            # 行 = 扭量
+        outer_sum = sum(np.outer(p, np.conj(p)) for p in P)   # 3×3 分量空间矩阵
+        max_err_tri = max(max_err_tri,
+                          abs(np.linalg.det(outer_sum) - abs(np.linalg.det(A)) ** 2))
+        # Hadamard：|det₃| ≤ |π₁||π₂||π₃|
+        norms = np.linalg.norm(A, axis=1)
+        max_hadamard_ratio = max(max_hadamard_ratio,
+                                 abs(np.linalg.det(A)) / (norms.prod() + 1e-300))
+    report["results"]["N9_triple_twistor_det"] = {
+        "max|det₃(P) − |det₃[π₁π₂π₃]|²|（200 随机三扭量）": round(float(max_err_tri), 14),
+        "Hadamard: max |det₃|/(|π₁||π₂||π₃|) ≤ 1": round(float(max_hadamard_ratio), 10) <= 1.0,
+        "note": "GQ2：三扭量外积和 det = |3 阶行列式|²（Cauchy-Binet/det(AA†)=|detA|²）"
+                "——胶球质量平方 = 三扭量体积形式；与电子 det₂ = |⟨π₁,π₂⟩|² 同构"}
+
+    # ---- N10 秩判据：独立 ⟹ 激发；退化 ⟹ 非激发（GQ3–GQ5）----
+    e1, e2, e3 = np.eye(3, dtype=complex)
+    P_ind = [e1, e2, e3]                            # 三扭量独立（张满）
+    A_ind = np.array(P_ind)
+    m2_ind = abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P_ind)))
+    P_dep = [e1, e2, e2]                            # 退化：两扭量相等
+    A_dep = np.array(P_dep)
+    m2_dep = abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P_dep)))
+    # 共面（π₃ = απ₁+βπ₂，线性相关但两两不平行）：det₃ = 0
+    alpha, beta = 1.3, -0.7
+    pi3_coplanar = alpha * e1 + beta * e2
+    P_cop = [e1, e2, pi3_coplanar]
+    m2_cop = abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P_cop)))
+    # 数值线性相关性检查（SVD 最小奇异值）
+    svd_min_ind = float(np.min(np.linalg.svd(A_ind, compute_uv=False)))
+    svd_min_dep = float(np.min(np.linalg.svd(A_dep, compute_uv=False)))
+    report["results"]["N10_rank_criterion"] = {
+        "三扭量独立（单位基）⟹ m² = 1（激发）": abs(m2_ind - 1.0) < 1e-12,
+        "退化（π₃ = π₂）⟹ m² = 0（非激发）": m2_dep < 1e-12,
+        "共面（π₃ 线性相关）⟹ m² = 0（非激发）": m2_cop < 1e-12,
+        "SVD 最小奇异值（独立 1.0 / 退化 0）": [round(svd_min_ind, 6), round(svd_min_dep, 6)],
+        "note": "GQ3–GQ5：激发 ⟺ det₃ ≠ 0 ⟺ 三扭量张满（秩 3）；退化/共面 "
+                "⟹ 无质量——'激发 ⟺ 秩'判据的三体版（与电子秩 2 同构）"}
+
+    # ---- N11 统一秩判据表（GQ6：质量² = |det_N[π₁...π_N]|²）----
+    z = 2.0 + 3.0j                                   # N=1：1×1 动量
+    m1 = abs(z * np.conj(z))                         # det₁ = |π₁|²
+    det1_formula = abs(z) ** 2
+    a1, b1, a2, b2 = 1 + 1j, 2 - 1j, -1 + 0.5j, 0.5 + 2j   # N=2：双扭量
+    symp2 = a1 * b2 - a2 * b1
+    det2_formula = abs(symp2) ** 2
+    P2 = [np.array([a1, b1]), np.array([a2, b2])]
+    m2_formula = abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P2)))
+    A3 = np.array([e1, e2, e3])                      # N=3：三扭量
+    det3_formula = abs(np.linalg.det(A3)) ** 2
+    P3 = [e1, e2, e3]
+    m3_formula = abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P3)))
+    report["results"]["N11_rank_unified"] = {
+        "N=1 光子: det₁ = |π₁|²": abs(m1 - det1_formula) < 1e-12,
+        "N=2 电子: det₂ = |⟨π₁,π₂⟩|²（= |det 2×2|²）": abs(m2_formula - det2_formula) < 1e-12,
+        "N=3 胶球: det₃ = |det₃[π₁π₂π₃]|²": abs(m3_formula - det3_formula) < 1e-12,
+        "统一链": "质量² = |det_N[π₁...π_N]|²，N = 扭量数（秩 = N）",
+        "note": "GQ6：一条链——质量 ⟺ 激发 ⟺ 扭量独立（秩 = 扭量数）；"
+                "电子（2 维辛体积）与胶球（3 维体积形式）是同一判据的两个实例"}
+
+    # ---- N12 W 型三体纠缠：两两配对都有纠缠贡献 ----
+    # 3 维扭量的每对 Plücker 坐标（叉积）非零 ⟺ 该对不平行（局部纠缠）。
+    # 随机独立三扭量：三对叉积全非零 = W 型（两两纠缠）；共面三扭量：
+    # 两两可纠缠但体积为零 = 局部纠缠 ≠ 全域激发（需秩 3）。
+    n_w = 0
+    for _ in range(200):
+        P = [rng.standard_normal(3) + 1j * rng.standard_normal(3) for _ in range(3)]
+        cross = [np.linalg.norm(np.cross(P[i], P[j])) for i, j in ((0, 1), (0, 2), (1, 2))]
+        if all(c > 1e-8 for c in cross):
+            n_w += 1
+    cross_cop = [np.linalg.norm(np.cross(P_cop[i], P_cop[j]))
+                 for i, j in ((0, 1), (0, 2), (1, 2))]
+    report["results"]["N12_w_type_triplet"] = {
+        "随机独立三扭量：三对 Plücker 全非零（W 型，200/200）": n_w == 200,
+        "共面三扭量：两两不平行但 det₃ = 0（局部纠缠 ≠ 激发）":
+            all(c > 1e-8 for c in cross_cop) and m2_cop < 1e-12,
+        "note": "三扭量 = W 型三体纠缠（任意两对都有纠缠贡献）——与 GHZ "
+                "（QFT7，只有整体纠缠）互补；但只有三扭量张满（秩 3）才是"
+                "激发：局部两两纠缠 ≠ 全域质量（GQ4b）"}
+
+    # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
+    fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
+    # 左：det₃(P) vs |det₃[π₁π₂π₃]|² 散点（恒等，y = x）
+    dets_P, dets_A = [], []
+    for _ in range(200):
+        P = [rng.standard_normal(3) + 1j * rng.standard_normal(3) for _ in range(3)]
+        A = np.array(P, dtype=complex)
+        dets_P.append(abs(np.linalg.det(sum(np.outer(p, np.conj(p)) for p in P))))
+        dets_A.append(abs(np.linalg.det(A)) ** 2)
+    ax2[0].scatter(dets_A, dets_P, s=14, alpha=0.6)
+    lim = [0, max(max(dets_P), max(dets_A)) * 1.05]
+    ax2[0].plot(lim, lim, "r--", lw=1.2, label="y = x（恒等）")
+    ax2[0].set_xlabel("|det₃[π₁π₂π₃]|²")
+    ax2[0].set_ylabel("det₃(Σπᵢ⊗π̄ᵢ)")
+    ax2[0].set_title("GQ2 三扭量 det 恒等（Cauchy-Binet）")
+    ax2[0].legend(fontsize=8)
+    ax2[0].grid(alpha=0.3)
+    # 右：退化→独立扫描：π₃ = (1−t)·e₂ + t·e₃，t ∈ [0,1]
+    ts = np.linspace(0, 1, 101)
+    m2_scan = [abs(np.linalg.det(np.array([e1, e2, (1 - t) * e2 + t * e3]))) ** 2 for t in ts]
+    ax2[1].plot(ts, m2_scan, "b-", lw=1.6)
+    ax2[1].axhline(0, color="k", ls=":", lw=0.8)
+    ax2[1].set_xlabel("t（π₃ 从退化 e₂ 渐变到独立 e₃）")
+    ax2[1].set_ylabel("m² = det₃(P)")
+    ax2[1].set_title("GQ5 秩判据：第三方向独立 ⟹ 激发")
+    ax2[1].grid(alpha=0.3)
+    fig2.tight_layout()
+    fig2.savefig(os.path.join(OUT, "fig_triple_rank.png"), dpi=130)
+    plt.close(fig2)
+
     # report.md
     with open(os.path.join(OUT, "report.json"), "w", encoding="utf-8") as f:
         json.dump(_py(report), f, ensure_ascii=False, indent=2)
@@ -247,7 +362,7 @@ def main():
     with open(os.path.join(OUT, "report.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(md))
     print(f"report written to {OUT}")
-    print(json.dumps(report["results"], ensure_ascii=False, indent=1)[:2000])
+    print(json.dumps(_py(report["results"]), ensure_ascii=False, indent=1)[:2000])
 
 
 if __name__ == "__main__":

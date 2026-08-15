@@ -226,6 +226,23 @@ def main():
         n7 = res["N7_three_direction_basis"]
         check("QFT6: (σ₁+σ₂+σ₃)² = 3I（机器精度）", n7["max|(σ₁+σ₂+σ₃)² − 3I|"] == 0.0)
         check("QFT6: 三方向可逆（det = −3）", abs(n7["det(σ₁+σ₂+σ₃)"] + 3.0) < 1e-6)
+        n9 = res["N9_triple_twistor_det"]
+        check("GQ2: 三扭量 det₃ = |det₃[π₁π₂π₃]|²（机器精度）",
+              n9["max|det₃(P) − |det₃[π₁π₂π₃]|²|（200 随机三扭量）"] < 1e-10)
+        check("GQ2: Hadamard |det₃| ≤ |π₁||π₂||π₃|", n9["Hadamard: max |det₃|/(|π₁||π₂||π₃|) ≤ 1"])
+        n10 = res["N10_rank_criterion"]
+        check("GQ3–5: 独立 ⟹ m² = 1 / 退化 ⟹ m² = 0 / 共面 ⟹ m² = 0",
+              n10["三扭量独立（单位基）⟹ m² = 1（激发）"] and
+              n10["退化（π₃ = π₂）⟹ m² = 0（非激发）"] and
+              n10["共面（π₃ 线性相关）⟹ m² = 0（非激发）"])
+        n11 = res["N11_rank_unified"]
+        check("GQ6: 统一链 N=1,2,3（质量² = |det_N|²）",
+              n11["N=1 光子: det₁ = |π₁|²"] and n11["N=2 电子: det₂ = |⟨π₁,π₂⟩|²（= |det 2×2|²）"] and
+              n11["N=3 胶球: det₃ = |det₃[π₁π₂π₃]|²"])
+        n12 = res["N12_w_type_triplet"]
+        check("GQ4b: W 型两两纠缠 ≠ 全域激发（共面 det₃ = 0）",
+              n12["随机独立三扭量：三对 Plücker 全非零（W 型，200/200）"] and
+              n12["共面三扭量：两两不平行但 det₃ = 0（局部纠缠 ≠ 激发）"])
 
     # 4. 产物完整性
     artifacts = {
@@ -236,6 +253,7 @@ def main():
         "artifacts/maxwell/photon_infall.gif": 500_000,
         "artifacts/entanglement/helix_3d.png": 30_000,
         "artifacts/qftflow/fig_antiphase_global.png": 30_000,
+        "artifacts/qftflow/fig_triple_rank.png": 30_000,
         "artifacts/blackhole/fig_flow_structures.png": 30_000,
     }
     for rel, mb in artifacts.items():
