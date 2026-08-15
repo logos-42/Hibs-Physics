@@ -100,3 +100,4 @@ import ProjectionPhysics.Explorations.MaxwellFlow
 import ProjectionPhysics.Explorations.MaxwellSpace
 import ProjectionPhysics.Explorations.SpaceField3D
 import ProjectionPhysics.Explorations.SpinFromSpace
+import ProjectionPhysics.Explorations.DoubleSlit

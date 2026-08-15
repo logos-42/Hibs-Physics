@@ -40,4 +40,5 @@
 - [theory-spacefield3d.md](./theory-spacefield3d.md) — 空间场 3D 向量微积分（三场接缝）：div(curl C)=0 自动（B 无散是 3D 恒等）/法拉第 3D/梯度无旋；磁场=自旋的代数位置
 - [theory-spin-from-space.md](./theory-spin-from-space.md) — 自旋 = 空间三方向结构的涌现（行动探索）：i=σ₁σ₂σ₃ 体积元/S²=¾(s=½)/SU(2) 双重覆盖 2π 变号；狄拉克之上第一性
 - [theory-fractal-cosmic-web.md](./theory-fractal-cosmic-web.md) — 分形宇宙 × 流动空间（探索）：KBC 空洞 = 分形骨架必然空白 + Hubble 悖论整合（δ* = −0.25 落观测范围）
+- [theory-double-slit.md](./theory-double-slit.md) — 双缝 = 空间螺旋谐波的干涉（波粒二象性重释）：螺旋投影=波纹/叠加恒等/观察=相干丧失⟹两道条纹
 - [log.md](./log.md)

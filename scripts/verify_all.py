@@ -73,6 +73,7 @@ def main():
                        "scripts/verify_spacefield3d.py",
                        "scripts/verify_spin_from_space.py",
                        "scripts/verify_fractal_flow.py",
+                       "scripts/verify_double_slit.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -121,6 +122,15 @@ def main():
               res["V4_hubble_tension"]["δ* 在观测范围"])
         check("FR: 空洞内 H 提升（tension 量级）",
               0.05 < res["V5_hubble_boost"]["空洞提升 ΔH/H"] < 0.15)
+
+    ds = load_report("artifacts/doubleslit/report.json")
+    if ds:
+        res = ds["results"]
+        check("DS: 螺旋投影圆误差 0", res["N1_helix_projection"]["max|x²+y² − R²|（xy 投影是圆）"] == 0.0)
+        check("DS: 双缝产生干涉条纹",
+              res["N2_double_slit"]["解析条纹数（I > 0.5）"] > 50)
+        check("DS: 观察后 = 2 道条纹",
+              res["N3_observation"]["观察后亮带数"] == 2)
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:
