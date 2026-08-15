@@ -59,3 +59,6 @@ session-20260814-glueball,local,ProjectionPhysics,artifact,mass_spectrum.png,../
 session-20260814-glueball,local,ProjectionPhysics,artifact,report.json,../artifacts/glueball/report.json,generated,docs/wiki/theory-glueball-coupling.md,三方向耦合验证报告
 session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics.pdf,../paper/projection-physics.pdf,generated,README.md,论文英文版§8探索汇总
 session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,README.md,论文中文版§8探索汇总
+session-20260815-twistor,local,ProjectionPhysics,artifact,helicity_sphere.png,../artifacts/twistor/helicity_sphere.png,generated,docs/wiki/theory-twistor.md,CP¹螺旋度+光锥动量
+session-20260815-twistor,local,ProjectionPhysics,artifact,charge_normal.png,../artifacts/twistor/charge_normal.png,generated,docs/wiki/theory-twistor.md,电性=法向量朝向
+session-20260815-twistor,local,ProjectionPhysics,artifact,report.json,../artifacts/twistor/report.json,generated,docs/wiki/theory-twistor.md,扭量兼容性验证报告

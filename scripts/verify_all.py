@@ -75,6 +75,7 @@ def main():
                        "scripts/verify_fractal_flow.py",
                        "scripts/verify_double_slit.py",
                        "scripts/verify_glueball_coupling.py",
+                       "scripts/verify_twistor.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -149,6 +150,20 @@ def main():
               fit["2++"][1] <= fit["2++"][0] <= fit["2++"][2], fit["2++"])
         check("GB: 0-+ 模型落入格点范围",
               fit["0-+"][1] <= fit["0-+"][0] <= fit["0-+"][2], fit["0-+"])
+
+    tw = load_report("artifacts/twistor/report.json")
+    if tw:
+        res = tw["results"]
+        check("TW: 扭量动量无质量恒等（机器精度）",
+              res["N1_momentum_massless"]["max|det(π⊗π̄)|（200 随机扭量）"] < 1e-10)
+        n4 = res["N4_charge_vs_normal"]
+        check("TW: 电性 = 法向量（σ₃ 本征 ±1）",
+              n4["σ₃·e+ = +1·e+（电子，法向量正向）"] and
+              n4["σ₃·e− = −1·e−（正电子，法向量反向）"])
+        check("TW: 电荷共轭反交换 + 翻转法向量",
+              n4["C·σ₃ + σ₃·C = 0（反交换）"] and n4["C 翻转法向量方向（e+ ↔ e−）"])
+        check("TW: 胶子色八重态全部无质量",
+              res["N5_gluon_twistor"]["全部无质量"])
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:
