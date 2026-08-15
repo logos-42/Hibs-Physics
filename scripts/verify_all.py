@@ -76,6 +76,7 @@ def main():
                        "scripts/verify_double_slit.py",
                        "scripts/verify_glueball_coupling.py",
                        "scripts/verify_twistor.py",
+                       "scripts/verify_qft_flow.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -199,6 +200,33 @@ def main():
               abs(chsh["quantum"] - 2.8284) < 0.05, chsh["quantum"])
         check("EH: LHV 界 = 2", chsh["lhv_bound"] == 2.0)
 
+    qf = load_report("artifacts/qftflow/report.json")
+    if qf:
+        res = qf["results"]
+        n1 = res["N1_excitation_flow"]
+        check("QFT1: 非激发 dτ² = 0（随流）", n1["非激发 = 0（机器精度）"] and
+              abs(n1["非激发 dτ²（dx = c·dt，随流）"]) < 1e-12)
+        check("QFT2: 激发 dτ² > 0（偏离流动）", n1["激发 > 0"] and n1["激发 dτ²（dx = 0.6c·dt，偏离）"] > 0)
+        n2 = res["N2_excitation_mass"]
+        check("QFT3: 激发质量 = 锚定范数（机器精度）", n2["max|m² − (|ψ₁|²+|ψ₀|²)|（200 随机旋量）"] < 1e-10)
+        n4 = res["N4_global_antiphase"]
+        check("QFT5: 反相恒等全域（机器精度）", n4["反相恒等 max|E − (−cos²φ)|（所有距离/位置）"] < 1e-10)
+        check("QFT5: E(Δ=π) = −1 精确", n4["E(Δ=π) 精确反关联"] == 1.0)
+        check("QFT5: 关联形状与距离无关（全域无衰减）", n4["形状与距离无关（max≈0, min≈−1, mean≈−½）"])
+        n5 = res["N5_ghz_reduced"]
+        check("QFT7: GHZ 单体约化混合（Tr ρ² = ½ < 1）",
+              n5["ρ² ≠ ρ（混合态）"] and abs(n5["Tr(ρ_A²)"] - 0.5) < 1e-6 and n5["纯度 < 1（三体纠缠判据）"])
+        n6 = res["N6_rank_entanglement"]
+        check("QFT8: 单扭量秩 1（det = 0 机器精度）", n6["单扭量 max|det|（秩 1，非激发）"] < 1e-10)
+        check("QFT8: 双扭量 det = |⟨π₁,π₂⟩|²（机器精度）",
+              n6["双扭量 max|det − |⟨π₁,π₂⟩|²|（秩 2，激发）"] < 1e-10)
+        check("QFT8: 平行 ⟹ m² = 0 / 正交 ⟹ m² 最大",
+              n6["平行（α=0）⟹ m² = 0（无质量/可分）"] and
+              n6["正交（α=π/2）⟹ m² = 最大（有质量/纠缠）"])
+        n7 = res["N7_three_direction_basis"]
+        check("QFT6: (σ₁+σ₂+σ₃)² = 3I（机器精度）", n7["max|(σ₁+σ₂+σ₃)² − 3I|"] == 0.0)
+        check("QFT6: 三方向可逆（det = −3）", abs(n7["det(σ₁+σ₂+σ₃)"] + 3.0) < 1e-6)
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -207,6 +235,7 @@ def main():
         "artifacts/maxwell/fig_blackhole_flow.png": 30_000,
         "artifacts/maxwell/photon_infall.gif": 500_000,
         "artifacts/entanglement/helix_3d.png": 30_000,
+        "artifacts/qftflow/fig_antiphase_global.png": 30_000,
         "artifacts/blackhole/fig_flow_structures.png": 30_000,
     }
     for rel, mb in artifacts.items():

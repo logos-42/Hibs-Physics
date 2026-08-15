@@ -103,3 +103,4 @@ import ProjectionPhysics.Explorations.SpinFromSpace
 import ProjectionPhysics.Explorations.DoubleSlit
 import ProjectionPhysics.Explorations.GlueballCoupling
 import ProjectionPhysics.Explorations.Twistor
+import ProjectionPhysics.Explorations.QFTFlow

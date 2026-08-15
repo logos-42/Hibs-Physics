@@ -43,4 +43,5 @@
 - [theory-double-slit.md](./theory-double-slit.md) — 双缝 = 空间螺旋谐波的干涉（波粒二象性重释）：螺旋投影=波纹/叠加恒等/观察=相干丧失⟹两道条纹
 - [theory-glueball-coupling.md](./theory-glueball-coupling.md) — 胶球三方向耦合 + 质量化梯度：√N·M₀ 序列 vs 格点胶球谱（0++/2++/0-+ 量级吻合）
 - [theory-twistor.md](./theory-twistor.md) — 彭罗斯扭量 × 流动空间：光子/胶子单扭量 ✓（无质量恒等 det=0）；电子=经典障碍（双扭量）；电性=法向量朝向（TW4）
+- [theory-qft-flow.md](./theory-qft-flow.md) — QFT × 流动空间（探索）：激发态=锚定偏离空间流动；全域纠缠=空间场相干（反相无距离衰减）；质量⟺激发⟺秩2纠缠统一
 - [log.md](./log.md)
