@@ -72,6 +72,7 @@ def main():
         for script in ["scripts/verify_maxwell_space.py",
                        "scripts/verify_spacefield3d.py",
                        "scripts/verify_spin_from_space.py",
+                       "scripts/verify_fractal_flow.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -110,6 +111,16 @@ def main():
         check("SFS: 2π 复原 / 4π 还原",
               res["double_cover"]["e^{2iπσ₁} = +I（旋转 2π 复原）"] and
               res["double_cover"]["旋量旋转 π 变号（费米子 2π 不还原，4π 还原）"])
+
+    fr = load_report("artifacts/fractal/report.json")
+    if fr:
+        res = fr["results"]
+        check("FR: 谱域散度恒等 ∇²Φ = δ 精确",
+              res["V2_flow_consistency"]["max|∇·C + δ|（谱域，精确）"] == 0.0)
+        check("FR: δ* 落在 KBC 观测范围",
+              res["V4_hubble_tension"]["δ* 在观测范围"])
+        check("FR: 空洞内 H 提升（tension 量级）",
+              0.05 < res["V5_hubble_boost"]["空洞提升 ΔH/H"] < 0.15)
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:

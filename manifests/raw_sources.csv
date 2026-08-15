@@ -47,3 +47,7 @@ session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.pd
 session-20260814-spinspace,local,ProjectionPhysics,artifact,double_cover.png,../artifacts/spinspace/double_cover.png,generated,docs/wiki/theory-spin-from-space.md,SU(2)双重覆盖:旋转2π变号
 session-20260814-spinspace,local,ProjectionPhysics,artifact,three_directions.png,../artifacts/spinspace/three_directions.png,generated,docs/wiki/theory-spin-from-space.md,三方向⟹σ
 session-20260814-spinspace,local,ProjectionPhysics,artifact,report.json,../artifacts/spinspace/report.json,generated,docs/wiki/theory-spin-from-space.md,自旋=三方向涌现验证报告
+session-20260814-fractal,local,ProjectionPhysics,artifact,fractal_field.png,../artifacts/fractal/fractal_field.png,generated,docs/wiki/theory-fractal-cosmic-web.md,分形密度场截面(骨架+空洞)
+session-20260814-fractal,local,ProjectionPhysics,artifact,flow_void.png,../artifacts/fractal/flow_void.png,generated,docs/wiki/theory-fractal-cosmic-web.md,流动场+最大空洞(KBC类比)
+session-20260814-fractal,local,ProjectionPhysics,artifact,hubble_tension.png,../artifacts/fractal/hubble_tension.png,generated,docs/wiki/theory-fractal-cosmic-web.md,Hubble悖论整合(δ*-H关系)
+session-20260814-fractal,local,ProjectionPhysics,artifact,report.json,../artifacts/fractal/report.json,generated,docs/wiki/theory-fractal-cosmic-web.md,分形流动验证报告
