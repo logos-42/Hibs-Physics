@@ -8,8 +8,11 @@ projection π and its kernel ker π, not objects we are free to define.
 
 - **中文版**: [README.zh-CN.md](README.zh-CN.md) · 数学草案细节: [SPEC.md](SPEC.md)
 - **Paper**: [paper/projection-physics.tex](paper/projection-physics.tex) —
-  single-column REVTeX preprint (PRD style), 20 pp; Chinese version:
-  [projection-physics-zh.tex](paper/projection-physics-zh.tex)
+  single-column REVTeX preprint (PRD style), 20+ pp; Chinese version:
+  [projection-physics-zh.tex](paper/projection-physics-zh.tex); both
+  compiled to PDF via tectonic. §8 covers four recent explorations
+  (spin emergence, double-slit as space-helix interference, fractal cosmos
+  with the KBC void, glueball three-direction coupling).
 - **Repository**: [github.com/logos-42/Hibs-Physics](https://github.com/logos-42/Hibs-Physics)
 - **Source material**: HIBS paper (Liu & Xu) + a six-round derivation dialogue
   with Gemini (archived at `../HIBS/gemini/` in the sibling repository).
@@ -224,9 +227,11 @@ Weyl decomposition is the open question `CliffordEmergence`.
 ## 6. Build & verify
 
 ```bash
-elan override set v4.28.0    # pinned in lean-toolchain
-lake build                   # 34 jobs, no errors, no sorry
-.lake/build/bin/projphys     # prints the theorem inventory
+lake build                  # ~4140 jobs, no errors, no sorry/admit
+make test                   # canonical gate: lake build + 8 verify scripts
+                            #   + regression assertions (all reports in artifacts/)
+make fast                   # gate without re-running the numeric scripts
+python3 scripts/wiki_check.py   # wiki integrity (links + frontmatter)
 ```
 
 Layout:
@@ -242,7 +247,20 @@ ProjectionPhysics/
 │   └── projection-physics.bib    # references (18 real entries)
 ├── ProjectionPhysics.lean   # root module
 ├── Main.lean                # executable
-└── ProjectionPhysics/                    # 2026-08-14 减法重组：主线 8 + 探索 6 + 归档 24
+├── Makefile                 # canonical test command (make test → verify_all.py)
+├── scripts/                 # verification & visualization (8 verify_*.py in gate)
+│   ├── verify_all.py            # unified gate (lake build + zero-sorry scan + scripts + assertions)
+│   ├── verify_maxwell_space.py  # electromagnetic = kinematics of C (MS1–MS5)
+│   ├── verify_spacefield3d.py   # 3D vector calculus: div(curl C)=0 automatic (SF1–SF5)
+│   ├── verify_spin_from_space.py# spin = emergence of three-direction structure (SFS1–SFS5)
+│   ├── verify_fractal_flow.py   # fractal cosmos: KBC void + Hubble tension (δ* = −0.25)
+│   ├── verify_double_slit.py    # double-slit = space-helix harmonics (DS1–DS4)
+│   ├── verify_glueball_coupling.py # glueball 3-dir coupling + massification (GC1–GC4)
+│   ├── verify_maxwell_flow.py   # Maxwell × flow postulates (MF1–MF6, P1–P4)
+│   ├── verify_entanglement_helix.py # CHSH local bound (EH1–EH4)
+│   ├── verify_blackhole_wormhole.py # Gordon black hole / wormhole (BH1–WH1)
+│   └── wiki_check.py            # wiki integrity
+└── ProjectionPhysics/                    # 主线 + 探索（见 README 正文）
     ├── SpaceLightSpeed.lean     # ★ main line: vector light speed — c = space's own
     │                            #   equivalent velocity; photon=comoving⟹m=0; electron=spin⟹m>0 (SLS1–SLS6)
     ├── SpaceMetric.lean         # ★ main line: space-flow metric — dτ²=dt²−dx²/c²; photon
@@ -258,13 +276,21 @@ ProjectionPhysics/
     │                            #   mass=chiral coupling (DB1'–DB6')
     ├── MinimalCoreMathlib.lean  # main line (mathlib): mass=anchoring — m²=|ψ₁|²+|ψ₀|²;
     │                            #   nonzero spinor ⟹ m>0 (MC1'–MC6')
-    ├── Explorations/            # frozen (2026-08-14): glueball/color structure — no new theorems
-    │   ├── SpinStatistics.lean      # spin-statistics hard constraint (SS1–SS8)
-    │   ├── CliffordSix.lean         # Cℓ(6) 8-dim representation (CS1–CS3)
-    │   ├── ColorOctetMathlib.lean   # 3⊗3=8⊕1 trace decomposition (CM1–CM3)
-    │   ├── SphericalHarmonics.lean  # glueball force = spherical harmonics (SH1–SH5)
-    │   ├── SU3Bridge.lean           # SU(3) cyclic subgroup
-    │   └── GlueballBridge.lean      # SU(3) color action, glueball mass
+    ├── Explorations/            # 探索线（2026-08-14 后活跃）：新方向结果
+    │   ├── EntanglementHelix.lean    # CHSH local bound (EH1–EH4)
+    │   ├── BlackHoleWormhole.lean    # Gordon black hole / wormhole (BH1–WH1)
+    │   ├── MaxwellFlow.lean          # Maxwell × flow postulates (MF1–MF6, PH1–PH2)
+    │   ├── MaxwellSpace.lean         # EM = kinematics of C (MS1–MS5)
+    │   ├── SpaceField3D.lean         # 3D vector calculus (SF1–SF5)
+    │   ├── SpinFromSpace.lean        # spin = 3-direction emergence (SFS1–SFS5)
+    │   ├── DoubleSlit.lean           # double-slit = helix harmonics (DS1–DS4)
+    │   ├── GlueballCoupling.lean     # glueball 3-dir coupling (GC1–GC4)
+    │   ├── SpinStatistics.lean       # spin-statistics hard constraint (SS1–SS8)
+    │   ├── CliffordSix.lean          # Cℓ(6) 8-dim representation (CS1–CS3)
+    │   ├── ColorOctetMathlib.lean    # 3⊗3=8⊕1 trace decomposition (CM1–CM3)
+    │   ├── SphericalHarmonics.lean   # glueball force = spherical harmonics (SH1–SH5)
+    │   ├── SU3Bridge.lean            # SU(3) cyclic subgroup
+    │   └── GlueballBridge.lean       # SU(3) color action, glueball mass
     └── Archive/                 # deprecated (pre-08-06 hidden-number line + core dual-track):
                                 # Definitions/Kernel/Completeness/Mass/NullTheorem/Bridges/
                                 # Algebra/Clifford/LinearAlgebra/Differential/SymmetryBreaking/
@@ -280,10 +306,15 @@ ProjectionPhysics/
    Aut(ker π) — the missing half of mass (D2).
 2. **Metric signature (D4)**: the weakest link; no honest derivation of the
    Minkowski minus sign exists yet.
-3. **Coefficient-ring upgrade** (ℤ[i] → ℚ[i]/ℝ): unlocks the difference quotient
-   (D7'), 3D rotations (quaternions as comparison object), and continuous physics.
-4. **Multi-projection families**: Fin n index sets, projection rank, connecting
-   to rank-nullity (L5/L6).
+3. **The "second input"** (deepest open problem): the origin of ℏ, e, M₀,
+   and the electron's choice of the 2-dim representation — all remain
+   inputs, not consequences (see paper §9).
+4. **Continuum 3D calculus**: the discrete 3D curl/divergence identities
+   (SF1–SF5) are formalized; the continuum version and continuity remain
+   open.
+5. **Falsifiable exits from reinterpretation**: inhomogeneous-flow Lorentz
+   violation; lattice checks of the glueball √N·M₀ higher channels
+   (n = 4, 5, 6).
 
 ---
 

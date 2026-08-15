@@ -57,3 +57,5 @@ session-20260814-doubleslit,local,ProjectionPhysics,artifact,report.json,../arti
 session-20260814-glueball,local,ProjectionPhysics,artifact,three_field_coupling.png,../artifacts/glueball/three_field_coupling.png,generated,docs/wiki/theory-glueball-coupling.md,三场耦合演化+g扫描
 session-20260814-glueball,local,ProjectionPhysics,artifact,mass_spectrum.png,../artifacts/glueball/mass_spectrum.png,generated,docs/wiki/theory-glueball-coupling.md,√N·M₀ vs 格点胶球谱
 session-20260814-glueball,local,ProjectionPhysics,artifact,report.json,../artifacts/glueball/report.json,generated,docs/wiki/theory-glueball-coupling.md,三方向耦合验证报告
+session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics.pdf,../paper/projection-physics.pdf,generated,README.md,论文英文版§8探索汇总
+session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,README.md,论文中文版§8探索汇总

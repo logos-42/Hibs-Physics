@@ -49,7 +49,14 @@ lattice QCD ($0^{++}$ at $\sqrt3\,M_0$ with $M_0\approx1$ GeV, $0.0\%$
 deviation), and the mode counts $N=3,6,7$ align with the degeneracies
 $d(n)=\frac12(n+1)(n+2)$ of the isotropic three-dimensional harmonic
 oscillator.  All central theorems are formalized in the Lean 4 theorem prover
-(no axioms, no admitted proofs).  We state the epistemic status honestly:
+(no axioms, no admitted proofs).  Four further explorations are
+formalized and checked against data: spin as the emergence of the
+three-direction structure (SFS1--SFS5), double-slit interference as
+interference of space-helix harmonics (DS1--DS4), the fractal cosmos
+with the KBC void resolving the Hubble tension ($\delta^*=-0.249$
+inside the observed range), and glueball three-direction coupling with
+a massification gradient; the glueball $\sqrt{N}\,M_0$ sequence with
+$N=3,6,7$ falls inside the lattice ranges for all three channels.  We state the epistemic status honestly:
 at the present stage the framework is a self-consistent \emph{conceptual
 reconstruction} --- mathematically and numerically indistinguishable from
 standard physics wherever it overlaps --- and we catalogue the falsifiable
@@ -554,6 +561,109 @@ Module (file) & Theorems \\
 \end{ruledtabular}
 \end{table}
 
+
+\section{Recent explorations: spin, double-slit, fractal cosmos, and glueball dynamics}\label{sec:explorations}
+
+Four further checks of the framework were carried out after the first
+version of this paper; all are formalized in Lean (zero \texttt{sorry})
+and validated numerically (artifacts and scripts in the repository).
+
+\subsection{Spin as the emergence of the three-direction structure}
+
+Within the three-direction postulate (P4), the spin structure is not an
+input: the three directions generate a Clifford algebra, and the imaginary
+unit emerges as the oriented volume element
+\begin{equation}
+i = \sigma_1\sigma_2\sigma_3 , \qquad
+[\sigma_i,\sigma_j] = 2i\varepsilon_{ijk}\sigma_k , \qquad
+S^2 = \tfrac34\,\hbar^2 = s(s{+}1)\,\hbar^2 \quad (s=\tfrac12) .
+\end{equation}
+The value $s=\tfrac12$ is the Casimir value forced by the $2$-dimensional
+(irreducible) representation of $C\ell(3)$, and the sign flip under a
+$2\pi$ rotation (``fermionic'' behaviour) is the double-cover geometry of
+$\mathrm{SU}(2)$ over $\mathrm{SO}(3)$ --- not a quantum postulate.  This
+answers, within the framework, the question Dirac left open (where does the
+``complex intrinsic property'' come from? --- it is the orientation of the
+three directions) while honestly recording that the choice of the
+2-dimensional representation and the value of $\hbar$ remain inputs
+(``second input'' gap).
+
+\subsection{Double-slit interference as interference of space-helix harmonics}
+
+Photons are comoving with the flow (P2); if the flow carries a helical
+structure (circular motion in the plane plus translation along the normal,
+the two planar modes of P4), then the projection of the helix onto any
+plane is a harmonic wave ($x=R\cos\omega t$; the $xy$ projection is exactly
+a circle, $x^2+y^2=R^2$, DS1).  Interference fringes are then the algebraic
+consequence of adding two harmonics,
+\begin{equation}
+\cos\alpha+\cos\beta=2\cos\!\tfrac{\alpha+\beta}{2}\,\cos\!\tfrac{\alpha-\beta}{2},
+\qquad I(\theta)=4I_0\cos^2\!\big(\tfrac{\pi d\sin\theta}{\lambda}\big),
+\end{equation}
+and observation (which-slit information) removes the interference cross
+term $2\cos\Delta\varphi$ in $|z_1+z_2|^2$ --- the ``compression of the
+space harmonics'' --- leaving two bands (DS4).  The mathematics is
+identical to standard wave optics and decoherence; the re-interpretation
+is conceptual (the wave is the projection of the space helix, the particle
+is the compressed-harmonic localisation).
+
+\subsection{Fractal cosmos, the KBC void, and the Hubble tension}
+
+If cosmic structure is fractal (observed galaxy distribution
+$D\simeq1.2{-}1.5$), then in the flow picture the expansion is the
+divergence of the flow, $H(\bm{x})=H_0\big(1-\delta(\bm{x})/3\big)$
+(top-hat linear theory), and voids are the necessary empty regions of the
+fractal ``skeleton'' (cytoskeleton analogy).  The local Hubble constant
+measured inside a deep void is elevated: reproducing the observed tension
+$\Delta H/H=(73.0-67.4)/67.4=8.3\%$ requires a void depth
+\begin{equation}
+\delta^* = -3\,\Delta H/H = -0.249 ,
+\end{equation}
+which falls inside the observed KBC void range
+$\delta\in[-0.3,-0.2]$; a simulated fractal flow field (96$^3$ FFT,
+Poisson-solved, spectral divergence identity exact to machine precision)
+produces a largest void with central $\delta=-0.27$ and an $9\%$ Hubble
+boost, consistent with the $5.6$ km/s/Mpc tension.  This reproduces the
+known KBC-void resolution of the tension (Keenan et al.\ 2013, Shanks et
+al.\ 2019) in the flow language; it is a consistency check, not a new
+prediction.
+
+\subsection{Glueball three-direction coupling and the massification gradient}
+
+Describing the glueball in the three-direction version of the modified
+Maxwell system ($V=g\,C_1C_2C_3$ three-linear coupling) yields a stable
+localised bound state whose mass grows monotonically with the coupling;
+the mass-squared decomposes into the three-direction gradient sum
+$m^2=\sum_i(\partial_x C_i)^2$ (equal gradients $\Rightarrow
+m\propto\sqrt3\,g$, the same $\sqrt3$ factor as the mode rule), and the
+``gradient that resists the space flow'' is the massification mechanism
+($\Phi=\tfrac12 v^2$, SG11).  With the mode rule of
+Sec.~\ref{sec:mass} ($N=3,6,7$), the updated lattice comparison
+(Morningstar--Peardon 1999; Chen et al.\ 2006) gives
+
+\begin{table}[h]
+\caption{Glueball masses from the $\sqrt{N}\,M_0$ rule with $M_0=0.93$\,GeV
+(central), updated with the three-direction coupling check.}
+\label{tab:glueball2}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+Channel & $N$ & $\sqrt{N}\,M_0$ (GeV) & Lattice (GeV) & Verdict \\
+\hline
+$0^{++}$ & 3 & 1.61 & $1.475{-}1.75$ & inside \\
+$2^{++}$ & 6 & 2.28 & $2.15{-}2.40$ & inside \\
+$0^{-+}$ & 7 & 2.46 & $2.30{-}2.60$ & inside \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+All three channels fall inside the lattice ranges (previously $2^{++}$ was
+$3{-}13\%$ low with $N=5$; the oscillator degeneracy $N=6=d(2)$ brings it
+inside).  The inverse-derived $M_0\simeq0.93\pm0.07$\,GeV is consistent
+across the three channels to better than $7\%$.  The $N$-sequence and the
+$M_0$ calibration remain fits (second-input gap), and the coupling model is
+a $1{+}1$-dimensional toy, so the verdict is: data consistent at the
+order-of-magnitude level; first-principles prediction not yet achieved.
+
 \section{Relation to existing physics}\label{sec:relation}
 
 \subsection{What is standard, restated}
@@ -653,9 +763,16 @@ The following gaps are structural, not cosmetic:
   QCD dynamics the repository does not have.
   \item \textbf{The $N$-sequence.}  $(3,6,7)$ is not yet derived; the
   $d(3)-d(1)$ subtraction for $0^{-+}$ is ad hoc.
-  \item \textbf{Dimensionality.}  The Maxwell-space derivation is a $1{+}1$
-  dimensional skeleton; the 3D curl/divergence calculus and continuity are
-  not formalized.
+  \item \textbf{Continuum 3D calculus.}  The 3D discrete curl/divergence
+  identities are now formalized (SF1--SF5: $\operatorname{div}\!\operatorname{curl}=0$
+  automatic, 3D Faraday automatic, gradient curl-free); the continuum
+  version and continuity remain open.
+  \item \textbf{The $N$-sequence.}  $(3,6,7)$ now has a dynamical candidate
+  (three-linear coupling, GC1--GC4) but is still not derived; the
+  $d(3)-d(1)$ subtraction for $0^{-+}$ remains ad hoc.
+  \item \textbf{Representation choice and $\hbar$.}  Why the electron uses the
+  2-dimensional representation, and the numerical value of $\hbar$, have no
+  origin in the framework (second-input gap).
   \item \textbf{Missing standard content.}  Charge quantization, the value
   of $e$, QCD confinement, the complete curvature tensor and the Einstein
   field equations, and Born's rule are all outside the framework.

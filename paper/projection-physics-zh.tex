@@ -470,6 +470,89 @@ CHSH：量子预言 & $2\sqrt2=2.8284$；Aspect 1982：$2.697$ \\
 \end{ruledtabular}
 \end{table}
 
+
+\section{近期探索：自旋、双缝、分形宇宙与胶球动力学}\label{sec:explorations}
+
+论文初版之后，框架又完成了四项检验，全部在 Lean 中形式化（零
+\texttt{sorry}）并通过数值验证（脚本与产物在仓库中）。
+
+\subsection{自旋 = 空间三方向结构的涌现}
+
+在三方向公设（P4）下，自旋结构不是输入：三个方向生成 Clifford 代数，
+虚数单位作为定向体积元涌现，
+\begin{equation}
+i = \sigma_1\sigma_2\sigma_3 , \qquad
+[\sigma_i,\sigma_j] = 2i\varepsilon_{ijk}\sigma_k , \qquad
+S^2 = \tfrac34\,\hbar^2 = s(s{+}1)\,\hbar^2 \quad (s=\tfrac12) .
+\end{equation}
+$s=\tfrac12$ 是 $C\ell(3)$ 的二维不可约表示强制的 Casimir 值；$2\pi$
+旋转变号（``费米子''行为）是 $\mathrm{SU}(2)$ 对 $\mathrm{SO}(3)$ 的
+双重覆盖几何——不是量子公设。这回答了狄拉克留下的问题（``复数内禀
+属性''从哪来？——三方向的定向），同时诚实记录：二维表示的选择与
+$\hbar$ 的数值仍是输入（``第二输入''缺口）。
+
+\subsection{双缝干涉 = 空间螺旋谐波的干涉}
+
+光子随空间流动（P2）；若流动携带螺旋结构（平面圆周运动 + 法向传播，
+即 P4 的两个平面模），则螺旋在任意平面的投影是谐波
+（$x=R\cos\omega t$；$xy$ 投影精确是圆，$x^2+y^2=R^2$，DS1）。
+干涉条纹是两列谐波叠加的代数必然，
+\begin{equation}
+\cos\alpha+\cos\beta=2\cos\!\tfrac{\alpha+\beta}{2}\,\cos\!\tfrac{\alpha-\beta}{2},
+\qquad I(\theta)=4I_0\cos^2\!\big(\tfrac{\pi d\sin\theta}{\lambda}\big),
+\end{equation}
+观察（哪条缝的信息）去掉 $|z_1+z_2|^2$ 中的干涉交叉项
+$2\cos\Delta\varphi$——即``空间谐波的压缩''——剩两道条纹（DS4）。
+数学与标准波动光学/退相干完全相同；重释是概念性的（波 = 螺旋投影，
+粒子 = 谐波压缩后的局域化）。
+
+\subsection{分形宇宙、KBC 空洞与哈勃常数悖论}
+
+若宇宙结构是分形的（观测：星系分布 $D\simeq1.2{-}1.5$），则流动图像里
+膨胀是流动的散度，$H(\bm{x})=H_0\big(1-\delta(\bm{x})/3\big)$（top-hat
+线性理论），空洞是分形``骨架''的必然空白（细胞骨架类比）。深空洞内
+测到的局域哈勃常数升高：复现观测张力
+$\Delta H/H=(73.0-67.4)/67.4=8.3\%$ 需要空洞深度
+\begin{equation}
+\delta^* = -3\,\Delta H/H = -0.249 ,
+\end{equation}
+落在 KBC 空洞观测范围 $\delta\in[-0.3,-0.2]$ 内；模拟的分形流动场
+（96$^3$ FFT，泊松求解，谱域散度恒等精确到机器精度）给出最大空洞
+中心 $\delta=-0.27$、$9\%$ 哈勃提升，与 5.6 km/s/Mpc 的张力一致。
+这是已知 KBC 空洞解释（Keenan et al.\ 2013, Shanks et al.\ 2019）
+在流动语言里的复述——一致性检验，不是新预言。
+
+\subsection{胶球三方向耦合与质量化梯度}
+
+用改造麦克斯韦系统的三方向版（三线耦合 $V=g\,C_1C_2C_3$）描述胶球，
+得到稳定局域束缚态，质量随耦合单调增大；质量平方分解为三方向梯度
+平方和 $m^2=\sum_i(\partial_x C_i)^2$（等幅梯度 $\Rightarrow m\propto
+\sqrt3\,g$，与模式规则的 $\sqrt3$ 因子同源），``抵御空间流动的梯度''
+即质量化机制（$\Phi=\tfrac12 v^2$，SG11）。按第 \ref{sec:mass} 节的
+模式规则（$N=3,6,7$），更新的格点对比（Morningstar--Peardon 1999；
+Chen et al.\ 2006）：
+
+\begin{table}[h]
+\caption{$\sqrt{N}\,M_0$ 规则的胶球质量（$M_0=0.93$\,GeV 中值），
+三方向耦合检验更新版。}
+\label{tab:glueball2}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+道 & $N$ & $\sqrt{N}\,M_0$ (GeV) & 格点 (GeV) & 判定 \\
+\hline
+$0^{++}$ & 3 & 1.61 & $1.475{-}1.75$ & 范围内 \\
+$2^{++}$ & 6 & 2.28 & $2.15{-}2.40$ & 范围内 \\
+$0^{-+}$ & 7 & 2.46 & $2.30{-}2.60$ & 范围内 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+三个道全部落入格点区间（此前 $N=5$ 时 $2^{++}$ 偏低 $3{-}13\%$；
+谐振子简并度 $N=6=d(2)$ 使其落入）。反推 $M_0\simeq0.93\pm0.07$\,GeV
+在三个道间一致（离散 $<7\%$）。$N$ 序列与 $M_0$ 标定仍是拟合（第二
+输入缺口），耦合模型是 $1{+}1$ 维玩具——判定：数据在量级上一致；
+第一性预言尚未达成。
+
 \section{与现有物理的关系}\label{sec:relation}
 
 \subsection{标准内容的重新表述}
