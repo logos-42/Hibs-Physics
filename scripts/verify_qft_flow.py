@@ -18,6 +18,7 @@ leo（2026-08-15）假设：
 """
 import json
 import os
+import itertools
 from datetime import date
 
 import numpy as np
@@ -427,6 +428,56 @@ def main():
         "note": "完整 Cauchy-Binet（数值）：det(AA†) = 所有 n×n 子式平方和——"
                 "m > n 多扭量叠加的质量² = 全纠缠结构（所有 n 元子族的子纠缠"
                 "体积平方和）；m = n 退化为单一子式 |det A|²（GQN2 Lean 已证）"}
+
+    # ---- N19–N20：一般 Finset 版 Cauchy-Binet（GQS1 任意 m 完整 + GQS3 展开核）----
+    # N19：GQS1 ★ n=2 任意 m —— det(Σπᵢπᵢ†) = Σ_{i<j}|⟨πᵢ,πⱼ⟩|²（C(m,2) 项，Finset 双重和）
+    ms = [3, 4, 5, 6, 8, 10, 12]
+    err_gqs1 = 0.0
+    n_gqs1 = 0
+    for m in ms:
+        for _ in range(30):
+            P = [rng.standard_normal(2) + 1j * rng.standard_normal(2) for _ in range(m)]
+            A2 = np.array(P, dtype=complex)  # m×2
+            Pmat = sum(np.outer(p, np.conj(p)) for p in P)
+            lhs = abs(np.linalg.det(Pmat))
+            rhs = 0.0
+            for i in range(m):
+                for j in range(i + 1, m):
+                    rhs += abs(A2[i, 0] * A2[j, 1] - A2[i, 1] * A2[j, 0]) ** 2
+            err_gqs1 = max(err_gqs1, abs(lhs - rhs))
+            n_gqs1 += 1
+    report["results"]["N19_gqs1_finset_2d_any_m"] = {
+        "max|det(P) − Σ_{i<j}|⟨πᵢ,πⱼ⟩|²|（m=3..12 × 30）": round(float(err_gqs1), 13),
+        "样本数": n_gqs1,
+        "note": "GQS1 ★（Lean 全证）：n=2 任意 m 的 Finset 版 Cauchy-Binet——"
+                "任意多个半旋量叠加的质量² = 所有无序对的辛内积平方和（C(m,2) 项），"
+                "每对半旋量的纠缠贡献独立相加（GQM1 的 m 任意推广）"}
+
+    # N20：GQS3 ★ 一般 n 展开核 —— det(AA†) = Σ_{r 单射}(∏ₖ Aₖ,rₖ)·conj(det M_r)
+    def subdet(A, r):  # M_r[l,k] = A[l, r[k]] 的 det（列按 r 排列的 n×n 子式）
+        n = A.shape[0]  # 行数 = 分量维数
+        M = np.array([[A[l, r[k]] for k in range(n)] for l in range(n)], dtype=complex)
+        return np.linalg.det(M)
+    err_gqs3 = 0.0
+    n_gqs3 = 0
+    for (n, m) in [(2, 3), (2, 4), (2, 5), (3, 4), (3, 5)]:
+        for _ in range(20):
+            A = rng.standard_normal((n, m)) + 1j * rng.standard_normal((n, m))
+            lhs = abs(np.linalg.det(A @ A.conj().T))
+            rhs = 0.0
+            for r in itertools.product(range(m), repeat=n):
+                if len(set(r)) == n:  # 单射（非单射项归零，交替性）
+                    prod = np.prod([A[k, r[k]] for k in range(n)])
+                    rhs += prod * np.conj(subdet(A, r))
+            err_gqs3 = max(err_gqs3, abs(lhs - abs(rhs)))
+            n_gqs3 += 1
+    report["results"]["N20_gqs3_expansion_core"] = {
+        "max|det(AA†) − Σ_{r 单射}(∏A)·star(det M_r)|（n=2..3, m=3..5 × 20）": round(float(err_gqs3), 13),
+        "样本数": n_gqs3,
+        "note": "GQS2a/b/c + GQS3 ★（Lean 全证）：一般 n 的展开内核——"
+                "det(AA†) = 单射项和（多重和展开 map_sum + 非单射归零 map_eq_zero_of_eq + "
+                "det_conjTranspose）；完整 Cauchy-Binet 的最后一跳（单射函数和 ↔ 子集×排列和"
+                "= Σ_S |det(A[:,S])|²）数学骨架见 Lean 注释，留作后续形式化"}
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))

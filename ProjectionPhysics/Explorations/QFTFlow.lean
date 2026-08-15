@@ -701,6 +701,266 @@ theorem quad_outer_3d_det (a₁ b₁ c₁ a₂ b₂ c₂ a₃ b₃ c₃ a₄ b�
 --      注释（减法原则）。物理上这是标准线性代数恒等——框架贡献 =
 --      "质量² = 全纠缠结构（所有子族体积平方和）"的解释层重述。
 
+/-! ### GQS1–GQS3. 一般 Finset 版 Cauchy-Binet -/
+
+-- leo（2026-08-15 第五轮）：一般 Finset 版。
+-- GQS1 ★ n=2 任意 m（完整）：det(Σᵢ₌₀ᵐ⁻¹ πᵢπᵢ†) = Σ_{i<j} |⟨πᵢ,πⱼ⟩|²
+--      （GQM1 的 m 任意推广——Finset 双重和 + 对角分离 + 对换重排）
+-- GQS2 一般 n 核心：det(AA†) 的多重和展开（map_sum/map_smul_univ）、
+--      非单射归零（map_eq_zero_of_eq）、单射的 det 表达（det_conjTranspose）
+-- GQS3 一般 n：det(AA†) = Σ_{r 单射} (∏ Aₖ,rₖ)•star(det 子式)（组合引理）；
+--      ★ 最后的求和重排（单射函数和 ↔ 子集×排列和 = |det|² 和）数学骨架
+--      见注释——完整 Finset 双射形式化留作后续（诚实边界）。
+
+/-- m 个扭量（2 维）外积和（2×2 分量空间矩阵）：P = Σᵢ πᵢπᵢ†。 -/
+def outerSumM2 {m : ℕ} (π : Fin m → Fin 2 → ℂ) : Matrix (Fin 2) (Fin 2) ℂ :=
+  !![ ∑ i, π i 0 * star (π i 0), ∑ i, π i 0 * star (π i 1) ;
+      ∑ i, π i 1 * star (π i 0), ∑ i, π i 1 * star (π i 1) ]
+
+/-- 所有无序对（i < j）的辛内积平方和（Finset 双重和，if 指示）。 -/
+def pairDetSumAll {m : ℕ} (π : Fin m → Fin 2 → ℂ) : ℂ :=
+  ∑ i : Fin m, ∑ j : Fin m,
+    if i < j then
+      (π i 0 * π j 1 - π i 1 * π j 0) * star (π i 0 * π j 1 - π i 1 * π j 0)
+    else 0
+
+/-- 2×2 展开项：T(i,j) = |aᵢ|²|bⱼ|² − aᵢb̄ᵢbⱼāⱼ（det 展开的 (i,j) 项）。 -/
+def T2 {m : ℕ} (π : Fin m → Fin 2 → ℂ) (i j : Fin m) : ℂ :=
+  (π i 0 * star (π i 0)) * (π j 1 * star (π j 1)) -
+    (π i 0 * star (π i 1)) * (π j 1 * star (π j 0))
+
+/-- 辅助：双重和对换重命名 ΣᵢΣⱼ f(i,j) = ΣᵢΣⱼ f(j,i)（sum_comm 两次）。 -/
+lemma sum_swap {m : ℕ} (f : Fin m → Fin m → ℂ) :
+    (∑ i : Fin m, ∑ j : Fin m, f i j) = ∑ i : Fin m, ∑ j : Fin m, f j i := by
+  calc
+    (∑ i : Fin m, ∑ j : Fin m, f i j)
+      = ∑ j : Fin m, ∑ i : Fin m, f i j := by
+          rw [Finset.sum_comm]
+    _ = ∑ i : Fin m, ∑ j : Fin m, f j i := by
+          -- 变量重命名：ΣⱼΣᵢ f i j = ΣᵢΣⱼ f j i（sum_comm 对 g = fun j i => f i j）
+          rw [Finset.sum_comm]
+
+/-- 辅助：乘积展开 (Σᵢ xᵢ)·(Σⱼ yⱼ) = ΣᵢΣⱼ xᵢ·yⱼ（mathlib Fintype.sum_mul_sum）。 -/
+lemma sum_mul_sum {α β : Type*} [Fintype α] [Fintype β]
+    (x : α → ℂ) (y : β → ℂ) :
+    (∑ i : α, x i) * (∑ j : β, y j) = ∑ i : α, ∑ j : β, x i * y j :=
+  Fintype.sum_mul_sum x y
+
+/-- 辅助：对角项 T(i,i) = 0（aᵢāᵢbᵢb̄ᵢ − aᵢb̄ᵢbᵢāᵢ 抵消）。 -/
+lemma T2_diag_zero {m : ℕ} (π : Fin m → Fin 2 → ℂ) (i : Fin m) : T2 π i i = 0 := by
+  unfold T2
+  ring
+
+/-- 辅助：配对恒等 T(i,j) + T(j,i) = |aᵢbⱼ − aⱼbᵢ|²（两半旋量的纠缠贡献）。 -/
+lemma T2_pair_sum {m : ℕ} (π : Fin m → Fin 2 → ℂ) (i j : Fin m) :
+    T2 π i j + T2 π j i =
+      (π i 0 * π j 1 - π i 1 * π j 0) * star (π i 0 * π j 1 - π i 1 * π j 0) := by
+  unfold T2
+  simp [star_sub, StarMul.star_mul]
+  ring
+
+/-- 辅助：det 展开成双重和 det(P) = ΣᵢΣⱼ T(i,j)（乘积展开）。 -/
+lemma outer_sum_m2_expand {m : ℕ} (π : Fin m → Fin 2 → ℂ) :
+    Matrix.det (outerSumM2 π) = ∑ i : Fin m, ∑ j : Fin m, T2 π i j := by
+  unfold outerSumM2
+  rw [Matrix.det_fin_two]
+  simp
+  unfold T2
+  -- (Σᵢ aᵢāᵢ)(Σⱼ bⱼb̄ⱼ) − (Σᵢ aᵢb̄ᵢ)(Σⱼ bⱼāⱼ) = ΣᵢΣⱼ (aᵢāᵢbⱼb̄ⱼ − aᵢb̄ᵢbⱼāⱼ)
+  calc
+    (∑ i : Fin m, π i 0 * star (π i 0)) * (∑ j : Fin m, π j 1 * star (π j 1)) -
+      (∑ i : Fin m, π i 0 * star (π i 1)) * (∑ j : Fin m, π j 1 * star (π j 0))
+        = (∑ i : Fin m, ∑ j : Fin m, (π i 0 * star (π i 0)) * (π j 1 * star (π j 1))) -
+          (∑ i : Fin m, ∑ j : Fin m, (π i 0 * star (π i 1)) * (π j 1 * star (π j 0))) := by
+            congr 1
+            · exact sum_mul_sum (fun i => π i 0 * star (π i 0))
+                (fun j => π j 1 * star (π j 1))
+            · exact sum_mul_sum (fun i => π i 0 * star (π i 1))
+                (fun j => π j 1 * star (π j 0))
+    _ = ∑ i : Fin m, ∑ j : Fin m,
+          ((π i 0 * star (π i 0)) * (π j 1 * star (π j 1)) -
+            (π i 0 * star (π i 1)) * (π j 1 * star (π j 0))) := by
+          -- 反向分配：∑ᵢΣⱼ a − ∑ᵢΣⱼ b = ∑ᵢΣⱼ (a − b)（先外层，再逐项内层）
+          rw [← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro x hx
+          rw [← Finset.sum_sub_distrib]
+
+/-- ★ GQS1：n=2 任意 m 的 Finset 版 Cauchy-Binet——det(Σᵢπᵢπᵢ†) =
+    Σ_{i<j} |⟨πᵢ,πⱼ⟩|²（C(m,2) 个子式平方和）。
+    任意多个半旋量叠加（2 维）的质量² = 所有对的辛内积平方和——
+    每对半旋量的纠缠贡献独立相加（GQM1 的 m 任意推广，完整证明：
+    det 展开 → 三分分解 → 对角归零 → 对换重排 → 配对恒等）。 -/
+theorem outer_sum_m2_det {m : ℕ} (π : Fin m → Fin 2 → ℂ) :
+    Matrix.det (outerSumM2 π) = pairDetSumAll π := by
+  rw [outer_sum_m2_expand]
+  unfold pairDetSumAll
+  calc
+    (∑ i : Fin m, ∑ j : Fin m, T2 π i j)
+      = ∑ i : Fin m, ∑ j : Fin m,
+          ((if i < j then T2 π i j else 0) + (if i = j then T2 π i j else 0) +
+            (if i > j then T2 π i j else 0)) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          apply Finset.sum_congr rfl
+          intro j hj
+          rcases lt_trichotomy i j with hlt | heq | hgt
+          · simp [hlt, lt_asymm hlt, ne_of_lt hlt]
+          · subst heq
+            simp
+          · simp [hgt, lt_asymm hgt, ne_of_gt hgt]
+    _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) +
+        (∑ i : Fin m, ∑ j : Fin m, if i = j then T2 π i j else 0) +
+        (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by
+          simp [Finset.sum_add_distrib, add_assoc]
+    _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) +
+        (∑ i : Fin m, T2 π i i) +
+        (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by
+          have h2 : (∑ i : Fin m, ∑ j : Fin m, if i = j then T2 π i j else 0) =
+              ∑ i : Fin m, T2 π i i := by
+            simp [Finset.sum_ite_eq']
+          rw [h2]
+    _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) + 0 +
+        (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by
+          have h3 : (∑ i : Fin m, T2 π i i) = 0 := by
+            simp [T2_diag_zero]
+          rw [h3]
+    _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) +
+        (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by
+          simp
+    _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) +
+        (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π j i else 0) := by
+          -- 对换重命名：ΣᵢΣⱼ if i>j then T(i,j) else 0 = ΣᵢΣⱼ if i<j then T(j,i) else 0
+          have hswap : (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) =
+              ∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π j i else 0 := by
+            simpa using
+              (sum_swap (fun i j => if i > j then T2 π i j else 0) :
+                (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) =
+                  ∑ i : Fin m, ∑ j : Fin m, if j > i then T2 π j i else 0)
+          rw [hswap]
+    _ = ∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j + T2 π j i else 0 := by
+          rw [← Finset.sum_add_distrib]
+          apply Finset.sum_congr rfl
+          intro x hx
+          rw [← Finset.sum_add_distrib]
+          apply Finset.sum_congr rfl
+          intro j hj
+          by_cases h : x < j <;> simp [h]
+    _ = ∑ i : Fin m, ∑ j : Fin m, if i < j then
+          (π i 0 * π j 1 - π i 1 * π j 0) * star (π i 0 * π j 1 - π i 1 * π j 0) else 0 := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          apply Finset.sum_congr rfl
+          intro j hj
+          by_cases h : i < j
+          · simp [h, T2_pair_sum π i j]
+          · simp [h]
+
+/-! ### GQS2–GQS3. 一般 n 的 Cauchy-Binet 核心（det 的多重和展开） -/
+
+-- 一般 n：A : Fin n → Fin m → ℂ（行 = n 维分量，列 = m 个扭量）。
+-- AA† 的 (i,k) = Σⱼ Aᵢⱼ·star(Aₖⱼ)；第 i 行 = Σⱼ Aᵢⱼ • rowⱼ（rowⱼ = A† 的第 j 行）。
+-- GQS2a ★：det(AA†) = Σ_{r : Fin n → Fin m} (∏ₖ Aₖ,rₖ) • detₙ(行 star(A[:,rₖ]))——
+--    det 的行多线性：map_sum 一次展开全部 n 重和，map_smul_univ 提出全部标量。
+-- GQS2b：r 非单射 ⟹ 该项 = 0（map_eq_zero_of_eq：两行相同，交替性）。
+-- GQS2c：r 单射 ⟹ detₙ(行 star(A[:,rₖ])) = star(det(fun l k => A l (r k)))
+--    （det_conjTranspose：行子矩阵 = 子式转置的共轭）。
+-- GQS3：det(AA†) = Σ_{r 单射} (∏ₖ Aₖ,rₖ)•star(det 子式)（组合引理）。
+-- ★ 完整 Cauchy-Binet 的最后一跳（诚实边界，数学骨架见文件尾注释）：
+--    Σ_{r 单射} (∏ₖ Aₖ,rₖ)•star(det 子式) = Σ_{S, |S|=n} |det(A[:,S])|²——
+--    单射函数和 ↔ 子集×排列和 的 Finset 双射（det_apply Leibniz 展开 + sign 重排）
+--    需 ~200-400 行 Finset 双射形式化，留作后续；GQS1（n=2 任意 m）已完整。
+
+/-- ★ GQS2a：det(AA†) = Σ_{r : Fin n → Fin m} (∏ₖ Aₖ,rₖ) • detRowAlternating(行 star(A[:,rₖ]))。
+    多重和展开（det 的行多线性 + map_sum + map_smul_univ）——一般 n 的展开内核。 -/
+theorem det_conj_mul_sum_expand {n m : ℕ} (A : Fin n → Fin m → ℂ) :
+    Matrix.det (fun i k => ∑ j : Fin m, A i j * star (A k j)) =
+      ∑ r : Fin n → Fin m,
+        (∏ k : Fin n, A k (r k)) • Matrix.detRowAlternating
+          (fun k l => star (A l (r k))) := by
+  calc
+    Matrix.det (fun i k => ∑ j : Fin m, A i j * star (A k j))
+      = Matrix.detRowAlternating (fun i k => ∑ j : Fin m, A i j * star (A k j)) := by
+          rfl
+    _ = Matrix.detRowAlternating
+          (fun i => ∑ j : Fin m, A i j • (fun l : Fin n => star (A l j))) := by
+          -- funext + sum_apply：双参行函数与"每行一个和"一致
+          congr
+          funext i k
+          simp [Finset.sum_apply, Pi.smul_apply]
+    _ = ∑ r : Fin n → Fin m,
+          Matrix.detRowAlternating
+            (fun i => A i (r i) • (fun l : Fin n => star (A l (r i)))) := by
+          -- map_sum：一次展开全部参数（每行一个和）的多重和
+          -- f = detRowAlternating（作为 MultilinearMap），ι = Fin n，α i = Fin m
+          -- g i j = A i j • (fun l => star (A l j))
+          simpa using
+            (MultilinearMap.map_sum
+              (f := Matrix.detRowAlternating.toMultilinearMap)
+              (g := fun i j => A i j • (fun l : Fin n => star (A l j))))
+    _ = ∑ r : Fin n → Fin m,
+          (∏ k : Fin n, A k (r k)) • Matrix.detRowAlternating
+            (fun k l => star (A l (r k))) := by
+          apply Finset.sum_congr rfl
+          intro r hr
+          -- map_smul_univ：f (fun i => c i • m i) = (∏ i, c i) • f m
+          -- c i = A i (r i)，m i = fun l => star (A l (r i))
+          simpa using
+            (MultilinearMap.map_smul_univ
+              (f := Matrix.detRowAlternating.toMultilinearMap)
+              (c := fun i => A i (r i))
+              (m := fun i l => star (A l (r i))))
+
+/-- GQS2b：r 非单射（两个扭量索引相同）⟹ 该项的行列式 = 0
+    （交替性：两行相同 ⟹ AlternatingMap 归零）。 -/
+theorem detRowAlt_zero_of_not_injective {n m : ℕ} (A : Fin n → Fin m → ℂ)
+    (r : Fin n → Fin m) (h : ¬ Function.Injective r) :
+    Matrix.detRowAlternating (fun k l => star (A l (r k))) = 0 := by
+  rcases Function.not_injective_iff.mp h with ⟨k, k', hkk', hne⟩
+  have hrow : (fun l : Fin n => star (A l (r k))) = fun l : Fin n => star (A l (r k')) := by
+    rw [hkk']
+  exact Matrix.detRowAlternating.map_eq_zero_of_eq
+    (fun i l => star (A l (r i))) hrow hne
+
+/-- GQS2c：该项的行列式 = star(子式 det)——行子矩阵 (fun k l => star (A l (r k)))
+    是 (fun l k => A l (r k)) 的共轭转置，det(Mᴴ) = star(det M)（det_conjTranspose）。
+    r 单射时 (fun l k => A l (r k)) 是 A 的列子矩阵（列序按 r，|det|² 与子式一致）。 -/
+theorem detRowAlt_eq_star {n m : ℕ} (A : Fin n → Fin m → ℂ) (r : Fin n → Fin m) :
+    Matrix.detRowAlternating (fun k l => star (A l (r k))) =
+      star (Matrix.det (fun l k => A l (r k))) := by
+  change Matrix.det (fun k l => star (A l (r k))) = star (Matrix.det (fun l k => A l (r k)))
+  simpa [Matrix.conjTranspose] using
+    (Matrix.det_conjTranspose (M := fun l k => A l (r k)))
+
+/-- ★ GQS3：一般 n 的组合引理——det(AA†) =
+    Σ_{r : Fin n → Fin m} if r 单射 then (∏ₖ Aₖ,rₖ) • star(det 列子矩阵) else 0。
+    单射项保留下、非单射项归零（GQS2b/c 逐项替换）。
+    ★ 完整 Cauchy-Binet 的最后一跳（诚实边界）：Σ_{r 单射} ↔ Σ_{S, |S|=n}
+    子集×排列重排（det_apply Leibniz + sign 合并 = |det(A[:,S])|²）留作后续——
+    GQS1（n=2 任意 m）已完整覆盖"任意多半旋量叠加"。 -/
+theorem det_conj_mul_sum_injective {n m : ℕ} (A : Fin n → Fin m → ℂ) :
+    Matrix.det (fun i k => ∑ j : Fin m, A i j * star (A k j)) =
+      ∑ r : Fin n → Fin m,
+        if Function.Injective r then
+          (∏ k : Fin n, A k (r k)) • star (Matrix.det (fun l k => A l (r k)))
+        else 0 := by
+  classical
+  calc
+    Matrix.det (fun i k => ∑ j : Fin m, A i j * star (A k j))
+      = ∑ r : Fin n → Fin m,
+          (∏ k : Fin n, A k (r k)) • Matrix.detRowAlternating (fun k l => star (A l (r k))) :=
+          det_conj_mul_sum_expand A
+    _ = ∑ r : Fin n → Fin m,
+          if Function.Injective r then
+            (∏ k : Fin n, A k (r k)) • star (Matrix.det (fun l k => A l (r k))) else 0 := by
+          apply Finset.sum_congr rfl
+          intro r hr
+          by_cases h : Function.Injective r
+          · rw [detRowAlt_eq_star A r]
+            simp [h]
+          · rw [detRowAlt_zero_of_not_injective A r h]
+            simp [h]
+
 end ProjectionPhysics.QFTFlow
 
 end

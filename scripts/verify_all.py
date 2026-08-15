@@ -260,6 +260,12 @@ def main():
         n18 = res["N18_cauchy_binet_general"]
         check("GQM: 一般 n×m 完整 Cauchy-Binet（360 样本）",
               n18["max|det(AA†) − Σ_S|det(A[:,S])|²|（n=2..4, m=n+1..n+4 × 30）"] < 1e-6)
+        n19 = res["N19_gqs1_finset_2d_any_m"]
+        check("GQS1: n=2 任意 m Finset 版（Σ_{i<j}|⟨πᵢ,πⱼ⟩|²，210 样本）",
+              n19["max|det(P) − Σ_{i<j}|⟨πᵢ,πⱼ⟩|²|（m=3..12 × 30）"] < 1e-8)
+        n20 = res["N20_gqs3_expansion_core"]
+        check("GQS3: 一般 n 展开核（Σ_{r 单射}(∏A)·star(det M_r)）",
+              n20["max|det(AA†) − Σ_{r 单射}(∏A)·star(det M_r)|（n=2..3, m=3..5 × 20）"] < 1e-8)
 
     # 4. 产物完整性
     artifacts = {
