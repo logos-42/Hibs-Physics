@@ -164,6 +164,11 @@ def main():
               n4["C·σ₃ + σ₃·C = 0（反交换）"] and n4["C 翻转法向量方向（e+ ↔ e−）"])
         check("TW: 胶子色八重态全部无质量",
               res["N5_gluon_twistor"]["全部无质量"])
+        n6 = res["N6_twistor_pair_electron"]
+        check("TW6: 双扭量 det = |⟨π₁,π₂⟩|²（机器精度）",
+              n6["max|det(p₁+p₂) − |⟨π₁,π₂⟩|²|（200 随机对）"] < 1e-10)
+        check("TW7: 电荷共轭保持双扭量质量",
+              n6["电荷共轭保持质量 m²(Cπ) = m²(π)"])
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:

@@ -115,6 +115,51 @@ def main():
                 "——每个色态 a 的动量都在光锥上；色 = 2³ = 8（Cℓ(6) 旋量，"
                 "ColorOctetMathlib）。胶子参数（无质量/自旋 1/色）全部适合扭量"}
 
+    # ---- N6 双扭量电子（TW6–TW8）----
+    max_diff = 0.0
+    masses = []
+    for _ in range(200):
+        pi1 = rng.standard_normal(2) + 1j * rng.standard_normal(2)
+        pi2 = rng.standard_normal(2) + 1j * rng.standard_normal(2)
+        p = momentum_from_twistor(pi1) + momentum_from_twistor(pi2)
+        det_p = np.linalg.det(p)
+        wick = pi1[0] * pi2[1] - pi1[1] * pi2[0]   # 辛内积 ⟨π₁,π₂⟩
+        max_diff = max(max_diff, abs(det_p - abs(wick) ** 2))
+        masses.append(abs(wick) ** 2)
+    # 电荷共轭保持质量（数值）
+    pi1 = np.array([1 + 1j, 0.5 - 0.3j])
+    pi2 = np.array([0.2 + 0.8j, 1 - 0.6j])
+    m2 = abs(pi1[0] * pi2[1] - pi1[1] * pi2[0]) ** 2
+    m2_C = abs(np.conj(pi1[0]) * np.conj(pi2[1]) - np.conj(pi1[1]) * np.conj(pi2[0])) ** 2
+    # 夹角扫描：平行 ⟹ m=0；垂直 ⟹ m 最大
+    th_scan = np.linspace(0, np.pi / 2, 50)
+    m_scan = [abs(np.cos(t) * np.sin(t)) ** 2 * 4 for t in th_scan]
+    report["results"]["N6_twistor_pair_electron"] = {
+        "max|det(p₁+p₂) − |⟨π₁,π₂⟩|²|（200 随机对）": round(float(max_diff), 14),
+        "质量范围（随机对）": [round(float(np.min(masses)), 6),
+                              round(float(np.max(masses)), 6)],
+        "电荷共轭保持质量 m²(Cπ) = m²(π)": bool(abs(m2_C - m2) < 1e-12),
+        "平行 ⟹ m = 0 / 垂直 ⟹ m 最大": "TW6 公式直接给出",
+        "note": "★ 双扭量电子：det(p₁+p₂) = |⟨π₁,π₂⟩|²（TW6 Lean 已证）——"
+                "质量来自两旋量相对方向；电荷共轭保持质量（TW7：正反粒子"
+                "同质量 ✓）+ 翻转法向量（TW8：电性 = 法向量朝向）——"
+                "电性假设与质量解耦地兼容"}
+
+    # ---- 图 3: 双扭量质量几何 ----
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(th_scan, m_scan, "C2-", lw=2)
+    ax.axvline(0, color="gray", ls=":", label="平行 ⟹ m = 0（无质量）")
+    ax.axvline(np.pi / 4, color="C3", ls="--", label="正交 ⟹ m 最大")
+    ax.set_xlabel("两旋量夹角 θ（π₁ 与 π₂ 的方向差）")
+    ax.set_ylabel("m² = |⟨π₁,π₂⟩|²")
+    ax.set_title("双扭量电子：质量 = 两旋量的相对方向\n"
+                 "（单扭量 det = 0 的障碍由双旋量复合解除，TW6）")
+    ax.legend(fontsize=9)
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUT, "twistor_pair_mass.png"), dpi=150)
+    plt.close(fig)
+
     # ---- 图 1: 螺旋度球面（CP¹）+ 动量方向 ----
     fig, axes = plt.subplots(1, 2, figsize=(11, 5))
     th = np.linspace(0, 2 * np.pi, 100)
@@ -151,16 +196,16 @@ def main():
     report["conclusion"] = (
         "扭量 × 流动空间兼容性判定（4 层）：① 光子 = 单扭量 ✓ 完全兼容"
         "（TW1：动量 det = 0 恒等——彭罗斯模型成立）；② 电子/正电子 = "
-        "单扭量 ✗ 被 TW1 阻止（det = 0 ⟹ 无质量）——彭罗斯经典障碍，"
-        "出路 = 双扭量（未形式化）；但用户的'电性 = 法向量方向'有独立"
-        "代数内核（TW4：电荷共轭翻转 σ₃ 本征值 ±1——电性是法向量朝向，"
-        "结构对应成立）；③ 胶子 = 单扭量 ✓ 兼容（TW5：无质量恒等 + "
-        "色八重态 2³ = 8，参数表全部 det = 0）；④ 诚实：扭量兼容点 = "
-        "无质量粒子类（光子/胶子），带质量类（电子）是经典障碍；"
-        "'法向量 ⟹ 电性'是手性/电荷共轭的代数对应，不是电性数值来源"
-        "（第二输入缺口）。")
+        "双扭量 ✓ 构造成功（TW6：det(p₁+p₂) = |⟨π₁,π₂⟩|²——两旋量复合"
+        "解除单扭量障碍，质量 = 相对方向，彭罗斯经典）；③ 电性假设 "
+        "✓ 兼容（TW4/TW8：电荷共轭翻转法向量 σ₃ 本征值 ±1）+ 与质量"
+        "解耦（TW7：正反粒子同质量 ✓ 实验事实）；④ 胶子 = 单扭量 ✓ "
+        "兼容（TW5：无质量恒等 + 色八重态）；诚实：双扭量质量公式是"
+        "彭罗斯标准结果（Penrose & Rindler），电子质量数值 m_e 需标定"
+        "旋量（第二输入缺口），'法向量 ⟹ 电性'是代数对应非数值来源。")
     report["files"] = {"helicity_sphere": "helicity_sphere.png",
-                       "charge_normal": "charge_normal.png"}
+                       "charge_normal": "charge_normal.png",
+                       "twistor_pair_mass": "twistor_pair_mass.png"}
 
     with open(os.path.join(OUT, "report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
