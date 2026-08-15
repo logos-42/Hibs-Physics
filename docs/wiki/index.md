@@ -41,4 +41,5 @@
 - [theory-spin-from-space.md](./theory-spin-from-space.md) — 自旋 = 空间三方向结构的涌现（行动探索）：i=σ₁σ₂σ₃ 体积元/S²=¾(s=½)/SU(2) 双重覆盖 2π 变号；狄拉克之上第一性
 - [theory-fractal-cosmic-web.md](./theory-fractal-cosmic-web.md) — 分形宇宙 × 流动空间（探索）：KBC 空洞 = 分形骨架必然空白 + Hubble 悖论整合（δ* = −0.25 落观测范围）
 - [theory-double-slit.md](./theory-double-slit.md) — 双缝 = 空间螺旋谐波的干涉（波粒二象性重释）：螺旋投影=波纹/叠加恒等/观察=相干丧失⟹两道条纹
+- [theory-glueball-coupling.md](./theory-glueball-coupling.md) — 胶球三方向耦合 + 质量化梯度：√N·M₀ 序列 vs 格点胶球谱（0++/2++/0-+ 量级吻合）
 - [log.md](./log.md)

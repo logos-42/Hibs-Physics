@@ -74,6 +74,7 @@ def main():
                        "scripts/verify_spin_from_space.py",
                        "scripts/verify_fractal_flow.py",
                        "scripts/verify_double_slit.py",
+                       "scripts/verify_glueball_coupling.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py"]:
@@ -131,6 +132,21 @@ def main():
               res["N2_double_slit"]["解析条纹数（I > 0.5）"] > 50)
         check("DS: 观察后 = 2 道条纹",
               res["N3_observation"]["观察后亮带数"] == 2)
+
+    gb = load_report("artifacts/glueball/report.json")
+    if gb:
+        res = gb["results"]
+        scan = res["V2_coupling_scan"]
+        check("GB: 耦合增强 ⟹ 束缚更紧（质量单调）",
+              all(scan["束缚态质量"][i] < scan["束缚态质量"][i + 1]
+                  for i in range(len(scan["束缚态质量"]) - 1)), scan["束缚态质量"])
+        check("GB: 质量化梯度 Φ = ½v²",
+              abs(res["V3_massification_gradient"]["梯度势 Φ = ½v²（SG11）"] - 0.045) < 1e-6)
+        fit = res["V4_lattice_comparison"]["√N·M₀ 序列（M₀=0.93 GeV 中值）"]
+        check("GB: 0++ 模型落入格点范围",
+              fit["0++"][1] <= fit["0++"][0] <= fit["0++"][2], fit["0++"])
+        check("GB: 0-+ 模型落入格点范围",
+              fit["0-+"][1] <= fit["0-+"][0] <= fit["0-+"][2], fit["0-+"])
 
     mf = load_report("artifacts/maxwell/report.json")
     if mf:
