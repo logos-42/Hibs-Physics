@@ -801,6 +801,45 @@ def main():
                 "无质量（两模型共享光锥 E²=|p|²）。诚实：代数恒等（真但平凡），"
                 "波动性需波动方程（骨架）；解释层"}
 
+    # ---- N27：GQR 光子能量匹配（数条数：圈数 = 频率，E = ħω = h·f）----
+    # 1. 数圈数：螺旋 (r cos ωt, r sin ωt, ct) 在 t 秒内的圈数 = ωt/2π（可数）
+    h_pl = 6.62607015e-34        # 普朗克常数（SI）
+    f_vis = 5.0e14               # 可见光频率（Hz = 每秒圈数——可数）
+    E_planck = h_pl * f_vis      # E = h·f（普朗克-爱因斯坦）
+    # 螺旋数圈：ω = 2πf ⟹ t 秒圈数 = f·t（整数率，可数）
+    t_count = 3.0
+    turns = f_vis * t_count      # 3 秒内转过的圈数
+    turns_whole = int(round(turns))
+    # 2. E = ħω = h·f 数值验证（ħ = h/2π）
+    hbar = h_pl / (2 * np.pi)
+    omega = 2 * np.pi * f_vis
+    E_hbar_omega = hbar * omega
+    match_err = abs(E_hbar_omega - E_planck) / E_planck
+    # 3. 螺旋旋转能量解释：E = L·ω（每圈角动量 h × 每秒圈数 f）
+    L_per_turn = h_pl                      # 每圈角动量 = h（光子自旋 ħ = h/2π 每弧度）
+    E_helix = L_per_turn * f_vis           # E = 每圈角动量 × 每秒圈数
+    # 4. 图：螺旋 + 圈数标注（数条数可视化）
+    tq2 = np.linspace(0, 6 * np.pi, 400)
+    fig_turns, axt = plt.subplots(figsize=(5.6, 4.6), subplot_kw={"projection": "3d"})
+    axt.plot(0.8 * np.cos(tq2), 0.8 * np.sin(tq2), tq2, lw=1.4, color="tab:blue")
+    axt.set_title("光子螺旋：数圈数\n每圈 = 一个频率周期 = 角动量 h\nE = h·f（每圈角动量 × 每秒圈数）")
+    axt.set_xlabel("x"); axt.set_ylabel("y"); axt.set_zlabel("z（传播方向）")
+    fig_turns.tight_layout()
+    fig_turns.savefig(os.path.join(OUT, "fig_photon_turns.png"), dpi=130)
+    plt.close(fig_turns)
+    report["results"]["N27_photon_energy_matching"] = {
+        "数圈数：3 秒内圈数 = f·t（可数整数率）": int(turns_whole),
+        "E = h·f（普朗克-爱因斯坦，f = 5e14 Hz）": round(E_planck, 24),
+        "E = ħω 数值匹配相对误差": round(match_err, 18),
+        "E = 每圈角动量 h × 每秒圈数 f（螺旋解释）": round(E_helix, 24),
+        "螺旋圈数图": "artifacts/qftflow/fig_photon_turns.png",
+        "note": "GQR 匹配尝试：ħ = 空间旋转条数（圈数）在扭量聚合下的频率效果。"
+                "圈数 = 频率（每秒圈数 f，可数）；每圈角动量 = h（光子自旋 ħ = h/2π 每弧度）；"
+                "E = ħω = (h/2π)·(2πf) = h·f = 每圈角动量 × 每秒圈数——光量子关系从螺旋"
+                "旋转能量涌现。匹配判定：结构匹配 ✓（E = L·ω 旋转能量恒等 + 光子自旋 = ħ 实验事实）；"
+                "诚实：E = h·f 是普朗克-爱因斯坦恒等（真但平凡），L = h 依赖光子自旋实验，"
+                "尚未从螺旋几何独立数出 ħ 数值（那才是预言）"}
+
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
