@@ -1253,6 +1253,68 @@ lemma chainJump_outside_lightcone {n : ℕ} (t : ℕ) (i j : Fin n)
     (h : t + 1 < Nat.dist i.1 j.1) : (chainJump (n := n) ^ (t + 1)) i j = 0 := by
   exact chainJump_causal t i j h
 
+/-! ### GQC3★. 非均匀流动 ⟹ 倾斜光锥 ⟹ 等效超光速（几何描述，非物质描述）
+
+leo（2026-08-16）假设推进第三跳（信息传递：因果 → 等效速度）：
+- ★ 关键物理观点：**空间本身的等效流动速度就是光速**；在不均匀空间里
+  （流动速度逐点不同，如黑洞视界内 Painlevé-Gullstrand 雨速 > c、
+  Alcubierre 泡的拖曳坐标），**等效速度完全可以超光速**。
+- 这是**几何描述**不是**物质描述**：信号相对流动仍 ≤ 1 格/步（局部因果，
+  GQC2 在流动坐标系中成立），但流动把信号拖曳到更远——静止坐标系的
+  等效速度 = 信号速度 + 流动速度，可 > 1（光锥被流动倾斜）。
+- ★ GQC3a：坐标拖曳——流动位形 φ（格点 k 被拖曳位移 φ_k），
+  流动坐标 ξ_k = k − φ_k 中信号 ≤ t 步可达 ⟹ 静止坐标距离
+  |j − i| ≤ t + |φ_j − φ_i|（三角不等式：等效距离 = 信号位移 + 流动位移）
+- ★ GQC3b：等效超光速——信号随流（流动坐标中静止，被流动携带）时，
+  流动梯度 > 1 格/步 ⟹ 1 步内静止位移 > 1（等效速度 > 1 = 超光速），
+  而信号相对流动从未超过 1（局部因果保持）。
+- 物理含义：**因果性（信号 ≤ 局部光速）与等效超光速（几何拖曳）不矛盾**
+  ——这是曲率飞船（Alcubierre）的数学结构：泡内信号 ≤ c，泡移动等效 > c。
+- 诚实：坐标变换 + 三角不等式（真但平凡）；框架贡献 = 把 GQC2 的光锥
+  明确为"流动坐标系光锥"，静止坐标系中等效超光速是几何倾斜（解释层）。 -/
+
+/-- 流动坐标：格点 k 的流动坐标 ξ_k = k − φ_k（φ_k = 流动拖曳位移）。
+    信号在流动坐标中速度 ≤ 1（局部因果，GQC2 的均匀光锥在流动系成立）。 -/
+def flowCoord {n : ℕ} (φ : Fin n → ℤ) (k : Fin n) : ℤ :=
+  (k.1 : ℤ) - φ k
+
+/-- GQC3a★. 坐标拖曳：流动坐标中信号 t 步可达（|ξ_j − ξ_i| ≤ t）
+    ⟹ 静止坐标距离 |j − i| ≤ t + |φ_j − φ_i|——等效距离 = 信号位移 + 流动位移。
+    证明链：j − i = (ξ_j+φ_j) − (ξ_i+φ_i) = (ξ_j−ξ_i) + (φ_j−φ_i) → 三角不等式。 -/
+lemma gqc3_equivalent_speed {n : ℕ} (φ : Fin n → ℤ) (t : ℕ) (i j : Fin n)
+    (hξ : |flowCoord φ j - flowCoord φ i| ≤ (t : ℤ)) :
+    |(j.1 : ℤ) - (i.1 : ℤ)| ≤ (t : ℤ) + |φ j - φ i| := by
+  have hsplit : (j.1 : ℤ) - (i.1 : ℤ) =
+      (flowCoord φ j - flowCoord φ i) + (φ j - φ i) := by
+    simp [flowCoord]
+    ring
+  rw [hsplit]
+  exact le_trans (abs_add_le _ _) (add_le_add hξ (le_rfl))
+
+/-- GQC3b★. 等效超光速（几何）：信号随流（流动坐标中静止，被流动携带）
+    且流动梯度 > 1 格/步 ⟹ 1 步内静止位移 > 1——等效速度超光速，
+    而信号相对流动从未超过局部光速（因果保持）。
+    证明链：ξ_i = ξ_j ⟹ j − i = φ_j − φ_i（omega）→ abs_of_pos（梯度正）→ hflow。 -/
+lemma gqc3_superluminal_geometric {n : ℕ} (φ : Fin n → ℤ) (i j : Fin n)
+    (hcarry : flowCoord φ i = flowCoord φ j)
+    (hflow : 1 < φ j - φ i) :
+    (1 : ℤ) < |(j.1 : ℤ) - (i.1 : ℤ)| := by
+  have hsplit : (j.1 : ℤ) - (i.1 : ℤ) = φ j - φ i := by
+    unfold flowCoord at hcarry
+    omega
+  rw [hsplit]
+  have hpos : 0 < φ j - φ i := by omega
+  rw [abs_of_pos hpos]
+  exact hflow
+
+/-- GQC3★ 一致性：均匀流动特例——φ_k = v·k（线性位形，均匀拖曳）时，
+    等效超光速判据直接套用 GQC3b（v > 1 步的均匀流动 ⟹ 等效速度 > 1）。 -/
+lemma gqc3_uniform_flow {n : ℕ} (v : ℤ) (i j : Fin n)
+    (hcarry : flowCoord (fun k => v * (k.1 : ℤ)) i = flowCoord (fun k => v * (k.1 : ℤ)) j)
+    (hflow : 1 < v * (j.1 : ℤ) - v * (i.1 : ℤ)) :
+    (1 : ℤ) < |(j.1 : ℤ) - (i.1 : ℤ)| := by
+  exact gqc3_superluminal_geometric (fun k => v * (k.1 : ℤ)) i j hcarry hflow
+
 end ProjectionPhysics.QFTFlow
 
 end
