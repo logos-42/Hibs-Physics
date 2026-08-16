@@ -280,6 +280,13 @@ def main():
         check("GQC1: 子式逐项守恒（每个子纠缠体积 |det(U·A[:,S])|² 随流不变）",
               all(v["max|子式|det|² 差|"] < 1e-8 for v in n22["矩形版（m>n 叠加）det 守恒 + 子式逐项守恒"].values())
               and n22["双扭量辛内积逐对 |⟨Uπᵢ,Uπⱼ⟩|² 守恒最大误差（100 样本）"] < 1e-8)
+        n23 = res["N23_causal_lightcone"]
+        check("GQC2: 光锥（带宽≤1 ⟹ t 步带宽≤t，光锥外传播核为零）",
+              all(v["最大带宽违规元数"] == 0 for v in n23["链跳跃光锥（带宽≤1 ⟹ t 步带宽≤t，违规元数全 0）"].values())
+              and all(v["带宽-1 随机矩阵 t≤5 步光锥外最大|传播核|"] == 0.0
+                      for v in n23["随机带宽-1 矩阵光锥外传播核（全 0）"].values()))
+        check("GQC2: 酉多步信息守恒 det((U^t A)(U^t A)†) = det(AA†)",
+              n23["酉多步信息守恒 det((U^t A)(U^t A)†) = det(AA†) 最大误差（t=2,3,5）"] < 1e-8)
 
     # 4. 产物完整性
     artifacts = {

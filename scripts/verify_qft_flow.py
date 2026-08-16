@@ -577,6 +577,71 @@ def main():
                 "纠缠结构随流传播不衰减（幺正性 = 辛结构守恒）。"
                 "诚实：酉变换保持行列式是标准线性代数；框架贡献 = 命名为流动传播下的信息守恒（解释层）"}
 
+    # ---- N23：GQC2 因果传播 = 格点化流动 ⟹ 光锥（带宽传播）----
+    # 链跳跃矩阵 T（|i−j|=1 处为 1，带宽 1）：t 步后 T^t 带宽 ≤ t（光锥）
+    def chain_jump(n_):
+        T = np.zeros((n_, n_), dtype=complex)
+        for i in range(n_):
+            for j in range(n_):
+                if abs(i - j) == 1:
+                    T[i, j] = 1
+        return T
+
+    cone = {}
+    max_bw_viol = 0.0
+    for n in [8, 12]:
+        T = chain_jump(n)
+        for t in range(1, 7):
+            P = np.linalg.matrix_power(T, t)
+            viol = 0
+            for i in range(n):
+                for j in range(n):
+                    if abs(i - j) > t and abs(P[i, j]) > 1e-12:
+                        viol += 1
+            max_bw_viol = max(max_bw_viol, float(viol))
+        # 光锥核快照（t = n//2，三角结构）
+        t_snap = n // 2
+        P = np.linalg.matrix_power(T, t_snap)
+        cone[f"n={n}, t={t_snap}"] = {
+            "最大带宽违规元数": int(max_bw_viol),
+            "光锥核非零元数": int(np.count_nonzero(np.abs(P) > 1e-12)),
+            "理论带宽 ≤ t 内非零元数上限（1+2t·(n−t) 内）": None}
+    # 随机带宽-1 复矩阵（一般化：band_le T 1 ⟹ band_le T^t t）
+    rand_bw = {}
+    for n in [8, 10]:
+        T = rng.standard_normal((n, n)) + 1j * rng.standard_normal((n, n))
+        for i in range(n):
+            for j in range(n):
+                if abs(i - j) > 1:
+                    T[i, j] = 0
+        max_v = 0.0
+        for t in range(1, 6):
+            P = np.linalg.matrix_power(T, t)
+            for i in range(n):
+                for j in range(n):
+                    if abs(i - j) > t:
+                        max_v = max(max_v, abs(P[i, j]))
+        rand_bw[f"n={n}"] = {"带宽-1 随机矩阵 t≤5 步光锥外最大|传播核|": round(max_v, 15)}
+    # 酉多步信息守恒（pow 版数值）：U^t 仍酉 ⟹ det 守恒
+    multi_err = 0.0
+    for n in range(2, 5):
+        for _ in range(20):
+            U = random_unitary(n, rng)
+            A = rng.standard_normal((n, n)) + 1j * rng.standard_normal((n, n))
+            for t in [2, 3, 5]:
+                Ut = np.linalg.matrix_power(U, t)
+                lhs = (Ut @ A) @ (Ut @ A).conj().T
+                rhs = A @ A.conj().T
+                multi_err = max(multi_err, abs(abs(np.linalg.det(lhs)) - abs(np.linalg.det(rhs))))
+    report["results"]["N23_causal_lightcone"] = {
+        "链跳跃光锥（带宽≤1 ⟹ t 步带宽≤t，违规元数全 0）": cone,
+        "随机带宽-1 矩阵光锥外传播核（全 0）": rand_bw,
+        "酉多步信息守恒 det((U^t A)(U^t A)†) = det(AA†) 最大误差（t=2,3,5）": round(multi_err, 13),
+        "note": "GQC2：因果性从「流动是格点局域的」直接涌现——最近邻跳跃（带宽 1）⟹ "
+                "t 步传播核带宽 ≤ t ⟹ 距离 > t 的格点之间传播核为零（光锥）。"
+                "信息速度 ≤ 1 格/步 = 流动格点化的因果速度上限——不可通信定理的几何版，"
+                "不需要 QM 的额外公设。诚实：带宽传播是矩阵稀疏性标准事实（真但平凡）"}
+
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))

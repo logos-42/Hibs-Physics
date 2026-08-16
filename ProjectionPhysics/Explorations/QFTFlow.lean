@@ -37,6 +37,7 @@
 
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Nat.Dist
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
@@ -1156,6 +1157,101 @@ lemma gqc1_unitary_transport {n : ℕ} (U A : Matrix (Fin n) (Fin n) ℂ)
 /- GQC1c 备注：双扭量逐对守恒 |⟨Uπ₁,Uπ₂⟩|² = |⟨π₁,π₂⟩|²（U 酉）由 GQC1 通用版
     + GQS1（n=2：det(AA†) = Σ_{i<j}|⟨πᵢ,πⱼ⟩|²）组合给出，且逐项数值验证
     见 N22（每个子式 |det(U·A[:,S])|² = |det(A[:,S])|² 机器精度）。 -/
+
+/-! ### GQC2★. 因果传播：格点化流动 ⟹ 光锥 ⟹ 不可通信定理的几何版
+
+leo（2026-08-16）假设推进第二跳（信息传递：传播 → 因果）：
+- 流动是格点化的（假设 6）：信息只能通过最近邻跳跃传播（局域性，带宽 1）
+- ★ GQC2a：复合传输守恒——两步（归纳可得任意多步）酉传播仍保持
+  det(AA†)（信息守恒在多步传播下成立）
+- ★ GQC2b：带宽传播——带宽 ≤ 1 的跳跃矩阵，t 步后带宽 ≤ t
+  （t 步传播核只在 |i−j| ≤ t 处非零——光锥）
+- ★ GQC2：链跳跃光锥——t+1 步后，距离 > t+1 的格点之间传播核为零：
+  格点 j 在时刻 t 只能感知 t 步内可达的格点——信息速度 ≤ 1 格/步
+  = 流动格点化的因果速度上限。
+- 物理含义：**因果性从"流动是格点局域的"直接涌现**——不可通信定理的
+  几何版，不需要 QM 的额外公设（无超光速 = 格点距离限制，不是额外禁令）。
+- 诚实：带宽传播是矩阵稀疏性的标准事实（真但平凡）；框架贡献 = 把它
+  命名为流动格点化的因果结构（解释层）。 -/
+
+/-- GQC2a★. 复合传输守恒：U₁, U₂ 酉 ⟹ det(((U₂U₁)A)((U₂U₁)A)†) = det(AA†)。
+    证明链：(U₂U₁)(U₂U₁)† = U₂(U₁U₁†)U₂† = 1（U₂U₁ 酉）→ GQC1。 -/
+lemma gqc2_compound_transport {n : ℕ} (U₁ U₂ A : Matrix (Fin n) (Fin n) ℂ)
+    (hU₁ : U₁ * U₁ᴴ = 1) (hU₂ : U₂ * U₂ᴴ = 1) :
+    (((U₂ * U₁) * A) * ((U₂ * U₁) * A)ᴴ).det = (A * Aᴴ).det := by
+  have hU : (U₂ * U₁) * (U₂ * U₁)ᴴ = 1 := by
+    rw [Matrix.conjTranspose_mul]
+    calc
+      (U₂ * U₁) * (U₁ᴴ * U₂ᴴ) = ((U₂ * U₁) * U₁ᴴ) * U₂ᴴ :=
+        (mul_assoc (U₂ * U₁) U₁ᴴ U₂ᴴ).symm
+      _ = (U₂ * (U₁ * U₁ᴴ)) * U₂ᴴ := by
+        congr 1
+        exact mul_assoc U₂ U₁ U₁ᴴ
+      _ = (U₂ * 1) * U₂ᴴ := by rw [hU₁]
+      _ = U₂ * U₂ᴴ := by simp
+      _ = 1 := hU₂
+  exact gqc1_unitary_transport (U := U₂ * U₁) A hU
+
+/-- GQC2b. 带宽定义：矩阵 T 的带宽 ≤ b——距离 > b 的 (i,j) 处为 0。
+    dist 用 Nat.dist（ℕ 上的距离 |i−j| = (i−j)+(j−i)）。 -/
+def band_le {n : ℕ} (T : Matrix (Fin n) (Fin n) ℂ) (b : ℕ) : Prop :=
+  ∀ i j : Fin n, b < Nat.dist i.1 j.1 → T i j = 0
+
+/-- GQC2b. 带宽复合：带宽 ≤ a 与带宽 ≤ b 的矩阵乘积带宽 ≤ a+b。
+    证明：|i−j| > a+b 时，每个 k 要么 |i−k| > a（A 零）要么 |k−j| > b（B 零），
+    否则三角不等式矛盾。 -/
+lemma band_comp {n : ℕ} (A B : Matrix (Fin n) (Fin n) ℂ) {a b : ℕ}
+    (hA : band_le A a) (hB : band_le B b) : band_le (A * B) (a + b) := by
+  intro i j hij
+  rw [Matrix.mul_apply]
+  apply Finset.sum_eq_zero
+  intro k hk
+  by_cases hik : a < Nat.dist i.1 k.1
+  · rw [hA i k hik, zero_mul]
+  · have hik_le : Nat.dist i.1 k.1 ≤ a := Nat.le_of_not_gt hik
+    have hkj : b < Nat.dist k.1 j.1 := by
+      by_contra hnot
+      have hkj_le : Nat.dist k.1 j.1 ≤ b := Nat.le_of_not_gt hnot
+      have htri := Nat.dist.triangle_inequality i.1 k.1 j.1
+      have : Nat.dist i.1 j.1 ≤ a + b :=
+        le_trans htri (Nat.add_le_add hik_le hkj_le)
+      omega
+    rw [hB k j hkj, mul_zero]
+
+/-- GQC2b. 带宽幂：带宽 ≤ b 的矩阵，t+1 步后带宽 ≤ (t+1)·b。
+    证明链：归纳 + band_comp + 结合律 ((t+1)·b + b = (t+2)·b)。 -/
+lemma band_pow {n : ℕ} (T : Matrix (Fin n) (Fin n) ℂ) {b : ℕ}
+    (hT : band_le T b) (t : ℕ) : band_le (T ^ (t + 1)) ((t + 1) * b) := by
+  induction t with
+  | zero =>
+      simpa using hT
+  | succ t ih =>
+      have hband : band_le (T ^ (t + 1) * T) ((t + 1) * b + b) :=
+        band_comp (T ^ (t + 1)) T ih hT
+      have hb : (t + 1) * b + b = (t + 2) * b := by
+        simpa [Nat.succ_eq_add_one] using (Nat.succ_mul (t + 1) b).symm
+      simpa [pow_succ, ← hb] using hband
+
+/-- 一维链最近邻跳跃矩阵：只在 |i−j| = 1 处为 1（流动格点化的局域传播）。 -/
+def chainJump {n : ℕ} : Matrix (Fin n) (Fin n) ℂ :=
+  fun i j => if Nat.dist i.1 j.1 = 1 then 1 else 0
+
+lemma chainJump_band {n : ℕ} : band_le (chainJump (n := n)) 1 := by
+  intro i j hij
+  have hne : Nat.dist i.1 j.1 ≠ 1 := Nat.ne_of_gt hij
+  simp [chainJump, hne]
+
+/-- GQC2★. 链跳跃光锥：t+1 步后带宽 ≤ t+1——传播核只在 |i−j| ≤ t+1 处非零。
+    证明链：band_pow（b=1，归纳带宽传播）+ (t+1)·1 = t+1。 -/
+lemma chainJump_causal {n : ℕ} (t : ℕ) :
+    band_le (chainJump (n := n) ^ (t + 1)) (t + 1) := by
+  simpa using band_pow (T := chainJump (n := n)) (b := 1) (t := t) (chainJump_band)
+
+/-- GQC2★. 光锥外为零：t+1 步后，距离 > t+1 的格点之间传播核为零——
+    格点 j 在时刻 t 只能感知 t 步内可达的格点（信息速度 ≤ 1 格/步）。 -/
+lemma chainJump_outside_lightcone {n : ℕ} (t : ℕ) (i j : Fin n)
+    (h : t + 1 < Nat.dist i.1 j.1) : (chainJump (n := n) ^ (t + 1)) i j = 0 := by
+  exact chainJump_causal t i j h
 
 end ProjectionPhysics.QFTFlow
 
