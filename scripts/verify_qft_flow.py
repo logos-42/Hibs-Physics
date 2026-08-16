@@ -479,6 +479,43 @@ def main():
                 "det_conjTranspose）；完整 Cauchy-Binet 的最后一跳（单射函数和 ↔ 子集×排列和"
                 "= Σ_S |det(A[:,S])|²）数学骨架见 Lean 注释，留作后续形式化"}
 
+    # ---- N21：格点 N 序列 (3,6,7) 与 C(m,n) 组合数对照（锚定加法 vs 纠缠加法）----
+    from math import comb
+    # 组合数表：C(m,n)，m = 扭量数（3..7），n = 空间维数（1,2,3）
+    comb_table = {m: {n: comb(m, n) for n in (1, 2, 3)} for m in range(3, 8)}
+    # 格点胶球谱的叠加数 N（m² = N·M₀²，锚定加法）：0++/2++/0-+
+    N_seq = {"0++": 3, "2++": 6, "0-+": 7}
+    hits = {}
+    for state, N in N_seq.items():
+        found = []
+        for m in range(3, 8):
+            for n in (1, 2, 3):
+                if comb(m, n) == N:
+                    found.append(f"C({m},{n})={N}")
+        hits[state] = found if found else "无组合数匹配（仅 C(m,1)=m 平凡）"
+    # 等幅均匀扭量（n=2 最大纠缠近似）：πᵢ = (cos 2πi/m, sin 2πi/m)，
+    # det(P) = Σ_{i<j} sin²(θⱼ−θᵢ)（Cauchy-Binet n=2 全对数展开）——纠缠加法的值
+    det_vals = {}
+    for m in range(3, 8):
+        th = [2 * np.pi * i / m for i in range(m)]
+        rhs = sum(np.sin(th[j] - th[i]) ** 2 for i in range(m) for j in range(i + 1, m))
+        # 直接 det（数值交叉验证）
+        Pmat = np.zeros((2, 2), dtype=complex)
+        for i in range(m):
+            v = np.array([np.cos(th[i]), np.sin(th[i])], dtype=complex)
+            Pmat += np.outer(v, np.conj(v))
+        lhs = abs(np.linalg.det(Pmat))
+        det_vals[m] = {"det(P)": round(float(lhs), 10), "Σsin²": round(float(rhs), 10),
+                       "C(m,2)": comb(m, 2)}
+    report["results"]["N21_lattice_N_vs_Cmn"] = {
+        "组合数 C(m,n) 表（m=3..7）": {f"m={m}": {f"C(m,{n})": comb(m, n) for n in (1, 2, 3)} for m in range(3, 8)},
+        "格点 N 序列命中检测": hits,
+        "等幅均匀 n=2 det(P)（纠缠加法）": det_vals,
+        "note": "对照：格点 N（3,6,7）= 锚定加法（叠加数 m）；Cauchy-Binet 子式项数 = C(m,n)。"
+                "命中：3=C(3,2)、6=C(4,2)（n=2 全对数，数字巧合）；7 无组合数匹配；"
+                "n=3（胶球实际维数）C(m,3)=1,4,10,20,35 完全不含 3,6,7——"
+                "格点 N 序列是锚定加法（叠加数），不是纠缠加法（子式数），两者是平行独立结构"}
+
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
     # 左：det₃(P) vs |det₃[π₁π₂π₃]|² 散点（恒等，y = x）

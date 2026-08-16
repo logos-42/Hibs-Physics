@@ -266,6 +266,13 @@ def main():
         n20 = res["N20_gqs3_expansion_core"]
         check("GQS3: 一般 n 展开核（Σ_{r 单射}(∏A)·star(det M_r)）",
               n20["max|det(AA†) − Σ_{r 单射}(∏A)·star(det M_r)|（n=2..3, m=3..5 × 20）"] < 1e-8)
+        n21 = res["N21_lattice_N_vs_Cmn"]
+        check("N21: 格点 N 序列命中检测（3=C(3,2), 6=C(4,2) 命中；7 仅平凡 C(7,1)）",
+              "C(3,2)=3" in n21["格点 N 序列命中检测"]["0++"]
+              and "C(4,2)=6" in n21["格点 N 序列命中检测"]["2++"]
+              and n21["格点 N 序列命中检测"]["0-+"] == ["C(7,1)=7"])
+        check("N21: 等幅均匀 n=2 恒等（det(P) = Σ_{i<j}sin²）",
+              all(abs(v["det(P)"] - v["Σsin²"]) < 1e-8 for v in n21["等幅均匀 n=2 det(P)（纠缠加法）"].values()))
 
     # 4. 产物完整性
     artifacts = {

@@ -961,6 +961,160 @@ theorem det_conj_mul_sum_injective {n m : ℕ} (A : Fin n → Fin m → ℂ) :
           · rw [detRowAlt_zero_of_not_injective A r h]
             simp [h]
 
+/-! ### GQS4–GQS6. 最后一跳：单射函数和 ↔ 子集×排列双射（完整 Cauchy-Binet） -/
+
+-- leo（2026-08-15 第五轮续）：攻完整一般 Finset 版。
+-- GQS4：固定子集 S 内，枚举和 Σ_{e : Fin n ≃ S}(∏ₖ Aₖ,eₖ)•star(det M_e) = |det A[:,S]|²
+--   （e₀ = orderIsoOfFin 升序枚举；e = e₀∘π 参数化 → det_permute' 列排列变号 →
+--     det_apply Leibniz → det_transpose 合并）
+-- GQS5：单射函数和 ↔ (像子集 × 枚举) 双射（Fintype.sum_equiv）
+-- GQS6 ★ 完整一般 Finset 版 Cauchy-Binet：det(AA†) = Σ_{S, |S|=n} |det(A[:,S])|²
+
+/-- 辅助：枚举与排列的双射——固定基准枚举 e₀，任意枚举 e = π.trans e₀（π 排列）。 -/
+def enumEquivPerm {n : ℕ} {S : Type*} (e₀ : Fin n ≃ S) : (Fin n ≃ S) ≃ Equiv.Perm (Fin n) :=
+  { toFun := fun e => e.trans e₀.symm
+    invFun := fun π => π.trans e₀
+    left_inv := by
+      intro e
+      ext k
+      simp [Equiv.trans_apply]
+    right_inv := by
+      intro π
+      ext k
+      simp [Equiv.trans_apply] }
+
+/-- ★ GQS4：固定子集 S（card = n）——Σ_{e : Fin n ≃ S}(∏ₖ Aₖ,eₖ)•star(det M_e) =
+    |det A[:,S]|²（任意 n 元子族的"子纠缠体积"平方；e₀ = 升序枚举）。
+    证明：e = π.trans e₀ 参数化（sum_enum_param）→ det_permute'（列排列 sign 变号）→
+    star 提出 sign（sum_smul）→ det_apply + det_transpose（Leibniz 和 = det M₀）。 -/
+theorem sum_enum_minor {n m : ℕ} (A : Fin n → Fin m → ℂ)
+    (S : Finset (Fin m)) (hS : S.card = n) :
+    (∑ e : Fin n ≃ S,
+      (∏ k : Fin n, A k (e k)) • star (Matrix.det (fun l k => A l (e k)))) =
+      Matrix.det (fun i k => A i (S.orderIsoOfFin hS k)) *
+        star (Matrix.det (fun i k => A i (S.orderIsoOfFin hS k))) := by
+  let e₀ : Fin n ≃ S := S.orderIsoOfFin hS
+  calc
+    (∑ e : Fin n ≃ S,
+      (∏ k : Fin n, A k (e k)) • star (Matrix.det (fun l k => A l (e k))))
+      = ∑ π : Equiv.Perm (Fin n),
+          (∏ k : Fin n, A k (e₀ (π k))) •
+            star (Matrix.det (fun l k => A l (e₀ (π k)))) := by
+          -- e = π.trans e₀ 参数化（enumEquivPerm 双射）
+          symm
+          -- 目标：∑ π, F (π.trans e₀) = ∑ e, F e
+          have hparam : (∑ e : Fin n ≃ S,
+              (∏ k : Fin n, A k (e k)) • star (Matrix.det (fun l k => A l (e k)))) =
+            ∑ π : Equiv.Perm (Fin n),
+              (∏ k : Fin n, A k (Equiv.trans π e₀ k)) •
+                star (Matrix.det (fun l k => A l (Equiv.trans π e₀ k))) := by
+            calc
+              (∑ e : Fin n ≃ S,
+                (∏ k : Fin n, A k (e k)) • star (Matrix.det (fun l k => A l (e k))))
+                = ∑ a : Fin n ≃ S,
+                    (∏ k : Fin n, A k (Equiv.trans (Equiv.trans a e₀.symm) e₀ k)) •
+                      star (Matrix.det (fun l k => A l (Equiv.trans (Equiv.trans a e₀.symm) e₀ k))) := by
+                    apply Finset.sum_congr rfl
+                    intro a ha
+                    congr 1
+                    · apply Finset.prod_congr rfl
+                      intro k hk
+                      simp [Equiv.trans_apply]
+                    · congr 1
+                      congr 1
+                      ext l k
+                      simp [Equiv.trans_apply]
+              _ = ∑ π : Equiv.Perm (Fin n),
+                    (∏ k : Fin n, A k (Equiv.trans π e₀ k)) •
+                      star (Matrix.det (fun l k => A l (Equiv.trans π e₀ k))) := by
+                    -- Equiv.sum_comp：∑ a, g (e a) = ∑ π, g π（e a = a.trans e₀.symm）
+                    exact Equiv.sum_comp (enumEquivPerm e₀)
+                      (g := fun π : Equiv.Perm (Fin n) =>
+                        (∏ k : Fin n, A k (Equiv.trans π e₀ k)) •
+                        star (Matrix.det (fun l k => A l (Equiv.trans π e₀ k))))
+          exact hparam.symm
+    _ = ∑ π : Equiv.Perm (Fin n),
+          (∏ k : Fin n, A k (e₀ (π k))) •
+            star (Equiv.Perm.sign π • Matrix.det (fun l k => A l (e₀ k))) := by
+          -- det_permute'：det(fun l k => A l (e₀ (π k))) = sign π • det(fun l k => A l (e₀ k))
+          apply Finset.sum_congr rfl
+          intro π hπ
+          congr 1
+          congr 1
+          -- 左边 det 的矩阵 = M₀.submatrix id π
+          have hm : (fun l k => A l (e₀ (π k))) =
+              Matrix.submatrix (fun l k => A l (e₀ k)) id π := by
+            ext l k
+            simp [Matrix.submatrix]
+          rw [hm, Matrix.det_permute']
+          -- sign π • det = (sign π : ℂ) * det（ℤ-smul 展开）
+          exact (zsmul_eq_mul (Matrix.det (fun l k => A l (e₀ k))) (Equiv.Perm.sign π)).symm
+    _ = (∑ π : Equiv.Perm (Fin n), Equiv.Perm.sign π •
+          (∏ k : Fin n, A k (e₀ (π k)))) •
+          star (Matrix.det (fun l k => A l (e₀ k))) := by
+          -- star(sign π • det M₀) = sign π • star(det M₀)，然后 sum_smul 提出 star(det M₀)
+          calc
+            (∑ π : Equiv.Perm (Fin n),
+              (∏ k : Fin n, A k (e₀ (π k))) •
+                star (Equiv.Perm.sign π • Matrix.det (fun l k => A l (e₀ k))))
+              = ∑ π : Equiv.Perm (Fin n),
+                  (Equiv.Perm.sign π • (∏ k : Fin n, A k (e₀ (π k)))) •
+                    star (Matrix.det (fun l k => A l (e₀ k))) := by
+                  -- 每项：star(sign π • det) = sign π • star(det)；(∏A)•(sign•star) = (sign•∏A)•star
+                  apply Finset.sum_congr rfl
+                  intro π hπ
+                  have hs : star (Equiv.Perm.sign π • Matrix.det (fun l k => A l (e₀ k))) =
+                      Equiv.Perm.sign π • star (Matrix.det (fun l k => A l (e₀ k))) := by
+                    -- 环同态保持 ℤ-smul：star(sign π • det) = sign π • star(det)
+                    exact AddMonoidHom.map_zsmul ((starRingEnd ℂ) : ℂ →+ ℂ)
+                      (Matrix.det (fun l k => A l (e₀ k))) (Equiv.Perm.sign π)
+                  rw [hs]
+                  -- 展开 ℤ-smul 为 intCast 乘法，ℂ 自 smul 为乘法，ring 合并
+                  have h1 : Equiv.Perm.sign π • star (Matrix.det (fun l k => A l (e₀ k))) =
+                      (Equiv.Perm.sign π : ℂ) * star (Matrix.det (fun l k => A l (e₀ k))) :=
+                    zsmul_eq_mul (star (Matrix.det (fun l k => A l (e₀ k)))) (Equiv.Perm.sign π)
+                  have h2 : Equiv.Perm.sign π • (∏ k : Fin n, A k (e₀ (π k))) =
+                      (Equiv.Perm.sign π : ℂ) * (∏ k : Fin n, A k (e₀ (π k))) :=
+                    zsmul_eq_mul (∏ k : Fin n, A k (e₀ (π k))) (Equiv.Perm.sign π)
+                  rw [h1, h2]
+                  rw [smul_eq_mul, smul_eq_mul]
+                  ring
+            _ = (∑ π : Equiv.Perm (Fin n), Equiv.Perm.sign π •
+                  (∏ k : Fin n, A k (e₀ (π k)))) •
+                  star (Matrix.det (fun l k => A l (e₀ k))) := by
+                  rw [Finset.sum_smul]
+    _ = Matrix.det (fun i k => A i (S.orderIsoOfFin hS k)) *
+          star (Matrix.det (fun i k => A i (S.orderIsoOfFin hS k))) := by
+          -- Σ_π sign π • ∏ₖ Aₖ,e₀(πₖ) = det M₀（det_transpose + det_apply Leibniz）
+          have hdet : (∑ π : Equiv.Perm (Fin n), Equiv.Perm.sign π •
+              (∏ k : Fin n, A k (e₀ (π k)))) =
+              Matrix.det (fun i k => A i (e₀ k)) := by
+            -- det M₀ = det M₀ᵀ（det_transpose），M₀ᵀ r c = A c (e₀ r)
+            -- det(M₀ᵀ) = Σ_σ sign σ • ∏ i, A i (e₀ (σ i))（det_apply）
+            rw [← Matrix.det_transpose]
+            rw [Matrix.det_apply]
+            -- 两边是同一个 Leibniz 和（变量重命名）
+            rfl
+          rw [hdet]
+          simp [e₀]
+
+/-! ### GQS5–GQS6. 最后一跳（数学骨架，诚实标注：Sigma 依赖相等未形式化） -/
+
+-- leo（2026-08-15）：完整一般 Finset 版 Cauchy-Binet 的最后一跳——
+--   det(AA†) = Σ_{S, |S|=n} |det(A[:,S])|²（一般 n, m）。
+-- 数学骨架（三步，GQS4 已 Lean 全证）：
+--   1. GQS4 ✓（sum_enum_minor，已证）：固定子集 S（card = n）内，
+--      Σ_{e : Fin n ≃ S}(∏ₖ Aₖ,eₖ)•star(det M_e) = |det A[:,S]|²
+--      （e = π.trans e₀ 参数化 → det_permute' 列排列变号 → map_zsmul →
+--        det_apply + det_transpose Leibniz 合并）
+--   2. GQS5（骨架）：单射函数和 ↔ (像子集 × 枚举) 和——
+--      Σ_{r : Fin n → Fin m, 单射} f r = Σ_{S, |S|=n} Σ_{e : Fin n ≃ S} f(嵌入 e)
+--      双射 r ↦ (univ.image r, 像枚举)（injEquivSigma：toFun/invFun/left_inv 已构造，
+--      right_inv 的 Sigma 依赖相等 Eq.recOn 化简未完成——Lean 已知难点）
+--   3. GQS6（骨架）：组合 det(AA†) = Σ_{S,|S|=n}|det(A[:,S])|²（GQS3 + GQS5 + GQS4）
+-- 诚实：GQS4 已证（固定子集内 |det|² 是最后一跳的数学核心）；GQS5/6 的组合双射
+-- （Sigma 类型依赖相等）留作后续；GQS1（n=2 任意 m）已完整覆盖"任意多半旋量叠加"。
+
 end ProjectionPhysics.QFTFlow
 
 end
