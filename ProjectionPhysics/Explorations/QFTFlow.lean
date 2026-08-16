@@ -1315,6 +1315,74 @@ lemma gqc3_uniform_flow {n : ℕ} (v : ℤ) (i j : Fin n)
     (1 : ℤ) < |(j.1 : ℤ) - (i.1 : ℤ)| := by
   exact gqc3_superluminal_geometric (fun k => v * (k.1 : ℤ)) i j hcarry hflow
 
+/-! ### GQF★. 流动动量与四力：质量=位移条数，电荷=流散度（扭量×希尔伯特空间重述）
+
+leo（2026-08-16）假设（用扭量/希尔伯特空间重述流动空间）：
+- ★ 质量 = 物体周围以光速运动的空间位移的条数——锚定加法：
+  格点 N 序列（3,6,7）= 条数（N21），统一链 m² = |det_N|²（GQN5）
+- ★ 正电荷 = 单位时间以光速向四周发散的空间位移条数（流的源）
+- ★ 负电荷 = 单位时间从四周以光速汇聚的空间位移条数（流的汇）
+- 正负电荷周围空间圆柱状螺旋运动，均右手螺旋（发散/汇聚区分电性；
+  电性 = 流散度符号，TW4/TW8 的法向量翻转是同一结构）
+- 能量 = 物体在空间中运动程度 + 周围空间运动程度
+- ★ 动量 = m(C − v)：C = 矢量光速（方向可变），v = 物体速度——
+  物体相对空间流动的动量（希尔伯特空间 ℂⁿ 上的算子）
+- ★ 四力 = 动量导数分解（product rule 四项，莱布尼茨法则）：
+  电场力 = (dm/dt)·C（质量流 × 光速方向）
+  核力   = m·(dC/dt)（质量 × 光速流——矢量光速方向变化）
+  磁场力 = (dm/dt)·v（质量流 × 速度）
+  万有引力/惯性力 = m·(dv/dt)（质量 × 加速度）
+- 诚实：代数恒等（product rule，真但平凡）+ GQF4 电荷散度为数学骨架
+  （需矢量场微积分）；物理映射 = 解释层。 -/
+
+/-- GQF1★. 流动动量（希尔伯特空间 ℂⁿ 算子）：P̂ = m·(Ĉ − v̂)。
+    分解引理：P̂ = m·Ĉ − m·v̂——空间流动量（m·C，随流部分）
+    减机械动量（m·v，物体运动部分）。 -/
+lemma gqf1_flow_momentum {n : ℕ} (m : ℂ) (C v : Matrix (Fin n) (Fin n) ℂ) :
+    m • (C - v) = m • C - m • v := by
+  simp [sub_eq_add_neg, smul_add, smul_neg]
+
+/-- GQF2★. 四力分解（product rule）：动量变化率 = 电场力 + 核力 − 磁场力 − 万有引力。
+    d/dt[m(C−v)] = (dm)C + m(dC) − (dm)v − m(dv)。
+    重组恒等：dm(C−v) + m(dC−dv) = dm·C + m·dC − dm·v − m·dv
+    （莱布尼茨法则的代数形式——四项通道在物理注释中标注；
+    dC, dv 是算子的变化率（矩阵），dm 是质量流（标量））。 -/
+lemma gqf2_four_forces {n : ℕ} (dm m : ℂ)
+    (C v dC dv : Matrix (Fin n) (Fin n) ℂ) :
+    dm • C + m • dC - (dm • v + m • dv) =
+      dm • (C - v) + m • (dC - dv) := by
+  ext i j
+  simp [sub_eq_add_neg]
+  ring
+
+/-- GQF2b. 四力通道独立标注（分量级）：四项各自可识别——
+    (dm·C) 电场通道、(m·dC) 核力通道、(dm·v) 磁场通道、(m·dv) 引力通道。
+    四项符号：电场 + 核力 − 磁场 − 引力（总力 = 两项和 − 两项和）。 -/
+lemma gqf2b_four_channels {n : ℕ} (dm m : ℂ)
+    (C v dC dv : Matrix (Fin n) (Fin n) ℂ) :
+    (dm • C + m • dC) - (dm • v + m • dv) =
+      (dm • C - dm • v) + (m • dC - m • dv) := by
+  ext i j
+  simp [sub_eq_add_neg]
+  ring
+
+/-- GQF3★. 质量 = 位移条数（锚定加法）：质量加法保持正性——
+    条数叠加永不归零（多激发叠加质量单调增，QFT4 叠加锚定永不减少的动量版）。
+    连接 N21：格点 N 序列（3,6,7）= 条数；统一链 GQN5：m² = |det_N|²。 -/
+lemma gqf3_mass_positive_sum (m₁ m₂ : ℂ) (hm₁ : 0 < m₁.re) (hm₂ : 0 < m₂.re) :
+    0 < (m₁ + m₂).re := by
+  rw [Complex.add_re]
+  linarith
+
+/- GQF4（数学骨架，诚实标注）：电荷 = 空间位移流的散度（源/汇）。
+   - 正电荷 = 发散源：单位时间以光速向外流出的位移条数（∇·J > 0）
+   - 负电荷 = 汇聚汇：单位时间从无限远以光速流入的位移条数（∇·J < 0）
+   - 正负电荷周围空间均圆柱状右手螺旋：轴向流动 + 环向涡度 + 径向（发散/汇聚）
+   - 数学需要矢量场微积分（∇·J = ρ，J = 空间位移流）——离散格点版留作后续；
+     已有 TW4/TW8 覆盖电性 = 法向量方向（电荷共轭 C = iσ₂ 翻转 ±1），
+     与流散度是同一结构的两个表述（源/汇 ↔ 法向量翻转）
+   - 数值：N25 电荷流场模拟（正 = 发散右手螺旋，负 = 汇聚右手螺旋）。 -/
+
 end ProjectionPhysics.QFTFlow
 
 end

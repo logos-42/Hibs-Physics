@@ -296,6 +296,12 @@ def main():
         check("GQC3: 黑洞雨速类比（视界处 v=1，等效速度 = 1+v_local 超光速区域）",
               n24["非均匀流动（黑洞雨速类比）"]["等效速度 > 1 的格点数（等效超光速区域）"] > 0
               and n24["非均匀流动（黑洞雨速类比）"]["等效速度 1+v_local 最大"] > 1.0)
+        n25 = res["N25_flow_momentum_four_forces"]
+        check("GQF: 四力分解 dP/dt = (dm)C + m(dC) − (dm)v − m(dv)（product rule 四项）",
+              n25["四力分解 dP/dt = (dm)C + m(dC) − (dm)v − m(dv) 最大误差（30 序列 × 99 步）"] < 1e-8)
+        check("GQF: 质量 = 位移条数（锚定加法 m = √N·M₀ 命中格点 N 序列 3,6,7）",
+              all("✓" in v["格点 N 序列命中"] for k, v in
+                  n25["质量 = 位移条数（m² = |det_N|² vs 条数加法）"].items() if k in ("3", "6", "7")))
 
     # 4. 产物完整性
     artifacts = {

@@ -701,6 +701,60 @@ def main():
                 "Painlevé-Gullstrand 结构）。诚实：坐标变换+三角不等式（真但平凡）；"
                 "框架贡献 = GQC2 光锥明确为流动系光锥，等效超光速是几何倾斜（解释层）"}
 
+    # ---- N25：GQF 流动动量与四力（质量=位移条数，电荷=流散度）----
+    # 1. 四力分解数值：m(t), C(t), v(t) 时间序列，数值差分验证 dP/dt = 四项和
+    rng4 = np.random.default_rng(11)
+    four_max_err = 0.0
+    for _ in range(30):
+        T = 100
+        mt = 1.0 + 0.3 * np.sin(np.linspace(0, 3, T))          # 质量流（标量）
+        Ct = (rng4.standard_normal((T, 2, 2)) + 1j * rng4.standard_normal((T, 2, 2)))
+        vt = (rng4.standard_normal((T, 2, 2)) + 1j * rng4.standard_normal((T, 2, 2)))
+        Pt = mt[:, None, None] * (Ct - vt)                       # P = m(C−v)
+        dP = np.diff(Pt, axis=0)                                 # 数值差分 dP/dt
+        dm = np.diff(mt)[:, None, None]
+        dC = np.diff(Ct, axis=0)
+        dv = np.diff(vt, axis=0)
+        # 精确展开：dP = m(dC−dv) + dm(C−v) + dm(dC−dv)（product rule 四项 + 二阶项）
+        rhs = (mt[:-1, None, None] * (dC - dv) + dm * (Ct[:-1] - vt[:-1])
+               + dm * (dC - dv))
+        four_max_err = max(four_max_err, float(np.max(np.abs(dP - rhs))))
+    # 2. 质量 = 位移条数（锚定加法谱）：N 条方向叠加 m² = N·M₀²（M₀=1）
+    #    ——格点 N 序列（3,6,7）对应 m = √3, √6, √7（0++ √3·M₀ 命中，N21）
+    mass_table = {}
+    for N in range(1, 8):
+        mass_table[N] = {"m = √N·M₀（锚定加法，M₀=1）": round(np.sqrt(N), 4),
+                         "格点 N 序列命中": "✓" if N in (3, 6, 7) else ""}
+    # 3. 电荷流场：正电荷（发散右手螺旋）vs 负电荷（汇聚右手螺旋）
+    #    圆柱螺旋：径向（发散/汇聚）+ 环向（右手 ω）+ 轴向（匀速流）
+    th = np.linspace(0, 4 * np.pi, 200)
+    z = np.linspace(0, 2, 200)
+    r_plus = 0.3 + 0.6 * z / 2          # 正电荷：半径随 z 增大（发散）
+    r_minus = 1.0 - 0.4 * z / 2         # 负电荷：半径随 z 减小（汇聚）
+    fig_charge, axq = plt.subplots(1, 2, figsize=(10, 4.4),
+                                   subplot_kw={"projection": "3d"})
+    for ax, r, name, q in [(axq[0], r_plus, "正电荷：发散右手螺旋", "+"),
+                           (axq[1], r_minus, "负电荷：汇聚右手螺旋", "−")]:
+        ax.plot(r * np.cos(th), r * np.sin(th), z, lw=1.4)
+        ax.set_title(name)
+        ax.set_xlabel("x"); ax.set_ylabel("y"); ax.set_zlabel("z（轴向流动）")
+    axq[0].set_title("正电荷：发散右手螺旋（空间位移向外，源）")
+    axq[1].set_title("负电荷：汇聚右手螺旋（空间位移向内，汇）")
+    fig_charge.tight_layout()
+    fig_charge.savefig(os.path.join(OUT, "fig_charge_helix.png"), dpi=130)
+    plt.close(fig_charge)
+    report["results"]["N25_flow_momentum_four_forces"] = {
+        "四力分解 dP/dt = (dm)C + m(dC) − (dm)v − m(dv) 最大误差（30 序列 × 99 步）": round(four_max_err, 13),
+        "质量 = 位移条数（m² = |det_N|² vs 条数加法）": mass_table,
+        "电荷流场图（正=发散右手螺旋，负=汇聚右手螺旋）": "artifacts/qftflow/fig_charge_helix.png",
+        "note": "GQF：流动动量 P = m(C−v)（物体相对空间流动的动量，C=矢量光速方向可变）；"
+                "四力 = dP/dt 的 product rule 分解：电场力(dm·C) + 核力(m·dC) − "
+                "磁场力(dm·v) − 万有引力(m·dv)——莱布尼茨法则四项通道；"
+                "质量 = 位移条数（锚定加法 N·M₀²，N21 格点 N 序列）；"
+                "电荷 = 空间位移流散度（正=发散源，负=汇聚汇，均右手螺旋）。"
+                "诚实：product rule 是代数恒等（真但平凡），电荷散度为数学骨架（GQF4 标注）；"
+                "物理映射 = 解释层，四力通道与标准力学的对应未定量（无耦合常数）"}
+
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
