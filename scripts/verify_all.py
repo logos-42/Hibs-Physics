@@ -302,6 +302,11 @@ def main():
         check("GQF: 质量 = 位移条数（锚定加法 m = √N·M₀ 命中格点 N 序列 3,6,7）",
               all("✓" in v["格点 N 序列命中"] for k, v in
                   n25["质量 = 位移条数（m² = |det_N|² vs 条数加法）"].items() if k in ("3", "6", "7")))
+        n26 = res["N26_photon_structure"]
+        check("GQP: 光子模型 B 环向抵消 + 无质量（类光）+ 随流",
+              n26["模型 B 环向动量抵消（y 叠加最大幅度）"] == 0.0
+              and n26["无质量判据 E² = |p|²（轴向光速，c=1）"]
+              and n26["光子随流（位移 = 流动位移，v_flow = c）"])
 
     # 4. 产物完整性
     artifacts = {

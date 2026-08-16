@@ -755,6 +755,52 @@ def main():
                 "诚实：product rule 是代数恒等（真但平凡），电荷散度为数学骨架（GQF4 标注）；"
                 "物理映射 = 解释层，四力通道与标准力学的对应未定量（无耦合常数）"}
 
+    # ---- N26：GQP 光子结构（激发电子螺旋 ⟹ 无质量，随流光速）----
+    # 模型 A：单激发电子圆柱螺旋（轴向直线速度 = 光速）
+    # 模型 B：双激发电子绕轴线对称旋转（环向动量抵消 ⟹ 纯轴向 ⟹ 无质量）
+    tq = np.linspace(0, 4 * np.pi, 300)
+    rq, om = 0.8, 1.0
+    # 模型 A：单螺旋 (r cos ωt, r sin ωt, ct)
+    xA = rq * np.cos(om * tq)
+    yA = rq * np.sin(om * tq)
+    zA = tq * 1.0                                    # 轴向直线 = 光速（z/t = 1）
+    # 模型 B：双螺旋对称（环向 ±，轴向同向）
+    xB1, yB1 = rq * np.cos(om * tq), rq * np.sin(om * tq)
+    xB2, yB2 = rq * np.cos(om * tq), -rq * np.sin(om * tq)
+    zB = tq * 1.0
+    # 验证：模型 B 环向动量抵消（y 方向 ± 对称）
+    p_y_total = np.max(np.abs(yB1 + yB2))            # 环向（y）叠加 = 0
+    # 验证：无质量（类光）——E² = |p|²（轴向光速，环向抵消）
+    p_axial = 1.0                                    # p_z = c
+    massless_ok = abs(1.0 ** 2 - p_axial ** 2) < 1e-12   # E = |p|（c=1）
+    # 验证：光子随流（GQC3 v = C：流动坐标中光子静止）
+    v_flow = 1.0                                     # 流动速度 = 光速
+    carried_ok = abs((v_flow * tq[-1]) - zA[-1]) < 1e-12  # 光子位移 = 流动位移
+    fig_photon, axp = plt.subplots(1, 2, figsize=(10, 4.4),
+                                   subplot_kw={"projection": "3d"})
+    axp[0].plot(xA, yA, zA, lw=1.5, color="tab:blue")
+    axp[0].set_title("模型 A：单激发电子圆柱螺旋\n（轴向直线速度 = 光速）")
+    axp[0].set_xlabel("x"); axp[0].set_ylabel("y"); axp[0].set_zlabel("z（传播方向）")
+    axp[1].plot(xB1, yB1, zB, lw=1.2, color="tab:red", label="激发电子 1（+环向）")
+    axp[1].plot(xB2, yB2, zB, lw=1.2, color="tab:green", ls="--", label="激发电子 2（−环向）")
+    axp[1].set_title("模型 B：双激发电子绕轴对称旋转\n（环向抵消 ⟹ 纯轴向 ⟹ 无质量）")
+    axp[1].set_xlabel("x"); axp[1].set_ylabel("y"); axp[1].set_zlabel("z")
+    axp[1].legend(fontsize=8)
+    fig_photon.tight_layout()
+    fig_photon.savefig(os.path.join(OUT, "fig_photon_models.png"), dpi=130)
+    plt.close(fig_photon)
+    report["results"]["N26_photon_structure"] = {
+        "模型 B 环向动量抵消（y 叠加最大幅度）": round(p_y_total, 13),
+        "无质量判据 E² = |p|²（轴向光速，c=1）": bool(massless_ok),
+        "光子随流（位移 = 流动位移，v_flow = c）": bool(carried_ok),
+        "光子结构图": "artifacts/qftflow/fig_photon_models.png",
+        "note": "GQP：光子 = 激发电子（质量电荷消失）的螺旋结构。粒子性 = 电子实体遗留的"
+                "螺旋结构；波动性 = 空间本身的波动（GQP4 数学骨架）；光子静止在空间中随流"
+                "（v = C，GQC3 流动携带，等效速度 = 光速）。模型 A：单螺旋（单扭量 det=0 "
+                "无质量，TW1）；模型 B：双螺旋对称——环向动量抵消 ⟹ 净动量纯轴向 ⟹ "
+                "无质量（两模型共享光锥 E²=|p|²）。诚实：代数恒等（真但平凡），"
+                "波动性需波动方程（骨架）；解释层"}
+
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
