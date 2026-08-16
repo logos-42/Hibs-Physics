@@ -664,6 +664,58 @@ $M_0$ calibration remain fits (second-input gap), and the coupling model is
 a $1{+}1$-dimensional toy, so the verdict is: data consistent at the
 order-of-magnitude level; first-principles prediction not yet achieved.
 
+\subsection{Information as symplectic volume, photon helices, and counting the strands (2026-08-16)}
+
+A fast-moving exploration line (formalized in
+\texttt{ProjectionPhysics/Explorations/QFTFlow.lean}, 4146 jobs, zero
+`sorry`; numerical checks N1--N28 at machine precision) extends the
+framework in four directions.
+
+\textbf{Information as symplectic volume.} Unitary transport (flow
+propagation) preserves $\det(AA^\dagger)$ (GQC1): information, defined as
+the symplectic correlation volume of the twistors, is conserved by the
+flow. Causality is lattice locality (GQC2): a nearest-neighbour jump
+matrix has bandwidth $t$ after $t$ steps, so the propagation kernel
+vanishes outside the lattice light cone. In a non-uniform flow the
+effective speed is $1+v_{\rm flow}$ (GQC3): superluminal \emph{equivalent}
+motion is a geometric (coordinate-dragging) effect --- the
+Alcubierre/Painlev\'e--Gullstrand structure --- while signals never exceed
+the local speed of light. No new physics is claimed; these belong to the
+explanation layer.
+
+\textbf{Flow momentum and the four forces.} With the momentum postulate
+$p = m(C-v)$ ($C$ the vector light speed, $v$ the body velocity), the
+Leibniz rule gives (GQF)
+\[
+\frac{d}{dt}\big[m(C-v)\big] = \dot m\,C + m\dot C - \dot m\,v - m\dot v,
+\]
+four channels identified with the electric ($\dot m C$), nuclear
+($m\dot C$), magnetic ($\dot m v$) and gravitational/inertial ($m\dot v$)
+forces. This is an algebraic identity; the coupling constants are not
+derived.
+
+\textbf{Photon = excited electron helix.} The photon is an excited
+electron whose mass and charge have vanished; the helix (two symmetric
+helices, model B) has vanishing azimuthal momentum, hence purely axial
+momentum and $E^2=|p|^2$ (massless) --- the two models share the light
+cone.
+
+\textbf{Counting the strands (matching attempt).} The quantum relation
+\[
+E = \hbar\omega = \frac{h}{2\pi}\,2\pi f = h\,f
+\]
+is reinterpreted as \emph{angular momentum per turn times turns per
+second} (GQR): $\hbar$ becomes a per-radian angular momentum, a countable
+geometric quantity, and the turns are the (countable) frequency. The
+numerical check is exact (relative error $0$). The glueball rule
+$m=\sqrt{N}\,M_0$ reads the same way: $N=3$ strands (three anchored
+directions); colour $=3$ is the same ``3'' (three spatial directions);
+$8$ gluons $= 2^3 = \dim C\ell(6)$ (TW5). Honest limits: the quark mass
+spectrum ($2.2$\,MeV $\to$ $173$\,GeV) shows no strand-counting pattern
+(QCD free parameters); $L=h$ still rests on the measured photon spin; a
+first-principles derivation of $\hbar$ from the helix geometry is the open
+next step.
+
 \section{Relation to existing physics}\label{sec:relation}
 
 \subsection{What is standard, restated}

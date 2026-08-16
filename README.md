@@ -206,6 +206,40 @@ Weyl decomposition is the open question `CliffordEmergence`.
 
 ---
 
+## 4.5 Recent QFTFlow explorations (2026-08-16)
+
+A fast-moving exploration line lives in
+`ProjectionPhysics/Explorations/QFTFlow.lean` (4146 jobs, zero `sorry`),
+all formalized and numerically verified (N1–N28, machine precision):
+
+- **Twistor unification (GQ/GQN/GQM/GQS)**: mass² = |detₙ|² = Σ|minor dets|² —
+  mass as symplectic entanglement volume (Cauchy-Binet chain, general Finset
+  version; n=2, any m complete).
+- **Information = symplectic volume (GQC1)**: unitary transport (flow
+  propagation) preserves det(AA†) — information conservation in the flow.
+- **Causality = lattice locality (GQC2)**: bandwidth ≤ 1 ⟹ t-step bandwidth ≤ t —
+  light cone from lattice flow.
+- **Equivalent superluminality = geometric (GQC3)**: tilted light cones —
+  flow dragging makes the effective speed 1+v_flow > c while signals stay ≤ c
+  locally (Alcubierre/Painlevé–Gullstrand structure).
+- **Flow momentum & four forces (GQF)**: p = m(C−v); d/dt p =
+  (dm)C + m(dC) − (dm)v − m(dv) — electric/nuclear/magnetic/gravity channels
+  from the Leibniz rule.
+- **Photon = excited electron helix (GQP)**: model B — antipodal double helix
+  ⟹ azimuthal cancellation ⟹ massless; the photon is carried by the flow.
+- **★ Matching: E = ħω = h·f = angular momentum per turn × turns per second
+  (GQR)**: ħ reinterpreted as per-radian angular momentum (a countable
+  geometric quantity); turns = frequency (countable). Relative error 0.
+- **Glueball/quark counting (N28)**: N = 3 directions → 3 colors → 3 glueball
+  anchorings — the same "3" runs through space/color/glueball; 8 gluons =
+  2³ = dim Cℓ(6). Quark masses (2.2 MeV → 173 GeV) show **no** counting
+  pattern — QCD free parameters (honest).
+
+Honest status: all of the above are algebraic identities plus interpretation
+(explanation layer); no new falsifiable prediction yet. The second-input gap
+(e, ℏ, M₀, G remain unquantified inputs) is unchanged; deriving ℏ from helix
+geometry is the open next step.
+
 ## 5. Honest assessment (what is NOT claimed)
 
 1. **Drafts are drafts.** `RepresentationCompleteness`, `KernelRepresentation`,
