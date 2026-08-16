@@ -11,6 +11,11 @@
 | `projection-physics.bib` | 参考文献（18 条，全真实：Gordon 1923 / Hamilton–Lisle 2008 / Morningstar–Peardon 1999 / Chen 2006 / Aspect 1982 / PDG 2024 / de Moura CADE-15 等），两版共用 |
 | `projection-physics.pdf` | 英文版编译产物（tectonic 0.17.0，20 页，零错误零 overfull） |
 | `projection-physics-zh.pdf` | 中文版编译产物（tectonic 0.17.0，13 页，零错误零 overfull） |
+| `projection-unified.tex` | **大一统论文（英文版，2026-08-16）**。流动空间大一统：质量=辛纠缠体积（Cauchy-Binet 链）、信息=辛体积（传输/因果/等效超光速）、四力=流动动量莱布尼茨分解、光子=激发电子螺旋、量子关系从螺旋几何涌现（E=ħω、p=h/λ、E=hf、圆周=波长）、胶球/夸克与"3"的贯穿。REVTeX 4.2 + 7 张配图（paper/figures/） |
+| `projection-unified-zh.tex` | **大一统论文（中文版）**。内容与英文版等同；REVTeX 4.2 + ctex（fandol） |
+| `projection-unified.pdf` | 大一统英文版编译产物（tectonic，零错误，仅 1 处 overfull 警告） |
+| `projection-unified-zh.pdf` | 大一统中文版编译产物（tectonic，零错误零警告） |
+| `figures/` | 大一统论文配图（7 张，源自 artifacts/qftflow/：fig_triple_rank / fig_tilted_lightcone / fig_charge_helix / fig_photon_models / fig_photon_turns / fig_circumference_wavelength / fig_antiphase_global） |
 | `apstemplate.tex` / `apssamp.tex` / `apssamp.bib` / `fig_*.eps` / `vid_*.eps` | APS 官方 REVTeX 模板样例（下载的 zip 原样保留，投稿参考用，不属于论文） |
 
 ## 编译
