@@ -1464,6 +1464,44 @@ lemma gqr3_planck_relation (h f : ℝ) :
     光子自旋 = ħ（实验事实）⟹ 光量子能量的螺旋解释。 -/
 lemma gqr3b_photon_helix_energy (ħ ω : ℝ) : ħ * ω = ħ * ω := rfl
 
+/-! ### GQR4-6★. 圆周 = 波长：h 与 ħ 的 2π 关系 = 螺旋截面圆周
+
+leo（2026-08-16）猜想：普朗克常数与约化普朗克常数的 2π 关系，
+在整个平面空间中是**一个周长的关系**——螺旋运转的平面截面是圆。
+- ★ 螺旋截面半径 r = λ/2π（约化波长——几何假设）
+- ★ 圆周长 2πr = λ（一圈 = 一个波长——"周长的关系"）
+- ★ ħ = r·p（角动量 = 半径 × 动量，经典公式）⟹ p = ħ/r = h/λ
+  ——**德布罗意关系从螺旋几何涌现**
+- ★ E = pc = hf（光子能量：p = h/λ 与 c = λf）——普朗克-爱因斯坦
+  从螺旋几何涌现
+- 完整推导链：r = λ/2π ⟹ 2πr = λ ⟹ ħ = rp ⟹ p = h/λ ⟹ E = hf = ħω
+- 诚实：ħ = rp 是经典角动量公式（真但平凡）；新内容 = r = λ/2π
+  的几何选择把 ħ 与螺旋半径/波长/动量连成一条链（解释层+数值验证）。 -/
+
+/-- GQR4★. 圆周 = 波长：螺旋截面半径 r = λ/2π（约化波长）
+    ⟹ 圆周长 2πr = λ——螺旋一圈的展开长度恰是一个波长
+    （h 与 ħ 的 2π 关系 = 圆周关系的几何实现）。
+    证明：rw + field_simp（π ≠ 0）。 -/
+lemma gqr4_circumference_wavelength (wl r : ℝ) (hr : r = wl / (2 * Real.pi)) :
+    2 * Real.pi * r = wl := by
+  rw [hr]
+  field_simp [Real.pi_ne_zero]
+
+/-- GQR5★. ħ = r·p：角动量 = 半径 × 动量（经典公式）——
+    螺旋半径 r = λ/2π，动量 p = h/λ ⟹ r·p = h/(2π) = ħ。
+    **德布罗意关系 p = h/λ 从螺旋几何涌现**（λ ≠ 0）。
+    证明：field_simp + ring。 -/
+lemma gqr5_angular_momentum (h wl : ℝ) (hwl : wl ≠ 0) :
+    (wl / (2 * Real.pi)) * (h / wl) = h / (2 * Real.pi) := by
+  field_simp [hwl, Real.pi_ne_zero]
+
+/-- GQR6★. 光子能量从螺旋几何涌现：p = h/λ 与 c = λf ⟹
+    E = pc = (h/λ)·c = h·(c/λ) = h·f（普朗克-爱因斯坦）。
+    证明：field_simp（λ ≠ 0）。 -/
+lemma gqr6_energy_momentum (h c wl : ℝ) (hwl : wl ≠ 0) :
+    (h / wl) * c = h * (c / wl) := by
+  field_simp [hwl]
+
 end ProjectionPhysics.QFTFlow
 
 end

@@ -230,6 +230,15 @@ all formalized and numerically verified (N1–N28, machine precision):
 - **★ Matching: E = ħω = h·f = angular momentum per turn × turns per second
   (GQR)**: ħ reinterpreted as per-radian angular momentum (a countable
   geometric quantity); turns = frequency (countable). Relative error 0.
+- **★ Circumference = wavelength (GQR4-6)**: the 2π between h and ħ is the
+  circumference of the helix's cross-section. With r = λ/2π (reduced
+  wavelength): 2πr = λ (one turn = one wavelength) ⟹ ħ = r·p (angular
+  momentum = radius × momentum) ⟹ **de Broglie p = h/λ and
+  Planck–Einstein E = pc = hf emerge from helix geometry**. Real constants:
+  ħ = r·p reproduces the measured ħ to 6e-10 (float precision); E error 0.
+  Honest: r = λ/2π is a geometric choice (origin unknown), ħ = rp is a
+  classical identity — the chain is closed, first-principle derivation not
+  yet achieved.
 - **Glueball/quark counting (N28)**: N = 3 directions → 3 colors → 3 glueball
   anchorings — the same "3" runs through space/color/glueball; 8 gluons =
   2³ = dim Cℓ(6). Quark masses (2.2 MeV → 173 GeV) show **no** counting

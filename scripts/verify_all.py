@@ -15,6 +15,7 @@
 """
 
 import json
+import math
 import os
 import subprocess
 import sys
@@ -317,6 +318,11 @@ def main():
               and n28["锚定加法 m² = 3·M₀² ⟹ m = √3·M₀（0++ 命中）"] == 1.732051
               and n28["统一三链条匹配表"]["胶子数（色八重态 adjoint 表示）"] == 8
               and n28["统一三链条匹配表"]["Cℓ(6) 旋量维数 2³"] == 8)
+        n29 = res["N29_circumference_wavelength"]
+        check("GQR4-6: 圆周 = 波长（ħ = r·p 复现真实 ħ，德布罗意 + 普朗克-爱因斯坦从螺旋几何涌现）",
+              abs(n29["h/ħ（= 2π = 单位圆周长）"] - 2 * math.pi) < 1e-6
+              and float(n29["真实 ħ 相对误差"]) < 1e-6
+              and float(n29["E = pc = hf 相对误差"]) < 1e-6)
 
     # 4. 产物完整性
     artifacts = {
