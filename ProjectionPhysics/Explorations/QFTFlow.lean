@@ -1115,6 +1115,48 @@ theorem sum_enum_minor {n m : ℕ} (A : Fin n → Fin m → ℂ)
 -- 诚实：GQS4 已证（固定子集内 |det|² 是最后一跳的数学核心）；GQS5/6 的组合双射
 -- （Sigma 类型依赖相等）留作后续；GQS1（n=2 任意 m）已完整覆盖"任意多半旋量叠加"。
 
+/-! ### GQC1★. 流动传播 = 酉传输：信息（辛关联体积）守恒
+
+leo（2026-08-16）假设推进（信息 = 辛关联结构，见 wiki "信息=辛体积"重定义）：
+- 流动的传输算符 U（酉：U·U† = 1）作用于每个扭量：πᵢ ↦ U·πᵢ
+- 扭量矩阵 A 的列 = 扭量 ⟹ 流动传播 = A ↦ U·A
+- 总信息（辛关联体积）= det(A·A†)（= Σ|det 子式|²，Cauchy-Binet）
+- ★ GQC1：酉传输保持 det((UA)(UA)†) = det(AA†)——流动传播不改变
+  模式的辛关联结构总量（信息守恒）。
+- 物理含义：流动是幺正的（不丢信息），纠缠结构随流传播而不衰减。
+- 诚实：这是"酉演化保持行列式"的线性代数事实（真但平凡）；框架贡献 =
+  把它命名为流动传播下的信息守恒（解释层），非新物理预言。 -/
+
+/-- GQC1b. 传输公式：(UA)(UA)† = U(AA†)U†——流动作用在扭量上等价于
+    对关联矩阵的酉共轭。 -/
+lemma gqc1_transport_formula {n : ℕ} (U A : Matrix (Fin n) (Fin n) ℂ) :
+    (U * A) * (U * A)ᴴ = U * (A * Aᴴ) * Uᴴ := by
+  rw [Matrix.conjTranspose_mul]
+  simp [Matrix.mul_assoc]
+
+/-- GQC1★. 流动传播下信息守恒：U 酉 ⟹ det((UA)(UA)†) = det(AA†)。
+    证明链：传输公式 → det_mul 两次 → det_conjTranspose（det U† = star(det U)）
+    → 酉性 |det U|² = 1（det(UU†) = 1）→ 复数交换合并。 -/
+lemma gqc1_unitary_transport {n : ℕ} (U A : Matrix (Fin n) (Fin n) ℂ)
+    (hU : U * Uᴴ = 1) :
+    ((U * A) * (U * A)ᴴ).det = (A * Aᴴ).det := by
+  rw [gqc1_transport_formula]
+  calc
+    (U * (A * Aᴴ) * Uᴴ).det = U.det * (A * Aᴴ).det * (Uᴴ).det := by
+      rw [Matrix.det_mul, Matrix.det_mul]
+    _ = U.det * (A * Aᴴ).det * star U.det := by
+      rw [Matrix.det_conjTranspose]
+    _ = (A * Aᴴ).det := by
+      have hnorm : U.det * star U.det = 1 := by
+        have h := congrArg Matrix.det hU
+        rw [Matrix.det_mul, Matrix.det_conjTranspose, Matrix.det_one] at h
+        exact h
+      rw [mul_assoc, mul_comm (A * Aᴴ).det, ← mul_assoc, hnorm, one_mul]
+
+/- GQC1c 备注：双扭量逐对守恒 |⟨Uπ₁,Uπ₂⟩|² = |⟨π₁,π₂⟩|²（U 酉）由 GQC1 通用版
+    + GQS1（n=2：det(AA†) = Σ_{i<j}|⟨πᵢ,πⱼ⟩|²）组合给出，且逐项数值验证
+    见 N22（每个子式 |det(U·A[:,S])|² = |det(A[:,S])|² 机器精度）。 -/
+
 end ProjectionPhysics.QFTFlow
 
 end

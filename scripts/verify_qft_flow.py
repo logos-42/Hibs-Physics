@@ -516,6 +516,68 @@ def main():
                 "n=3（胶球实际维数）C(m,3)=1,4,10,20,35 完全不含 3,6,7——"
                 "格点 N 序列是锚定加法（叠加数），不是纠缠加法（子式数），两者是平行独立结构"}
 
+    # ---- N22：GQC1 流动传播 = 酉传输，信息（辛关联体积）守恒 ----
+    # 随机酉 U（QR 分解）+ 随机扭量矩阵 A：det((UA)(UA)†) = det(AA†)
+    def random_unitary(n_, rng_):
+        Z = rng_.standard_normal((n_, n_)) + 1j * rng_.standard_normal((n_, n_))
+        Q, _ = np.linalg.qr(Z)
+        return Q
+
+    max_err_formula = 0.0
+    max_err_det = 0.0
+    nsamp = 0
+    for n in range(2, 5):
+        for _ in range(25):
+            U = random_unitary(n, rng)
+            A = rng.standard_normal((n, n)) + 1j * rng.standard_normal((n, n))
+            assert np.allclose(U @ U.conj().T, np.eye(n), atol=1e-10), "U 非酉（生成器错误）"
+            UA = U @ A
+            lhs = UA @ UA.conj().T
+            rhs = U @ (A @ A.conj().T) @ U.conj().T
+            max_err_formula = max(max_err_formula, float(np.max(np.abs(lhs - rhs))))
+            max_err_det = max(max_err_det,
+                              abs(abs(np.linalg.det(lhs)) - abs(np.linalg.det(A @ A.conj().T))))
+            nsamp += 1
+    # 矩形版（m>n 多扭量叠加）：det 守恒 + 子式逐项守恒（更强：每个子纠缠体积不变）
+    rect = {}
+    for n, m in [(2, 4), (2, 5), (3, 4), (3, 5), (4, 5)]:
+        err_det, err_minor, nS = 0.0, 0.0, 0
+        for _ in range(20):
+            U = random_unitary(n, rng)
+            A = rng.standard_normal((n, m)) + 1j * rng.standard_normal((n, m))
+            UA = U @ A
+            err_det = max(err_det,
+                          abs(abs(np.linalg.det(UA @ UA.conj().T))
+                              - abs(np.linalg.det(A @ A.conj().T))))
+            for S in itertools.combinations(range(m), n):
+                M, UM = A[:, S], UA[:, S]
+                err_minor = max(err_minor,
+                                abs(abs(np.linalg.det(UM)) ** 2 - abs(np.linalg.det(M)) ** 2))
+                nS += 1
+        rect[f"n={n},m={m}"] = {"max|det(AA†) 差|": round(err_det, 13),
+                                "max|子式|det|² 差|": round(err_minor, 13),
+                                "子式数": nS}
+    # GQC1c：双扭量辛内积逐对守恒 |⟨Uπᵢ,Uπⱼ⟩|² = |⟨πᵢ,πⱼ⟩|²
+    pair_err = 0.0
+    for _ in range(100):
+        U = random_unitary(2, rng)
+        P = rng.standard_normal((3, 2)) + 1j * rng.standard_normal((3, 2))
+        UP = P @ U.T
+        for i in range(3):
+            for j in range(i + 1, 3):
+                a, b = np.vdot(P[i], P[j]), np.vdot(UP[i], UP[j])
+                pair_err = max(pair_err, abs(abs(b) ** 2 - abs(a) ** 2))
+    report["results"]["N22_unitary_transport_info"] = {
+        "传输公式 (UA)(UA)† = U(AA†)U† 最大误差（n=2..4 × 25）": round(max_err_formula, 13),
+        "det((UA)(UA)†) = det(AA†) 最大误差（方阵 n=2..4 × 25）": round(max_err_det, 13),
+        "矩形版（m>n 叠加）det 守恒 + 子式逐项守恒": rect,
+        "双扭量辛内积逐对 |⟨Uπᵢ,Uπⱼ⟩|² 守恒最大误差（100 样本）": round(pair_err, 13),
+        "note": "GQC1：流动传播 = 酉传输 U，信息 = 辛关联体积 det(AA†)（= Σ|det 子式|²）。"
+                "酉演化下不仅总量守恒，每个子纠缠体积 |det(U·A[:,S])|² 逐项不变——"
+                "纠缠结构随流传播不衰减（幺正性 = 辛结构守恒）。"
+                "诚实：酉变换保持行列式是标准线性代数；框架贡献 = 命名为流动传播下的信息守恒（解释层）"}
+
+
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
     # 左：det₃(P) vs |det₃[π₁π₂π₃]|² 散点（恒等，y = x）

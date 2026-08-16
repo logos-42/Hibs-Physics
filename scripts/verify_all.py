@@ -273,6 +273,13 @@ def main():
               and n21["格点 N 序列命中检测"]["0-+"] == ["C(7,1)=7"])
         check("N21: 等幅均匀 n=2 恒等（det(P) = Σ_{i<j}sin²）",
               all(abs(v["det(P)"] - v["Σsin²"]) < 1e-8 for v in n21["等幅均匀 n=2 det(P)（纠缠加法）"].values()))
+        n22 = res["N22_unitary_transport_info"]
+        check("GQC1: 流动传播信息守恒 det((UA)(UA)†) = det(AA†)（酉传输）",
+              n22["det((UA)(UA)†) = det(AA†) 最大误差（方阵 n=2..4 × 25）"] < 1e-8
+              and n22["传输公式 (UA)(UA)† = U(AA†)U† 最大误差（n=2..4 × 25）"] < 1e-8)
+        check("GQC1: 子式逐项守恒（每个子纠缠体积 |det(U·A[:,S])|² 随流不变）",
+              all(v["max|子式|det|² 差|"] < 1e-8 for v in n22["矩形版（m>n 叠加）det 守恒 + 子式逐项守恒"].values())
+              and n22["双扭量辛内积逐对 |⟨Uπᵢ,Uπⱼ⟩|² 守恒最大误差（100 样本）"] < 1e-8)
 
     # 4. 产物完整性
     artifacts = {
