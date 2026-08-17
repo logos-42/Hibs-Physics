@@ -6,12 +6,12 @@
 
 | 文件 | 说明 |
 |---|---|
-| `projection-unified.tex` | **大一统论文（英文版，2026-08-16）**：《The Geometric Description of Physics at the Cosmic Scale》（物理学在宇宙尺度下的几何的描述）。流动空间大一统：质量=辛纠缠体积（Cauchy-Binet 链）、信息=辛体积（传输/因果/等效超光速）、四力=流动动量莱布尼茨分解、光子=激发电子螺旋、量子关系从螺旋几何涌现（E=ħω、p=h/λ、E=hf、圆周=波长）、胶球/夸克与"3"的贯穿。REVTeX 4.2 + 7 张配图（paper/figures/） |
-| `projection-unified-zh.tex` | **大一统论文（中文版）**：《物理学在宇宙尺度下的几何的描述》。内容与英文版等同；REVTeX 4.2 + ctex（fandol） |
-| `projection-unified.pdf` | 大一统英文版编译产物（tectonic，零错误，仅 1 处 overfull 警告） |
-| `projection-unified-zh.pdf` | 大一统中文版编译产物（tectonic，零错误零警告） |
-| `figures/` | 大一统论文配图（7 张，源自 artifacts/qftflow/：fig_triple_rank / fig_tilted_lightcone / fig_charge_helix / fig_photon_models / fig_photon_turns / fig_circumference_wavelength / fig_antiphase_global） |
-| `apstemplate.tex` / `apssamp.tex` / `apssamp.bib` / `fig_*.eps` / `vid_*.eps` | APS 官方 REVTeX 模板样例（下载的 zip 原样保留，投稿参考用，不属于论文） |
+| `projection-unified.tex` | **大一统论文（英文版，2026-08-16）**：《The Geometric Description of Physics at the Cosmic Scale》（物理学在宇宙尺度下的几何的描述）。流动空间大一统：质量=辛纠缠体积（Cauchy-Binet 链）、信息=辛体积（传输/因果/等效超光速/全域相干）、四力=流动动量莱布尼茨分解、光子=激发电子螺旋、量子关系从螺旋几何涌现（E=ħω、p=h/λ、E=hf、圆周=波长）、胶球/夸克与"3"的贯穿。REVTeX 4.2 + 6 张配图（figures_en/） |
+| `projection-unified-zh.tex` | **大一统论文（中文版）**：《物理学在宇宙尺度下的几何的描述》。内容与英文版等同；REVTeX 4.2 + ctex（fandol），配图用 figures/ |
+| `projection-unified.pdf` | 大一统英文版编译产物（tectonic，零错误） |
+| `projection-unified-zh.pdf` | 大一统中文版编译产物（tectonic，零错误） |
+| `figures/` | 中文版配图（6 张，源自 artifacts/qftflow/：fig_triple_rank / fig_tilted_lightcone / fig_charge_helix / fig_photon_models / fig_photon_turns / fig_antiphase_global） |
+| `figures_en/` | 英文版配图（同 6 张，EN tex 引用此目录） |
 
 ## 编译
 
@@ -26,12 +26,14 @@
 
 ## 结构
 
-10 节 + 2 附录：1 Introduction → 2 Postulates（SLS1–4）→ 3 Mathematical
-structure → 4 Mass（MC1–MC2，胶球 √N·M₀）→ 5 Electrodynamics as
-kinematics（MS1–MS5）→ 6 Gravitation（Gordon/Φ=½v²/黑洞公设版）→
-7 Numerical validation（两表）→ 8 Relation to existing physics（诚实 4 层
-判定）→ 9 Discussion（预言 P1–P4 + 开放问题）→ 10 Conclusion → 附录 A
-Lean 形式化总览 → 附录 B 6 个证明要点。
+11 节 + 1 附录：1 Introduction → 2 Postulates（SLS1–4）→ 3 Mass as
+symplectic entanglement volume（Cauchy-Binet 链）→ 4 Information
+（GQC1–3 + 全域相干 QFT5）→ 5 The four forces（莱布尼茨分解）→
+6 The photon（激发电子螺旋）→ 7 The quantum relations from helix
+geometry（GQR1–6）→ 8 Glueball, quark, and the one "3"（√N·M₀）→
+9 Numerical validation（N1–N29）→ 10 Honest assessment（4 层判定）→
+11 Conclusion → 附录 A 完整推导链（公设 → 6 条链 → 预言 → 诚实边界，
+逐步标注 Lean 定理与数值验证号）。
 
 ## 注意
 
