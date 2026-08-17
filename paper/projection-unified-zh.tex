@@ -65,7 +65,7 @@ $\lesssim 10^{-10}$），推导链在 Lean 4 中全形式化、零 \texttt{sorry
 \end{postulate}
 
 \begin{postulate}[矢量光速]
-空间的等效流动速度即光速（黑洞河流模型\cite{HamiltonLisle2008} 是同一几何结构）；矢量光速 $C$ 方向可变。物体的流动动量为
+空间的等效流动速度即光速（黑洞河流模型\cite{hamilton2008river} 是同一几何结构）；矢量光速 $C$ 方向可变。物体的流动动量为
 $p = m(C-v)$，$v$ 为物体速度。
 \end{postulate}
 
@@ -84,13 +84,13 @@ $N$ 条）。电荷 = 单位时间条数流：正电荷 = 发散条数（源）�
 \section{质量 = 辛纠缠体积}
 \label{sec:mass}
 
-以扭量 $\pi_i$ 为半旋量激发\cite{Penrose1967}，总关联矩阵 $P = \sum_i \pi_i\pi_i^\dagger
+以扭量 $\pi_i$ 为半旋量激发\cite{penrose1967twistor}，总关联矩阵 $P = \sum_i \pi_i\pi_i^\dagger
 = AA^\dagger$（$A$ 的列 = 扭量）。质量平方 = 辛纠缠体积：
 \begin{equation}
 m^2 = \det(AA^\dagger) = \sum_{S,\,|S|=n} \big|\det A_S\big|^2 ,
 \label{eq:cauchy}
 \end{equation}
-即 Cauchy--Binet 链：$n=2$、任意 $m$（任意多半旋量叠加）已完整形式化\cite{deMoura2015,mathlib2020}
+即 Cauchy--Binet 链：$n=2$、任意 $m$（任意多半旋量叠加）已完整形式化\cite{de2015lean}
 （$\det(\sum_i \pi_i\pi_i^\dagger)=\sum_{i<j}|\langle\pi_i,\pi_j\rangle|^2$，
 GQS1）；一般 $n$ 展开核（GQS2/3）与固定子集和（GQS4）均已证。
 统一链为
@@ -146,11 +146,11 @@ $\det(p_1+p_2)=\sin^2\alpha$：旋量平行 = 无质量，正交 = 质量最大�
 辛结构守恒：信息随流传播不衰减。
 
 \paragraph{因果（GQC2）。} 流动是格点局域的：最近邻跳跃矩阵（带宽 1）
-$t$ 步后带宽 $\le t$，传播核在格点光锥外为零。因果性从格点局域性涌现（对照 Bell\cite{Bell1964} 与 Aspect\cite{Aspect1982} 的量子侧）
+$t$ 步后带宽 $\le t$，传播核在格点光锥外为零。因果性从格点局域性涌现（对照 Bell\cite{bell1964einstein} 与 Aspect\cite{aspect1982experimental} 的量子侧）
 ——不可通信定理的几何版，无需额外公设。
 
 \paragraph{等效速度（GQC3）。} 非均匀流动中等效速度 $=1+v_{\rm flow}$：
-超光速\emph{等效}运动是几何（坐标拖曳）效应——Alcubierre\cite{Alcubierre1994}/Painlev\'e--
+超光速\emph{等效}运动是几何（坐标拖曳）效应——Alcubierre\cite{alcubierre1994warp}/Painlev\'e--
 Gullstrand 结构——而信号从不超越局部光速。光锥被流动倾斜
 （图~\ref{fig:cone}）。
 
@@ -170,10 +170,10 @@ $>1$），而流动系中信号每步 $\le 1$。}
 = \dot m\,C + m\dot C - \dot m\,v - m\dot v ,
 \label{eq:fourforces}
 \end{equation}
-对应电场力（$\dot m C$；对照 Maxwell\cite{Maxwell1865}）：质量流 $\times$ 光速方向）、核力（$m\dot C$：
+对应电场力（$\dot m C$；对照 Maxwell\cite{maxwell1996dynamical}）：质量流 $\times$ 光速方向）、核力（$m\dot C$：
 质量 $\times$ 光速流——矢量光速方向变化）、磁场力（$\dot m v$：质量流
 $\times$ 速度）与万有引力/惯性力（$m\dot v$：质量 $\times$ 加速度；对照
-引力的几何理论\cite{Einstein1915}）。力不是独立实体：它们是流动动量分解的四通道。电荷在同样语言中是空间
+引力的几何理论\cite{einstein1915feldgleichungen}）。力不是独立实体：它们是流动动量分解的四通道。电荷在同样语言中是空间
 位移流的散度：正 = 源（发散右手螺旋），负 = 汇（汇聚右手螺旋）——
 图~\ref{fig:charge}。
 
@@ -187,7 +187,7 @@ $\times$ 速度）与万有引力/惯性力（$m\dot v$：质量 $\times$ 加速
 \section{光子 = 激发电子螺旋}
 \label{sec:photon}
 
-光子是质量与电荷消失的电子激发态（对照光量子\cite{Einstein1905}）：它是电子实体遗留的螺旋结构。
+光子是质量与电荷消失的电子激发态（对照光量子\cite{einstein1905erzeugung}）：它是电子实体遗留的螺旋结构。
 粒子性来自遗留的电子结构；波动性来自空间本身的波动（波动方程的形式化
 留作开放）。
 
@@ -222,7 +222,7 @@ E = \hbar\omega = \frac{h}{2\pi}\,2\pi f = h\,f =
 \times
 \underbrace{f}_{\text{每秒圈数}},
 \end{equation}
-普朗克-爱因斯坦关系\cite{Planck1900} = 螺旋的旋转能量，德布罗意波长\cite{DeBroglie1924}（图~\ref{fig:turns}）。
+普朗克-爱因斯坦关系\cite{planck1978gesetz} = 螺旋的旋转能量，德布罗意波长\cite{de1924recherches}（图~\ref{fig:turns}）。
 
 \begin{figure}[htbp]
 \includegraphics[width=0.9\columnwidth]{figures/fig_photon_turns.png}
@@ -265,19 +265,19 @@ $E=pc$ & $3.313\times10^{-19}$\,J & $=hf$ 精确一致 \\
 \Delta x\,\Delta p \;\sim\; \frac{\lambda}{2\pi}\,\frac{h}{\lambda}
 = \frac{h}{2\pi} = \hbar \;\ge\; \frac{\hbar}{2},
 \end{equation}
-海森堡不确定性关系\cite{Heisenberg1927}在螺旋几何的自然尺度上被精确复现
+海森堡不确定性关系\cite{heisenberg1927anschaulichen}在螺旋几何的自然尺度上被精确复现
 （螺旋无法把光子定域得比自身半径更好——那会摧毁条数结构）。
 
 \paragraph{相同条数的排斥（泡利）。} 两个相同态 = 两个平行扭量；其辛体积
 为零，$\det(AA^\dagger)=|\det A|^2=0$——相同条数不创造新结构、无质量、
 无新自由度。这是排斥的几何秩判据：只有\emph{不同}的条数（线性无关的
-扭量）才打开新通道，与泡利不相容原理背后的几何秩判据形式相同\cite{Pauli1925}。
+扭量）才打开新通道，与泡利不相容原理背后的几何秩判据形式相同\cite{pauli1925zusammenhang}。
 
 \section{胶球、夸克与同一个"3"}
 \label{sec:glueball}
 
 胶球质量规则读作条数计数：$m=\sqrt{N}\,M_0$，$N=3$ 个锚定方向
-（$\sigma_1\sigma_2\sigma_3$）；格点 $N$ 序列 $\{3,6,7\}$\cite{MorningstarPeardon1999,Chen2006,PDG2024}（道
+（$\sigma_1\sigma_2\sigma_3$）；格点 $N$ 序列 $\{3,6,7\}$\cite{morningstar1999glueball,chen2006glueball,navas2024review}（道
 $0^{++},2^{++},0^{-+}$）以 $\sqrt{3},\sqrt{6},\sqrt{7}$ 倍 $M_0$ 落入
 格点区间。色数 = 同一个"3"：色 $=3$ = 三个空间方向（结构对应：
 为什么 3 色）；8 胶子 $= 2^3 = \dim C\ell(6)$（TW5）。空间的"3"、
@@ -289,7 +289,7 @@ $0^{++},2^{++},0^{-+}$）以 $\sqrt{3},\sqrt{6},\sqrt{7}$ 倍 $M_0$ 落入
 \section{数值验证}
 \label{sec:validation}
 
-以上全部恒等经数值验证（N1--N31；Lean 4\cite{deMoura2015,mathlib2020}，机器精度）：Cauchy--Binet 链
+以上全部恒等经数值验证（N1--N31；Lean 4\cite{de2015lean}，机器精度）：Cauchy--Binet 链
 （$\le 5.9\times10^{-12}$）、酉传输（公式误差 $0$，子体积逐项守恒
 $\le 5.9\times10^{-12}$）、光锥带宽（违规 $0$）、四力分解（误差 $0$）、
 光子模型（环向抵消 $0$）、量子匹配（$E=\hbar\omega$ 相对误差 $0$；
@@ -331,7 +331,7 @@ $N$ 序列是后验拟合）；(iv) 光子波动性的连续波动方程、电�
 \label{app:derivations}
 
 本附录以人类可读的形式汇集正文使用的全部推导。每一步都是完整的代数
-恒等；对应的 Lean~4 定理 \cite{deMoura2015,mathlib2020} 与数值验证
+恒等；对应的 Lean~4 定理 \cite{de2015lean} 与数值验证
 （N1--N31）逐步引用。不跳步；凡某一步需要\emph{非推导}输入，均明确
 声明。
 
@@ -367,7 +367,7 @@ r = \frac{\lambda}{2\pi},
 \subsection{链 1：质量 = 辛纠缠体积}
 \label{app:chain1}
 
-以扭量 $\pi_i$ 为半旋量激发 \cite{Penrose1967}，总关联矩阵
+以扭量 $\pi_i$ 为半旋量激发 \cite{penrose1967twistor}，总关联矩阵
 $P=\sum_i\pi_i\pi_i^\dagger=AA^\dagger$（$A$ 的列即扭量）。质量平方 =
 辛纠缠体积：
 \begin{equation}
@@ -474,7 +474,7 @@ N25，误差 0）。通道与四种相互作用的对应是解释层；电荷散
 \subsection{链 4：光子}
 \label{app:chain4}
 
-光子 = 电子的激发态 \cite{Einstein1905}，其中质量与电荷消失。模型 B
+光子 = 电子的激发态 \cite{einstein1905erzeugung}，其中质量与电荷消失。模型 B
 （两个激发螺旋绕轴对称旋转）：环向动量抵消，$p_y+(-p_y)=0$，净动量
 纯轴向（\texttt{azimuthal\_cancellation}，GQP2）；色散类光，
 $E^2=|p|^2$（GQP2b）。等价地，$v=C$ 时流动动量 \eqref{eq:flowmomentum}
@@ -509,7 +509,7 @@ L=r\,p=\frac{\lambda}{2\pi}\,p,
 p=\frac{h}{\lambda},
 \label{eq:debroglie}
 \end{equation}
-德布罗意关系 \cite{DeBroglie1924} 涌现（GQR5）。
+德布罗意关系 \cite{de1924recherches} 涌现（GQR5）。
 \item \textbf{普朗克-爱因斯坦关系。} 由 $E=\hbar\omega$ 与
 $\omega=2\pi f$：
 \begin{equation}
@@ -527,18 +527,18 @@ $\Delta x\sim r=\lambda/2\pi$，$\Delta p\sim p=h/\lambda$；故
 =\frac{h}{2\pi}=\hbar\ge\frac{\hbar}{2},
 \label{eq:heisenberg}
 \end{equation}
-海森堡关系 \cite{Heisenberg1927} 出现在螺旋的自然尺度（螺旋无法把光子
+海森堡关系 \cite{heisenberg1927anschaulichen} 出现在螺旋的自然尺度（螺旋无法把光子
 定域得比自身半径更好）。
 \item \textbf{泡利不相容。} 两条相同条数 = 两个平行扭量；辛体积为零，
 $\det(AA^\dagger)=|\det A|^2=0$——相同条数不打开新通道（链 1 的秩
 判据）。只有\emph{不同}（线性无关）条数才创造新自由度，与泡利原理
-\cite{Pauli1925} 同精神。
+\cite{pauli1925zusammenhang} 同精神。
 \end{enumerate}
 
 \subsection{链 6：引力与电磁（结构性）}
 \label{app:chain6}
 
-\textbf{引力。} 非均匀流动 $v(x)$ 给出 Gordon 度规
+\textbf{引力。} 非均匀流动 $v(x)$ 给出 Gordon 度规\cite{gordon1923lichtfortpflanzung}
 \begin{equation}
 \mathrm d\tau^2=\mathrm dt^2-\frac{(\mathrm dx-v\,\mathrm dt)^2}{c^2},
 \qquad g=\begin{pmatrix}1-v^2/c^2 & v/c^2\\ v/c^2 & -1/c^2\end{pmatrix},
@@ -568,7 +568,8 @@ $\nabla\times(-\nabla\phi)=0$ 自动成立（SF1--SF2）。
 \begin{enumerate}
 \item \textbf{胶球格点序列}（后验拟合，已验证）：$m=\sqrt N\,M_0$，
 $N=\{3,6,7\}$ 对应 $0^{++},2^{++},0^{-+}$
-\cite{MorningstarPeardon1999,Chen2006,PDG2024}；三通道一致给出
+\cite{morningstar1999glueball,chen2006glueball,navas2024review,besiii2026lightest}
+（$X(2370)$ 是 $0^{-+}$ 通道的最新实验候选）；三通道一致给出
 $M_0\approx0.93\pm0.07$ GeV。可被未来格点数据 $N=4,5$ 证伪：
 $\sqrt4,\sqrt5\times M_0$。
 \item \textbf{三方向时间尺度}（提出中；推导与形式化待补）：三方向胶球
