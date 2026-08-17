@@ -23,26 +23,27 @@
 我们提出一个以\emph{流动空间}为原初实体的统一物理框架：空间本身就是
 流动介质，一切物理对象都是该流动的激发（锚定螺旋模式）。从一组少量
 公设——矢量光速（方向可变）、三方向锚定、空间位移"条数"的计数——
-框架以一条精确恒等链推导出：(i) 质量 = 辛纠缠体积，
-$\det(AA^\dagger)=\sum_S|\det A_S|^2$（Cauchy--Binet 链，Lean 4 全形式化、
-零 \texttt{sorry}）；(ii) 信息 = 辛体积，酉传输下守恒，因果性从格点
-局域性涌现（光锥），等效超光速是纯几何（坐标拖曳）效应；
-(iii) 四力 = 流动动量 $p=m(C-v)$ 的莱布尼茨分解四通道；
-(iv) 光子 = 激发电子螺旋（环向动量抵消 $\Rightarrow$ 无质量）；
-(v) 量子关系 $E=\hbar\omega$、德布罗意关系 $p=h/\lambda$ 与
-普朗克-爱因斯坦关系 $E=pc=hf$ \emph{从螺旋几何涌现}：在几何选择
-$r=\lambda/2\pi$（约化波长 = 螺旋半径）下，螺旋截面圆周
-$2\pi r=\lambda$ 给出 $\hbar=rp$，进而 $p=h/\lambda$ 与 $E=hf$；
-(vi) 色的"3"、胶球三方向锚定的"3"与空间三维的"3"是同一结构，
-8 胶子 $=2^3=\dim C\ell(6)$。全部恒等以物理常数代入数值验证到机器
-精度（相对误差 $\lesssim 10^{-10}$）。诚实状态明确：推导\emph{链已闭合}
+框架以一条精确恒等链推导出：质量 = 辛纠缠体积，信息 = 辛体积
+（酉传输下守恒），四力 = 流动动量 $p=m(C-v)$ 的莱布尼茨分解四通道。
+量子关系 $E=\hbar\omega$、德布罗意关系 $p=h/\lambda$、普朗克-爱因斯坦关系
+$E=hf$ 与不确定性乘积 $\Delta x\,\Delta p=\hbar$ 从螺旋几何涌现
+（几何选择 $r=\lambda/2\pi$：约化波长 = 螺旋半径）；泡利不相容 = 相同
+条数的几何秩判据。全部恒等以物理常数代入数值验证到机器精度（相对误差
+$\lesssim 10^{-10}$），推导链在 Lean 4 中全形式化、零 \texttt{sorry}。诚实状态明确：推导\emph{链已闭合}
 （几何 $\Rightarrow$ 量子关系），而几何选择 $r=\lambda/2\pi$ 与剩余输入常数
 （$e$、$M_0$）的第一性推导尚未达成。
 \end{abstract}
 
 \maketitle
 
-\section{引言：换基座，而非修补}
+\begin{quote}
+\itshape
+``激进主义者总是用过于简单的方式看待问题。他们将宇宙划分为善与恶、黑与白、我们与他们。但现实是一个光谱，而非二元对立。''
+\par
+\hfill —— 雷托二世，《沙丘神帝》（弗兰克·赫伯特，1981）
+\end{quote}
+
+\section{引言}
 \label{sec:intro}
 
 现代物理面临四个概念矛盾，它们不是技术难题而是公设冲突：时空本身的
@@ -52,8 +53,8 @@ $2\pi r=\lambda$ 给出 $\hbar=rp$，进而 $p=h/\lambda$ 与 $E=hf$；
 
 本文采取不同策略：\emph{更换原初实体}。原初实体不是粒子、不是场、不是
 时空，而是\emph{流动}。空间是流动介质；粒子与场是该流动的激发——锚定的
-螺旋模式。本文汇集在此基座上建立的统一链\cite{ProjectionPhysics}，并在 Lean 4 中全形式化
-（4146 jobs，零 \texttt{sorry}），数值验证（N1--N29）全部机器精度。
+螺旋模式。本文汇集在此基座上建立的统一链\cite{ProjectionPhysics}，并在 Lean 4 证明助手中全形式化
+（零 \texttt{sorry}），数值验证（N1--N31）全部机器精度。
 
 \section{流动空间框架的公设}
 \label{sec:postulates}
@@ -115,7 +116,22 @@ $m^2$ 从零上升：激发 = 独立第三方向。}
 \label{fig:triple}
 \end{figure}
 
-\section{信息 = 辛体积：传输、因果、等效速度}
+\paragraph{全域相干（QFT5）。} 反相恒等 $\cos(\theta+\pi)=-\cos\theta$ 处处成立：
+关联 $E(\theta)=\cos\theta\cos(\theta+\pi)$ 在传播距离 $L$ 下形状不变（所有曲线
+重合于 $-\cos^2\theta$），且 $E(\Delta=\pi)=-1$ 精确。全域纠缠 = 空间场本身自带
+的相干——不是超距作用；$E$ 只依赖相对相位差。右面板呼应第~\ref{sec:mass}~节的
+秩判据：双扭量对 $\det(p_1+p_2)=|\langle\pi_1,\pi_2\rangle|^2=\sin^2\alpha$，
+激发质量 = 两半旋量的相对方向（图~\ref{fig:antiphase}）。
+
+\begin{figure}[htbp]
+\includegraphics[width=0.9\columnwidth]{figures/fig_antiphase_global.png}
+\caption{全域相干与秩判据：（左）反相关联 $E=\cos\theta\cos(\theta+\pi)$ 对任意
+传播距离 $L$ 完全重合（$E(\Delta=\pi)=-1$）；（右）双扭量行列式
+$\det(p_1+p_2)=\sin^2\alpha$：旋量平行 = 无质量，正交 = 质量最大。}
+\label{fig:antiphase}
+\end{figure}
+
+\section{信息 = 辛体积}
 \label{sec:info}
 
 信息被几何地重新定义：\emph{信息 = 辛关联体积} $\det(AA^\dagger)$
@@ -182,6 +198,7 @@ $\times$ 速度）与万有引力/惯性力（$m\dot v$：质量 $\times$ 加速
 \item \textbf{模型 B}：两个激发电子绕同一轴线对称旋转，沿旋转平面垂直
 方向以光速直线运动。环向动量抵消（$p_y+(-p_y)=0$，GQP2），净动量纯
 轴向，$E^2=|p|^2$（无质量）：两模型共享同一光锥。
+\item 两种模型的观测对应（如圆偏振）留作开放。
 \end{itemize}
 光子静止\emph{在}空间中，\emph{随}流动运动（$v=C$：$p=m(C-v)=0$ 且
 $m=0$，GQP3）——与流动公设一致。
@@ -248,13 +265,13 @@ $E=pc$ & $3.313\times10^{-19}$\,J & $=hf$ 精确一致 \\
 \Delta x\,\Delta p \;\sim\; \frac{\lambda}{2\pi}\,\frac{h}{\lambda}
 = \frac{h}{2\pi} = \hbar \;\ge\; \frac{\hbar}{2},
 \end{equation}
-海森堡不确定性关系\cite{Heisenberg1927}在其自然尺度上从螺旋几何涌现
+海森堡不确定性关系\cite{Heisenberg1927}在螺旋几何的自然尺度上被精确复现
 （螺旋无法把光子定域得比自身半径更好——那会摧毁条数结构）。
 
 \paragraph{相同条数的排斥（泡利）。} 两个相同态 = 两个平行扭量；其辛体积
 为零，$\det(AA^\dagger)=|\det A|^2=0$——相同条数不创造新结构、无质量、
 无新自由度。这是排斥的几何秩判据：只有\emph{不同}的条数（线性无关的
-扭量）才打开新通道，与泡利不相容原理\cite{Pauli1925}同构。
+扭量）才打开新通道，与泡利不相容原理背后的几何秩判据形式相同\cite{Pauli1925}。
 
 \section{胶球、夸克与同一个"3"}
 \label{sec:glueball}
@@ -272,7 +289,7 @@ $0^{++},2^{++},0^{-+}$）以 $\sqrt{3},\sqrt{6},\sqrt{7}$ 倍 $M_0$ 落入
 \section{数值验证}
 \label{sec:validation}
 
-以上全部恒等经数值验证（N1--N29；Lean 4\cite{deMoura2015,mathlib2020}，机器精度）：Cauchy--Binet 链
+以上全部恒等经数值验证（N1--N31；Lean 4\cite{deMoura2015,mathlib2020}，机器精度）：Cauchy--Binet 链
 （$\le 5.9\times10^{-12}$）、酉传输（公式误差 $0$，子体积逐项守恒
 $\le 5.9\times10^{-12}$）、光锥带宽（违规 $0$）、四力分解（误差 $0$）、
 光子模型（环向抵消 $0$）、量子匹配（$E=\hbar\omega$ 相对误差 $0$；
@@ -308,6 +325,282 @@ $N$ 序列是后验拟合）；(iv) 光子波动性的连续波动方程、电�
 光子（激发电子螺旋）与量子关系（螺旋的旋转；圆周 = 波长）。链已闭合；
 链首的几何选择是开放问题。基座能否存活是实验的问题；框架现在已足够
 精确到可以被证伪。
+
+\appendix
+\section{完整推导链：从公设到方程}
+\label{app:derivations}
+
+本附录以人类可读的形式汇集正文使用的全部推导。每一步都是完整的代数
+恒等；对应的 Lean~4 定理 \cite{deMoura2015,mathlib2020} 与数值验证
+（N1--N31）逐步引用。不跳步；凡某一步需要\emph{非推导}输入，均明确
+声明。
+
+\subsection{公设}
+\label{app:postulates}
+
+\begin{enumerate}
+\item \textbf{流动空间。} 空间是流动介质。非激发模式完全随流（光子：
+$\mathrm d\tau^2=0$）；激发模式被锚定，偏离流动
+（\texttt{unexcited\_comoving\_zero\_time}、
+\texttt{excited\_implies\_deviation\_from\_flow}）。
+\item \textbf{矢量光速。} 空间的等效流动速度即光速，$|C|=c$，$C$ 方向
+可变。物体的流动动量为
+\begin{equation}
+p = m\,(C-v),
+\label{eq:flowmomentum}
+\end{equation}
+$v$ 为物体速度（GQF1；\texttt{SLS1}）。
+\item \textbf{三方向。} 空间是三方向的：$\sigma_1,\sigma_2,\sigma_3$，
+$(\sigma_1+\sigma_2+\sigma_3)^2=3I$（三方向纠缠基底，QFT6；
+\texttt{three\_direction\_entanglement\_basis}）。
+\item \textbf{条数计数。} 质量 = 物体周围以光速运动的空间位移条数，
+$m=\sqrt N\,M_0$（锚定加法）；电荷 = 单位时间条数流（正电荷 = 源，
+负电荷 = 汇；均为右手螺旋）。
+\item \textbf{几何选择（输入，非推导）。} 螺旋半径 = 约化波长，
+\begin{equation}
+r = \frac{\lambda}{2\pi},
+\label{eq:rchoice}
+\end{equation}
+声明为量子链的唯一直观几何输入。
+\end{enumerate}
+
+\subsection{链 1：质量 = 辛纠缠体积}
+\label{app:chain1}
+
+以扭量 $\pi_i$ 为半旋量激发 \cite{Penrose1967}，总关联矩阵
+$P=\sum_i\pi_i\pi_i^\dagger=AA^\dagger$（$A$ 的列即扭量）。质量平方 =
+辛纠缠体积：
+\begin{equation}
+m^2=\det(AA^\dagger)=\sum_{S,\;|S|=n}\big|\det A_S\big|^2,
+\label{eq:cb}
+\end{equation}
+即 Cauchy--Binet 恒等。推导步骤（每一步均已形式化）：
+\begin{itemize}
+\item $AA^\dagger$ 是厄米矩阵；$\det(AA^\dagger)=\det(A)\det(A^\dagger)$
+（Leibniz 公式；\texttt{outer\_sum\_det}，GQN2）。
+\item $\det(A^\dagger)=\overline{\det(A)}$（转置共轭；
+\texttt{det\_conj\_mul\_sum\_injective}，GQS2c），故方阵情形
+$\det(AA^\dagger)=|\det A|^2$。
+\item 当 $m>n$（扭量数多于维数），按行多重线性展开
+$\det(AA^\dagger)$，每项对应 $m$ 条条数的一个 $n$ 元子集 $S$：
+子式平方和 $\sum_S|\det A_S|^2$
+（\texttt{det\_conj\_mul\_sum\_expand}，GQS2a；
+\texttt{sum\_enum\_minor}，GQS4）。
+\item $n=2$、任意 $m$（任意多数半旋量叠加）：
+\begin{equation}
+\det\Big(\sum_{i}\pi_i\pi_i^\dagger\Big)=\sum_{i<j}\big|\langle\pi_i,\pi_j\rangle\big|^2,
+\label{eq:cb2}
+\end{equation}
+每个无序对贡献其辛面积（\texttt{outer\_sum\_m2\_det}，GQS1）。
+\end{itemize}
+统一链（GQN5，\texttt{excitation\_rank\_unified}）：$N=1$ 光子
+（秩 1，$|\det_1|^2$，无质量）、$N=2$ 电子
+（$|\langle\pi_1,\pi_2\rangle|^2$，辛面积）、$N=3$ 胶球
+（$|\det_3[\pi_1\pi_2\pi_3]|^2$，体积）。秩判据：激发 $\Leftrightarrow$
+扭量线性无关（\texttt{triple\_excited\_implies\_independent}，GQ4a；
+\texttt{excited\_implies\_independent\_N}，GQN4a）；退化（平行）扭量
+$\det=0$，即无质量（\texttt{pair\_massless\_iff\_parallel}，QFT8；
+\texttt{triple\_degenerate\_massless}，GQ5）。数值验证：N19--N20
+（Cauchy--Binet，$8\times10^{-13}$）、N6（秩判据）。
+
+\subsection{链 2：信息、因果、等效速度}
+\label{app:chain2}
+
+\textbf{信息}被重新定义为辛关联体积 $\det(AA^\dagger)$。酉传输
+$A\mapsto UA$（$UU^\dagger=1$）下：
+\begin{equation}
+\det\big((UA)(UA)^\dagger\big)
+=\det\big(U(AA^\dagger)U^\dagger\big)
+=\det(AA^\dagger)\,\big|\det U\big|^2
+=\det(AA^\dagger),
+\label{eq:unit}
+\end{equation}
+两次使用 $\det(XY)=\det X\det Y$ 与 $\det(U^\dagger)=\overline{\det U}$
+（\texttt{unitary\_transport\_conserves\_det}，GQC1；子体积逐项守恒，
+N22）。信息随流传播不衰减。
+
+\textbf{因果}从格点局域性涌现。设最近邻跳跃矩阵带宽为 1。两个事实：
+(i) 带宽 $a$ 与 $b$ 的算符复合带宽 $\le a+b$（三角不等式；
+\texttt{band\_comp}，GQC2b）；(ii) 故 $t$ 步带宽 $\le t$
+（\texttt{band\_pow}，GQC2b）。因此传播核在格点光锥外为零（链跳跃，
+\texttt{chainJump}，GQC2）：信号不能跨越光锥（N23，违规数 0）。
+
+\textbf{等效超光速}是坐标拖曳。流动坐标 $\xi_k=k-\varphi_k$ 中 $t$ 步
+可达的信号满足 $|j-i|\le t+|\varphi_j-\varphi_i|$（\texttt{flowCoord}，
+GQC3a）；流动梯度 $>1$ 时静止系位移一步超过 1，而信号相对流动从未
+超越局部光速（GQC3b）。等效速度精确等于 $1+v_{\rm flow}$（N24）。
+
+\textbf{全域相干}是场自带的：反相恒等
+\begin{equation}
+\cos(\theta+\pi)=-\cos\theta
+\label{eq:antiphase}
+\end{equation}
+处处成立，故关联 $E(\theta)=\cos\theta\cos(\theta+\pi)=-\cos^2\theta$
+与传播距离 $L$ 无关，且 $E(\Delta=\pi)=-1$ 精确
+（\texttt{antiphase\_anticorrelation\_global}、
+\texttt{antiphase\_correlation\_any\_point}，QFT5；N4）。不是超距作用：
+$E$ 只依赖相对相位差。
+
+\subsection{链 3：四力}
+\label{app:chain3}
+
+由流动动量 \eqref{eq:flowmomentum}，$p=m(C-v)$，力 = 莱布尼茨
+（乘积法则）分解：
+\begin{equation}
+F=\frac{\mathrm dp}{\mathrm dt}
+=\frac{\mathrm dm}{\mathrm dt}C
++m\frac{\mathrm dC}{\mathrm dt}
+-\frac{\mathrm dm}{\mathrm dt}v
+-m\frac{\mathrm dv}{\mathrm dt},
+\label{eq:fourforces}
+\end{equation}
+四个通道（GQF2）：
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+通道 & 物理对应 \\
+\midrule
+$\dfrac{\mathrm dm}{\mathrm dt}\,C$ & 电场力（条数流；源 = 散度） \\
+$m\,\dfrac{\mathrm dC}{\mathrm dt}$ & 核力（流动方向改变） \\
+$-\dfrac{\mathrm dm}{\mathrm dt}\,v$ & 磁场力（条数流对抗物体速度） \\
+$-m\,\dfrac{\mathrm dv}{\mathrm dt}$ & 万有引力（流动梯度） \\
+\bottomrule
+\end{tabular}
+\end{center}
+恒等精确成立（乘积法则；\texttt{four\_force\_decomposition}，GQF2；
+N25，误差 0）。通道与四种相互作用的对应是解释层；电荷散度形式与
+波动方程是形式化骨架。
+
+\subsection{链 4：光子}
+\label{app:chain4}
+
+光子 = 电子的激发态 \cite{Einstein1905}，其中质量与电荷消失。模型 B
+（两个激发螺旋绕轴对称旋转）：环向动量抵消，$p_y+(-p_y)=0$，净动量
+纯轴向（\texttt{azimuthal\_cancellation}，GQP2）；色散类光，
+$E^2=|p|^2$（GQP2b）。等价地，$v=C$ 时流动动量 \eqref{eq:flowmomentum}
+给出 $p=m(C-v)=0$（GQP3）：光子静止于空间、随流以光速运动。两模型
+共享光锥（N26：环向抵消 0，无质量判据 $\checkmark$）。
+
+\subsection{链 5：量子关系从螺旋几何涌现}
+\label{app:chain5}
+
+这是核心链。所有步骤都是完整代数恒等；唯一输入是几何选择
+\eqref{eq:rchoice}。
+
+\begin{enumerate}
+\item \textbf{圆周 = 波长。} 由 $r=\lambda/2\pi$，螺旋截面圆周
+\begin{equation}
+2\pi r=2\pi\cdot\frac{\lambda}{2\pi}=\lambda,
+\label{eq:circ}
+\end{equation}
+螺旋一圈的展开长度恰是一个波长（\texttt{gqr4\_circumference\_wavelength}，
+GQR4）。
+\item \textbf{$\hbar$ = 半径 $\times$ 动量。} 一圈的角动量
+\begin{equation}
+L=r\,p=\frac{\lambda}{2\pi}\,p,
+\label{eq:hbar}
+\end{equation}
+经典公式。由 $h=\lambda p$（一圈一个量子，$L=h$），\eqref{eq:hbar}
+即 $\hbar=L/2\pi=h/2\pi$——普朗克常数 = 每弧度角动量
+（\texttt{gqr5\_hbar\_eq\_rp}，GQR5；N29：$\hbar=rp$ 与真实 $\hbar$
+相对误差 $6\times10^{-10}$）。
+\item \textbf{德布罗意关系。} 由 \eqref{eq:hbar}，
+\begin{equation}
+p=\frac{h}{\lambda},
+\label{eq:debroglie}
+\end{equation}
+德布罗意关系 \cite{DeBroglie1924} 涌现（GQR5）。
+\item \textbf{普朗克-爱因斯坦关系。} 由 $E=\hbar\omega$ 与
+$\omega=2\pi f$：
+\begin{equation}
+E=\hbar\omega=\frac{h}{2\pi}\cdot 2\pi f=hf,
+\label{eq:planck}
+\end{equation}
+再由 \eqref{eq:debroglie}，$E=pc=(h/\lambda)c=hf$
+（\texttt{gqr3\_planck\_relation}、\texttt{gqr6\_planck\_einstein}，
+GQR3/GQR6；N27：$E=\hbar\omega$ 相对误差 0；$E=pc$ 与 $hf$ 误差 0）。
+量子关系是螺旋几何加经典恒等在 \eqref{eq:rchoice} 下的推论。
+\item \textbf{海森堡不确定性。} 螺旋半径 = 位置不确定性的自然尺度，
+$\Delta x\sim r=\lambda/2\pi$，$\Delta p\sim p=h/\lambda$；故
+\begin{equation}
+\Delta x\,\Delta p\sim\frac{\lambda}{2\pi}\cdot\frac{h}{\lambda}
+=\frac{h}{2\pi}=\hbar\ge\frac{\hbar}{2},
+\label{eq:heisenberg}
+\end{equation}
+海森堡关系 \cite{Heisenberg1927} 出现在螺旋的自然尺度（螺旋无法把光子
+定域得比自身半径更好）。
+\item \textbf{泡利不相容。} 两条相同条数 = 两个平行扭量；辛体积为零，
+$\det(AA^\dagger)=|\det A|^2=0$——相同条数不打开新通道（链 1 的秩
+判据）。只有\emph{不同}（线性无关）条数才创造新自由度，与泡利原理
+\cite{Pauli1925} 同精神。
+\end{enumerate}
+
+\subsection{链 6：引力与电磁（结构性）}
+\label{app:chain6}
+
+\textbf{引力。} 非均匀流动 $v(x)$ 给出 Gordon 度规
+\begin{equation}
+\mathrm d\tau^2=\mathrm dt^2-\frac{(\mathrm dx-v\,\mathrm dt)^2}{c^2},
+\qquad g=\begin{pmatrix}1-v^2/c^2 & v/c^2\\ v/c^2 & -1/c^2\end{pmatrix},
+\label{eq:gordon}
+\end{equation}
+其中 $g_{tt}=1-v^2/c^2$ 在 $\Phi=\tfrac12 v^2$ 处匹配弱场形式
+$g_{tt}=1-2\Phi/c^2$：引力势 = 流动速度平方的一半
+（\texttt{gordon\_weak\_field\_matches\_newton}，SG11）。测地线方程给出
+牛顿极限 $a=-\nabla(\tfrac12 v^2)=-\nabla\Phi$（数值验证）。光子条件
+$|\mathrm dx-v\,\mathrm dt|=c\,\mathrm dt$ 给出 $\mathrm d\tau^2=0$
+（\texttt{gordon\_photon\_proper\_time\_zero}，SG9）。黑洞视界处
+$|v|=c$，逃逸不可能——是"光子随流"公设的直接推论（PH2），非额外公设。
+
+\textbf{电磁。} 以空间场 $C$ 为唯一独立场，定义 $E=-\partial_t C$、
+$B=\partial_x C$（运动学）。法拉第定律自动成为恒等：
+$\partial_t B=\partial_t\partial_x C=\partial_x\partial_t C=-\partial_x E$
+（\texttt{MS2}）；安培-麦克斯韦等价于 $C$ 的波动方程（\texttt{MS3}）。
+麦克斯韦方程组归结为空间场的波动方程；规范冗余被物理条件 $|C|=c$
+（SLS1）消灭。3D 恒等 $\nabla\cdot(\nabla\times C)=0$ 与
+$\nabla\times(-\nabla\phi)=0$ 自动成立（SF1--SF2）。
+
+\subsection{预言}
+\label{app:predictions}
+
+框架的预言清单（诚实标注状态）：
+
+\begin{enumerate}
+\item \textbf{胶球格点序列}（后验拟合，已验证）：$m=\sqrt N\,M_0$，
+$N=\{3,6,7\}$ 对应 $0^{++},2^{++},0^{-+}$
+\cite{MorningstarPeardon1999,Chen2006,PDG2024}；三通道一致给出
+$M_0\approx0.93\pm0.07$ GeV。可被未来格点数据 $N=4,5$ 证伪：
+$\sqrt4,\sqrt5\times M_0$。
+\item \textbf{三方向时间尺度}（提出中；推导与形式化待补）：三方向胶球
+（$m_G=\sqrt3\,M_0$）携带一个时间尺度
+\begin{equation}
+\tau_G=\frac{1}{6M_0^2},
+\label{eq:taug}
+\end{equation}
+在 $M_0\approx0.99$ GeV 下 $\approx0.17$\,GeV${}^{-1}\approx1.1\times10^{-24}$\,s。
+该代数关系作为候选预言记录；其物理对应（衰变宽度、相干时间或其他）及
+从条数计数公设的推导是开放的。
+\item \textbf{黑洞逃逸不可能}（公设推论）：视界内光子随流向内，向外模
+消失（黑洞节的 P2、P3）。几何事实，非额外公设。
+\item \textbf{标准框架之外不再声称其他新可证伪预言}：第~\ref{sec:honest}~节
+的诚实评估不变。
+\end{enumerate}
+
+\subsection{链的诚实边界}
+\label{app:boundaries}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+层 & 例子 & 状态 \\
+\midrule
+数学恒等 & Cauchy--Binet、乘积法则、$\cos(\theta+\pi)$ & 真但标准 \\
+概念重构 & $\hbar$ = 每弧度角动量；力 = 四通道；光子 = 螺旋 & 解释层 \\
+推导输入 & \eqref{eq:rchoice}、$M_0$、$e$、$G$ 数值 & 输入，非推导 \\
+骨架 & 波动方程；电荷 = 散度；连续 3D & 形式化待补 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \bibliography{projection-physics}
 

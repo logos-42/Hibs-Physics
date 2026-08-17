@@ -24,24 +24,19 @@ space}: space itself is a flowing medium, and all physical objects are
 excitations (anchored patterns) of this flow.  From a small set of
 postulates --- vector light speed (direction-changeable), three anchored
 directions, and the counting of space-displacement ``strands'' --- the
-framework derives, in a single chain of exact identities: (i) mass as
-symplectic entanglement volume, $\det(AA^\dagger)=\sum_S|\det A_S|^2$
-(Cauchy--Binet chain, fully formalized in Lean 4 with zero \texttt{sorry});
-(ii) information as symplectic volume, conserved under unitary transport,
-with causality emerging from lattice locality (light cone) and effective
-superluminality as a purely geometric (coordinate-dragging) effect;
-(iii) the four forces as the four channels of the Leibniz decomposition of
-the flow momentum $p=m(C-v)$; (iv) the photon as an excited-electron helix
-whose azimuthal momentum cancels, and hence is massless; (v) the quantum
-relations $E=\hbar\omega$, the de~Broglie relation $p=h/\lambda$, and the
-Planck--Einstein relation $E=pc=hf$ \emph{emerging from helix geometry}:
-with the geometric choice $r=\lambda/2\pi$ (reduced wavelength as helix
-radius), the circumference of the helix cross-section $2\pi r=\lambda$ gives
-$\hbar=rp$ and hence $p=h/\lambda$ and $E=hf$; (vi) the ``3'' of colour,
-of the three glueball anchoring directions, and of the three spatial
-directions as one and the same structure, with 8 gluons $=2^3=\dim C\ell(6)$.
-All identities are verified numerically with physical constants at machine
-precision (relative errors $\lesssim 10^{-10}$).  The honest status is
+framework derives, in a single chain of exact identities: mass as
+symplectic entanglement volume, information as symplectic volume
+conserved under unitary transport, and the four forces as the four
+channels of the Leibniz decomposition of the flow momentum
+$p=m(C-v)$.  The quantum relations $E=\hbar\omega$, the de~Broglie
+relation $p=h/\lambda$, the Planck--Einstein relation $E=hf$, and the
+uncertainty product $\Delta x\,\Delta p=\hbar$ emerge from helix
+geometry, with the geometric choice $r=\lambda/2\pi$ (reduced wavelength
+as helix radius); Pauli exclusion is the geometric rank criterion for
+identical strands.  All identities are verified numerically with physical
+constants at machine precision (relative errors $\lesssim 10^{-10}$), and
+the derivation chain is fully formalized in Lean 4 with zero
+\texttt{sorry}.  The honest status is
 stated: the derivation \emph{chains are closed} (geometry $\Rightarrow$
 quantum relations), while first-principle derivations of the geometric
 choice $r=\lambda/2\pi$ and of the remaining input constants ($e$, $M_0$)
@@ -50,7 +45,16 @@ are not yet achieved.
 
 \maketitle
 
-\section{Introduction: changing the foundation, not patching}
+\begin{quote}
+\itshape
+``Radicals always see matters in terms which are too simple. They divide
+the universe into good and evil, black and white, us and them. But reality
+is a spectrum, not a dichotomy.''
+\par
+\hfill --- Leto~II, \textit{God Emperor of Dune} (Frank Herbert, 1981)
+\end{quote}
+
+\section{Introduction}
 \label{sec:intro}
 
 Modern physics faces four conceptual contradictions that are not technical
@@ -67,8 +71,8 @@ The primitive is not particles, not fields, not spacetime: it is
 \emph{flow}.  Space is a flowing medium; particles and fields are
 excitations --- anchored, spiralling patterns --- of this flow.  This
 document collects the unified chain that has been built on this foundation \cite{ProjectionPhysics}
-and formalized in Lean 4 (4146 jobs, zero \texttt{sorry}), with numerical
-verification (N1--N29) at machine precision.
+and formalized in the Lean 4 proof assistant (zero \texttt{sorry}), with numerical
+verification (N1--N31) at machine precision.
 
 \section{Postulates of the flowing-space framework}
 \label{sec:postulates}
@@ -140,7 +144,29 @@ zero: excitation = independent third direction.}
 \label{fig:triple}
 \end{figure}
 
-\section{Information as symplectic volume: transport, causality, effective speed}
+\paragraph{Global coherence (QFT5).} The anti-phase identity
+$\cos(\theta+\pi)=-\cos\theta$ holds everywhere: the correlation
+$E(\theta)=\cos\theta\cos(\theta+\pi)$ is shape-invariant under the
+propagation distance $L$ (all curves collapse onto $-\cos^2\theta$), with
+$E(\Delta=\pi)=-1$ exactly.  Global entanglement is coherence inherent to
+the space field itself --- no action at a distance; $E$ depends only on
+the relative phase difference.  The right panel recalls the rank
+criterion of Section~\ref{sec:mass}: for a two-twistor pair
+$\det(p_1+p_2)=|\langle\pi_1,\pi_2\rangle|^2=\sin^2\alpha$, so the
+excited mass is the relative orientation of the two half-spinors
+(Fig.~\ref{fig:antiphase}).
+
+\begin{figure}[htbp]
+\includegraphics[width=0.9\columnwidth]{figures_en/fig_antiphase_global.png}
+\caption{Global coherence and rank criterion: (left) the anti-phase
+correlation $E=\cos\theta\cos(\theta+\pi)$ is identical for every
+propagation distance $L$ ($E(\Delta=\pi)=-1$); (right) the two-twistor
+determinant $\det(p_1+p_2)=\sin^2\alpha$: parallel spinors are massless,
+orthogonal spinors give maximal mass.}
+\label{fig:antiphase}
+\end{figure}
+
+\section{Information as symplectic volume}
 \label{sec:info}
 
 Information is redefined geometrically: \emph{information = symplectic
@@ -209,7 +235,7 @@ the sign.}
 \label{fig:charge}
 \end{figure}
 
-\section{The photon: an excited-electron helix}
+\section{The photon}
 \label{sec:photon}
 
 The photon is the excited state of an electron (cf.\ the light quantum \cite{Einstein1905}) in which mass and charge
@@ -228,6 +254,8 @@ about a common axis, moving at light speed perpendicular to the rotation
 plane.  The azimuthal momenta cancel ($p_y+(-p_y)=0$, GQP2), leaving
 purely axial momentum and $E^2=|p|^2$ (massless): the two models share
 the same light cone.
+\item The observational correspondence of the two models (e.g.\ circular
+polarizations) is left open.
 \end{itemize}
 The photon is at rest \emph{in} space and travels \emph{with} the flow
 ($v=C$: $p=m(C-v)=0$ with $m=0$, GQP3) --- consistent with the flow
@@ -304,8 +332,8 @@ $\Delta p \sim p = h/\lambda$.  Their product is
 = \frac{h}{2\pi} = \hbar \;\ge\; \frac{\hbar}{2},
 \end{equation}
 so the Heisenberg uncertainty relation
-\cite{Heisenberg1927} emerges from the helix geometry at its natural
-scale (the helix cannot localize a photon better than its own radius
+\cite{Heisenberg1927} is reproduced exactly at the natural scale of the
+helix geometry (the helix cannot localize a photon better than its own radius
 without destroying the strand structure).
 
 \paragraph{Exclusion of identical strands (Pauli).}  Two identical
@@ -313,8 +341,9 @@ states are two parallel twistors; their symplectic volume vanishes,
 $\det(AA^\dagger)=|\det A|^2=0$ --- identical strands create no new
 structure, no mass, no new degree of freedom.  This is the geometric rank
 criterion for exclusion: only \emph{distinct} strands (linearly
-independent twistors) open a new channel, in the spirit of the Pauli
-exclusion principle \cite{Pauli1925}.
+independent twistors) open a new channel, formally identical to the
+geometric rank criterion behind the Pauli exclusion principle
+\cite{Pauli1925}.
 
 \section{Glueball, quark, and the one ``3''}
 \label{sec:glueball}
@@ -335,7 +364,7 @@ parameters; the colour count gives structure, not numbers.
 \section{Numerical validation}
 \label{sec:validation}
 
-All identities above are verified numerically (N1--N29; Lean 4 \cite{deMoura2015,mathlib2020}, machine
+All identities above are verified numerically (N1--N31; Lean 4 \cite{deMoura2015,mathlib2020}, machine
 precision): the Cauchy--Binet chain ($\le 5.9\times10^{-12}$),
 unitary transport (formula error $0$, sub-volume conservation
 $\le 5.9\times10^{-12}$), the light-cone bandwidth (violations $0$),
@@ -384,6 +413,327 @@ helix), and the quantum relations (rotation of the helix; circumference =
 wavelength).  The chains are closed; the geometric choice at their head
 is the open question.  Whether the foundation survives is a question for
 experiment; the framework is now precise enough to be falsified.
+
+\appendix
+\section{The full derivation chain: from postulates to equations}
+\label{app:derivations}
+
+This appendix collects, in human-readable form, every derivation used in
+the main text.  Each step is a complete algebraic identity; the
+corresponding Lean~4 theorem \cite{deMoura2015,mathlib2020} and the
+numerical verification (N1--N31) are cited step by step.  No step is
+skipped; where a step requires an input that is \emph{not} derived, it is
+declared explicitly.
+
+\subsection{The postulates}
+\label{app:postulates}
+
+\begin{enumerate}
+\item \textbf{Flowing space.} Space is a flowing medium.  A non-excited
+pattern is carried completely by the flow (photon: $\mathrm d\tau^2=0$);
+an excited pattern is anchored, deviating from the flow
+(\texttt{unexcited\_comoving\_zero\_time}, \texttt{excited\_implies\_deviation\_from\_flow}).
+\item \textbf{Vector light speed.} The equivalent flow velocity of space
+is the speed of light, $|C|=c$, with $C$ direction-changeable.  The flow
+momentum of a body is
+\begin{equation}
+p = m\,(C-v),
+\label{eq:flowmomentum}
+\end{equation}
+where $v$ is the body's velocity (GQF1; \texttt{SLS1}).
+\item \textbf{Three directions.} Space is three-directional:
+$\sigma_1,\sigma_2,\sigma_3$ with
+$(\sigma_1+\sigma_2+\sigma_3)^2=3I$ (three-direction entanglement basis,
+QFT6; \texttt{three\_direction\_entanglement\_basis}).
+\item \textbf{Strand counting.} Mass is the count of space-displacement
+strands moving at light speed around the body, $m=\sqrt N\,M_0$
+(anchored addition); charge is the strand flux per unit time (source =
+positive, sink = negative; both right-handed helices).
+\item \textbf{Geometric choice (input, not derived).} The helix radius
+equals the reduced wavelength,
+\begin{equation}
+r = \frac{\lambda}{2\pi},
+\label{eq:rchoice}
+\end{equation}
+declared as the one free geometric input of the quantum chain.
+\end{enumerate}
+
+\subsection{Chain 1: mass as symplectic entanglement volume}
+\label{app:chain1}
+
+With twistors $\pi_i$ as half-spinor excitations \cite{Penrose1967}, the
+total correlation matrix is $P=\sum_i\pi_i\pi_i^\dagger=AA^\dagger$ (the
+columns of $A$ are the twistors).  The mass squared is the symplectic
+entanglement volume:
+\begin{equation}
+m^2=\det(AA^\dagger)=\sum_{S,\;|S|=n}\big|\det A_S\big|^2,
+\label{eq:cb}
+\end{equation}
+the Cauchy--Binet identity.  Derivation steps (each formalized):
+\begin{itemize}
+\item $AA^\dagger$ is Hermitian; $\det(AA^\dagger)=\det(A)\det(A^\dagger)$
+(Leibniz formula; \texttt{outer\_sum\_det}, GQN2).
+\item $\det(A^\dagger)=\overline{\det(A)}$ (transpose-conjugate;
+\texttt{det\_conj\_mul\_sum\_injective}, GQS2c), hence
+$\det(AA^\dagger)=|\det A|^2$ for square $A$.
+\item For $m>n$ (more twistors than dimensions), expanding
+$\det(AA^\dagger)$ by multilinearity in the rows gives one term per
+$n$-subset $S$ of the $m$ strands: the minors sum
+$\sum_S|\det A_S|^2$ (\texttt{det\_conj\_mul\_sum\_expand} GQS2a,
+\texttt{sum\_enum\_minor} GQS4).
+\item $n=2$, arbitrary $m$ (any number of superposed half-spinors):
+\begin{equation}
+\det\Big(\sum_{i}\pi_i\pi_i^\dagger\Big)=\sum_{i<j}\big|\langle\pi_i,\pi_j\rangle\big|^2,
+\label{eq:cb2}
+\end{equation}
+every unordered pair contributes its symplectic area
+(\texttt{outer\_sum\_m2\_det}, GQS1).
+\end{itemize}
+The unified chain (GQN5, \texttt{excitation\_rank\_unified}):
+$N=1$ photon (rank 1, $|\det_1|^2$, massless), $N=2$ electron
+($|\langle\pi_1,\pi_2\rangle|^2$, symplectic area), $N=3$ glueball
+($|\det_3[\pi_1\pi_2\pi_3]|^2$, volume).  The rank criterion:
+excitation $\Leftrightarrow$ linearly independent twistors
+(\texttt{triple\_excited\_implies\_independent} GQ4a;
+\texttt{excited\_implies\_independent\_N} GQN4a); degenerate (parallel)
+twistors give $\det=0$, i.e.\ massless
+(\texttt{pair\_massless\_iff\_parallel} QFT8;
+\texttt{triple\_degenerate\_massless} GQ5).  Numerical verification:
+N19--N20 (Cauchy--Binet, $8\times10^{-13}$), N6 (rank criterion).
+
+\subsection{Chain 2: information, causality, effective speed}
+\label{app:chain2}
+
+\textbf{Information} is redefined as the symplectic correlation volume
+$\det(AA^\dagger)$.  Under unitary transport
+$A\mapsto UA$ ($UU^\dagger=1$):
+\begin{equation}
+\det\big((UA)(UA)^\dagger\big)
+=\det\big(U(AA^\dagger)U^\dagger\big)
+=\det(AA^\dagger)\,\big|\det U\big|^2
+=\det(AA^\dagger),
+\label{eq:unit}
+\end{equation}
+using $\det(XY)=\det X\det Y$ twice and $\det(U^\dagger)=\overline{\det U}$
+(\texttt{unitary\_transport\_conserves\_det}, GQC1; sub-volumes term by
+term, N22).  Information propagates without decay.
+
+\textbf{Causality} emerges from lattice locality.  Let a
+nearest-neighbour jump matrix have bandwidth $1$.  Two facts:
+(i) composing operators of bandwidth $a$ and $b$ gives bandwidth
+$\le a+b$ (triangle inequality; \texttt{band\_comp}, GQC2b);
+(ii) hence $t$ steps have bandwidth $\le t$ (\texttt{band\_pow}, GQC2b).
+Therefore the propagation kernel vanishes outside the lattice light cone
+(chain jump, \texttt{chainJump}, GQC2): no signal crosses the cone
+(N23, violations $0$).
+
+\textbf{Effective superluminality} is coordinate dragging.  In the flow
+coordinates $\xi_k=k-\varphi_k$ a signal reachable in $t$ steps satisfies
+$|j-i|\le t+|\varphi_j-\varphi_i|$ (\texttt{flowCoord}, GQC3a); with a
+flow gradient $>1$ the rest-frame displacement exceeds $1$ in one step,
+while the signal never exceeds the local light speed relative to the flow
+(GQC3b).  The equivalent speed is $1+v_{\rm flow}$ exactly (N24).
+
+\textbf{Global coherence} is field-inherent: the anti-phase identity
+\begin{equation}
+\cos(\theta+\pi)=-\cos\theta
+\label{eq:antiphase}
+\end{equation}
+holds at every point, so the correlation
+$E(\theta)=\cos\theta\cos(\theta+\pi)=-\cos^2\theta$ is independent of
+the propagation distance $L$ and $E(\Delta=\pi)=-1$ exactly
+(\texttt{antiphase\_anticorrelation\_global}, \texttt{antiphase\_correlation\_any\_point},
+QFT5; N4).  No action at a distance: $E$ depends only on the relative
+phase difference.
+
+\subsection{Chain 3: the four forces}
+\label{app:chain3}
+
+From the flow momentum \eqref{eq:flowmomentum},
+$p=m(C-v)$, the force is the Leibniz (product-rule) decomposition:
+\begin{equation}
+F=\frac{\mathrm dp}{\mathrm dt}
+=\frac{\mathrm dm}{\mathrm dt}C
++m\frac{\mathrm dC}{\mathrm dt}
+-\frac{\mathrm dm}{\mathrm dt}v
+-m\frac{\mathrm dv}{\mathrm dt},
+\label{eq:fourforces}
+\end{equation}
+four channels (GQF2):
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+channel & physical identification \\
+\midrule
+$\dfrac{\mathrm dm}{\mathrm dt}\,C$ & electric force (strand flux; source = divergence) \\
+$m\,\dfrac{\mathrm dC}{\mathrm dt}$ & nuclear force (direction change of the flow) \\
+$-\dfrac{\mathrm dm}{\mathrm dt}\,v$ & magnetic force (flux against the body's velocity) \\
+$-m\,\dfrac{\mathrm dv}{\mathrm dt}$ & gravitation (flow gradient) \\
+\bottomrule
+\end{tabular}
+\end{center}
+The identity is exact (product rule; \texttt{four\_force\_decomposition},
+GQF2; N25, error $0$).  The identifications of the channels with the
+four interactions are the interpretation layer; the divergence form of
+charge and the wave equation are formalization skeletons.
+
+\subsection{Chain 4: the photon}
+\label{app:chain4}
+
+The photon is the excited state of an electron \cite{Einstein1905} in
+which mass and charge vanish.  Model B (two excited helices rotating
+symmetrically about the axis): the azimuthal momenta cancel,
+$p_y+(-p_y)=0$, so the net momentum is purely axial
+(\texttt{azimuthal\_cancellation}, GQP2); the dispersion is lightlike,
+$E^2=|p|^2$ (GQP2b).  Equivalently, at $v=C$ the flow momentum
+\eqref{eq:flowmomentum} gives $p=m(C-v)=0$ (GQP3): the photon is at rest
+in space, carried by the flow at light speed.  The two models share the
+light cone (N26: azimuthal cancellation $0$, massless criterion
+$\checkmark$).
+
+\subsection{Chain 5: the quantum relations from helix geometry}
+\label{app:chain5}
+
+This is the central chain.  All steps are complete algebraic
+identities; the single input is the geometric choice
+\eqref{eq:rchoice}.
+
+\begin{enumerate}
+\item \textbf{Circumference = wavelength.}  With $r=\lambda/2\pi$,
+the circumference of the helix cross-section is
+\begin{equation}
+2\pi r=2\pi\cdot\frac{\lambda}{2\pi}=\lambda,
+\label{eq:circ}
+\end{equation}
+one turn of the helix unfolds exactly one wavelength
+(\texttt{gqr4\_circumference\_wavelength}, GQR4).
+\item \textbf{$\hbar$ as radius $\times$ momentum.}  The angular momentum
+of one turn is
+\begin{equation}
+L=r\,p=\frac{\lambda}{2\pi}\,p,
+\label{eq:hbar}
+\end{equation}
+the classical formula.  With $h=\lambda p$ (one quantum per turn,
+$L=h$), \eqref{eq:hbar} reads
+$\hbar=L/2\pi=h/2\pi$ --- Planck's constant is the angular momentum per
+radian (\texttt{gqr5\_hbar\_eq\_rp}, GQR5; N29: $\hbar=rp$ matches the
+true $\hbar$ to $6\times10^{-10}$).
+\item \textbf{de~Broglie relation.}  From \eqref{eq:hbar},
+\begin{equation}
+p=\frac{h}{\lambda},
+\label{eq:debroglie}
+\end{equation}
+the de~Broglie relation \cite{DeBroglie1924} emerges (GQR5).
+\item \textbf{Planck--Einstein relation.}  With $E=\hbar\omega$ and
+$\omega=2\pi f$:
+\begin{equation}
+E=\hbar\omega=\frac{h}{2\pi}\cdot 2\pi f=hf,
+\label{eq:planck}
+\end{equation}
+and with \eqref{eq:debroglie}, $E=pc=(h/\lambda)c=hf$
+(\texttt{gqr3\_planck\_relation}, \texttt{gqr6\_planck\_einstein},
+GQR3/GQR6; N27: $E=\hbar\omega$ relative error $0$; $E=pc$ vs $hf$ error
+$0$).  The quantum relations are consequences of helix geometry plus
+classical identities, given \eqref{eq:rchoice}.
+\item \textbf{Heisenberg uncertainty.}  The helix radius is the natural
+scale of positional uncertainty, $\Delta x\sim r=\lambda/2\pi$, and
+$\Delta p\sim p=h/\lambda$; hence
+\begin{equation}
+\Delta x\,\Delta p\sim\frac{\lambda}{2\pi}\cdot\frac{h}{\lambda}
+=\frac{h}{2\pi}=\hbar\ge\frac{\hbar}{2},
+\label{eq:heisenberg}
+\end{equation}
+the Heisenberg relation \cite{Heisenberg1927} at the natural scale of the
+helix (the helix cannot localize a photon better than its own radius).
+\item \textbf{Pauli exclusion.}  Two identical strands are two parallel
+twistors; their symplectic volume vanishes,
+$\det(AA^\dagger)=|\det A|^2=0$ --- identical strands open no new channel
+(rank criterion of Chain~1).  Only distinct (linearly independent)
+strands create a new degree of freedom, in the spirit of the Pauli
+principle \cite{Pauli1925}.
+\end{enumerate}
+
+\subsection{Chain 6: gravitation and electrodynamics (structural)}
+\label{app:chain6}
+
+\textbf{Gravitation.}  A non-uniform flow $v(x)$ gives the Gordon metric
+\begin{equation}
+\mathrm d\tau^2=\mathrm dt^2-\frac{(\mathrm dx-v\,\mathrm dt)^2}{c^2},
+\qquad g=\begin{pmatrix}1-v^2/c^2 & v/c^2\\ v/c^2 & -1/c^2\end{pmatrix},
+\label{eq:gordon}
+\end{equation}
+with $g_{tt}=1-v^2/c^2$ matching the weak-field form
+$g_{tt}=1-2\Phi/c^2$ at $\Phi=\tfrac12 v^2$: the gravitational potential
+is half the square of the flow speed (\texttt{gordon\_weak\_field\_matches\_newton},
+SG11).  The geodesic equation then gives the Newtonian limit
+$a=-\nabla(\tfrac12 v^2)=-\nabla\Phi$ (verified numerically).  The
+photon condition $|\mathrm dx-v\,\mathrm dt|=c\,\mathrm dt$ gives
+$\mathrm d\tau^2=0$ (\texttt{gordon\_photon\_proper\_time\_zero}, SG9).
+At the black-hole horizon $|v|=c$ and escape becomes impossible --- a
+direct consequence of the postulate that the photon follows the flow
+(PH2), not an extra axiom.
+
+\textbf{Electrodynamics.}  With the space field $C$ as the only
+independent field, define $E=-\partial_t C$, $B=\partial_x C$
+(motion-kinematics).  Then Faraday's law is an identity,
+$\partial_t B=\partial_t\partial_x C=\partial_x\partial_t C=-\partial_x E$
+(\texttt{MS2}); Amp\`ere--Maxwell is equivalent to the wave equation of
+$C$ (\texttt{MS3}).  Maxwell's equations reduce to the wave equation of
+the space field; gauge redundancy is eliminated by the physical condition
+$|C|=c$ (SLS1).  The 3D identities
+$\nabla\cdot(\nabla\times C)=0$ and $\nabla\times(-\nabla\phi)=0$ are
+automatic (SF1--SF2).
+
+\subsection{Predictions}
+\label{app:predictions}
+
+Predictions of the framework, with honest status:
+
+\begin{enumerate}
+\item \textbf{Glueball lattice sequence} (a posteriori fit, verified):
+$m=\sqrt N\,M_0$ with $N=\{3,6,7\}$ for $0^{++},2^{++},0^{-+}$
+\cite{MorningstarPeardon1999,Chen2006,PDG2024}; $M_0\approx0.93\pm0.07$ GeV
+consistent across the three channels.  Falsifiable by future lattice data
+at $N=4,5$: $\sqrt4,\sqrt5\times M_0$.
+\item \textbf{Three-direction timescale} (proposed; derivation and
+formalization pending): the three-direction glueball
+($m_G=\sqrt3\,M_0$) carries a timescale
+\begin{equation}
+\tau_G=\frac{1}{6M_0^2},
+\label{eq:taug}
+\end{equation}
+i.e.\ $\approx0.17$\,GeV${}^{-1}\approx1.1\times10^{-24}$\,s at
+$M_0\approx0.99$\,GeV.  The algebraic relation is recorded as a candidate
+prediction; its physical identification (decay width, coherence time, or
+other) and its derivation from the strand-counting postulate are open.
+\item \textbf{Black-hole escape impossibility} (postulate consequence):
+inside the horizon the photon follows the flow inward; outward modes
+vanish (P2, P3 of the black-hole section).  Geometric, not an extra
+axiom.
+\item \textbf{No other new falsifiable predictions} are claimed beyond
+the standard framework: the honest assessment of \S\ref{sec:honest}
+stands.
+\end{enumerate}
+
+\subsection{Honest boundaries of the chain}
+\label{app:boundaries}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+layer & examples & status \\
+\midrule
+mathematical identities & Cauchy--Binet, product rule, $\cos(\theta+\pi)$ &
+true but standard \\
+conceptual reframing & $\hbar$ = angular momentum per radian; force = four
+channels; photon = helix & interpretation layer \\
+derived inputs & \eqref{eq:rchoice}, $M_0$, $e$, $G$ values & inputs, not
+derived \\
+skeletons & wave equation; charge as divergence; continuum 3D &
+formalization pending \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \bibliography{projection-physics}
 

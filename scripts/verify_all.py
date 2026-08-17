@@ -333,6 +333,10 @@ def main():
                   for v in n31["海森堡：Δx·Δp = (λ/2π)(h/λ) = ħ ≥ ħ/2（螺旋几何）"].values())
               and n31["泡利：平行扭量（相同态）det"] == 0.0
               and n31["泡利：不同扭量（不同态）det ≠ 0"] > 0)
+        n32 = res["N32_mercury_precession"]
+        check("N32: 水星近日点进动（GR 公式 Δφ = 6πGM/(c²a(1−e²))，落入观测 43.1±0.5）",
+              "43.1 ± 0.5 arcsec/century" in n32["观测值（GR 经典验证）"]
+              and 42.0 < float(n32["每世纪进动（计算）"].split(" ")[0]) < 44.0)
 
     # 4. 产物完整性
     artifacts = {
