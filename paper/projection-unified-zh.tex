@@ -52,7 +52,7 @@ $2\pi r=\lambda$ 给出 $\hbar=rp$，进而 $p=h/\lambda$ 与 $E=hf$；
 
 本文采取不同策略：\emph{更换原初实体}。原初实体不是粒子、不是场、不是
 时空，而是\emph{流动}。空间是流动介质；粒子与场是该流动的激发——锚定的
-螺旋模式。本文汇集在此基座上建立的统一链，并在 Lean 4 中全形式化
+螺旋模式。本文汇集在此基座上建立的统一链\cite{LiuXu,ProjectionPhysics}，并在 Lean 4 中全形式化
 （4146 jobs，零 \texttt{sorry}），数值验证（N1--N29）全部机器精度。
 
 \section{流动空间框架的公设}
@@ -64,7 +64,7 @@ $2\pi r=\lambda$ 给出 $\hbar=rp$，进而 $p=h/\lambda$ 与 $E=hf$；
 \end{postulate}
 
 \begin{postulate}[矢量光速]
-空间的等效流动速度即光速；矢量光速 $C$ 方向可变。物体的流动动量为
+空间的等效流动速度即光速（黑洞河流模型\cite{HamiltonLisle2008} 是同一几何结构）；矢量光速 $C$ 方向可变。物体的流动动量为
 $p = m(C-v)$，$v$ 为物体速度。
 \end{postulate}
 
@@ -83,13 +83,13 @@ $N$ 条）。电荷 = 单位时间条数流：正电荷 = 发散条数（源）�
 \section{质量 = 辛纠缠体积}
 \label{sec:mass}
 
-以扭量 $\pi_i$ 为半旋量激发，总关联矩阵 $P = \sum_i \pi_i\pi_i^\dagger
+以扭量 $\pi_i$ 为半旋量激发\cite{Penrose1967}，总关联矩阵 $P = \sum_i \pi_i\pi_i^\dagger
 = AA^\dagger$（$A$ 的列 = 扭量）。质量平方 = 辛纠缠体积：
 \begin{equation}
 m^2 = \det(AA^\dagger) = \sum_{S,\,|S|=n} \big|\det A_S\big|^2 ,
 \label{eq:cauchy}
 \end{equation}
-即 Cauchy--Binet 链：$n=2$、任意 $m$（任意多半旋量叠加）已完整形式化
+即 Cauchy--Binet 链：$n=2$、任意 $m$（任意多半旋量叠加）已完整形式化\cite{deMoura2015,mathlib2020}
 （$\det(\sum_i \pi_i\pi_i^\dagger)=\sum_{i<j}|\langle\pi_i,\pi_j\rangle|^2$，
 GQS1）；一般 $n$ 展开核（GQS2/3）与固定子集和（GQS4）均已证。
 统一链为
@@ -130,11 +130,11 @@ $m^2$ 从零上升：激发 = 独立第三方向。}
 辛结构守恒：信息随流传播不衰减。
 
 \paragraph{因果（GQC2）。} 流动是格点局域的：最近邻跳跃矩阵（带宽 1）
-$t$ 步后带宽 $\le t$，传播核在格点光锥外为零。因果性从格点局域性涌现
+$t$ 步后带宽 $\le t$，传播核在格点光锥外为零。因果性从格点局域性涌现（对照 Bell\cite{Bell1964} 与 Aspect\cite{Aspect1982} 的量子侧）
 ——不可通信定理的几何版，无需额外公设。
 
 \paragraph{等效速度（GQC3）。} 非均匀流动中等效速度 $=1+v_{\rm flow}$：
-超光速\emph{等效}运动是几何（坐标拖曳）效应——Alcubierre/Painlev\'e--
+超光速\emph{等效}运动是几何（坐标拖曳）效应——Alcubierre\cite{Alcubierre1994}/Painlev\'e--
 Gullstrand 结构——而信号从不超越局部光速。光锥被流动倾斜
 （图~\ref{fig:cone}）。
 
@@ -154,7 +154,7 @@ $>1$），而流动系中信号每步 $\le 1$。}
 = \dot m\,C + m\dot C - \dot m\,v - m\dot v ,
 \label{eq:fourforces}
 \end{equation}
-对应电场力（$\dot m C$：质量流 $\times$ 光速方向）、核力（$m\dot C$：
+对应电场力（$\dot m C$；对照 Maxwell\cite{Maxwell1865}）：质量流 $\times$ 光速方向）、核力（$m\dot C$：
 质量 $\times$ 光速流——矢量光速方向变化）、磁场力（$\dot m v$：质量流
 $\times$ 速度）与万有引力/惯性力（$m\dot v$：质量 $\times$ 加速度）。
 力不是独立实体：它们是流动动量分解的四通道。电荷在同样语言中是空间
@@ -171,7 +171,7 @@ $\times$ 速度）与万有引力/惯性力（$m\dot v$：质量 $\times$ 加速
 \section{光子 = 激发电子螺旋}
 \label{sec:photon}
 
-光子是质量与电荷消失的电子激发态：它是电子实体遗留的螺旋结构。
+光子是质量与电荷消失的电子激发态（对照光量子\cite{Einstein1905}）：它是电子实体遗留的螺旋结构。
 粒子性来自遗留的电子结构；波动性来自空间本身的波动（波动方程的形式化
 留作开放）。
 
@@ -205,7 +205,7 @@ E = \hbar\omega = \frac{h}{2\pi}\,2\pi f = h\,f =
 \times
 \underbrace{f}_{\text{每秒圈数}},
 \end{equation}
-普朗克-爱因斯坦关系 = 螺旋的旋转能量（图~\ref{fig:turns}）。
+普朗克-爱因斯坦关系\cite{Planck1900} = 螺旋的旋转能量，德布罗意波长\cite{DeBroglie1924}（图~\ref{fig:turns}）。
 
 \begin{figure}[htbp]
 \includegraphics[width=0.9\columnwidth]{figures/fig_photon_turns.png}
@@ -245,7 +245,7 @@ $E=pc$ & $3.313\times10^{-19}$\,J & $=hf$ 精确一致 \\
 \label{sec:glueball}
 
 胶球质量规则读作条数计数：$m=\sqrt{N}\,M_0$，$N=3$ 个锚定方向
-（$\sigma_1\sigma_2\sigma_3$）；格点 $N$ 序列 $\{3,6,7\}$（道
+（$\sigma_1\sigma_2\sigma_3$）；格点 $N$ 序列 $\{3,6,7\}$\cite{MorningstarPeardon1999,Chen2006,PDG2024}（道
 $0^{++},2^{++},0^{-+}$）以 $\sqrt{3},\sqrt{6},\sqrt{7}$ 倍 $M_0$ 落入
 格点区间。色数 = 同一个"3"：色 $=3$ = 三个空间方向（结构对应：
 为什么 3 色）；8 胶子 $= 2^3 = \dim C\ell(6)$（TW5）。空间的"3"、
@@ -257,7 +257,7 @@ $0^{++},2^{++},0^{-+}$）以 $\sqrt{3},\sqrt{6},\sqrt{7}$ 倍 $M_0$ 落入
 \section{数值验证}
 \label{sec:validation}
 
-以上全部恒等经数值验证（N1--N29，机器精度）：Cauchy--Binet 链
+以上全部恒等经数值验证（N1--N29；Lean 4\cite{deMoura2015,mathlib2020}，机器精度）：Cauchy--Binet 链
 （$\le 5.9\times10^{-12}$）、酉传输（公式误差 $0$，子体积逐项守恒
 $\le 5.9\times10^{-12}$）、光锥带宽（违规 $0$）、四力分解（误差 $0$）、
 光子模型（环向抵消 $0$）、量子匹配（$E=\hbar\omega$ 相对误差 $0$；
@@ -293,5 +293,7 @@ $N$ 序列是后验拟合）；(iv) 光子波动性的连续波动方程、电�
 光子（激发电子螺旋）与量子关系（螺旋的旋转；圆周 = 波长）。链已闭合；
 链首的几何选择是开放问题。基座能否存活是实验的问题；框架现在已足够
 精确到可以被证伪。
+
+\bibliography{projection-physics}
 
 \end{document}

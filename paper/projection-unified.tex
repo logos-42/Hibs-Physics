@@ -66,7 +66,7 @@ The present work follows a different strategy: \emph{change the primitive}.
 The primitive is not particles, not fields, not spacetime: it is
 \emph{flow}.  Space is a flowing medium; particles and fields are
 excitations --- anchored, spiralling patterns --- of this flow.  This
-document collects the unified chain that has been built on this foundation
+document collects the unified chain that has been built on this foundation \cite{LiuXu,ProjectionPhysics}
 and formalized in Lean 4 (4146 jobs, zero \texttt{sorry}), with numerical
 verification (N1--N29) at machine precision.
 
@@ -80,7 +80,7 @@ deviating from the flow.
 \end{postulate}
 
 \begin{postulate}[Vector light speed]
-The equivalent flow speed of space is the speed of light; the vector light
+The equivalent flow speed of space is the speed of light (the river model of black holes \cite{HamiltonLisle2008} is the same geometric structure); the vector light
 speed $C$ has a direction that can change.  The flow momentum of a body is
 $p = m(C-v)$, with $v$ the body velocity.
 \end{postulate}
@@ -103,7 +103,7 @@ with the same right-handed helix sense.
 \section{Mass as symplectic entanglement volume}
 \label{sec:mass}
 
-With twistors $\pi_i$ as the half-spinor excitations, the total
+With twistors $\pi_i$ as the half-spinor excitations \cite{Penrose1967}, the total
 correlation matrix is $P = \sum_i \pi_i\pi_i^\dagger = AA^\dagger$ (the
 columns of $A$ are the twistors).  The mass squared is the symplectic
 entanglement volume:
@@ -112,7 +112,7 @@ m^2 = \det(AA^\dagger) = \sum_{S,\,|S|=n} \big|\det A_S\big|^2 ,
 \label{eq:cauchy}
 \end{equation}
 the Cauchy--Binet chain: for $n=2$ and arbitrary $m$ (any number of
-superposed half-spinors) the identity is fully formalized in Lean
+superposed half-spinors) the identity is fully formalized in Lean \cite{deMoura2015,mathlib2020}
 ($\det(\sum_i \pi_i\pi_i^\dagger)=\sum_{i<j}|\langle\pi_i,\pi_j\rangle|^2$,
 GQS1); the general-$n$ expansion kernel (GQS2/3) and the fixed-subset
 sum (GQS4) are likewise proved.  The unified chain is
@@ -161,13 +161,13 @@ without decay.
 \paragraph{Causality (GQC2).} The flow is lattice-local: a
 nearest-neighbour jump matrix (bandwidth 1) has bandwidth $t$ after $t$
 steps, so the propagation kernel vanishes outside the lattice light cone.
-Causality emerges from lattice locality --- the geometric version of the
+Causality emerges from lattice locality (cf.\ Bell \cite{Bell1964} and Aspect \cite{Aspect1982} for the quantum side) --- the geometric version of the
 no-communication theorem, without extra axioms.
 
 \paragraph{Effective speed (GQC3).} In a non-uniform flow the equivalent
 speed is $1+v_{\rm flow}$: superluminal \emph{equivalent} motion is a
 geometric (coordinate-dragging) effect --- the
-Alcubierre/Painlev\'e--Gullstrand structure --- while signals never exceed
+Alcubierre \cite{Alcubierre1994}/Painlev\'e--Gullstrand structure \cite{HamiltonLisle2008} --- while signals never exceed
 the local speed of light.  The light cone is tilted by the flow
 (Fig.~\ref{fig:cone}).
 
@@ -189,7 +189,7 @@ four channels (GQF):
 = \dot m\,C + m\dot C - \dot m\,v - m\dot v ,
 \label{eq:fourforces}
 \end{equation}
-identified with the electric ($\dot m C$: mass flow $\times$ light
+identified with the electric ($\dot m C$; cf.\ Maxwell \cite{Maxwell1865}): mass flow $\times$ light
 direction), nuclear ($m\dot C$: mass $\times$ light-speed flow --- change
 of the vector light speed), magnetic ($\dot m v$: mass flow $\times$
 velocity) and gravitational/inertial ($m\dot v$: mass $\times$
@@ -211,7 +211,7 @@ the sign.}
 \section{The photon: an excited-electron helix}
 \label{sec:photon}
 
-The photon is the excited state of an electron in which mass and charge
+The photon is the excited state of an electron (cf.\ the light quantum \cite{Einstein1905}) in which mass and charge
 have vanished: it is the helix structure left behind by the electron
 entity.  Its particle nature comes from the residual electron structure;
 its wave nature from the vibration of space itself (formalization of the
@@ -253,7 +253,7 @@ E = \hbar\omega = \frac{h}{2\pi}\,2\pi f = h\,f =
 \times
 \underbrace{f}_{\text{turns per second}},
 \end{equation}
-the Planck--Einstein relation as the rotation energy of the helix
+the Planck--Einstein relation \cite{Planck1900} as the rotation energy of the helix, with the de~Broglie wavelength \cite{DeBroglie1924}
 (Fig.~\ref{fig:turns}).
 
 \begin{figure}[htbp]
@@ -299,7 +299,7 @@ $E=pc$ & $3.313\times10^{-19}$\,J & $=hf$ exactly \\
 
 The glueball mass rule reads as strand counting: $m=\sqrt{N}\,M_0$ with
 $N=3$ anchored directions ($\sigma_1\sigma_2\sigma_3$); the lattice
-$N$-sequence $\{3,6,7\}$ (channels $0^{++},2^{++},0^{-+}$) matches
+$N$-sequence $\{3,6,7\}$ \cite{MorningstarPeardon1999,Chen2006,PDG2024} (channels $0^{++},2^{++},0^{-+}$) matches
 $\sqrt{3},\sqrt{6},\sqrt{7}$ times $M_0$ within the lattice ranges.  The
 number of colours is the same ``3'': colour $=3$ = three spatial
 directions (structure correspondence: why 3 colours); 8 gluons
@@ -313,7 +313,7 @@ parameters; the colour count gives structure, not numbers.
 \section{Numerical validation}
 \label{sec:validation}
 
-All identities above are verified numerically (N1--N29, machine
+All identities above are verified numerically (N1--N29; Lean 4 \cite{deMoura2015,mathlib2020}, machine
 precision): the Cauchy--Binet chain ($\le 5.9\times10^{-12}$),
 unitary transport (formula error $0$, sub-volume conservation
 $\le 5.9\times10^{-12}$), the light-cone bandwidth (violations $0$),
@@ -362,5 +362,7 @@ helix), and the quantum relations (rotation of the helix; circumference =
 wavelength).  The chains are closed; the geometric choice at their head
 is the open question.  Whether the foundation survives is a question for
 experiment; the framework is now precise enough to be falsified.
+
+\bibliography{projection-physics}
 
 \end{document}
