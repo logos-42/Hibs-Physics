@@ -6,11 +6,6 @@
 
 | 文件 | 说明 |
 |---|---|
-| `projection-physics.tex` | **论文主文件（英文版）**。REVTeX 4.2，`\documentclass[aps,prd,preprint,superscriptaddress]{revtex4-2}`——单栏 preprint（Physical Review D 风格），最接近 arXiv 理论物理论文格式 |
-| `projection-physics-zh.tex` | **中文版**（内容与英文版等同）。REVTeX 4.2 + ctex（`fontset=fandol`），编译器需 XeLaTeX（tectonic 自动处理） |
-| `projection-physics.bib` | 参考文献（18 条，全真实：Gordon 1923 / Hamilton–Lisle 2008 / Morningstar–Peardon 1999 / Chen 2006 / Aspect 1982 / PDG 2024 / de Moura CADE-15 等），两版共用 |
-| `projection-physics.pdf` | 英文版编译产物（tectonic 0.17.0，20 页，零错误零 overfull） |
-| `projection-physics-zh.pdf` | 中文版编译产物（tectonic 0.17.0，13 页，零错误零 overfull） |
 | `projection-unified.tex` | **大一统论文（英文版，2026-08-16）**：《The Geometric Description of Physics at the Cosmic Scale》（物理学在宇宙尺度下的几何的描述）。流动空间大一统：质量=辛纠缠体积（Cauchy-Binet 链）、信息=辛体积（传输/因果/等效超光速）、四力=流动动量莱布尼茨分解、光子=激发电子螺旋、量子关系从螺旋几何涌现（E=ħω、p=h/λ、E=hf、圆周=波长）、胶球/夸克与"3"的贯穿。REVTeX 4.2 + 7 张配图（paper/figures/） |
 | `projection-unified-zh.tex` | **大一统论文（中文版）**：《物理学在宇宙尺度下的几何的描述》。内容与英文版等同；REVTeX 4.2 + ctex（fandol） |
 | `projection-unified.pdf` | 大一统英文版编译产物（tectonic，零错误，仅 1 处 overfull 警告） |
@@ -23,15 +18,11 @@
 本机无 LaTeX 发行版，用 tectonic 单二进制：
 
 ```bash
-~/.local/bin/tectonic projection-physics.tex      # 英文版
-~/.local/bin/tectonic projection-physics-zh.tex   # 中文版（XeLaTeX 引擎，ctex+fandol 字体）
 ```
 
 （tectonic 自动处理 bibtex 多趟编译；首次运行联网下载所需包。中文版 PDF
 体积较大是因为嵌入了 fandol 中文字体。）
 
-Overleaf 用户：直接上传 `projection-physics.tex` / `projection-physics-zh.tex`
-+ `projection-physics.bib`，文档类选 REVTeX 4.2；中文版编译器选 XeLaTeX。
 
 ## 结构
 
