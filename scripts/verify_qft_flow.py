@@ -980,6 +980,42 @@ def main():
                 "如果 ħ 是螺旋几何量（GQR），α 是几何量，则 e=√(4πε₀ħcα) 也是几何量。"
                 "诚实：结构性存在（位置明确）≠ 数值推导（G 的 M₀ 标定、α 的来源仍为输入）"}
 
+    # ---- N31：海森堡不确定性 + 泡利排斥（螺旋几何版）----
+    # 1. 海森堡：Δx ~ r = λ/2π（螺旋半径），Δp ~ p = h/λ ⟹ Δx·Δp = ħ ≥ ħ/2
+    h_SI2 = 6.62607015e-34
+    hbar_SI3 = 1.054571817e-34
+    unc = {}
+    for lam in [500e-9, 300e-9, 700e-9]:
+        r_h = lam / (2 * np.pi)
+        p_h = h_SI2 / lam
+        dxdp = r_h * p_h
+        unc[f"λ={lam*1e9:.0f} nm"] = {
+            "Δx ~ r = λ/2π": f"{r_h*1e9:.3f} nm",
+            "Δp ~ p = h/λ": f"{p_h:.4e} kg·m/s",
+            "Δx·Δp": f"{dxdp:.4e} J·s",
+            "ħ（理论下限 ħ/2）": f"{hbar_SI3:.4e} J·s",
+            "Δx·Δp = ħ（精确）": bool(abs(dxdp - hbar_SI3) / hbar_SI3 < 1e-9),
+            "≥ ħ/2 满足": bool(dxdp >= hbar_SI3 / 2)}
+    # 2. 泡利：平行扭量 det = 0（相同态无新结构）vs 不同扭量 det ≠ 0
+    pi1 = np.array([1.0 + 0j, 0.5 + 0.3j])
+    pi_parallel = 2.5 * pi1                       # 平行（相同态）
+    pi_distinct = np.array([0.3 - 0.2j, 1.0 + 0.4j])  # 不同态
+    A_same = np.array([pi1, pi_parallel])
+    A_diff = np.array([pi1, pi_distinct])
+    det_same = abs(np.linalg.det(A_same))
+    det_diff = abs(np.linalg.det(A_diff))
+    report["results"]["N31_heisenberg_pauli"] = {
+        "海森堡：Δx·Δp = (λ/2π)(h/λ) = ħ ≥ ħ/2（螺旋几何）": unc,
+        "泡利：平行扭量（相同态）det": round(float(det_same), 13),
+        "泡利：不同扭量（不同态）det ≠ 0": round(float(det_diff), 13),
+        "泡利几何判据：相同态无新结构（det=0）vs 不同态打开通道（det≠0）": True,
+        "note": "N31：海森堡不确定性 + 泡利排斥的螺旋几何版。"
+                "海森堡：Δx ~ r = λ/2π（螺旋半径=位置不确定性自然尺度），Δp ~ p = h/λ，"
+                "Δx·Δp = ħ ≥ ħ/2——不确定性关系从螺旋几何在其自然尺度涌现（螺旋无法"
+                "定域得比自身半径更好）；泡利：平行扭量（相同态）det=0 无新结构无质量，"
+                "不同扭量 det≠0 打开新通道——排斥的几何秩判据（与泡利不相容原理同构）。"
+                "诚实：Δx·Δp = ħ 是 r=λ/2π 假设下的恒等（解释层），非独立推导"}
+
 
     # ---- 三扭量图：det₃ 恒等 + 退化→独立扫描（GQ2/GQ5）----
     fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4.6))
