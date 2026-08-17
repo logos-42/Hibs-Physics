@@ -223,18 +223,23 @@ $E=h\cdot f$ = 每圈角动量 $\times$ 每秒圈数。}
 p &= \frac{h}{\lambda} && \text{（德布罗意关系涌现），}\\
 E &= pc = hf && \text{（普朗克-爱因斯坦涌现），}
 \end{align}
-以物理常数代入机器精度验证（图~\ref{fig:circ}）：$\lambda=500$\,nm 时
-$r=\lambda/2\pi=79.58$\,nm，$p=h/\lambda=1.3252\times10^{-27}$\,kg\,m\,s$^{-1}$，
-$\hbar=rp=1.0546\times10^{-34}$\,J\,s 复现实测 $\hbar$ 到
-$6\times10^{-10}$；$E=pc$ 与 $E=hf$ 精确一致。
+以物理常数代入机器精度验证（表~\ref{tab:circ}）。
 
-\begin{figure}[htbp]
-\includegraphics[width=0.9\columnwidth]{figures/fig_circumference_wavelength.png}
-\caption{圆周 = 波长：螺旋截面半径 $r=\lambda/2\pi$（约化波长）；圆周
-$2\pi r=\lambda$。推导链 $r=\lambda/2\pi \Rightarrow \hbar=rp \Rightarrow
-p=h/\lambda \Rightarrow E=hf$ 闭合。}
-\label{fig:circ}
-\end{figure}
+\begin{table}[htbp]
+\caption{圆周 = 波长：以物理常数闭合推导链（$\lambda=500$\,nm）。}
+\label{tab:circ}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+量 & 数值 & 检验 \\
+\hline
+$r=\lambda/2\pi$ & $79.58$\,nm & 约化波长 \\
+圆周 $2\pi r$ & $500.0$\,nm & $=\lambda$（一圈 = 一个波长） \\
+$p=h/\lambda$ & $1.3252\times10^{-27}$\,kg\,m\,s$^{-1}$ & 德布罗意 \\
+$\hbar=r\,p$ & $1.0546\times10^{-34}$\,J\,s & 实测 $1.05457\times10^{-34}$；相对误差 $6\times10^{-10}$ \\
+$E=pc$ & $3.313\times10^{-19}$\,J & $=hf$ 精确一致 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
 
 \section{胶球、夸克与同一个"3"}
 \label{sec:glueball}

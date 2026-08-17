@@ -111,39 +111,6 @@ fig.tight_layout()
 fig.savefig(os.path.join(OUT, "fig_photon_turns.png"), dpi=130)
 plt.close(fig)
 
-# ---- 6. fig_circumference_wavelength ----
-h_SI = 6.62607015e-34
-hbar_SI = 1.054571817e-34
-c_SI = 299792458.0
-lam_vis = 500e-9
-r_helix = lam_vis / (2 * np.pi)
-p_deb = h_SI / lam_vis
-hbar_geo = r_helix * p_deb
-err = abs(hbar_geo - hbar_SI) / hbar_SI
-E_pc = p_deb * c_SI
-f_ph = c_SI / lam_vis
-E_hf = h_SI * f_ph
-fig, axc2 = plt.subplots(1, 2, figsize=(10, 4.4))
-axc2[0].plot(np.cos(tq2), np.sin(tq2), lw=1.6, color="tab:blue")
-axc2[0].set_aspect("equal")
-axc2[0].set_title(f"Helix cross-section (radius r = $\\lambda/2\\pi$ = {r_helix*1e9:.2f} nm)\n"
-                  f"circumference 2$\\pi$r = $\\lambda$ = 500 nm")
-axc2[0].grid(alpha=0.3)
-axc2[1].axis("off")
-chain_txt = ("Derivation chain (physical constants)\n"
-             f"r = $\\lambda/2\\pi$ = {r_helix*1e9:.2f} nm\n"
-             f"circumference 2$\\pi$r = {2*np.pi*r_helix*1e9:.1f} nm = $\\lambda$  ok\n"
-             f"p = h/$\\lambda$ = {p_deb:.4e} kg m/s\n"
-             f"$\\hbar$ = r*p = {hbar_geo:.4e} J s\n"
-             f"measured $\\hbar$ = {hbar_SI:.4e} J s\n"
-             f"rel. error = {err:.2e}\n"
-             f"E = pc = {E_pc:.4e} J = hf  ok")
-axc2[1].text(0.05, 0.95, chain_txt, va="top", fontsize=11, family="monospace",
-             bbox=dict(boxstyle="round", facecolor="lightyellow", alpha=0.9))
-fig.tight_layout()
-fig.savefig(os.path.join(OUT, "fig_circumference_wavelength.png"), dpi=130)
-plt.close(fig)
-
 print("English figures written to", OUT)
 for f in sorted(os.listdir(OUT)):
     print(" ", f)
