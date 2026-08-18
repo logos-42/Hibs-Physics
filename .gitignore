@@ -4,3 +4,5 @@ lake-manifest.json
 artifacts/
 __pycache__/
 projection-unifiedNotes.bib
+docs/
+manifests
