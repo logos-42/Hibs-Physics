@@ -94,6 +94,7 @@ import ProjectionPhysics.SpaceMetric
 import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.SpaceGravity
+import ProjectionPhysics.SpaceFold
 import ProjectionPhysics.Explorations.EntanglementHelix
 import ProjectionPhysics.Explorations.BlackHoleWormhole
 import ProjectionPhysics.Explorations.MaxwellFlow
@@ -104,3 +105,4 @@ import ProjectionPhysics.Explorations.DoubleSlit
 import ProjectionPhysics.Explorations.GlueballCoupling
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
+import ProjectionPhysics.Explorations.SpaceExtensibility

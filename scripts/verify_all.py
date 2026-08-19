@@ -80,7 +80,9 @@ def main():
                        "scripts/verify_qft_flow.py",
                        "scripts/verify_maxwell_flow.py",
                        "scripts/verify_entanglement_helix.py",
-                       "scripts/verify_blackhole_wormhole.py"]:
+                       "scripts/verify_blackhole_wormhole.py",
+                       "scripts/verify_space_extensibility.py",
+                       "scripts/verify_space_fold.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -338,6 +340,37 @@ def main():
               "43.1 ± 0.5 arcsec/century" in n32["观测值（GR 经典验证）"]
               and 42.0 < float(n32["每世纪进动（计算）"].split(" ")[0]) < 44.0)
 
+    se = load_report("artifacts/spaceextensibility/report.json")
+    if se:
+        res = se["results"]
+        check("SE1: 压缩能密度非负 + δ>0 单调增",
+              res["SE1_compress_nonneg"]["正（δ>0）且随 δ 单调增"])
+        check("SE2: 内部空间更大 ⟺ 域差 δ>0",
+              res["SE2_domain_difference"]["内部空间更大 ⟺ δ>0（同坐标体积装更多空间）"])
+        check("SE3-4: 边界能 ≥ 0 + 总能恒等 + 压缩能单调",
+              res["SE3_SE4_energy_budget"]["E_bdry（弥散边界梯度层）≥ 0"]
+              and res["SE3_SE4_energy_budget"]["E_comp 随 δ 单调增"])
+        s5 = res["SE5_spiral_balance"]
+        check("SE5: 螺旋场自维持上限 δ_max（δ≤δ_max 外补=0 / δ>δ_max 外补>0）",
+              s5["δ ≤ δ_max → 外补能量 = 0（螺旋场内建维持）"]
+              and s5["δ > δ_max → 外补能量 > 0（需外能撑边界）"])
+
+    sf = load_report("artifacts/spacefold/report.json")
+    if sf:
+        res = sf["results"]
+        check("SF1: 密度度规行列式 = −ρ²/c² + v²(ρ²−1)/c⁴（机器精度）",
+              res["SF1_det_formula"]["机器精度（< 1e-12）"])
+        check("SF1s: 静态折叠 det = −ρ²/c²",
+              res["SF1s_static_det"]["静态折叠 = 纯密度贡献"])
+        check("SF1: ρ=1 退化保体积 −1/c²（SG2 接轨）+ 耦合项非零",
+              res["SF1_coupling"]["耦合项 v²(ρ²−1)/c⁴ 在 ρ≠1 时非零"])
+        check("SF2: 延拓性（内部密度更大 ⟹ |det| 更大）",
+              res["SF2_interior_larger"]["内部空间更大（|det_in| > |det_out|）"])
+        check("SF3: 空间域差值 ΔΦ = ½(v_in²−v_out²) 为正",
+              res["SF3_potential_difference"]["内部流动更快 ⟹ 势差为正"])
+        check("SF7: 边界维持能 = 压缩能（密度比同源）",
+              res["SF7_unified"]["E_bdry = E_compress（密度比同源）"])
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -349,6 +382,7 @@ def main():
         "artifacts/qftflow/fig_antiphase_global.png": 30_000,
         "artifacts/qftflow/fig_triple_rank.png": 30_000,
         "artifacts/blackhole/fig_flow_structures.png": 30_000,
+        "artifacts/spaceextensibility/space_extensibility.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
