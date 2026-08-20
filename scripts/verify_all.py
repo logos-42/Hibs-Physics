@@ -83,7 +83,8 @@ def main():
                        "scripts/verify_blackhole_wormhole.py",
                        "scripts/verify_space_extensibility.py",
                        "scripts/verify_space_fold.py",
-                       "scripts/verify_mass_cancellation.py"]:
+                       "scripts/verify_mass_cancellation.py",
+                       "scripts/verify_space_modulation.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
