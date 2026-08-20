@@ -67,3 +67,4 @@ session-20260818-unified,local,ProjectionPhysics,paper,arxiv-endorsement-email.m
 session-20260818-unified,local,ProjectionPhysics,paper,peer-review-request-email.md,../paper/peer-review-request-email.md,generated,paper/README.md,彭罗斯+Witten等前沿物理学家同行评议请求邮件(中英双版, 2026-08-18撰写)
 session-20260815-twistor,local,ProjectionPhysics,artifact,report.json,../artifacts/twistor/report.json,generated,docs/wiki/theory-twistor.md,扭量兼容性验证报告
 session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass.png,../artifacts/twistor/twistor_pair_mass.png,generated,docs/wiki/theory-twistor.md,双扭量电子质量几何
+dengyu-pdf,local,leo,pdf,dengyu.pdf,../docs/dengyu.pdf,compiled,docs/wiki/,邓宇(?)空间场/辛体积可逆性原始资料
