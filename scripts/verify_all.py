@@ -87,7 +87,8 @@ def main():
                        "scripts/verify_mass_cancellation.py",
                        "scripts/verify_space_modulation.py",
                        "scripts/verify_time_freeze.py",
-                       "scripts/verify_plasma_antigravity.py"]:
+                       "scripts/verify_plasma_antigravity.py",
+                       "scripts/verify_plasma_dynamics.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
