@@ -68,3 +68,4 @@ session-20260818-unified,local,ProjectionPhysics,paper,peer-review-request-email
 session-20260815-twistor,local,ProjectionPhysics,artifact,report.json,../artifacts/twistor/report.json,generated,docs/wiki/theory-twistor.md,扭量兼容性验证报告
 session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass.png,../artifacts/twistor/twistor_pair_mass.png,generated,docs/wiki/theory-twistor.md,双扭量电子质量几何
 dengyu-pdf,local,leo,pdf,dengyu.pdf,../docs/dengyu.pdf,compiled,docs/wiki/,邓宇(?)空间场/辛体积可逆性原始资料
+masstozero-md,local,leo,markdown,masstozero.md,../docs/wiki/masstozero.md,compiled,docs/wiki/theory-plasma-antigravity.md,Cu/H 等离子体同位素特征矩阵 + 双流形反引力场设计原始资料
