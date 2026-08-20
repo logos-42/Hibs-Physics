@@ -44,7 +44,8 @@
 - [theory-glueball-coupling.md](./theory-glueball-coupling.md) — 胶球三方向耦合 + 质量化梯度：√N·M₀ 序列 vs 格点胶球谱（0++/2++/0-+ 量级吻合）
 - [theory-twistor.md](./theory-twistor.md) — 彭罗斯扭量 × 流动空间：光子/胶子单扭量 ✓（无质量恒等 det=0）；电子=经典障碍（双扭量）；电性=法向量朝向（TW4）
 - [theory-qft-flow.md](./theory-qft-flow.md) — QFT × 流动空间（探索）：激发态=锚定偏离空间流动；全域纠缠=空间场相干（反相无距离衰减）；质量⟺激发⟺秩2纠缠统一
-- [theory-space-fold.md](./theory-space-fold.md) — 空间延拓性（度规层 + 能量预算层）：空间可压缩密度 ⟹ det(g)=−ρ²/c²+v²(ρ²−1)/c⁴ 流动×压缩耦合；延拓性（内部空间更大）；势差 ΔΦ=½(v_in²−v_out²)；边界维持能量（螺旋旋转场）
+- [theory-space-fold.md](./theory-space-fold.md) — 空间延拓性（度规层 + 能量预算层）：空间可压缩密度 ⟹ det(g)=−ρ²/c²+v²(ρ²−1)/c⁴ 流动×压缩耦合；延拓性（内部空间更大）；势差 ΔΦ=½(v_in²−v_out²)；边界维持能量（螺旋旋转场）；褶皱数延拓 + 势差放大（SF8–SF11）
+- [theory-fold-topology-measurement.md](./theory-fold-topology-measurement.md) — 折叠域测量：拓扑继续折叠（Q1，5.10x）+ 边界势差放大（Q2，δ_max ∝ B）
 - [theory-mass-cancellation.md](./theory-mass-cancellation.md) — 反引力场与质量取消（修订版，★ 通用于所有有质量物质：电子/质子/原子）：任意锚定物质 μ=1⟹m_eff²=0（AMC1，机制在空间不在电荷）；随流 dτ=0（AMC2）；易实现判据（弱场梯度²成本 AMC3 + 无源区 AMC4）；正/反电子=自然实例非机制（AMC5）；旋转流动捕获环（保守势回绕和=0 无等效质量 AMC6 + 切向流无径向逃逸 AMC7）；磁场=标记非捕获力（AMC8）
 - [theory-space-field-modulation.md](./theory-space-field-modulation.md) — 空间场调制通信（FM1–FM6）：四力合一单场（GQF2 product-rule 四通道）可像 FM 一样调制；信息编码在空间场方向相位步长；FM2 字母表可区分 + FM3 解码往返恒等（数学证明可传递信息）；FM6 载波单位模（纯相位，与 AM 区别）；媒介=空间场本身（不经 E/B）；随流等效超光速 1+v（GQC3，流动系因果保持）+ 空间波长压缩 λ_st=λ₀(1+v)（频段按空间理解）
 - [log.md](./log.md)

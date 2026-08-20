@@ -18,7 +18,7 @@
 --   · 引力 = 流动非均匀（SpaceGravity SG：Φ=½v²；GQF2 引力 = 质量·dv）
 --   · 时间 = 偏离空间流动（SpaceMetric SM3：偏离=0 ⟹ dτ=0）
 --   · 磁场 = 空间场旋度（SpaceField3D SF5：B = curl C，涡旋 ⟹ B≠0）
---   · 空间褶皱 = 密度 / 流动梯度（SpaceFold SF1–SF7：密度度规 + 压缩能量）
+--   · 空间褶皱 = 密度 / 流动梯度（SpaceFold SF1–SF11：密度度规 + 压缩能量 + 褶皱延拓）
 --   · 光子 = 激发态质量消失（GQP1–4 是机制的一个实例，非本模块适用范围）
 --
 -- 核心定理（mathlib，代数种子）：

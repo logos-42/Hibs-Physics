@@ -83,6 +83,7 @@ def main():
                        "scripts/verify_blackhole_wormhole.py",
                        "scripts/verify_space_extensibility.py",
                        "scripts/verify_space_fold.py",
+                       "scripts/measure_fold_topology.py",
                        "scripts/verify_mass_cancellation.py",
                        "scripts/verify_space_modulation.py"]:
             r = run(["python3", script], timeout=420)
@@ -372,6 +373,34 @@ def main():
               res["SF3_potential_difference"]["内部流动更快 ⟹ 势差为正"])
         check("SF7: 边界维持能 = 压缩能（密度比同源）",
               res["SF7_unified"]["E_bdry = E_compress（密度比同源）"])
+        check("SF8: 内部继续折叠（褶皱更多 ⟹ 内部空间更大，Q1）",
+              res["SF8_more_folds_more_space"]["N=1..20 层 |det| 严格递增"]
+              and res["SF8_more_folds_more_space"]["褶皱数可加 ρ₀N₁ + ρ₀N₂ = ρ₀(N₁+N₂)（SF8a）"])
+        check("SF9: 势差-密度耦合（ΔΦ 随 ρ_in 单调，α=1）",
+              res["SF9_potential_density_coupling"]["ΔΦ = ½α(ρ_in²−ρ_out²) 随 ρ_in 单调递增（α=1）"])
+        check("SF10: 边界势差越大 ⟹ 内部空间越大（链条，Q2）",
+              res["SF10_larger_potential_larger_space"]["|det g(ρ_in)| 随 ρ_in 单调递增"]
+              and res["SF10_larger_potential_larger_space"]["ΔΦ 大 ⟹ |det| 大（势差大 ⟹ 内部空间大，链条成对样本）"])
+        check("SF10b: 总势差 ΔΦ·S 随 ΔΦ 单调",
+              res["SF10b_total_potential"]["总势差 ΔΦ·S 随 ΔΦ 单调递增（S=10）"])
+        check("SF11: 自维持上限 ∝ B（δ_max² = νB²V/(κg2) 机器精度）",
+              res["SF11_sustain_limit_vs_B"]["δ_max 随 B 严格递增（1..8）"]
+              and res["SF11_sustain_limit_vs_B"]["δ_max² = νB²V/(κg2) 机器精度"])
+
+    ft = load_report("artifacts/fold_topology/report.json")
+    if ft:
+        res_ft = ft["results"]
+        q1b = res_ft["Q1_b_delta_at_fixed_energy_budget"]["反解可达 δ"]
+        space_tot = [v["内部空间总量 δ·∫g²dV"] for v in q1b.values()]
+        check("FOLD-Q1: 固定能量预算下多褶皱内部空间更多（N=5 > N=1）",
+              space_tot[2] > space_tot[0], space_tot)
+        q2b = res_ft["Q2_b_potential_difference_drive"]["边界势差驱动强度 B（≪ΔΦ 放大）放大"]
+        dmaxs = [v["δ_max（自维持上限）"] for v in q2b.values()]
+        check("FOLD-Q2: 势差驱动 B 放大 ⟹ δ_max 单调增（内部更大）",
+              all(dmaxs[i] < dmaxs[i + 1] for i in range(len(dmaxs) - 1)), dmaxs)
+        q2a = res_ft["Q2_a_boundary_stiffness_gamma"]["在 δ=1 固定时，γ（边界势差刚度）放大"]
+        check("FOLD-Q2a: 加硬边界层 γ 不改变 δ_max（需放大驱动强度而非刚度）",
+              len({v["δ_max（自维持上限）"] for v in q2a.values()}) == 1)
 
     mc = load_report("artifacts/masscancellation/report.json")
     if mc:
@@ -422,6 +451,7 @@ def main():
         "artifacts/qftflow/fig_triple_rank.png": 30_000,
         "artifacts/blackhole/fig_flow_structures.png": 30_000,
         "artifacts/spaceextensibility/space_extensibility.png": 30_000,
+        "artifacts/fold_topology/fold_topology.png": 30_000,
         "artifacts/masscancellation/fig_feasibility_capture.png": 30_000,
         "artifacts/masscancellation/fig_pair_flat_zone.png": 30_000,
     }

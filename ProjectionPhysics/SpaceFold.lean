@@ -20,6 +20,10 @@
 --   SF5. 边界维持能量 = 压缩功：正比于密度梯度的平方
 --   SF6. 螺旋旋转场维持：环流 Γ ≠ 0 ⟹ 边界是涡旋结构（动态，非静态墙）
 --   SF7. 密度域差 ⟺ 势差 ⟺ 维持能量（三者同源，统一为密度比）
+--   SF8. 内部继续折叠（2026-08-20 Q1）：褶皱数 N ⟹ 密度 ρ_N = N·ρ₀ ⟹ 内部空间更大
+--   SF9. 势差-密度耦合（2026-08-20）：ΔΦ = ½α(ρ_in²−ρ_out²)——密度域差驱动势差
+--   SF10. 边界势差放大（2026-08-20 Q2）：ΔΦ↑ ⟹ ρ_in↑ ⟹ 内部空间更大（含总势差 ΔΦ·S 版）
+--   SF11. 自维持上限 ∝ 旋转强度：δ_max = B·√(νV/(κ∫g²))——势差驱动放大 ⟹ 可支撑更大折叠
 --
 -- 诚实边界：这是新假设的代数种子（结构 + 序关系 + 能量形式），不是连续
 --   流体力学的完整形式化；ρ 的动力学方程（如何驱动折叠）未给出；能量
@@ -33,6 +37,7 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.FieldSimp
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.Data.Real.Sqrt
 
 noncomputable section
 namespace SpaceFold
@@ -212,13 +217,163 @@ theorem unidirectional_not_helical (vx : ℝ) :
   intro h
   exact h.2 rfl
 
+/-! ### ⑧ 内部继续折叠：褶皱数 → 密度 → 内部空间（2026-08-20 Q1） -/
+
+/-- 折叠层数（褶皱数）N：同一空间物质叠 N 层 ⟹ 有效密度 ρ_N = N·ρ₀。
+    物理图像：延拓橡皮泥对折一次 = 两层（N=2），对折两次 = 四层（N=4）……
+    \"拓扑结构的继续折叠\"在代数上 = 层数 N 的加法累积。 -/
+def foldedDensity (ρ₀ : ℝ) (N : ℕ) : ℝ := (N : ℝ) * ρ₀
+
+/-- SF8a：褶皱数可加——先叠 N₁ 层再叠 N₂ 层 = 叠 N₁+N₂ 层。
+    继续折叠是加法结构：褶皱越叠越多（拓扑延拓的代数内核）。 -/
+theorem folded_density_additive (ρ₀ : ℝ) (N₁ N₂ : ℕ) :
+    foldedDensity ρ₀ N₁ + foldedDensity ρ₀ N₂ = foldedDensity ρ₀ (N₁ + N₂) := by
+  unfold foldedDensity
+  rw [Nat.cast_add, add_mul]
+
+/-- SF8b：褶皱越多 ⟹ 密度越高（ρ₀ > 0 时严格单调）。 -/
+theorem folded_density_mono (ρ₀ : ℝ) (hρ₀ : 0 < ρ₀) {N₁ N₂ : ℕ} (hN : N₁ < N₂) :
+    foldedDensity ρ₀ N₁ < foldedDensity ρ₀ N₂ := by
+  unfold foldedDensity
+  exact mul_lt_mul_of_pos_right (Nat.cast_lt.mpr hN) hρ₀
+
+/-- ★ SF8（定理，Q1 回答）：内部继续折叠（褶皱更多）⟹ 内部空间更大。
+    链条：N₁ < N₂ ⟹ ρ(N₁) < ρ(N₂)（SF8b）⟹ |det g(ρ(N₂))| > |det g(ρ(N₁))|（SF2 延拓性）。
+    数值同位体：scripts/measure_fold_topology.py Q1（多褶皱叠加 ⟹ 内部空间总量更大）。 -/
+theorem more_folds_more_space (ρ₀ c : ℝ) (hρ₀ : 0 < ρ₀) {N₁ N₂ : ℕ} (hN : N₁ < N₂)
+    (hc : c ≠ 0) :
+    |Matrix.det (densityMetric (foldedDensity ρ₀ N₂) 0 c)| >
+    |Matrix.det (densityMetric (foldedDensity ρ₀ N₁) 0 c)| := by
+  exact interior_domain_larger (foldedDensity ρ₀ N₂) (foldedDensity ρ₀ N₁) c
+    (mul_nonneg (Nat.cast_nonneg N₁) (le_of_lt hρ₀)) (folded_density_mono ρ₀ hρ₀ hN) hc
+
+/-! ### ⑨ 势差-密度耦合（2026-08-20，SF9） -/
+
+/-- SF9 耦合公设：边界势差由密度域差驱动。
+    ΔΦ(ρ_in,ρ_out) = ½·α·(ρ_in² − ρ_out²)。
+    物理图像：压缩空间流动更快（v = β·ρ，α = β²）——密度差本身产生势差。
+    这是本轮新物理内容（显式公设）：把 SF3（势差，速度语言）与 SF2（延拓性，
+    密度语言）接起来的定量桥；α 的数值来源是第二输入缺口（同 k/κ/ν）。 -/
+def domainPotentialFromDensity (α ρ_in ρ_out : ℝ) : ℝ :=
+  α * (ρ_in*ρ_in - ρ_out*ρ_out) / 2
+
+/-- SF9a：势差-密度耦合的显式形式（ΔΦ = ½α(ρ_in²−ρ_out²)）。 -/
+theorem potential_difference_coupling_eq (α ρ_in ρ_out : ℝ) :
+    domainPotentialFromDensity α ρ_in ρ_out = α * (ρ_in^2 - ρ_out^2) / 2 := by
+  unfold domainPotentialFromDensity
+  ring
+
+/-- SF9b：密度域差越大 ⟹ 势差越大（α > 0 时严格单调）。
+    链条第一跳：ρ_in ↑ ⟹ ΔΦ ↑。 -/
+theorem potential_mono_density (α ρ_in₁ ρ_in₂ ρ_out : ℝ) (hα : 0 < α) (hρ₁ : 0 ≤ ρ_in₁)
+    (h₁ : ρ_in₁ < ρ_in₂) :
+    domainPotentialFromDensity α ρ_in₁ ρ_out < domainPotentialFromDensity α ρ_in₂ ρ_out := by
+  unfold domainPotentialFromDensity
+  have hs : ρ_in₁*ρ_in₁ < ρ_in₂*ρ_in₂ := by
+    nlinarith [hρ₁, h₁]
+  have hsub : ρ_in₁*ρ_in₁ - ρ_out*ρ_out < ρ_in₂*ρ_in₂ - ρ_out*ρ_out := by
+    linarith
+  have hm : α * (ρ_in₁*ρ_in₁ - ρ_out*ρ_out) < α * (ρ_in₂*ρ_in₂ - ρ_out*ρ_out) := by
+    exact (mul_lt_mul_iff_of_pos_left hα).mpr hsub
+  linarith
+
+/-! ### ⑩ 边界势差放大 ⟹ 内部空间更大（2026-08-20 Q2） -/
+
+/-- ★ SF10（定理，Q2 回答）：边界势差越大 ⟹ 内部空间越大。
+    链条（全 Lean 证）：ΔΦ₁ < ΔΦ₂（势差变大）⟹ ρ_in₁ < ρ_in₂（SF9 耦合逆）
+    ⟹ |det g(ρ_in₂)| > |det g(ρ_in₁)|（SF2 延拓性）。
+    物理：加大边界势差（把边界螺旋场转得更强）⟹ 内部密度更高 ⟹ 内部空间更大。
+    数值同位体：scripts/measure_fold_topology.py Q2b（B↑ ⟹ δ_max↑ ⟹ 内部空间更大）。 -/
+theorem larger_potential_larger_space (α c : ℝ) (hα : 0 < α) (hc : c ≠ 0)
+    (ρ_in₁ ρ_in₂ ρ_out : ℝ) (hρ₁ : 0 ≤ ρ_in₁) (hρ₂ : 0 ≤ ρ_in₂)
+    (hΔ : domainPotentialFromDensity α ρ_in₁ ρ_out < domainPotentialFromDensity α ρ_in₂ ρ_out) :
+    |Matrix.det (densityMetric ρ_in₂ 0 c)| >
+    |Matrix.det (densityMetric ρ_in₁ 0 c)| := by
+  have hlt : ρ_in₁ < ρ_in₂ := by
+    unfold domainPotentialFromDensity at hΔ
+    have hsq : ρ_in₁*ρ_in₁ < ρ_in₂*ρ_in₂ := by
+      have hΔ' : α * (ρ_in₁*ρ_in₁ - ρ_out*ρ_out) < α * (ρ_in₂*ρ_in₂ - ρ_out*ρ_out) := by
+        -- α·x₁/2 < α·x₂/2 ⟹ α·x₁ < α·x₂（乘 2）
+        nlinarith
+      -- α·(x₁−x₀) < α·(x₂−x₀) 且 α > 0 ⟹ x₁ < x₂
+      nlinarith
+    have habs : |ρ_in₁| < |ρ_in₂| := by
+      have hsq' : ρ_in₁^2 < ρ_in₂^2 := by simpa [sq] using hsq
+      exact sq_lt_sq.mp hsq'
+    rwa [abs_of_nonneg hρ₁, abs_of_nonneg hρ₂] at habs
+  exact interior_domain_larger ρ_in₂ ρ_in₁ c hρ₁ hlt hc
+
+/-- 边界总势差 = 单位面积势差 × 边界面积（\"整个\"边界积累的势差，ΔΦ·S）。 -/
+def totalBoundaryPotential (ΔΦ S : ℝ) : ℝ := ΔΦ * S
+
+/-- SF10b：边界面积固定时，势差越大 ⟹ 边界总势差越大。 -/
+theorem total_potential_mono (S : ℝ) (hS : 0 < S) (ΔΦ₁ ΔΦ₂ : ℝ) (hΔ : ΔΦ₁ < ΔΦ₂) :
+    totalBoundaryPotential ΔΦ₁ S < totalBoundaryPotential ΔΦ₂ S := by
+  unfold totalBoundaryPotential
+  exact mul_lt_mul_of_pos_right hΔ hS
+
+/-- ★ SF10c（定理，Q2 完整版）：边界\"整个\"势差（ΔΦ·S）越大 ⟹ 内部空间越大。
+    （边界面积固定、单位势差放大 ⟹ 总势差放大 ⟹ SF10 ⟹ 内部更大。） -/
+theorem larger_total_potential_larger_space (α c S : ℝ) (hα : 0 < α) (hS : 0 < S)
+    (hc : c ≠ 0) (ρ_in₁ ρ_in₂ ρ_out : ℝ) (hρ₁ : 0 ≤ ρ_in₁) (hρ₂ : 0 ≤ ρ_in₂)
+    (hΔ : totalBoundaryPotential (domainPotentialFromDensity α ρ_in₁ ρ_out) S <
+          totalBoundaryPotential (domainPotentialFromDensity α ρ_in₂ ρ_out) S) :
+    |Matrix.det (densityMetric ρ_in₂ 0 c)| >
+    |Matrix.det (densityMetric ρ_in₁ 0 c)| := by
+  have hΔ' : domainPotentialFromDensity α ρ_in₁ ρ_out <
+      domainPotentialFromDensity α ρ_in₂ ρ_out := by
+    unfold totalBoundaryPotential at hΔ
+    exact (mul_lt_mul_iff_of_pos_right hS).mp hΔ
+  exact larger_potential_larger_space α c hα hc ρ_in₁ ρ_in₂ ρ_out hρ₁ hρ₂ hΔ'
+
+/-- Q1 × Q2 汇合：褶皱越多 ⟹ 边界势差越大。
+    折叠既是\"内部空间更大\"（SF8），也是\"势差更大\"（SF9b）——同一件事的两面，
+    印证 SF7 \"三者同源\"。 -/
+theorem more_folds_larger_potential (α ρ₀ ρ_out : ℝ) (hα : 0 < α) (hρ₀ : 0 < ρ₀)
+    {N₁ N₂ : ℕ} (hN : N₁ < N₂) :
+    domainPotentialFromDensity α (foldedDensity ρ₀ N₁) ρ_out <
+    domainPotentialFromDensity α (foldedDensity ρ₀ N₂) ρ_out := by
+  exact potential_mono_density α (foldedDensity ρ₀ N₁) (foldedDensity ρ₀ N₂) ρ_out hα
+    (mul_nonneg (Nat.cast_nonneg N₁) (le_of_lt hρ₀)) (folded_density_mono ρ₀ hρ₀ hN)
+
+/-! ### ⑪ 自维持上限 ∝ 旋转强度（2026-08-20，SF11） -/
+
+/-- SE5 的自维持上限：δ_max = B·√(ν·V/(κ·∫g²dV))。
+    旋转强度 B（= |curl C|，边界势差驱动）能撑住的最大折叠比；
+    κ = 压缩刚度、ν = 旋转顺应度、V = 折叠域体积、∫g²dV = 空间总量系数。 -/
+def selfSustainLimit (ν B κ g2 V : ℝ) : ℝ := B * Real.sqrt (ν * V / (κ * g2))
+
+/-- SF11a：自维持上限随旋转强度线性增长（B₁ < B₂ ⟹ δ_max₁ < δ_max₂）。
+    数值同位体：scripts/measure_fold_topology.py Q2b（B↑ ⟹ δ_max 线性增）。 -/
+theorem self_sustain_limit_mono_in_B (ν B₁ B₂ κ g2 V : ℝ)
+    (hν : 0 < ν) (hκ : 0 < κ) (hg2 : 0 < g2) (hV : 0 < V)
+    (hBlt : B₁ < B₂) :
+    selfSustainLimit ν B₁ κ g2 V < selfSustainLimit ν B₂ κ g2 V := by
+  unfold selfSustainLimit
+  have hx : 0 < ν * V / (κ * g2) := by positivity
+  have hk : 0 < Real.sqrt (ν * V / (κ * g2)) := Real.sqrt_pos.mpr hx
+  nlinarith [hBlt, hk]
+
+/-- SF11b：自维持上限的平方形式 = SE5 边界等式 δ_max² = νB²V/(κ∫g²dV)。
+    数值脚本 measure_fold_topology.py 的 δ_max 即此式。 -/
+theorem self_sustain_limit_sq (ν B κ g2 V : ℝ)
+    (hν : 0 ≤ ν) (hκ : 0 < κ) (hg2 : 0 < g2) (hV : 0 ≤ V) :
+    selfSustainLimit ν B κ g2 V ^ 2 = ν * B^2 * V / (κ * g2) := by
+  unfold selfSustainLimit
+  rw [mul_pow]
+  rw [Real.sq_sqrt]
+  · ring
+  · have hx : 0 ≤ ν * V / (κ * g2) := by positivity
+    exact hx
+
 /-! ### ⑦ 诚实边界 -/
 
 /-- 完整空间折叠动力学（ρ 如何被驱动、边界如何自发形成、k 的数值来源）
     仍是开放问题；本模块提供代数骨架：密度度规 / 延拓性 / 势差 /
-    压缩能量 / 边界维持能量 / 螺旋边界 六条核心结构定理。 -/
+    压缩能量 / 边界维持能量 / 螺旋边界 / 褶皱数延拓 / 势差-密度耦合 /
+    自维持上限 十条核心结构定理（SF1–SF11）。 -/
 def FOLD_DERIVATION_SCOPE : String :=
-  "代数骨架: 密度度规 + 延拓性 + 势差 + 压缩能量 + 边界维持能量 + 螺旋边界; ρ 动力学方程与能量常数数值来源开放"
+  "代数骨架: 密度度规 + 延拓性 + 势差 + 压缩能量 + 边界维持能量 + 螺旋边界 + 褶皱数延拓 + 势差-密度耦合 + 自维持上限; ρ 动力学方程与能量常数数值来源开放"
 
 end SpaceFold
 end
