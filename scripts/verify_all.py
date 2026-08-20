@@ -82,7 +82,8 @@ def main():
                        "scripts/verify_entanglement_helix.py",
                        "scripts/verify_blackhole_wormhole.py",
                        "scripts/verify_space_extensibility.py",
-                       "scripts/verify_space_fold.py"]:
+                       "scripts/verify_space_fold.py",
+                       "scripts/verify_mass_cancellation.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -371,6 +372,43 @@ def main():
         check("SF7: 边界维持能 = 压缩能（密度比同源）",
               res["SF7_unified"]["E_bdry = E_compress（密度比同源）"])
 
+    mc = load_report("artifacts/masscancellation/report.json")
+    if mc:
+        res = mc["results"]
+        n1 = res["N1_universal_mass_cancellation"]
+        check("AMC1: 通用质量取消（电子/质子/原子同一曲线，μ=1 全归零）",
+              n1["归一化曲线 m_eff²/s² = (1−μ)² 对全部锚定强度一致"]
+              and n1["电子/质子/原子全部在 μ=1 归零"])
+        n2 = res["N2_gradient_cost"]
+        check("AMC3: 抹平成本 ∝ 梯度²（减半⟹¼）+ 均匀区零成本",
+              n2["成本 ∝ 梯度²（梯度减半 ⟹ 成本¼，全扫描）"]
+              and n2["均匀区 g=0 成本=0（本无褶皱可磨）"])
+        check("AMC4: 无源区零维持成本（源强²成本，Q=0 免费）",
+              res["N3_source_cost"]["无源区 Q=0 维持成本=0（源不再重新制造褶皱）"])
+        n4 = res["N4_pair_flat_zone"]
+        check("AMC5: 正/反电子相反源抵消（重叠带 ∇·C≈0、|C|≈0 ⟹ 测试物质偏离≈0）",
+              n4["重叠带 ∇·C ≈ 0（无净源，两相反源抵消）"]
+              and n4["平坦带 |C| ≈ 0 ⟹ 测试物质偏离 u≈0 ⟹ m_eff≈0"]
+              and n4["源旁对照 u 明显更大（仍有质量）"])
+        n5 = res["N5_ring_capture"]
+        check("AMC7: 切向流无径向逃逸（恒等机器精度 + 精确旋转流 100 圈误差 0 + 欧拉二次收敛）",
+              n5["AMC7 恒等 |p+v|²−|p|² = |v|²（200 随机切向流，机器精度）"]
+              and n5["精确旋转流 100 圈半径误差 = 0.0（几何捕获精确）"]
+              and n5["欧拉随流漂移二次收敛（步长减半 ⟹ 漂移≈¼，无线性项）"])
+        check("AMC2/AMC6/AMC8: 环无质量产生（dτ²=0、∇·C=0、B=curl C≠0、静态无辐射）",
+              n5["dτ² = 0 沿环（无质量，|C|=c 恒）"]
+              and n5["∇·C = 0（无源 ⟹ 环不制造质量）"]
+              and n5["∇×C = 2ω ≠ 0（B = curl C ≠ 0 磁场标记）"]
+              and n5["∂C/∂t = 0（静态环 ⟹ E=0 无辐射）"])
+        n6 = res["N6_loop_potential_zero"]
+        check("AMC6: 保守势闭合回绕和 = 0（机器精度）+ 接缝对照 ≠ 0",
+              n6["保守势闭合回绕和 = 0（机器精度，AMC6）"]
+              and n6["非保守（接缝不闭合）开口净积累 ≠ 0"])
+        n7 = res["N7_control_anchored_escapes"]
+        check("AMC8b: 锚定物质直线逃逸（环只捕获无质量物质，须整体覆盖反引力场）",
+              n7["锚定物质（v≠C）径向位移线性增长 ⟹ 逃逸"]
+              and n7["平均径向速度 ≈ 踢出速度 v_radial（线性）"])
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -383,6 +421,8 @@ def main():
         "artifacts/qftflow/fig_triple_rank.png": 30_000,
         "artifacts/blackhole/fig_flow_structures.png": 30_000,
         "artifacts/spaceextensibility/space_extensibility.png": 30_000,
+        "artifacts/masscancellation/fig_feasibility_capture.png": 30_000,
+        "artifacts/masscancellation/fig_pair_flat_zone.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)

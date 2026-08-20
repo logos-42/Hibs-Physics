@@ -95,6 +95,7 @@ import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.SpaceGravity
 import ProjectionPhysics.SpaceFold
+import ProjectionPhysics.MassCancellation
 import ProjectionPhysics.Explorations.EntanglementHelix
 import ProjectionPhysics.Explorations.BlackHoleWormhole
 import ProjectionPhysics.Explorations.MaxwellFlow
