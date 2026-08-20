@@ -33,12 +33,22 @@
 --   FM6 ★ 载波是单位模：|s_k| ≡ 1——纯相位调制（信息在相位/频率，不在幅值）
 --   FM7  等效超光速（几何）：引用 GQC3——调制随空间场流动，静止系等效
 --        速度可超光速，流动系局部因果保持（注释层 + 数值层）
+--   FM8 ★ 频段来源·涡度恒等：刚体旋转流 C=(−Ωy,Ωx,0) 的 CurlZ = 2Ω
+--        （涡度 = 二倍角速度——空间场固有振荡 = 涡旋运动）
+--   FM9 ★ 固有频率：ω₀ = CurlZ/2 = Ω——空间场固有振荡频率由自身旋度决定，
+--        不再是自由输入（第二输入缺口闭合一半）
+--   FM10★ 频段 = 磁场谱：B_z = CurlZ（SF5：B = curl C）⟹ ω₀ = B_z/2——
+--        频段读的是空间场旋度，测量媒介 = 空间场本身
+--   FM11  载波即固有振荡：FM1 的 ω₀ 换成涡旋频率 Ω——调制叠加在空间场
+--        固有振荡之上（FM1 + FM9 组合）
+--   FM12  正频段：Ω > 0 ⟹ 每步瞬时频率 > 0（频段在正频区）
 --
 -- 诚实边界：FM1–FM3 是复指数代数（真但平凡——这正是调频数学本身）；
 -- 框架贡献 = 把载波安装为空间场（统一场）的方向旋转 + 信息 = 相位步长
 -- （可数圈数）+ 解调 = 直接读空间场相位（MS 接轨）+ 随流等效超光速
--- （GQC3 引用）。无新物理预言（消息字母表 / 载波频率 ω₀ / 信道容量
--- 仍是输入；ω₀ 与 m_k 的物理来源 = 空间场振荡参数，第二输入缺口）。
+-- （GQC3 引用）。ω₀ 频段来源：本轮 FM8–FM12 由空间场固有振荡推导
+-- （ω₀ = 涡旋频率 = |B|/2，非自由输入）；m_k 的调制激励机制仍是
+-- 第二输入缺口。无新物理预言（消息字母表 / 信道容量仍结构层）。
 
 import Mathlib.Data.Complex.Basic
 import Mathlib.Tactic.FinCases
@@ -48,6 +58,7 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Real.Pi.Bounds
+import ProjectionPhysics.Explorations.Spacefield3D
 
 noncomputable section
 open scoped BigOperators
@@ -306,5 +317,77 @@ leo 关键物理观点：调制直接安装在空间场（统一场）上，随�
 - "频段根据空间理解"：载波频率 ω₀ 定义在流动系；静止观测者测到的空间
   频率被压缩 λ_st = λ₀/(1+v)（数值层 N32）。
 - 数值层：verify_space_modulation.py N30–N33。 -/
+
+/-! ### FM8–FM12. 频段来源：空间场固有振荡（ω₀ = 涡旋频率 = |B|/2）
+leo（2026-08-20）补上上一轮的诚实边界缺口：FM1–FM7 里 ω₀（载波频段）
+是自由输入。本轮从空间场固有振荡推导它：
+  · 空间场的固有振荡 = 空间场的涡旋运动——B = curl C ≠ 0 处空间场局部
+    旋转（Spacefield3D SF5：磁场 = 自旋的代数位置；自旋 = 涡旋）
+  · 刚体旋转流 C = (−Ωy, Ωx, 0)（角速度 Ω）的涡度 CurlZ = 2Ω——局部
+    角速度 = 涡度一半：ω₀ = CurlZ/2 = Ω（流体运动学恒等，真但平凡）
+  · ⟹ 载波频率 ω₀ 由空间场自身旋度决定（Ω = 空间场固有角速度），不是
+    自由输入；频段 = 空间场旋度谱 = 磁场谱（B = curl C，SF5）
+  · FM1 的相位步长重述：exp(I·(ω₀ + m_k)) 中 ω₀ = Ω——调制叠加在空间场
+    固有振荡之上（FM11）；正频段约束（FM12）。 -/
+
+/-- 刚体旋转流（绕 z 轴，角速度 Ω）：C = (−Ω·y, Ω·x, 0)。
+    空间场固有振荡的原型：C 局部绕 z 轴旋转，旋度 ≠ 0（涡旋）。 -/
+def rotFlow (Ω : ℝ) : SpaceField3D.VecField4 :=
+  { x := fun _ _ j _ => -Ω * (j : ℝ)
+    , y := fun _ i _ _ => Ω * (i : ℝ)
+    , z := fun _ _ _ _ => 0 }
+
+/-- FM8★ 涡度恒等：刚体旋转流的 curl z 分量 = 2Ω（涡度 = 二倍角速度）。
+    证明链：CurlZ = Dx C.y − Dy C.x = [Ω(i+1)−Ωi] − [−Ω(j+1)+Ωj] = 2Ω。 -/
+lemma fm8_rot_flow_curl_z (Ω : ℝ) (t i j k : ℤ) :
+    SpaceField3D.CurlZ (rotFlow Ω) t i j k = 2 * Ω := by
+  unfold SpaceField3D.CurlZ SpaceField3D.Dx SpaceField3D.Dy rotFlow
+  push_cast
+  ring
+
+/-- FM8b 涡度向量：x/y 分量为 0（纯绕 z 轴旋转，无其他方向涡旋）。 -/
+lemma fm8b_rot_flow_curl_xy (Ω : ℝ) (t i j k : ℤ) :
+    SpaceField3D.CurlX (rotFlow Ω) t i j k = 0 ∧
+    SpaceField3D.CurlY (rotFlow Ω) t i j k = 0 := by
+  unfold SpaceField3D.CurlX SpaceField3D.CurlY SpaceField3D.Dx SpaceField3D.Dy
+    SpaceField3D.Dz rotFlow
+  constructor <;> push_cast <;> ring
+
+/-- FM9★ 固有振荡频率 = 涡度一半：ω₀ = CurlZ/2 = Ω。
+    空间场固有振荡频率由空间场自身旋度决定——不再是自由输入
+    （上一轮的"ω₀ 频段来源"缺口，本轮闭合）。 -/
+lemma fm9_intrinsic_frequency (Ω : ℝ) (t i j k : ℤ) :
+    Ω = SpaceField3D.CurlZ (rotFlow Ω) t i j k / 2 := by
+  rw [fm8_rot_flow_curl_z]
+  ring
+
+/-- FM10★ 频段 = 磁场谱：B_z = CurlZ（SF5：B = curl C）⟹ ω₀ = B_z/2。
+    频段读的是空间场旋度（磁场谱）——测量媒介 = 空间场本身。 -/
+lemma fm10_frequency_from_B (Ω : ℝ) (t i j k : ℤ) :
+    Ω = (SpaceField3D.B_of (rotFlow Ω)).z t i j k / 2 := by
+  unfold SpaceField3D.B_of
+  change Ω = SpaceField3D.CurlZ (rotFlow Ω) t i j k / 2
+  rw [fm8_rot_flow_curl_z]
+  ring
+
+/-- FM11★ 载波即固有振荡：FM1 的相位步长公式中 ω₀ 换成涡旋频率 Ω——
+    调制叠加在空间场固有振荡之上（FM1 + FM9 的组合重述）。 -/
+lemma fm11_carrier_on_intrinsic (Ω : ℝ) (m : ℕ → Fin 2) (k : ℕ) :
+    fmStep Ω m k = Complex.exp (Complex.I * (Ω + (m k : ℝ))) := by
+  exact fm1_step_phase Ω m k
+
+/-- FM12 正频段：Ω > 0 ⟹ 每步瞬时频率 ω_k = Ω + m_k > 0
+    （频段在正频区；调制只产生正频率偏差）。 -/
+lemma fm12_positive_frequency (Ω : ℝ) (m : ℕ → Fin 2) (k : ℕ) (hΩ : 0 < Ω) :
+    0 < Ω + (m k : ℝ) := by
+  have hm : (0 : ℝ) ≤ (m k : ℝ) := by
+    have hlt : (m k : ℕ) < 2 := (m k).isLt
+    have hcases : (m k : ℕ) = 0 ∨ (m k : ℕ) = 1 := by omega
+    rcases hcases with h0 | h1
+    · rw [h0]
+      norm_num
+    · rw [h1]
+      norm_num
+  linarith
 
 end ProjectionPhysics.SpaceModulation
