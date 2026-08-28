@@ -11,5 +11,5 @@ root = "Main"
 
 [[require]]
 name = "mathlib"
-git = "/Users/apple/lm-principle/.lake/packages/mathlib"
+git = "/Users/apple/Downloads/lm-principle/.lake/packages/mathlib"
 rev = "v4.28.0"

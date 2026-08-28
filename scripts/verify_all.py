@@ -88,7 +88,8 @@ def main():
                        "scripts/verify_space_modulation.py",
                        "scripts/verify_time_freeze.py",
                        "scripts/verify_plasma_antigravity.py",
-                       "scripts/verify_plasma_dynamics.py"]:
+                       "scripts/verify_plasma_dynamics.py",
+                       "scripts/verify_plasma_fusion.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -442,6 +443,29 @@ def main():
               n7["锚定物质（v≠C）径向位移线性增长 ⟹ 逃逸"]
               and n7["平均径向速度 ≈ 踢出速度 v_radial（线性）"])
 
+    pf = load_report("artifacts/plasmafusion/report.json")
+    if pf:
+        res = pf["results"]
+        f2 = res["F2_beta_scan"]
+        check("PF-F2: ITER 5.3T β≈4.3% / SPARC 12.2T β<1%（高场宽松）",
+              abs(f2["beta_pct"][2] - 4.3) < 0.5 and f2["beta_pct"][4] < 1.0)
+        f3 = res["F3_confining_force"]
+        check("PF-F3: 约束力随 B²×面积（ITER 总力 ~5.5e9 N = GN 量级）",
+              f3[0]["F_total_MN"] > 1e3 and f3[1]["F_total_MN"] < f3[0]["F_total_MN"])
+        f4 = res["F4_hoop_stress"]
+        rows = f4["rows"]
+        check("PF-F4: ITER/SPARC 环向应力均在冷加工铜（250MPa）内",
+              rows[0]["safe_cold"] and rows[1]["safe_cold"])
+        f5 = res["F5_min_ring"]
+        check("PF-F5: 应力极限 12.2T R_max≈2.1m（高场必须小环，SPARC 逻辑）",
+              1.8 < f5["stress_limit_Rmax_12.2T_m"] < 2.4)
+        f6 = res["F6_space_compression"]
+        check("PF-F6: 空间压缩 G=(ρ_in/ρ_out)²，密度比 10 ⟹ 尺寸 ×0.215",
+              abs(f6["size_shrink_factor"][-1] - 100 ** (-1 / 3)) < 1e-9)
+        f7 = res["F7_modulation_control"]
+        check("PF-F7: δB/B=1% ⟹ 调制控制力占比 2.01%（PF9c 代数）",
+              abs(f7["mod_force_ratio_dF_over_F"][2] - 0.0201) < 1e-9)
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -457,6 +481,11 @@ def main():
         "artifacts/fold_topology/fold_topology.png": 30_000,
         "artifacts/masscancellation/fig_feasibility_capture.png": 30_000,
         "artifacts/masscancellation/fig_pair_flat_zone.png": 30_000,
+        "artifacts/plasmafusion/report.json": 5_000,
+        "artifacts/plasmafusion/summary.txt": 1_000,
+        "artifacts/plasmafusion/fig_hoop_stress.png": 30_000,
+        "artifacts/plasmafusion/fig_space_compression.png": 30_000,
+        "artifacts/plasmafusion/fig_mod_control.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)

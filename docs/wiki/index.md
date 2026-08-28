@@ -51,4 +51,5 @@
 - [theory-time-freeze.md](./theory-time-freeze.md) — 时空冻结（TF1–TF3/SZ1–SZ5/C1–C3）：物质时间冻结 dτ=0（质量取消 AMC2→SM1）+ 空间本身冻结（稳态场 ⟹ 无电场/时间反演对称可逆）+ 视界冻结（γ 发散）+ 代价账本（几何 ∝ g² 可任意小 vs 热力学 ∝ 1/T_cold 发散）
 - [theory-plasma-antigravity.md](./theory-plasma-antigravity.md) — 铜-氢等离子体双流形→持续反引力场（PA1–PA8）：锚定权重 q=Z²/√m（Cu 主导 106:1）+ 双流形叠加（B 线性/时变磁场⟹时变空间场）+ 配比调控（μ=1 任意配比归零）+ 体积变化为零目标（随流 dτ=0）+ 各向异性（氢维度调控 34× 铜维度）
 - [theory-plasma-dynamics.md](./theory-plasma-dynamics.md) — 等离子体动力学（DR1–DR5/TM1–TM4/TE1–TE5）：双流形几何（旋转流环耦合：闭合回绕和=0/反向环流抵消/螺旋边界/切向流捕获）+ 时变反引力 μ(t)（稳定变化有界/维持条件=旋转输入≥抹平成本/μ 须到达 1）+ 三温度弛豫（τ 比=质量比 62.6，Cu 解耦 H 平衡）
+- [theory-plasma-fusion.md](./theory-plasma-fusion.md) — 磁约束时变引力场可控核聚变工程计算（PF1–PF9）：约束力 F=B²A/2μ₀（ITER~5.5GN）+ 环向应力 σ=B²R/2μ₀t（冷加工铜 250MPa 内）+ 最小环（SPARC 级 R≈1.85–2.1m，高场必须小环）+ 空间压缩虚拟扩容（G=(ρ_in/ρ_out)² 环 ×G^(-1/3)）+ 四力调制控制层（δF/F=2δB/B）
 - [log.md](./log.md)
