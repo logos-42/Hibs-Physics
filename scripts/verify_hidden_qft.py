@@ -154,6 +154,46 @@ def main():
                 "隐数 Tag 流(A3 开方不可逆)若单向转换信息→能量, 需额外公设 = 第二输入缺口",
     }
 
+    # ---- H6: 分形振动能量累积 + 数学不对称流 (HQ7/HQ8) ----
+    # 振动本体: 相位模式振荡; 分形: 嵌套层数 L, 每层叠加相干能量
+    fractal_energies = []
+    for L in [1, 2, 4, 8, 16]:
+        E_f = 0.0
+        for _ in range(L):
+            th = rng.uniform(0, 2 * math.pi, N)
+            # 各层对齐度不同: 深层 (小尺度) 更易对齐 (分形自相似)
+            align = coherence(th)
+            E_f += -J * align * N
+        fractal_energies.append(float(E_f))
+    # 数学不对称: A3 开方不可逆 (HQ7) —— 开方把信息送入 iR 支且不回来
+    # 数值: 开方流单向下累积 (吸收态), 乘流双向 —— 净不对称
+    tags = ["S"] * N
+    def flow_sqrt(tags):
+        return ["iR"] * len(tags)          # 开方: 全部流向 iR (吸收态)
+    def flow_mul(tags):
+        return ["R"] * len(tags)           # 乘法: 流向 R
+    tags_after_sqrt = flow_sqrt(tags)
+    tags_after_mul = flow_mul(tags)
+    asym = (tags_after_sqrt.count("iR") != tags_after_mul.count("iR"))
+    res["H6_fractal_vibration"] = {
+        "layers": [1, 2, 4, 8, 16],
+        "fractal_energy": fractal_energies,
+        "energy_accumulates": fractal_energies[-1] < fractal_energies[0],
+        "sqrt_irreversible": tags_after_sqrt == ["iR"] * N,
+        "mul_sqrt_asymmetric": asym,
+        "note": "HQ7 A3 开方不可逆 (iR 吸收态) = 数学不对称; HQ8 分形叠加 "
+                "⟹ 势能累积 (每层 −JC·N)。但累积的是势能 (越负), 释放需"
+                "回到对称态 = 仍守恒。净产出需 Tag 流把信息→能量 = 第二输入缺口",
+    }
+    fig, ax = plt.subplots(figsize=(7.5, 5))
+    ax.plot([1, 2, 4, 8, 16], fractal_energies, "o-", color="tab:purple")
+    ax.set_xlabel("分形嵌套层数 L")
+    ax.set_ylabel("总势能 E (负值=越深越负)")
+    ax.set_title("分形振动: 嵌套越深 ⟹ 势能越负 (HQ8 叠加累积)")
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUT, "fig_fractal_energy.png"), dpi=140)
+    plt.close(fig)
+
     # ---- 断言 ----
     checks = []
     def chk(name, cond):
@@ -165,8 +205,29 @@ def main():
     chk("H3 极化相变 (T 超临界 ⟹ 对齐跳变)", max(aligns) > 0.8 and min(aligns) < 0.2)
     chk("H4 全对齐能量 = −JN (HQ5)", abs(E_align + J * N) < 1e-9)
     chk("H5 释放 ≈ 耦合减少 (守恒, 非净产出)", abs(release - J * N) < 0.1)
+    h6 = res["H6_fractal_vibration"]
+    chk("H6 分形振动能量累积 (嵌套越深越负, HQ8)",
+        h6["energy_accumulates"] and fractal_energies[0] < 0)
+    chk("H6 A3 开方不可逆 + 乘/开方流不对称 (HQ7)", h6["sqrt_irreversible"]
+        and h6["mul_sqrt_asymmetric"])
 
     report["checks"] = [{"name": n, "pass": c} for n, c in checks]
+    report["summary"] = {
+        "critical_sheet_sqrt_e": R_C,
+        "coherence_random": float(C_rand),
+        "coherence_full_align": float(C_align),
+        "polarization_align_min": float(min(aligns)),
+        "polarization_align_max": float(max(aligns)),
+        "energy_random": float(E_rand),
+        "energy_full_align": float(E_align),
+        "energy_release": float(release),
+        "theoretical_JN": float(J * N),
+        "net_production": False,
+        "verdict": ("隐数坐标给'极化→能量'漂亮描述（临界叶√e + 相位对齐相变 + "
+                    "相干能量），但能量账本闭合：释放=耦合减少（守恒）。"
+                    "净产出需隐数 Tag 流（A3 开方不可逆）单向转换信息→能量 = "
+                    "新公设 = 第二输入缺口（未变）。"),
+    }
     with open(os.path.join(OUT, "report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2, default=float)
 

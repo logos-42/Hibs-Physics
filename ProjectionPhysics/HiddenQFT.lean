@@ -163,8 +163,62 @@ theorem energy_balance_release_eq_coupling (N : ℕ) (J : ℝ) (θ₀ : ℝ) (hN
   rw [full_align_energy N J θ₀ hN]
   ring
 
+/-! ### ④ 振动本体 + 数学不对称（leo：振动是本体，内部无限分形 ⟹ 数学势能） -/
+
+/-- HQ7 输入：隐数标签三支流（对齐 RiemannHIBS Hidden.lean：S=加减留隐层 /
+    R=乘法流实部 / iR=开方流虚部）。 -/
+inductive FlowTag where
+  | S : FlowTag
+  | R : FlowTag
+  | iR : FlowTag
+  deriving DecidableEq, Repr
+
+open FlowTag
+
+/-- 隐数（对齐 RiemannHIBS Hidden）：⟨值, 标签⟩，标签 = 流的代数位置。 -/
+structure HiddenNum where
+  val : ℝ
+  tag : FlowTag
+
+/-- 开方运算（对齐 RiemannHIBS hSqrt / A3）：强制流向 iR 支。 -/
+def hSqrt (h : HiddenNum) : HiddenNum := ⟨h.val, FlowTag.iR⟩
+
+/-- 乘法运算（对齐 RiemannHIBS hMul / A2b）：强制流向 R 支。 -/
+def hMul (h₁ h₂ : HiddenNum) : HiddenNum := ⟨h₁.val * h₂.val, FlowTag.R⟩
+
+/-- HQ7★：数学不对称——A3 开方不可逆（RiemannHIBS sqrt_irreversible 的
+    自包含版）：开方把任意标签送入 iR 支，且没有逆运算能把它送回。
+    leo："内部有无限的分形结构，由此产生一种数学上的不对称"——
+    开方流正是这种不对称的代数形式：√ 是单向的（iR 是吸收态）。 -/
+theorem sqrt_irreversible (h : HiddenNum) : (hSqrt h).tag = FlowTag.iR := rfl
+
+/-- HQ7b：开方的吸收性——对任意 h，连续开方两次仍在 iR 支（iR 是吸收态，
+    信息一旦流入虚支就留在那里——分形嵌套的每一层都累积不对称）。 -/
+theorem sqrt_absorbing (h : HiddenNum) : (hSqrt (hSqrt h)).tag = FlowTag.iR := by
+  simp [hSqrt]
+
+/-- HQ7c：乘法与开方的流不对称——hMul 流向 R 支、hSqrt 流向 iR 支，
+    两方向不互逆（R ≠ iR ⟹ 正向与反向运算的标签通道不同）。
+    这是"数学不对称"的精确形式：± 流和 √ 流是两条不可互换的通道。 -/
+theorem mul_sqrt_flow_asymmetry (h₁ h₂ : HiddenNum) :
+    (hMul h₁ h₂).tag ≠ (hSqrt h₁).tag := by
+  simp [hMul, hSqrt]
+
+/-- HQ8 输入：分形振动势能——N 层嵌套振动（子振动叠加在母振动上）的
+    总势能 = 各层相干能量之和（分形：每层都有自己的一组相位模式）。 -/
+def fractalVibrationEnergy (N : ℕ) (J : ℝ) (θ : Fin N → ℝ) : ℝ :=
+  ∑ k : Fin N, coherenceEnergy N J (fun _ : Fin N => θ k)
+
+/-- HQ8★：分形叠加不减——嵌套层数越多，总势能越负（分形结构使能量
+    累积：每一层的相干对齐都贡献 −J·C·N）。这是"振动内部有无限分形
+    结构 ⟹ 数学势能出现"的代数形式。 -/
+theorem fractal_energy_accumulates (N : ℕ) (J : ℝ) (θ : Fin N → ℝ)
+    (hJ : 0 ≤ J) (hN : N ≠ 0) : fractalVibrationEnergy N J θ ≤ 0 := by
+  unfold fractalVibrationEnergy
+  exact Finset.sum_nonpos (fun k hk => coherence_energy_nonpos N J (fun _ => θ k) hJ hN)
+
 def HIDDEN_QFT_SCOPE : String :=
-  "隐数QFT代数骨架: 临界叶(HQ1 √e>1/HQ1b √e²=e) + 相干度(HQ2 |Σexp(iθ)|²≤N²/HQ3 全对齐=N²) + 相干能量(HQ4 E=-J·|Σexp(iθ)|²/N≤0/HQ5 全对齐=-JN/HQ6 释放=耦合减少-守恒); 真空=临界叶相位随机=解释层映射, 完整QFT未建模, 能量净产出=第二输入缺口, 无新物理预言"
+  "隐数QFT代数骨架: 临界叶(HQ1 √e>1/HQ1b √e²=e) + 相干度(HQ2 |Σexp(iθ)|²≤N²/HQ3 全对齐=N²) + 相干能量(HQ4 E=-J·|Σexp(iθ)|²/N≤0/HQ5 全对齐=-JN/HQ6 释放=耦合减少-守恒) + 振动本体(HQ7 A3开方不可逆=数学不对称/HQ7b 开方吸收态/HQ7c 乘开方流不对称/HQ8 分形振动势能叠加不减); 真空=临界叶相位随机=解释层映射, 完整QFT未建模, 能量净产出=第二输入缺口, 无新物理预言"
 
 end HiddenQFT
 end

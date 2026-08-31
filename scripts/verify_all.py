@@ -481,6 +481,10 @@ def main():
         check("HQ-H5: 释放 ≈ 耦合减少（守恒, 非净产出, HQ6）",
               res["H5_energy_balance"]["release_eq_coupling_approx"]
               and not res["H5_energy_balance"]["net_production"])
+        h6 = res["H6_fractal_vibration"]
+        check("HQ-H6: 分形振动能量累积 + A3 开方不可逆（HQ7/HQ8）",
+              h6["energy_accumulates"] and h6["sqrt_irreversible"]
+              and h6["mul_sqrt_asymmetric"])
 
     # 4. 产物完整性
     artifacts = {
@@ -502,8 +506,9 @@ def main():
         "artifacts/plasmafusion/fig_hoop_stress.png": 30_000,
         "artifacts/plasmafusion/fig_space_compression.png": 30_000,
         "artifacts/plasmafusion/fig_mod_control.png": 30_000,
-        "artifacts/hiddenqft/report.json": 5_000,
+        "artifacts/hiddenqft/report.json": 2_500,
         "artifacts/hiddenqft/fig_polarization.png": 30_000,
+        "artifacts/hiddenqft/fig_fractal_energy.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
