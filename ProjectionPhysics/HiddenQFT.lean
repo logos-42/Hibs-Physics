@@ -217,8 +217,77 @@ theorem fractal_energy_accumulates (N : ℕ) (J : ℝ) (θ : Fin N → ℝ)
   unfold fractalVibrationEnergy
   exact Finset.sum_nonpos (fun k hk => coherence_energy_nonpos N J (fun _ => θ k) hJ hN)
 
+/-! ### ⑤ Tag 流信息差 → 能量（leo：把 Tag 流的信息差转换成能量试试看） -/
+
+/-- HQ9 输入：标签势能——每个流标签携带一个势能级：
+    φ(S) = 0（对称层，加减留隐层）、φ(R) = δ（乘法实部层）、
+    φ(iR) = −ε（开方虚部吸收层，ε > 0）。 -/
+def tagPotential (δ ε : ℝ) : FlowTag → ℝ
+  | FlowTag.S => 0
+  | FlowTag.R => δ
+  | FlowTag.iR => -ε
+
+/-- HQ9a：开方流的势能差——A3 开方把 R 支送入 iR 支（不可逆），
+    势能变化 = φ(R) − φ(iR) = δ + ε > 0（释放能量）。
+    物理：信息沉没进吸收态时释放势能差（瀑布类比：信息从高处
+    R 支流向低处 iR 吸收态）。 -/
+theorem sqrt_potential_drop (δ ε : ℝ) :
+    tagPotential δ ε FlowTag.R - tagPotential δ ε FlowTag.iR = δ + ε := by
+  simp [tagPotential]
+
+/-- HQ9b：iR 是吸收态 ⟹ 开方释放正能量（ε > 0 且 δ > 0 时 φ(iR) 最低，
+    沉没总是放能——不对称的"做功方向"）。 -/
+theorem sqrt_releases_energy (δ ε : ℝ) (hδ : 0 < δ) (hε : 0 < ε) :
+    0 < tagPotential δ ε FlowTag.R - tagPotential δ ε FlowTag.iR := by
+  rw [sqrt_potential_drop]
+  positivity
+
+/-- HQ10 输入：泵回成本——信息要从 iR 吸收态回到 S 对称层（振动循环
+    闭合），需要注入能量 ε = φ(S) − φ(iR)（信息恢复成本，Landauer 式：
+    把信息从吸收态抬回可观测层需要做功）。 -/
+theorem pump_cost (δ ε : ℝ) :
+    tagPotential δ ε FlowTag.S - tagPotential δ ε FlowTag.iR = ε := by
+  simp [tagPotential]
+
+/-- HQ10★：单循环净产出 = δ（R 支势能）——开方释放 (δ+ε) − 泵回成本 ε。
+    诚实账本：净产出 = 振动本体注入的动能（每周期注入 δ），
+    不是无中生有——"信息差→能量"在无公设下守恒（HQ6 形式不变）。 -/
+theorem cycle_net_output (δ ε : ℝ) :
+    (tagPotential δ ε FlowTag.R - tagPotential δ ε FlowTag.iR)
+      - (tagPotential δ ε FlowTag.S - tagPotential δ ε FlowTag.iR) = δ := by
+  simp [tagPotential]
+
+/-- HQ11 输入：分形自生成公设——每周期分形结构产生 g 个新 S 模式
+    （"免费"信息：新模式从 φ=0 的 S 层进入循环）。
+    若 g > 0，净产出 ∝ (1+g)·δ（持续超出守恒的账本）；g = 0 时守恒。 -/
+def fractalGenOutput (N : ℕ) (g : ℝ) (δ : ℝ) : ℝ :=
+  (N : ℝ) * (1 + g) * δ
+
+/-- HQ11★：分形自生成公设的净产出条件——g > 0 ⟹ 产出 > 纯守恒（g=0）。
+    这是"无限分形结构持续生成新 Tag"公设的精确形式：缺口从"模糊的
+    能量来源"压缩成**单一参数 g（信息生成率）**。 -/
+theorem fractal_gen_positive_output (N : ℕ) (g δ : ℝ) (hN : 0 < N)
+    (hg : 0 < g) (hδ : 0 < δ) : fractalGenOutput N 0 δ < fractalGenOutput N g δ := by
+  unfold fractalGenOutput
+  -- N·(1+0)·δ < N·(1+g)·δ ⟺ 0 < g（N>0, δ>0 时）
+  have hNpos : 0 < (N : ℝ) := by positivity
+  have hstep : (1 + 0 : ℝ) < 1 + g := by nlinarith
+  have hmul1 : (1 + 0 : ℝ) * δ < (1 + g) * δ :=
+    mul_lt_mul_of_pos_right hstep hδ
+  have hmul2 : (N : ℝ) * ((1 + 0 : ℝ) * δ) < (N : ℝ) * ((1 + g) * δ) :=
+    mul_lt_mul_of_pos_left hmul1 hNpos
+  -- 重排：N·(1+0)·δ = N·((1+0)·δ)
+  simpa [mul_assoc] using hmul2
+
+/-- HQ11b：g=0 退化为守恒（无分形自生成 ⟹ 净产出 = N·δ = 振动注入，
+    与 HQ10 单循环一致——账本闭合）。 -/
+theorem fractal_gen_zero_is_conservative (N : ℕ) (δ : ℝ) :
+    fractalGenOutput N 0 δ = (N : ℝ) * δ := by
+  unfold fractalGenOutput
+  ring
+
 def HIDDEN_QFT_SCOPE : String :=
-  "隐数QFT代数骨架: 临界叶(HQ1 √e>1/HQ1b √e²=e) + 相干度(HQ2 |Σexp(iθ)|²≤N²/HQ3 全对齐=N²) + 相干能量(HQ4 E=-J·|Σexp(iθ)|²/N≤0/HQ5 全对齐=-JN/HQ6 释放=耦合减少-守恒) + 振动本体(HQ7 A3开方不可逆=数学不对称/HQ7b 开方吸收态/HQ7c 乘开方流不对称/HQ8 分形振动势能叠加不减); 真空=临界叶相位随机=解释层映射, 完整QFT未建模, 能量净产出=第二输入缺口, 无新物理预言"
+  "隐数QFT代数骨架: 临界叶(HQ1 √e>1/HQ1b √e²=e) + 相干度(HQ2 |Σexp(iθ)|²≤N²/HQ3 全对齐=N²) + 相干能量(HQ4 E=-J·|Σexp(iθ)|²/N≤0/HQ5 全对齐=-JN/HQ6 释放=耦合减少-守恒) + 振动本体(HQ7 A3开方不可逆=数学不对称/HQ7b 开方吸收态/HQ7c 乘开方流不对称/HQ8 分形振动势能叠加不减) + Tag流信息差→能量(HQ9 标签势能φ(S)=0/φ(R)=δ/φ(iR)=-ε/HQ9a 开方势能差δ+ε/HQ9b 沉没放能/HQ10 泵回成本ε+单循环净产出δ/HQ11 分形自生成公设g: g>0⟹超守恒, g=0守恒); 缺口压缩成单参数g(信息生成率)=第二输入缺口, 无新物理预言"
 
 end HiddenQFT
 end

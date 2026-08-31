@@ -185,6 +185,42 @@ def main():
                 "⟹ 势能累积 (每层 −JC·N)。但累积的是势能 (越负), 释放需"
                 "回到对称态 = 仍守恒。净产出需 Tag 流把信息→能量 = 第二输入缺口",
     }
+
+    # ---- H7: Tag 流发动机（信息差→能量 的完整循环账本, HQ9-HQ11）----
+    # 标签势能: φ(S)=0, φ(R)=δ, φ(iR)=−ε；循环 S→R→iR→泵回→S
+    delta_pot, eps_pot = 1.0, 0.5
+    release_sqrt = delta_pot + eps_pot     # 开方释放 (HQ9a)
+    pump = eps_pot                          # 泵回成本 (HQ10)
+    net_cycle = release_sqrt - pump         # 单循环净产出 = δ (HQ10)
+    # 分形自生成公设: g 个新模式/周期 (HQ11)
+    gen_rows = []
+    for g in [0.0, 0.5, 1.0, 2.0]:
+        cycles = 100
+        total = cycles * net_cycle * (1 + g)
+        gen_rows.append({"g": g, "total_100_cycles": float(total)})
+    res["H7_tag_flow_engine"] = {
+        "phi_S": 0.0, "phi_R": delta_pot, "phi_iR": -eps_pot,
+        "sqrt_release_delta_plus_eps": float(release_sqrt),
+        "pump_cost_eps": float(pump),
+        "cycle_net_output_delta": float(net_cycle),
+        "fractal_gen": gen_rows,
+        "conservative_without_postulate": net_cycle == delta_pot,
+        "note": "HQ9: 开方释放 δ+ε (信息沉没放能); HQ10: 泵回成本 ε ⟹ "
+                "单循环净产出 δ = 振动注入 (守恒)。HQ11: 分形自生成公设 "
+                "g>0 ⟹ 超守恒产出 ∝ (1+g)δ —— 缺口压缩成单参数 g (信息生成率)",
+    }
+    fig, ax = plt.subplots(figsize=(7.5, 5))
+    gs = [r["g"] for r in gen_rows]
+    totals = [r["total_100_cycles"] for r in gen_rows]
+    ax.plot(gs, totals, "o-", color="tab:orange")
+    ax.axhline(100, color="gray", ls="--", lw=1, label="g=0 守恒线 (100 周期 × δ)")
+    ax.set_xlabel("分形自生成率 g (新模式/周期)")
+    ax.set_ylabel("100 周期总净产出")
+    ax.set_title("Tag 流发动机: 净产出 ∝ (1+g)·δ —— g 是唯一的自由参数")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUT, "fig_tag_flow_engine.png"), dpi=140)
+    plt.close(fig)
     fig, ax = plt.subplots(figsize=(7.5, 5))
     ax.plot([1, 2, 4, 8, 16], fractal_energies, "o-", color="tab:purple")
     ax.set_xlabel("分形嵌套层数 L")
@@ -210,6 +246,12 @@ def main():
         h6["energy_accumulates"] and fractal_energies[0] < 0)
     chk("H6 A3 开方不可逆 + 乘/开方流不对称 (HQ7)", h6["sqrt_irreversible"]
         and h6["mul_sqrt_asymmetric"])
+    h7 = res["H7_tag_flow_engine"]
+    chk("H7 单循环净产出 = δ (开方释放 δ+ε − 泵回 ε, HQ10)",
+        abs(h7["cycle_net_output_delta"] - delta_pot) < 1e-12)
+    chk("H7 分形自生成 g>0 ⟹ 超守恒 (HQ11), g=0 守恒",
+        h7["fractal_gen"][-1]["total_100_cycles"] > 100
+        and h7["conservative_without_postulate"])
 
     report["checks"] = [{"name": n, "pass": c} for n, c in checks]
     report["summary"] = {

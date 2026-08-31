@@ -485,6 +485,12 @@ def main():
         check("HQ-H6: 分形振动能量累积 + A3 开方不可逆（HQ7/HQ8）",
               h6["energy_accumulates"] and h6["sqrt_irreversible"]
               and h6["mul_sqrt_asymmetric"])
+        h7 = res["H7_tag_flow_engine"]
+        check("HQ-H7: Tag 流发动机——单循环净产出 δ（开方释放−泵回，HQ10）"
+              " + 分形自生成 g>0 超守恒（HQ11）",
+              abs(h7["cycle_net_output_delta"] - 1.0) < 1e-12
+              and h7["fractal_gen"][-1]["total_100_cycles"] > 100
+              and h7["conservative_without_postulate"])
 
     # 4. 产物完整性
     artifacts = {
@@ -509,6 +515,7 @@ def main():
         "artifacts/hiddenqft/report.json": 2_500,
         "artifacts/hiddenqft/fig_polarization.png": 30_000,
         "artifacts/hiddenqft/fig_fractal_energy.png": 30_000,
+        "artifacts/hiddenqft/fig_tag_flow_engine.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
