@@ -89,7 +89,8 @@ def main():
                        "scripts/verify_time_freeze.py",
                        "scripts/verify_plasma_antigravity.py",
                        "scripts/verify_plasma_dynamics.py",
-                       "scripts/verify_plasma_fusion.py"]:
+                       "scripts/verify_plasma_fusion.py",
+                       "scripts/verify_hidden_qft.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -466,6 +467,21 @@ def main():
         check("PF-F7: δB/B=1% ⟹ 调制控制力占比 2.01%（PF9c 代数）",
               abs(f7["mod_force_ratio_dF_over_F"][2] - 0.0201) < 1e-9)
 
+    hq = load_report("artifacts/hiddenqft/report.json")
+    if hq:
+        res = hq["results"]
+        check("HQ-H1: 临界叶 √e≈1.6487>1（绝对/条件收敛分界）",
+              res["H1_critical_sheet"]["gt_one"])
+        check("HQ-H2: 相干度有界（随机<1, 全对齐=1, HQ2/HQ3）",
+              res["H2_coherence_bound"]["bound_ok"])
+        check("HQ-H3: 极化相变（涨落超临界 ⟹ 相位对齐, Ising 型）",
+              res["H3_polarization_phase_transition"]["phase_transition_observed"])
+        check("HQ-H4: 全对齐能量 = −JN（HQ5 最小能量态）",
+              res["H4_energy_emergence"]["hq5_ok"])
+        check("HQ-H5: 释放 ≈ 耦合减少（守恒, 非净产出, HQ6）",
+              res["H5_energy_balance"]["release_eq_coupling_approx"]
+              and not res["H5_energy_balance"]["net_production"])
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -486,6 +502,8 @@ def main():
         "artifacts/plasmafusion/fig_hoop_stress.png": 30_000,
         "artifacts/plasmafusion/fig_space_compression.png": 30_000,
         "artifacts/plasmafusion/fig_mod_control.png": 30_000,
+        "artifacts/hiddenqft/report.json": 5_000,
+        "artifacts/hiddenqft/fig_polarization.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)

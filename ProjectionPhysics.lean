@@ -99,6 +99,7 @@ import ProjectionPhysics.TimeFreeze
 import ProjectionPhysics.PlasmaAntiGravity
 import ProjectionPhysics.PlasmaDynamics
 import ProjectionPhysics.PlasmaFusion
+import ProjectionPhysics.HiddenQFT
 import ProjectionPhysics.MassCancellation
 import ProjectionPhysics.Explorations.EntanglementHelix
 import ProjectionPhysics.Explorations.BlackHoleWormhole
