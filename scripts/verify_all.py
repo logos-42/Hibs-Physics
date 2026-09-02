@@ -90,6 +90,7 @@ def main():
                        "scripts/verify_plasma_antigravity.py",
                        "scripts/verify_plasma_dynamics.py",
                        "scripts/verify_plasma_fusion.py",
+                       "scripts/verify_frc_compact.py",
                        "scripts/verify_hidden_qft.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -467,6 +468,43 @@ def main():
         check("PF-F7: δB/B=1% ⟹ 调制控制力占比 2.01%（PF9c 代数）",
               abs(f7["mod_force_ratio_dF_over_F"][2] - 0.0201) < 1e-9)
 
+    fc = load_report("artifacts/frccompact/report.json")
+    if fc:
+        res = fc["results"]
+        g1 = res["G1_beta_advantage"]["rows"]
+        check("FC-G1: FRC β=0.875 的 nT 是托卡马克 β=2% 的 ~44×（紧凑性来源）",
+              abs(g1[0]["nT_keVm3"] / g1[1]["nT_keVm3"] - 43.75) < 0.5)
+        g2 = res["G2_sstar_lock"]["rows"]
+        check("FC-FC2: S*²ρ_i² = β r_s²/2 对全部 μ 机器精度成立",
+              all(r["rel_err"] < 1e-12 for r in g2))
+        check("FC-FC5★: μ=0.999 ⟹ τ_E 与 S* 同放大 31.6×（锁定定理）",
+              abs(g2[3]["tau_E_s"] / g2[0]["tau_E_s"] - 31.62) < 0.2
+              and abs(g2[3]["S_star"] / g2[0]["S_star"] - 31.62) < 0.2)
+        g3 = res["G3_three_gates"]["rows"]
+        r10 = [r for r in g3 if abs(r["r_s_m"] - 0.10) < 1e-9][0]
+        check("FC-门①: r_s=10cm、μ=0、B=B_cap ⟹ 不点火（gain<1，需 B≈70T）",
+              r10["gain_mu0"] < 1.0 and r10["B_needed_T_mu0"] > 60.0)
+        check("FC-门②: r_s=10cm 应力上限 B≈26T（σ_y=2GPa, t=2cm，PF7 反解）",
+              24.0 < r10["B_cap_T"] < 28.0)
+        check("FC-门③: r_s=10cm、μ=0 的 S*≈75 在脉冲 FRC 已演示区（<100）",
+              r10["S_star_mu0"] < 100.0)
+        mu_crit = res["G3_three_gates"]["mu_crit_rmf"]
+        check("FC-门④★: RMF 硬天花板 μ<1−m_e/m_i≈0.99978（FC11）",
+              abs(mu_crit - 0.99978) < 1e-4)
+        check("FC-门④: r_s=10cm 所需 μ=0.9975 仍在 RMF 窗口内；r_s=3cm 已被排除",
+              r10["mu_needed_at_Bcap"] < mu_crit
+              and [r for r in g3 if abs(r["r_s_m"] - 0.03) < 1e-9][0]["mu_needed_at_Bcap"] > mu_crit)
+        g5 = res["G5_mu_tradeoff"]["rows"]
+        check("FC-FC5: τ_E 增益 = S* 惩罚 = 1/√(1−μ)（逐行）",
+              all(abs(r["tau_gain_x"] - r["S_penalty_x"]) < 1e-9 for r in g5))
+        g6 = res["G6_rmf_window"]["rows"]
+        check("FC-FC9: RMF 窗口比 = m_i/m_e，且 μ↑ ⟹ f_ci 上移",
+              all(g6[i]["f_ci_MHz"] < g6[i + 1]["f_ci_MHz"] for i in range(len(g6) - 1)))
+        g7 = res["G7_pulsed_no_ignition"]["rows"]
+        p10 = [r for r in g7 if abs(r["r_s_m"] - 0.10) < 1e-9 and r["mu"] == 0.0][0]
+        check("FC-G7: 脉冲非点火路线 r_s=10cm、μ=0 ⟹ 净出需 回收×注入 ≥80%",
+              0.78 < p10["eta_min_required"] < 0.82)
+
     hq = load_report("artifacts/hiddenqft/report.json")
     if hq:
         res = hq["results"]
@@ -512,6 +550,9 @@ def main():
         "artifacts/plasmafusion/fig_hoop_stress.png": 30_000,
         "artifacts/plasmafusion/fig_space_compression.png": 30_000,
         "artifacts/plasmafusion/fig_mod_control.png": 30_000,
+        "artifacts/frccompact/report.json": 5_000,
+        "artifacts/frccompact/summary.txt": 1_000,
+        "artifacts/frccompact/fig_frc_gates.png": 30_000,
         "artifacts/hiddenqft/report.json": 2_500,
         "artifacts/hiddenqft/fig_polarization.png": 30_000,
         "artifacts/hiddenqft/fig_fractal_energy.png": 30_000,

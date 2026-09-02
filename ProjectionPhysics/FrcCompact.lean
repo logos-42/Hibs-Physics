@@ -241,6 +241,46 @@ theorem rmf_window_ratio (e B m_e m_i : ℝ) (he : e ≠ 0) (hB : B ≠ 0)
   unfold elecCyclotron ionCyclotron
   field_simp [he, hB, hme, hmi]
 
+/-- FC11★★：RMF 窗口**存在**的充要条件——ω_ci < ω_ce ⟺ m_e < m_eff。
+
+    RMF（旋转磁场）驱动电流的物理要求：场变得比离子回旋快（离子来不及跟随）
+    却比电子回旋慢（电子被磁化跟着转 ⟹ 驱动出方位角电流）。
+    代入 m_eff = m_i(1−μ) 得到一条**硬天花板**：
+        μ < 1 − m_e/m_i
+    D-T 数值（m_i = 2.5u）：μ < 1 − 2.194e−4 = **0.99978**。
+
+    含义：质量取消不能把有效质量压到电子质量以下，否则"变化的电磁场"
+    这一支（用户要求结合的 FRC 技术）**整体失效**——不是效率下降，
+    是驱动窗口消失。这是本轮新增的第四道门。 -/
+theorem rmf_window_exists_iff (e B m_e m_eff : ℝ) (he : 0 < e) (hB : 0 < B)
+    (hme : 0 < m_e) (hm : 0 < m_eff) :
+    ionCyclotron e B m_eff < elecCyclotron e B m_e ↔ m_e < m_eff := by
+  unfold ionCyclotron elecCyclotron
+  have hC : 0 < e * B := by positivity
+  constructor
+  · intro h
+    have h1 : (e * B) * m_e < (e * B) * m_eff := (div_lt_div_iff₀ hm hme).mp h
+    nlinarith
+  · intro h
+    have h1 : (e * B) * m_e < (e * B) * m_eff := by nlinarith
+    exact (div_lt_div_iff₀ hm hme).mpr h1
+
+/-- FC11b：窗口关闭定理——μ ≥ 1 − m_e/m_i ⟹ RMF 窗口不存在
+    （ω_ci ≥ ω_ce，离子比电子转得还快）。 -/
+theorem rmf_window_closed_at_large_mu (e B m_e m_i μ : ℝ) (he : 0 < e) (hB : 0 < B)
+    (hme : 0 < m_e) (hmi : 0 < m_i) (hμle : 1 - m_e / m_i ≤ μ) (hμ1 : μ < 1) :
+    ¬ ionCyclotron e B (m_i * (1 - μ)) < elecCyclotron e B m_e := by
+  intro h
+  have hpos1 : 0 < 1 - μ := by linarith
+  have hm_eff_pos : 0 < m_i * (1 - μ) := by positivity
+  have hlt : m_e < m_i * (1 - μ) :=
+    (rmf_window_exists_iff e B m_e (m_i * (1 - μ)) he hB hme hm_eff_pos).mp h
+  have hle : m_i * (1 - μ) ≤ m_e := by
+    have hstep : m_i * (1 - μ) ≤ m_i * (m_e / m_i) :=
+      mul_le_mul_of_nonneg_left (by linarith) (le_of_lt hmi)
+    rwa [mul_div_cancel₀ m_e (ne_of_gt hmi)] at hstep
+  linarith
+
 /-! ### ⑦ 唯一不变量 Θ ≡ B²/m_eff -/
 
 /-- FC10 输入：Θ ≡ B²/m_eff —— 本模块的**唯一无量纲组合**（差一个常数）。 -/
@@ -278,7 +318,7 @@ theorem theta_antitone_mass (B m₁ m₂ : ℝ) (hB : B ≠ 0) (hm₁ : 0 < m₁
     _ = B * B / m₁ := by ring
 
 def FRC_COMPACT_SCOPE : String :=
-  "FRC迭代版紧凑装置代数骨架: FRC β≈1平衡(FC1 n=βB²/4μ₀kT, nT只由B定/FC1c ∝B²) + s参数锁定(FC2★ S*²ρ_i²=βr_s²/2 / FC3 S*²m=C² / FC4 τ_E²m=C²) + FC5★★锁定定理(S*/τ_E与m,B无关 ⇒ 不可能只改τ_E不改S*) + FC6★ τ_A²=βmr_s²/4kT与B无关(μ↑⟹不稳定加速) + FC7★ N_A²∝B²/m²发散 + FC8★ 机械门B²≤2μ₀σ_yt/R_c(PF7反解) + FC9★ RMF窗口ω_ci∝1/m_eff + FC10★★ 唯一不变量Θ=B²/m_eff, 固定S*预算⟹增益∝m_eff→0; 数值层输入: Bohm系数f_B, S*稳定边界, 材料σ_y, ⟨σv⟩用Bosch-Hale; 开放缺口: μ对⟨σv⟩的影响未建模, μ主动产生机制=第二输入缺口(未变); 无新物理预言"
+  "FRC迭代版紧凑装置代数骨架: FRC β≈1平衡(FC1 n=βB²/4μ₀kT, nT只由B定/FC1c ∝B²) + s参数锁定(FC2★ S*²ρ_i²=βr_s²/2 / FC3 S*²m=C² / FC4 τ_E²m=C²) + FC5★★锁定定理(S*/τ_E与m,B无关 ⇒ 不可能只改τ_E不改S*) + FC6★ τ_A²=βmr_s²/4kT与B无关(μ↑⟹不稳定加速) + FC7★ N_A²∝B²/m²发散 + FC8★ 机械门B²≤2μ₀σ_yt/R_c(PF7反解) + FC9★ RMF窗口ω_ci∝1/m_eff + FC10★★ 唯一不变量Θ=B²/m_eff, 固定S*预算⟹增益∝m_eff→0 + FC11★★ RMF窗口存在⟺m_e<m_eff ⟹ 硬天花板μ<1−m_e/m_i=0.99978(D-T); 数值层输入: Bohm系数f_B, S*稳定边界, 材料σ_y, ⟨σv⟩用Bosch-Hale; 开放缺口: μ对⟨σv⟩的影响未建模, μ主动产生机制=第二输入缺口(未变); 无新物理预言"
 
 end FrcCompact
 end
