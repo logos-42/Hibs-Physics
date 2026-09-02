@@ -69,3 +69,4 @@ session-20260815-twistor,local,ProjectionPhysics,artifact,report.json,../artifac
 session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass.png,../artifacts/twistor/twistor_pair_mass.png,generated,docs/wiki/theory-twistor.md,双扭量电子质量几何
 dengyu-pdf,local,leo,pdf,dengyu.pdf,../docs/dengyu.pdf,compiled,docs/wiki/,邓宇(?)空间场/辛体积可逆性原始资料
 masstozero-md,local,leo,markdown,masstozero.md,../docs/wiki/masstozero.md,compiled,docs/wiki/theory-plasma-antigravity.md,Cu/H 等离子体同位素特征矩阵 + 双流形反引力场设计原始资料
+slough2025cfr2,web,iopscience,paper,ae034d,https://iopscience.iop.org/article/10.1088/1741-4326/ae034d,compiled,docs/wiki/theory-frc-compact.md,"MSNW/Helion 分段压缩 FRC CFR2: 12cm 燃烧室 7-9T→35T 压缩 G~10 (Nucl. Fusion 65 106019)"

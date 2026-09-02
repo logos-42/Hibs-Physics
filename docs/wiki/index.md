@@ -52,5 +52,6 @@
 - [theory-plasma-antigravity.md](./theory-plasma-antigravity.md) — 铜-氢等离子体双流形→持续反引力场（PA1–PA8）：锚定权重 q=Z²/√m（Cu 主导 106:1）+ 双流形叠加（B 线性/时变磁场⟹时变空间场）+ 配比调控（μ=1 任意配比归零）+ 体积变化为零目标（随流 dτ=0）+ 各向异性（氢维度调控 34× 铜维度）
 - [theory-plasma-dynamics.md](./theory-plasma-dynamics.md) — 等离子体动力学（DR1–DR5/TM1–TM4/TE1–TE5）：双流形几何（旋转流环耦合：闭合回绕和=0/反向环流抵消/螺旋边界/切向流捕获）+ 时变反引力 μ(t)（稳定变化有界/维持条件=旋转输入≥抹平成本/μ 须到达 1）+ 三温度弛豫（τ 比=质量比 62.6，Cu 解耦 H 平衡）
 - [theory-plasma-fusion.md](./theory-plasma-fusion.md) — 磁约束时变引力场可控核聚变工程计算（PF1–PF9）：约束力 F=B²A/2μ₀（ITER~5.5GN）+ 环向应力 σ=B²R/2μ₀t（冷加工铜 250MPa 内）+ 最小环（SPARC 级 R≈1.85–2.1m，高场必须小环）+ 空间压缩虚拟扩容（G=(ρ_in/ρ_out)² 环 ×G^(-1/3)）+ 四力调制控制层（δF/F=2δB/B）
+- [theory-frc-compact.md](./theory-frc-compact.md) — FRC 迭代版紧凑装置 10cm 可行性转折报告（FC1–FC10）：β≈1 功率×400 + 高 n 劳森 τ 需求降 3 量级 + μ≈0.999 够 + 现实锚点 CFR2（Slough 2025：12cm 燃烧室 7-9T→35T 压缩 G~10）+ FC5★ 锁定定理（S*/τ_E 与 m,B 无关 ⟹ μ 改善输运必同因子恶化稳定性）+ FC10★ 唯一不变量 Θ=B²/m_eff（固定 S* 预算 ⟹ 增益∝m_eff→0）
 - [theory-hidden-qft.md](./theory-hidden-qft.md) — 隐数坐标量子场论（HQ1–HQ6，接 RiemannHIBS）：真空=临界叶 r=√e 相位随机模式 + 涨落超临界⟹极化相变（Ising 型，数值 0.00→0.83）+ 相干能量 E=−J|Σexp(iθ)|²/N≤0 + 能量账本闭合（释放=耦合减少，非净产出）
 - [log.md](./log.md)
