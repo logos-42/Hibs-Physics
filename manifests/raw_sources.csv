@@ -1,72 +1,72 @@
-source_id,company,vendor,kind,filename,raw_rel_path,status,compiled_into,notes
-gemini-3,local,HIBS,markdown,3.md,../HIBS/gemini/3.md,compiled,docs/wiki/theory-hidden-space-physics.md,"离散因果图、度规/相位涌现与核空间猜想"
-gemini-4,local,HIBS,markdown,4.md,../HIBS/gemini/4.md,compiled,docs/wiki/theory-hidden-space-physics.md,"核平移规范、Clifford/旋量与质量的代数几何提案"
-gemini-5,local,HIBS,markdown,5.md,../HIBS/gemini/5.md,compiled,docs/wiki/theory-hidden-space-physics.md,"扭量/旋量、Maxwell/Dirac 与质量生成提案"
-gemini-6,local,HIBS,markdown,6.md,../HIBS/gemini/6.md,compiled,docs/wiki/theory-hidden-space-physics.md,"离散因果图、能量动量与连续极限提案"
-gemini-7,local,HIBS,markdown,7.md,../HIBS/gemini/7.md,compiled,docs/wiki/theory-hidden-space-physics.md,"空间流动、物质生成与统一物理提案"
-gemini-2,local,HIBS,markdown,Gemini2.md,../HIBS/gemini/Gemini2.md,compiled,docs/wiki/theory-hidden-space-physics.md,"HIBS 结构与物理化方向"
-gemini-main,local,HIBS,markdown,gemini.md,../HIBS/gemini/gemini.md,compiled,docs/wiki/theory-hidden-space-physics.md,"HIBS 评析、不可逆乘法与空间/信息/物质统一讨论"
-session-20260814-helix,local,ProjectionPhysics,artifact,helix_3d.png,../artifacts/entanglement/helix_3d.png,generated,docs/wiki/theory-entanglement-helix.md,双螺旋纠缠3D静态图(脚本scripts/entanglement_helix_3d.py生成)
-session-20260814-helix,local,ProjectionPhysics,artifact,helix_3d.gif,../artifacts/entanglement/helix_3d.gif,generated,docs/wiki/theory-entanglement-helix.md,"双螺旋纠缠3D动画(96帧,相位随流动前进+脉冲传播)"
-session-20260814-helix,local,ProjectionPhysics,artifact,fig_e_delta.png,../artifacts/entanglement/fig_e_delta.png,generated,docs/wiki/theory-entanglement-helix.md,E(Δ)关联曲线:螺旋线性vs量子cos
-session-20260814-helix,local,ProjectionPhysics,artifact,fig_chsh.png,../artifacts/entanglement/fig_chsh.png,generated,docs/wiki/theory-entanglement-helix.md,CHSH柱状图:2 vs 2.828 vs 实验2.697
-session-20260814-helix,local,ProjectionPhysics,artifact,fig_flow_rotation.png,../artifacts/entanglement/fig_flow_rotation.png,generated,docs/wiki/theory-entanglement-helix.md,流旋转不变性扫描
-session-20260814-helix,local,ProjectionPhysics,artifact,fig_heatmap.png,../artifacts/entanglement/fig_heatmap.png,generated,docs/wiki/theory-entanglement-helix.md,E差值热图
-session-20260814-helix,local,ProjectionPhysics,artifact,report.json,../artifacts/entanglement/report.json,generated,docs/wiki/theory-entanglement-helix.md,贝尔检验结构化报告JSON
-session-20260814-helix,local,ProjectionPhysics,artifact,report.md,../artifacts/entanglement/report.md,generated,docs/wiki/theory-entanglement-helix.md,贝尔检验报告MD
-session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_flow_structures.png,../artifacts/blackhole/fig_flow_structures.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞vs虫洞流场对比(单调过c vs 峰值<c)
-session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_photon_freeze.png,../artifacts/blackhole/fig_photon_freeze.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞光锥:向外光子视界处冻结
-session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_time_dilation.png,../artifacts/blackhole/fig_time_dilation.png,generated,docs/wiki/theory-blackhole-wormhole.md,时间膨胀√(1−r_s/r)在视界归零
-session-20260814-bhwh,local,ProjectionPhysics,artifact,blackhole_3d.png,../artifacts/blackhole/blackhole_3d.png,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞3D:内向流动漏斗+视界球+光子轨迹
-session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_3d.png,../artifacts/blackhole/wormhole_3d.png,generated,docs/wiki/theory-blackhole-wormhole.md,虫洞3D:双漏斗嵌入+喉部+流线
-session-20260814-bhwh,local,ProjectionPhysics,artifact,wormhole_traverse.gif,../artifacts/blackhole/wormhole_traverse.gif,generated,docs/wiki/theory-blackhole-wormhole.md,光子穿越虫洞动画(dτ=0全程)
-session-20260814-bhwh,local,ProjectionPhysics,artifact,report.json,../artifacts/blackhole/report.json,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告JSON
-session-20260814-bhwh,local,ProjectionPhysics,artifact,report.md,../artifacts/blackhole/report.md,generated,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告MD
-session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_wavepacket.png,../artifacts/maxwell/fig_wavepacket.png,generated,docs/wiki/theory-maxwell-flow.md,基础麦克斯韦波包(leapfrog FDTD v=1.000c)
-session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_blackhole_flow.png,../artifacts/maxwell/fig_blackhole_flow.png,generated,docs/wiki/theory-maxwell-flow.md,|C|=c流场黑洞(流线入奇点)
-session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_redshift.png,../artifacts/maxwell/fig_redshift.png,generated,docs/wiki/theory-maxwell-flow.md,预言P2引力红移(流场vs GR弱场)
-session-20260814-maxwell,local,ProjectionPhysics,artifact,photon_infall.gif,../artifacts/maxwell/photon_infall.gif,generated,docs/wiki/theory-maxwell-flow.md,光子随流入黑洞动画(P1)
-session-20260814-maxwell,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwell/report.json,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告JSON
-session-20260814-maxwell,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwell/report.md,generated,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告MD
-session-20260814-maxwellspace,local,ProjectionPhysics,artifact,three_fields.png,../artifacts/maxwellspace/three_fields.png,generated,docs/wiki/theory-maxwell-space.md,"三场同源:C波动⟹E=-∂tC,B=∂xC"
-session-20260814-maxwellspace,local,ProjectionPhysics,artifact,maxwell_residuals.png,../artifacts/maxwellspace/maxwell_residuals.png,generated,docs/wiki/theory-maxwell-space.md,麦克斯韦自动成立残差≈0
-session-20260814-maxwellspace,local,ProjectionPhysics,artifact,source_drives_C.png,../artifacts/maxwellspace/source_drives_C.png,generated,docs/wiki/theory-maxwell-space.md,MS5电荷驱动空间场
-session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwellspace/report.json,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告JSON
-session-20260814-maxwellspace,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwellspace/report.md,generated,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告MD
-session-20260814-electron,local,ProjectionPhysics,artifact,electron_tornado.png,../artifacts/electron/electron_tornado.png,generated,docs/wiki/theory-maxwell-space.md,电子=空间流动龙卷风(源+涡旋)探讨图
-session-20260814-electron,local,ProjectionPhysics,artifact,coulomb_vs_sink.png,../artifacts/electron/coulomb_vs_sink.png,generated,docs/wiki/theory-maxwell-space.md,库仑场vs流动汇1/r²形状对应
-session-20260814-electron,local,ProjectionPhysics,artifact,self_energy.png,../artifacts/electron/self_energy.png,generated,docs/wiki/theory-maxwell-space.md,经典自能vs电子质量量级
-session-20260814-electron,local,ProjectionPhysics,artifact,report.json,../artifacts/electron/report.json,generated,docs/wiki/theory-maxwell-space.md,电子流动结构探讨报告
-session-20260814-spacefield3d,local,ProjectionPhysics,artifact,vortex_curl.png,../artifacts/spacefield3d/vortex_curl.png,generated,docs/wiki/theory-spacefield3d.md,涡旋C与B=curlC(磁场=自旋)
-session-20260814-spacefield3d,local,ProjectionPhysics,artifact,report.json,../artifacts/spacefield3d/report.json,generated,docs/wiki/theory-spacefield3d.md,3D向量微积分验证报告JSON
-session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.tex,../paper/projection-physics.tex,generated,docs/wiki/current-status.md,首篇论文主文件(REVTeX prd preprint单栏,20页,tectonic编译)
-session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.bib,../paper/projection-physics.bib,generated,docs/wiki/current-status.md,论文参考文献18条(全真实)
-session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.pdf,../paper/projection-physics.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物20页零错误
-session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.tex,../paper/projection-physics-zh.tex,generated,docs/wiki/current-status.md,论文中文版(内容与英文版等同,REVTeX+ctex fandol,13页)
-session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,docs/wiki/current-status.md,tectonic 0.17.0编译产物13页零错误
-session-20260814-spinspace,local,ProjectionPhysics,artifact,double_cover.png,../artifacts/spinspace/double_cover.png,generated,docs/wiki/theory-spin-from-space.md,SU(2)双重覆盖:旋转2π变号
-session-20260814-spinspace,local,ProjectionPhysics,artifact,three_directions.png,../artifacts/spinspace/three_directions.png,generated,docs/wiki/theory-spin-from-space.md,三方向⟹σ
-session-20260814-spinspace,local,ProjectionPhysics,artifact,report.json,../artifacts/spinspace/report.json,generated,docs/wiki/theory-spin-from-space.md,自旋=三方向涌现验证报告
-session-20260814-fractal,local,ProjectionPhysics,artifact,fractal_field.png,../artifacts/fractal/fractal_field.png,generated,docs/wiki/theory-fractal-cosmic-web.md,分形密度场截面(骨架+空洞)
-session-20260814-fractal,local,ProjectionPhysics,artifact,flow_void.png,../artifacts/fractal/flow_void.png,generated,docs/wiki/theory-fractal-cosmic-web.md,流动场+最大空洞(KBC类比)
-session-20260814-fractal,local,ProjectionPhysics,artifact,hubble_tension.png,../artifacts/fractal/hubble_tension.png,generated,docs/wiki/theory-fractal-cosmic-web.md,Hubble悖论整合(δ*-H关系)
-session-20260814-fractal,local,ProjectionPhysics,artifact,report.json,../artifacts/fractal/report.json,generated,docs/wiki/theory-fractal-cosmic-web.md,分形流动验证报告
-session-20260814-doubleslit,local,ProjectionPhysics,artifact,helix_harmonic.png,../artifacts/doubleslit/helix_harmonic.png,generated,docs/wiki/theory-double-slit.md,螺旋+平面投影谐波(波纹来源)
-session-20260814-doubleslit,local,ProjectionPhysics,artifact,slit_observation.png,../artifacts/doubleslit/slit_observation.png,generated,docs/wiki/theory-double-slit.md,干涉vs观察后两道条纹
-session-20260814-doubleslit,local,ProjectionPhysics,artifact,report.json,../artifacts/doubleslit/report.json,generated,docs/wiki/theory-double-slit.md,双缝谐波干涉验证报告
-session-20260814-glueball,local,ProjectionPhysics,artifact,three_field_coupling.png,../artifacts/glueball/three_field_coupling.png,generated,docs/wiki/theory-glueball-coupling.md,三场耦合演化+g扫描
-session-20260814-glueball,local,ProjectionPhysics,artifact,mass_spectrum.png,../artifacts/glueball/mass_spectrum.png,generated,docs/wiki/theory-glueball-coupling.md,√N·M₀ vs 格点胶球谱
-session-20260814-glueball,local,ProjectionPhysics,artifact,report.json,../artifacts/glueball/report.json,generated,docs/wiki/theory-glueball-coupling.md,三方向耦合验证报告
-session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics.pdf,../paper/projection-physics.pdf,generated,README.md,论文英文版§8探索汇总
-session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,generated,README.md,论文中文版§8探索汇总
-session-20260815-twistor,local,ProjectionPhysics,artifact,helicity_sphere.png,../artifacts/twistor/helicity_sphere.png,generated,docs/wiki/theory-twistor.md,CP¹螺旋度+光锥动量
-session-20260815-twistor,local,ProjectionPhysics,artifact,charge_normal.png,../artifacts/twistor/charge_normal.png,generated,docs/wiki/theory-twistor.md,电性=法向量朝向
-session-20260818-unified,local,ProjectionPhysics,paper,projection-unified.pdf,../paper/projection-unified.pdf,generated,paper/README.md,论文统一版英文PDF(19页, Lean 4 零sorry, IPFS CID QmUEoUUdKeu2qoysuZPKktCxhmmUyQ6GgDUmecoHcf2Npa)
-session-20260818-unified,local,ProjectionPhysics,paper,projection-unified-zh.pdf,../paper/projection-unified-zh.pdf,generated,paper/README.md,论文统一版中文PDF
-session-20260818-unified,local,ProjectionPhysics,paper,arxiv-endorsement-email.md,../paper/arxiv-endorsement-email.md,generated,paper/README.md,arXiv推荐人背书申请邮件(中英双版, 2026-08-18撰写)
-session-20260818-unified,local,ProjectionPhysics,paper,peer-review-request-email.md,../paper/peer-review-request-email.md,generated,paper/README.md,彭罗斯+Witten等前沿物理学家同行评议请求邮件(中英双版, 2026-08-18撰写)
-session-20260815-twistor,local,ProjectionPhysics,artifact,report.json,../artifacts/twistor/report.json,generated,docs/wiki/theory-twistor.md,扭量兼容性验证报告
-session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass.png,../artifacts/twistor/twistor_pair_mass.png,generated,docs/wiki/theory-twistor.md,双扭量电子质量几何
+﻿source_id,company,vendor,kind,filename,raw_rel_path,status,compiled_into,notes
+gemini-3,local,HIBS,markdown,3.md,../HIBS/gemini/3.md,compiled,docs/wiki/theory-hidden-space-physics.md,离散因果图、度规/相位涌现与核空间猜想
+gemini-4,local,HIBS,markdown,4.md,../HIBS/gemini/4.md,compiled,docs/wiki/theory-hidden-space-physics.md,核平移规范、Clifford/旋量与质量的代数几何提案
+gemini-5,local,HIBS,markdown,5.md,../HIBS/gemini/5.md,compiled,docs/wiki/theory-hidden-space-physics.md,扭量/旋量、Maxwell/Dirac 与质量生成提案
+gemini-6,local,HIBS,markdown,6.md,../HIBS/gemini/6.md,compiled,docs/wiki/theory-hidden-space-physics.md,离散因果图、能量动量与连续极限提案
+gemini-7,local,HIBS,markdown,7.md,../HIBS/gemini/7.md,compiled,docs/wiki/theory-hidden-space-physics.md,空间流动、物质生成与统一物理提案
+gemini-2,local,HIBS,markdown,Gemini2.md,../HIBS/gemini/Gemini2.md,compiled,docs/wiki/theory-hidden-space-physics.md,HIBS 结构与物理化方向
+gemini-main,local,HIBS,markdown,gemini.md,../HIBS/gemini/gemini.md,compiled,docs/wiki/theory-hidden-space-physics.md,HIBS 评析、不可逆乘法与空间/信息/物质统一讨论
+session-20260814-helix,local,ProjectionPhysics,artifact,helix_3d.png,../artifacts/entanglement/helix_3d.png,compiled,docs/wiki/theory-entanglement-helix.md,双螺旋纠缠3D静态图(脚本scripts/entanglement_helix_3d.py生成)
+session-20260814-helix-2,local,ProjectionPhysics,artifact,helix_3d.gif,../artifacts/entanglement/helix_3d.gif,compiled,docs/wiki/theory-entanglement-helix.md,"双螺旋纠缠3D动画(96帧,相位随流动前进+脉冲传播)"
+session-20260814-helix-3,local,ProjectionPhysics,artifact,fig_e_delta.png,../artifacts/entanglement/fig_e_delta.png,compiled,docs/wiki/theory-entanglement-helix.md,E(Δ)关联曲线:螺旋线性vs量子cos
+session-20260814-helix-4,local,ProjectionPhysics,artifact,fig_chsh.png,../artifacts/entanglement/fig_chsh.png,compiled,docs/wiki/theory-entanglement-helix.md,CHSH柱状图:2 vs 2.828 vs 实验2.697
+session-20260814-helix-5,local,ProjectionPhysics,artifact,fig_flow_rotation.png,../artifacts/entanglement/fig_flow_rotation.png,compiled,docs/wiki/theory-entanglement-helix.md,流旋转不变性扫描
+session-20260814-helix-6,local,ProjectionPhysics,artifact,fig_heatmap.png,../artifacts/entanglement/fig_heatmap.png,compiled,docs/wiki/theory-entanglement-helix.md,E差值热图
+session-20260814-helix-7,local,ProjectionPhysics,artifact,report.json,../artifacts/entanglement/report.json,compiled,docs/wiki/theory-entanglement-helix.md,贝尔检验结构化报告JSON
+session-20260814-helix-8,local,ProjectionPhysics,artifact,report.md,../artifacts/entanglement/report.md,compiled,docs/wiki/theory-entanglement-helix.md,贝尔检验报告MD
+session-20260814-bhwh,local,ProjectionPhysics,artifact,fig_flow_structures.png,../artifacts/blackhole/fig_flow_structures.png,compiled,docs/wiki/theory-blackhole-wormhole.md,黑洞vs虫洞流场对比(单调过c vs 峰值<c)
+session-20260814-bhwh-2,local,ProjectionPhysics,artifact,fig_photon_freeze.png,../artifacts/blackhole/fig_photon_freeze.png,compiled,docs/wiki/theory-blackhole-wormhole.md,黑洞光锥:向外光子视界处冻结
+session-20260814-bhwh-3,local,ProjectionPhysics,artifact,fig_time_dilation.png,../artifacts/blackhole/fig_time_dilation.png,compiled,docs/wiki/theory-blackhole-wormhole.md,时间膨胀√(1−r_s/r)在视界归零
+session-20260814-bhwh-4,local,ProjectionPhysics,artifact,blackhole_3d.png,../artifacts/blackhole/blackhole_3d.png,compiled,docs/wiki/theory-blackhole-wormhole.md,黑洞3D:内向流动漏斗+视界球+光子轨迹
+session-20260814-bhwh-5,local,ProjectionPhysics,artifact,wormhole_3d.png,../artifacts/blackhole/wormhole_3d.png,compiled,docs/wiki/theory-blackhole-wormhole.md,虫洞3D:双漏斗嵌入+喉部+流线
+session-20260814-bhwh-6,local,ProjectionPhysics,artifact,wormhole_traverse.gif,../artifacts/blackhole/wormhole_traverse.gif,compiled,docs/wiki/theory-blackhole-wormhole.md,光子穿越虫洞动画(dτ=0全程)
+session-20260814-bhwh-7,local,ProjectionPhysics,artifact,report.json,../artifacts/blackhole/report.json,compiled,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告JSON
+session-20260814-bhwh-8,local,ProjectionPhysics,artifact,report.md,../artifacts/blackhole/report.md,compiled,docs/wiki/theory-blackhole-wormhole.md,黑洞虫洞数值验证报告MD
+session-20260814-maxwell,local,ProjectionPhysics,artifact,fig_wavepacket.png,../artifacts/maxwell/fig_wavepacket.png,compiled,docs/wiki/theory-maxwell-flow.md,基础麦克斯韦波包(leapfrog FDTD v=1.000c)
+session-20260814-maxwell-2,local,ProjectionPhysics,artifact,fig_blackhole_flow.png,../artifacts/maxwell/fig_blackhole_flow.png,compiled,docs/wiki/theory-maxwell-flow.md,|C|=c流场黑洞(流线入奇点)
+session-20260814-maxwell-3,local,ProjectionPhysics,artifact,fig_redshift.png,../artifacts/maxwell/fig_redshift.png,compiled,docs/wiki/theory-maxwell-flow.md,预言P2引力红移(流场vs GR弱场)
+session-20260814-maxwell-4,local,ProjectionPhysics,artifact,photon_infall.gif,../artifacts/maxwell/photon_infall.gif,compiled,docs/wiki/theory-maxwell-flow.md,光子随流入黑洞动画(P1)
+session-20260814-maxwell-5,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwell/report.json,compiled,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告JSON
+session-20260814-maxwell-6,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwell/report.md,compiled,docs/wiki/theory-maxwell-flow.md,麦克斯韦×流动验证报告MD
+session-20260814-maxwellspace,local,ProjectionPhysics,artifact,three_fields.png,../artifacts/maxwellspace/three_fields.png,compiled,docs/wiki/theory-maxwell-space.md,"三场同源:C波动⟹E=-∂tC,B=∂xC"
+session-20260814-maxwellspace-2,local,ProjectionPhysics,artifact,maxwell_residuals.png,../artifacts/maxwellspace/maxwell_residuals.png,compiled,docs/wiki/theory-maxwell-space.md,麦克斯韦自动成立残差≈0
+session-20260814-maxwellspace-3,local,ProjectionPhysics,artifact,source_drives_C.png,../artifacts/maxwellspace/source_drives_C.png,compiled,docs/wiki/theory-maxwell-space.md,MS5电荷驱动空间场
+session-20260814-maxwellspace-4,local,ProjectionPhysics,artifact,report.json,../artifacts/maxwellspace/report.json,compiled,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告JSON
+session-20260814-maxwellspace-5,local,ProjectionPhysics,artifact,report.md,../artifacts/maxwellspace/report.md,compiled,docs/wiki/theory-maxwell-space.md,电磁=空间场运动学报告MD
+session-20260814-electron,local,ProjectionPhysics,artifact,electron_tornado.png,../artifacts/electron/electron_tornado.png,compiled,docs/wiki/theory-maxwell-space.md,电子=空间流动龙卷风(源+涡旋)探讨图
+session-20260814-electron-2,local,ProjectionPhysics,artifact,coulomb_vs_sink.png,../artifacts/electron/coulomb_vs_sink.png,compiled,docs/wiki/theory-maxwell-space.md,库仑场vs流动汇1/r²形状对应
+session-20260814-electron-3,local,ProjectionPhysics,artifact,self_energy.png,../artifacts/electron/self_energy.png,compiled,docs/wiki/theory-maxwell-space.md,经典自能vs电子质量量级
+session-20260814-electron-4,local,ProjectionPhysics,artifact,report.json,../artifacts/electron/report.json,compiled,docs/wiki/theory-maxwell-space.md,电子流动结构探讨报告
+session-20260814-spacefield3d,local,ProjectionPhysics,artifact,vortex_curl.png,../artifacts/spacefield3d/vortex_curl.png,compiled,docs/wiki/theory-spacefield3d.md,涡旋C与B=curlC(磁场=自旋)
+session-20260814-spacefield3d-2,local,ProjectionPhysics,artifact,report.json,../artifacts/spacefield3d/report.json,compiled,docs/wiki/theory-spacefield3d.md,3D向量微积分验证报告JSON
+session-20260814-paper,local,ProjectionPhysics,artifact,projection-physics.tex,../paper/projection-physics.tex,compiled,docs/wiki/current-status.md,首篇论文主文件(REVTeX prd preprint单栏,20页,tectonic编译)
+session-20260814-paper-2,local,ProjectionPhysics,artifact,projection-physics.bib,../paper/projection-physics.bib,compiled,docs/wiki/current-status.md,论文参考文献18条(全真实)
+session-20260814-paper-3,local,ProjectionPhysics,artifact,projection-physics.pdf,../paper/projection-physics.pdf,compiled,docs/wiki/current-status.md,tectonic 0.17.0编译产物20页零错误
+session-20260814-paper-4,local,ProjectionPhysics,artifact,projection-physics-zh.tex,../paper/projection-physics-zh.tex,compiled,docs/wiki/current-status.md,论文中文版(内容与英文版等同,REVTeX+ctex fandol,13页)
+session-20260814-paper-5,local,ProjectionPhysics,artifact,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,compiled,docs/wiki/current-status.md,tectonic 0.17.0编译产物13页零错误
+session-20260814-spinspace,local,ProjectionPhysics,artifact,double_cover.png,../artifacts/spinspace/double_cover.png,compiled,docs/wiki/theory-spin-from-space.md,SU(2)双重覆盖:旋转2π变号
+session-20260814-spinspace-2,local,ProjectionPhysics,artifact,three_directions.png,../artifacts/spinspace/three_directions.png,compiled,docs/wiki/theory-spin-from-space.md,三方向⟹σ
+session-20260814-spinspace-3,local,ProjectionPhysics,artifact,report.json,../artifacts/spinspace/report.json,compiled,docs/wiki/theory-spin-from-space.md,自旋=三方向涌现验证报告
+session-20260814-fractal,local,ProjectionPhysics,artifact,fractal_field.png,../artifacts/fractal/fractal_field.png,compiled,docs/wiki/theory-fractal-cosmic-web.md,分形密度场截面(骨架+空洞)
+session-20260814-fractal-2,local,ProjectionPhysics,artifact,flow_void.png,../artifacts/fractal/flow_void.png,compiled,docs/wiki/theory-fractal-cosmic-web.md,流动场+最大空洞(KBC类比)
+session-20260814-fractal-3,local,ProjectionPhysics,artifact,hubble_tension.png,../artifacts/fractal/hubble_tension.png,compiled,docs/wiki/theory-fractal-cosmic-web.md,Hubble悖论整合(δ*-H关系)
+session-20260814-fractal-4,local,ProjectionPhysics,artifact,report.json,../artifacts/fractal/report.json,compiled,docs/wiki/theory-fractal-cosmic-web.md,分形流动验证报告
+session-20260814-doubleslit,local,ProjectionPhysics,artifact,helix_harmonic.png,../artifacts/doubleslit/helix_harmonic.png,compiled,docs/wiki/theory-double-slit.md,螺旋+平面投影谐波(波纹来源)
+session-20260814-doubleslit-2,local,ProjectionPhysics,artifact,slit_observation.png,../artifacts/doubleslit/slit_observation.png,compiled,docs/wiki/theory-double-slit.md,干涉vs观察后两道条纹
+session-20260814-doubleslit-3,local,ProjectionPhysics,artifact,report.json,../artifacts/doubleslit/report.json,compiled,docs/wiki/theory-double-slit.md,双缝谐波干涉验证报告
+session-20260814-glueball,local,ProjectionPhysics,artifact,three_field_coupling.png,../artifacts/glueball/three_field_coupling.png,compiled,docs/wiki/theory-glueball-coupling.md,三场耦合演化+g扫描
+session-20260814-glueball-2,local,ProjectionPhysics,artifact,mass_spectrum.png,../artifacts/glueball/mass_spectrum.png,compiled,docs/wiki/theory-glueball-coupling.md,√N·M₀ vs 格点胶球谱
+session-20260814-glueball-3,local,ProjectionPhysics,artifact,report.json,../artifacts/glueball/report.json,compiled,docs/wiki/theory-glueball-coupling.md,三方向耦合验证报告
+session-20260815-paper-update,local,ProjectionPhysics,paper,projection-physics.pdf,../paper/projection-physics.pdf,compiled,README.md,论文英文版§8探索汇总
+session-20260815-paper-update-2,local,ProjectionPhysics,paper,projection-physics-zh.pdf,../paper/projection-physics-zh.pdf,compiled,README.md,论文中文版§8探索汇总
+session-20260815-twistor,local,ProjectionPhysics,artifact,helicity_sphere.png,../artifacts/twistor/helicity_sphere.png,compiled,docs/wiki/theory-twistor.md,CP¹螺旋度+光锥动量
+session-20260815-twistor-2,local,ProjectionPhysics,artifact,charge_normal.png,../artifacts/twistor/charge_normal.png,compiled,docs/wiki/theory-twistor.md,电性=法向量朝向
+session-20260818-unified,local,ProjectionPhysics,paper,projection-unified.pdf,../paper/projection-unified.pdf,compiled,paper/README.md,论文统一版英文PDF(19页, Lean 4 零sorry, IPFS CID QmUEoUUdKeu2qoysuZPKktCxhmmUyQ6GgDUmecoHcf2Npa)
+session-20260818-unified-2,local,ProjectionPhysics,paper,projection-unified-zh.pdf,../paper/projection-unified-zh.pdf,compiled,paper/README.md,论文统一版中文PDF
+session-20260818-unified-3,local,ProjectionPhysics,paper,arxiv-endorsement-email.md,../paper/arxiv-endorsement-email.md,compiled,paper/README.md,arXiv推荐人背书申请邮件(中英双版, 2026-08-18撰写)
+session-20260818-unified-4,local,ProjectionPhysics,paper,peer-review-request-email.md,../paper/peer-review-request-email.md,compiled,paper/README.md,彭罗斯+Witten等前沿物理学家同行评议请求邮件(中英双版, 2026-08-18撰写)
+session-20260815-twistor-3,local,ProjectionPhysics,artifact,report.json,../artifacts/twistor/report.json,compiled,docs/wiki/theory-twistor.md,扭量兼容性验证报告
+session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass.png,../artifacts/twistor/twistor_pair_mass.png,compiled,docs/wiki/theory-twistor.md,双扭量电子质量几何
 dengyu-pdf,local,leo,pdf,dengyu.pdf,../docs/dengyu.pdf,compiled,docs/wiki/,邓宇(?)空间场/辛体积可逆性原始资料
 masstozero-md,local,leo,markdown,masstozero.md,../docs/wiki/masstozero.md,compiled,docs/wiki/theory-plasma-antigravity.md,Cu/H 等离子体同位素特征矩阵 + 双流形反引力场设计原始资料
-slough2025cfr2,web,iopscience,paper,ae034d,https://iopscience.iop.org/article/10.1088/1741-4326/ae034d,compiled,docs/wiki/theory-frc-compact.md,"MSNW/Helion 分段压缩 FRC CFR2: 12cm 燃烧室 7-9T→35T 压缩 G~10 (Nucl. Fusion 65 106019)"
+slough2025cfr2,web,iopscience,paper,ae034d,https://iopscience.iop.org/article/10.1088/1741-4326/ae034d,compiled,docs/wiki/theory-frc-compact.md,MSNW/Helion 分段压缩 FRC CFR2: 12cm 燃烧室 7-9T→35T 压缩 G~10 (Nucl. Fusion 65 106019)

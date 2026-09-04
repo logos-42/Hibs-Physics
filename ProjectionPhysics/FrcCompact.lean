@@ -317,8 +317,41 @@ theorem theta_antitone_mass (B m₁ m₂ : ℝ) (hB : B ≠ 0) (hm₁ : 0 < m₁
     _ < (B * B) * (1 / m₁) := mul_lt_mul_of_pos_left hinv hB2
     _ = B * B / m₁ := by ring
 
+/-! ### ⑧ 人工场选频判据：RMF 驱动频率定量化（FC12） -/
+
+/-- FC12 输入：人工场 RMF 驱动角频率 = k × 离子回旋角频率 ω_ci（选频倍数 k∈[2,5]）。
+    这是"人工场调制频率的最优区间"：略高于离子回旋——离子刚磁化、能驱动方位角电流
+    （好用），远低于电子回旋（不纯加热），且低于装置光速响应上限（信号传得过装置）。
+    数值层（D-T，B=9T）：ω_ci=(eB/m_i)/2π≈55MHz，最优≈138-276MHz（VHF）。 -/
+def rmfAngFreq (k e B m : ℝ) : ℝ := k * ionCyclotron e B m
+
+/-- FC12 输入：装置光速响应上限 ω_max = c/L（空间场波动跨越装置长度的频率）。
+    调制频率超过 ω_max，则空间场信号传不过装置（MS3：空间场波动速度=c）。 -/
+def lightLimit (c L : ℝ) : ℝ := c / L
+
+/-- FC12★：人工场选频带非退化——2×ω_ci < 5×ω_ci（最优倍数区间存在）。
+    即总能取 k∈[2,5] 使驱动频率落在"好用"区间内（FC9 RMF 窗口下界之上）。 -/
+theorem rmf_selection_band_nonempty (e B m : ℝ) (he : 0 < e) (hB : 0 < B) (hm : 0 < m) :
+    rmfAngFreq 2 e B m < rmfAngFreq 5 e B m := by
+  unfold rmfAngFreq
+  have hci : 0 < ionCyclotron e B m := by
+    unfold ionCyclotron
+    positivity
+  nlinarith
+
+/-- FC12c：选频倍数在开区间 [2,5] 内的任意 k 都落在 RMF 窗口下界之上 ——
+    人工场选频不越出 FC9 的物理窗口（ω=k·ω_ci ≥ ω_ci）。 -/
+theorem rmf_selection_above_ci (k e B m : ℝ) (hk : 1 ≤ k) (he : 0 < e) (hB : 0 < B)
+    (hm : 0 < m) :
+    ionCyclotron e B m ≤ rmfAngFreq k e B m := by
+  unfold rmfAngFreq
+  have hci : 0 < ionCyclotron e B m := by
+    unfold ionCyclotron
+    positivity
+  nlinarith
+
 def FRC_COMPACT_SCOPE : String :=
-  "FRC迭代版紧凑装置代数骨架: FRC β≈1平衡(FC1 n=βB²/4μ₀kT, nT只由B定/FC1c ∝B²) + s参数锁定(FC2★ S*²ρ_i²=βr_s²/2 / FC3 S*²m=C² / FC4 τ_E²m=C²) + FC5★★锁定定理(S*/τ_E与m,B无关 ⇒ 不可能只改τ_E不改S*) + FC6★ τ_A²=βmr_s²/4kT与B无关(μ↑⟹不稳定加速) + FC7★ N_A²∝B²/m²发散 + FC8★ 机械门B²≤2μ₀σ_yt/R_c(PF7反解) + FC9★ RMF窗口ω_ci∝1/m_eff + FC10★★ 唯一不变量Θ=B²/m_eff, 固定S*预算⟹增益∝m_eff→0 + FC11★★ RMF窗口存在⟺m_e<m_eff ⟹ 硬天花板μ<1−m_e/m_i=0.99978(D-T); 数值层输入: Bohm系数f_B, S*稳定边界, 材料σ_y, ⟨σv⟩用Bosch-Hale; 开放缺口: μ对⟨σv⟩的影响未建模, μ主动产生机制=第二输入缺口(未变); 无新物理预言"
+  "FRC迭代版紧凑装置代数骨架: FRC β≈1平衡(FC1 n=βB²/4μ₀kT, nT只由B定/FC1c ∝B²) + s参数锁定(FC2★ S*²ρ_i²=βr_s²/2 / FC3 S*²m=C² / FC4 τ_E²m=C²) + FC5★★锁定定理(S*/τ_E与m,B无关 ⇒ 不可能只改τ_E不改S*) + FC6★ τ_A²=βmr_s²/4kT与B无关(μ↑⟹不稳定加速) + FC7★ N_A²∝B²/m²发散 + FC8★ 机械门B²≤2μ₀σ_yt/R_c(PF7反解) + FC9★ RMF窗口ω_ci∝1/m_eff + FC10★★ 唯一不变量Θ=B²/m_eff, 固定S*预算⟹增益∝m_eff→0 + FC11★★ RMF窗口存在⟺m_e<m_eff ⟹ 硬天花板μ<1−m_e/m_i=0.99978(D-T) + FC12★★ 人工场选频(RMF驱动频率ω=k·ω_ci, k∈[2,5]最优, 选频带非退化, 上界c/L装置光速响应); 数值层输入: Bohm系数f_B, S*稳定边界, 材料σ_y, ⟨σv⟩用Bosch-Hale; 开放缺口: μ对⟨σv⟩的影响未建模, μ主动产生机制=第二输入缺口(未变); 无新物理预言"
 
 end FrcCompact
 end
