@@ -91,7 +91,8 @@ def main():
                        "scripts/verify_plasma_dynamics.py",
                        "scripts/verify_plasma_fusion.py",
                        "scripts/verify_frc_compact.py",
-                       "scripts/verify_hidden_qft.py"]:
+                       "scripts/verify_hidden_qft.py",
+                       "scripts/verify_fusion_roadmap.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -557,6 +558,10 @@ def main():
         "artifacts/hiddenqft/fig_polarization.png": 30_000,
         "artifacts/hiddenqft/fig_fractal_energy.png": 30_000,
         "artifacts/hiddenqft/fig_tag_flow_engine.png": 30_000,
+        "artifacts/fusionroadmap/report.json": 2_000,
+        "artifacts/fusionroadmap/summary.txt": 500,
+        "artifacts/fusionroadmap/fig_gate_funnel.png": 30_000,
+        "artifacts/fusionroadmap/fig_mu_sensitivity_scaling.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
