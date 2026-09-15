@@ -562,6 +562,7 @@ def main():
         "artifacts/fusionroadmap/summary.txt": 500,
         "artifacts/fusionroadmap/fig_gate_funnel.png": 30_000,
         "artifacts/fusionroadmap/fig_mu_sensitivity_scaling.png": 30_000,
+        "artifacts/fusionroadmap/fig_18m_quarterly.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)

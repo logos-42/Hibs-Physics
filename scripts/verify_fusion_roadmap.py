@@ -211,6 +211,149 @@ R5_gates = {"门表": [{"门": g[0], "月": g[1], "交付": g[2], "通过条件"
 
 
 # ---------------------------------------------------------------------------
+# R6 前 18 个月逐季度落位（Q1–Q6，四条工作流 + 门 + 判据 + 失败处置）
+# 人·月为排程假设；金额按 leo 规则不入库（只在对话里给）
+# 验收：人数 2→3→5→6→7→8，人·月 6+9+15+18+21+24 = 93
+# ---------------------------------------------------------------------------
+# (季度, 月区间, 人数, 人·月, 主题, {工作流: 交付}, 门, 判据, 失败处置)
+QUARTERS = [
+    ("Q1", "M1–3", 2, 6, "判据规范（只设计不采购）",
+     {"诊断线": "回旋共振测量方案 + 误差预算（δ 目标 ≤1e-4）",
+      "装置线": "桌面判据台规格书 + 询价单",
+      "理论数值线": "标准 MHD 零假设基准（R_ci=0 解析+数值）",
+      "对外线": "预注册协议（论文 1）投稿"},
+     "G0（M3）", "δ 实际可达值 → μ_min = δ/(1+δ)",
+     "δ 只到 1e-3 ⟹ 判决仍可做，但阶梯起点抬高一个数量级"),
+    ("Q2", "M4–6", 3, 9, "D1 判决（生死门）",
+     {"诊断线": "R_ci 多批次实测（≥5 批次，报 3σ）",
+      "装置线": "桌面判据台建成（腔体/离子源/RF/探针）",
+      "理论数值线": "实测 vs 零假设对照 + 系统误差分解",
+      "对外线": "判决报告（数据+脚本+复现包）"},
+     "G1（M6）生死门", "R_ci > 3σ 且零假设预测 < 分辨率",
+     "R_ci=0 ⟹ 停装置线，写负结果论文（预注册过，负结果可发表）"),
+    ("Q3", "M7–9", 5, 15, "标定期 A：单参数曲线",
+     {"诊断线": "μ(B) / μ(f) / μ(配比) 三条曲线",
+      "装置线": "诊断升级（磁探针阵列 + 光谱）",
+      "理论数值线": "FC9/FC12/PA8 预言 vs 曲线形状对照",
+      "对外线": "季度证据包 + 内部技术备忘"},
+     "—", "三条曲线的单调性与符号",
+     "符号相反 ⟹ 先查仪器标定，再怀疑理论（顺序不许倒）"),
+    ("Q4", "M10–12", 6, 18, "标定期 B：功率标度 + 装置放大",
+     {"诊断线": "μ(P) 扫描（输入功率）",
+      "装置线": "中型测试台建成",
+      "理论数值线": "k 拟合 + 置信区间 + 外推倍数报告",
+      "对外线": "标定数据集 v1（对外版本）"},
+     "G2（M12）", "k ≥ 1 可行 / 0.5–1 重估装置功率 / <0.5 转 B 计划",
+     "k<0.5 ⟹ μ 降级为辅助输运层，停建 FRC 级装置"),
+    ("Q5", "M13–15", 7, 21, "复现期 A：第二装置 + 外部介入",
+     {"诊断线": "复现判据冻结（先写死再测）",
+      "装置线": "复现装置 #2 建成（独立场地/独立团队）",
+      "理论数值线": "两装置标定一致性分析（同号/同量级/≤2× 偏差）",
+      "对外线": "外部实验室合作协议 + 数据共享条款"},
+     "—", "#1/#2 曲线一致性",
+     "不一致 ⟹ 定位差异源（装置/诊断/操作），不急于下结论"),
+    ("Q6", "M16–18", 8, 24, "复现期 B：第三方结论 + 十八月收口",
+     {"诊断线": "第三方独立分析入库",
+      "装置线": "两装置稳定运行（重复性统计）",
+      "理论数值线": "公共数据集 + FRC 级装置参数表（M24 门前置设计）",
+      "对外线": "论文 2（D1 判决+标定+复现）+ 复现报告"},
+     "G3（M18）", "第三方数据同号同量级",
+     "复现失败 ⟹ 回 Q2 重设诊断（不是重投理论）"),
+]
+LANES = ["诊断线", "装置线", "理论数值线", "对外线"]
+assert [q[3] for q in QUARTERS] == [6, 9, 15, 18, 21, 24], "季度人·月与门表不一致"
+assert sum(q[3] for q in QUARTERS) == 93, "前 18 个月应为 93 人·月（G0–G3）"
+R6_18months = {
+    "总人·月（18 个月）": sum(q[3] for q in QUARTERS),
+    "人数曲线": [q[2] for q in QUARTERS],
+    "季度表": [{"季度": q[0], "月区间": q[1], "人数": q[2], "人·月": q[3],
+                "主题": q[4], "工作流交付": q[5], "门": q[6],
+                "本季判据": q[7], "失败处置": q[8]} for q in QUARTERS],
+    "金额口径（不入库，仅在对话里给）": "人力 ¥2.5万/人·月 纯薪 ×1.35 社保 = "
+                                        "¥3.375万/人·月；非人力为估列需询价",
+    "对 M0–18 总盘子的呼应": "与路线图 G0+G1+G2+G3 = 93 人·月一致",
+}
+
+
+# ---------------------------------------------------------------------------
+# 图 3：前 18 个月逐季度落位（四工作流 × 六季度 + 门 + 人·月）
+# ---------------------------------------------------------------------------
+def fig_18m_quarterly():
+    lane_color = {"诊断线": "#2e86de", "装置线": "#e67e22",
+                  "理论数值线": "#8e44ad", "对外线": "#27ae60"}
+    fig, (ax, ax2) = plt.subplots(2, 1, figsize=(13.0, 8.6), sharex=True,
+                                  gridspec_kw={"height_ratios": [2.5, 1.0],
+                                               "hspace": 0.10})
+    fig.patch.set_facecolor(PALETTE["bg"])
+    ax.set_facecolor(PALETTE["bg"])
+
+    for i, (q, span, n, pm, theme, cells, gate, crit, fail) in enumerate(QUARTERS):
+        for j, lane in enumerate(LANES):
+            y = len(LANES) - 1 - j
+            ax.add_patch(plt.Rectangle((i + 0.04, y + 0.06), 0.92, 0.88,
+                                       facecolor=lane_color[lane], alpha=0.14,
+                                       edgecolor=lane_color[lane], lw=1.1))
+            txt = cells[lane]
+            # 长句拆两行，避免溢出
+            if len(txt) > 16:
+                cut = txt.rfind("（")
+                cut = cut if 6 < cut < len(txt) - 2 else len(txt) // 2
+                txt = txt[:cut] + "\n" + txt[cut:]
+            ax.text(i + 0.5, y + 0.5, txt, ha="center", va="center",
+                    fontsize=7.6, color="#222222", linespacing=1.35)
+        # 门标记（画在泳道顶部）
+        ax.text(i + 0.5, len(LANES) + 0.28, q, ha="center", fontsize=12,
+                fontweight="bold", color="#333333")
+        ax.text(i + 0.5, len(LANES) + 0.02, f"{span}·{n}人·{pm}人·月",
+                ha="center", fontsize=8.2, color="#555555")
+        if gate != "—":
+            ax.text(i + 0.5, -0.42, "门 " + gate, ha="center", va="center",
+                    fontsize=8.4, color=PALETTE["gate"], fontweight="bold",
+                    bbox=dict(boxstyle="round,pad=0.2", fc="white",
+                              ec=PALETTE["gate"], alpha=0.95))
+        else:
+            ax.text(i + 0.5, -0.42, "（无门·季中滚动）", ha="center", va="center",
+                    fontsize=8.0, color=PALETTE["grey"])
+
+    ax.set_yticks([len(LANES) - 0.5 - j for j in range(len(LANES))])
+    ax.set_yticklabels(LANES[::-1], fontsize=10)
+    ax.set_ylim(-0.75, len(LANES) + 0.62)
+    ax.set_xlim(0, 6)
+    ax.set_xticks([])
+    ax.set_title("前 18 个月逐季度落位：四条工作流 × 六个季度（Q2 是生死门，Q4/Q6 是决策门）",
+                 fontsize=13, pad=12)
+    for s in ax.spines.values():
+        s.set_visible(False)
+
+    ax2.set_facecolor(PALETTE["bg"])
+    for i, (q, span, n, pm, *_rest) in enumerate(QUARTERS):
+        ax2.bar(i + 0.5, pm, width=0.62, color=PALETTE["bar"], alpha=0.88,
+                edgecolor="white")
+        ax2.text(i + 0.5, pm + 1.2, f"{pm}", ha="center", fontsize=9)
+    axb = ax2.twinx()
+    axb.step([i + 0.5 for i in range(6)], [q[2] for q in QUARTERS],
+             where="mid", color=PALETTE["warn"], lw=2.0, marker="o", ms=5,
+             label="人数（右轴）")
+    axb.set_ylabel("人数", color=PALETTE["warn"], fontsize=10)
+    axb.tick_params(axis="y", colors=PALETTE["warn"])
+    axb.set_ylim(0, 10)
+    axb.legend(loc="upper left", fontsize=9, framealpha=0.95)
+    ax2.set_ylabel("季度人·月", fontsize=10.5)
+    ax2.set_xlabel("季度", fontsize=10.5)
+    ax2.set_ylim(0, 32)
+    ax2.grid(alpha=0.25, axis="y")
+    ax2.text(3.0, 5.0, "18 个月合计 93 人·月（占五年 7.5%）；峰值 8 人",
+             ha="center", fontsize=9.5, color="#333333",
+             bbox=dict(boxstyle="round,pad=0.25", fc="white", ec=PALETTE["warn"]))
+
+    fig.subplots_adjust(left=0.085, right=0.915, top=0.90, bottom=0.075)
+    p = os.path.join(OUT, "fig_18m_quarterly.png")
+    fig.savefig(p, dpi=140, facecolor=PALETTE["bg"])
+    plt.close(fig)
+    return p
+
+
+# ---------------------------------------------------------------------------
 # 图 1：门漏斗（μ 阶梯 + 人力条）
 # ---------------------------------------------------------------------------
 def fig_gate_funnel():
@@ -347,6 +490,7 @@ def fig_mu_power_scaling():
 def main():
     f1 = fig_gate_funnel()
     f2 = fig_mu_power_scaling()
+    f3 = fig_18m_quarterly()
 
     report = {
         "title": "可控核聚变五年计划——判决漏斗数值支撑",
@@ -356,7 +500,8 @@ def main():
         "R3_D3_power_scaling": R3_scaling,
         "R4_mu_ladder_and_person_months": R4_ladder,
         "R5_gate_table": R5_gates,
-        "figures": [os.path.basename(f1), os.path.basename(f2)],
+        "R6_first_18_months_quarterly": R6_18months,
+        "figures": [os.path.basename(f1), os.path.basename(f2), os.path.basename(f3)],
         "诚实边界": [
             "本报告是计划文档的数值支撑，不是物理证据：所有门槛取自仓库已证条目"
             "（FC2/FC4/FC5/FC9/FC11/AMC1/AMC7），未新增物理。",
@@ -385,7 +530,16 @@ def main():
         f"M24 前累计 {R4_ladder['两年门（M24）前累计占比 [%]']}%",
         f"峰值人数 {R4_ladder['峰值人数']} 人；节律 "
         f"季度证据包 / 半年裁决 / 年度对外",
-        "图：fig_gate_funnel.png, fig_mu_sensitivity_scaling.png",
+        f"前 18 个月：{R6_18months['总人·月（18 个月）']} 人·月，人数 "
+        f"{'→'.join(str(x) for x in R6_18months['人数曲线'])}"
+        f"（占五年 {R6_18months['总人·月（18 个月）'] / total_pm * 100:.1f}%）",
+        "  逐季度：",
+    ]
+    for q in R6_18months["季度表"]:
+        lines.append(f"    {q['季度']} {q['月区间']} {q['人数']}人 {q['人·月']}人·月"
+                     f" | {q['主题']} | 门 {q['门']} | 判据 {q['本季判据']}")
+    lines += [
+        "图：fig_gate_funnel.png, fig_mu_sensitivity_scaling.png, fig_18m_quarterly.png",
     ]
     with open(os.path.join(OUT, "summary.txt"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
