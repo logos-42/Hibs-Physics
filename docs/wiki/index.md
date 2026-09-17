@@ -57,4 +57,5 @@
 - [fusion-program-roadmap.md](./fusion-program-roadmap.md) — 可控核聚变五年计划（判决漏斗）：3 判决量（D1 μ 回旋频移签名 / D2 Λ 锁定比 / D3 k 功率标度指数）+ 8 道门 + μ 数量级阶梯（每年一个数量级）+ 团队编成 + 预写失败处置；判决期只占 1.22% 人力
 - [mass-to-zero.md](./masstozero.md) — 铜-氢等离子体同位素特征矩阵（q=Z²/√m 锚定权重，PA/DR/TE 的源材料，Cu:H=106:1）
 - [theory-hidden-qft.md](./theory-hidden-qft.md) — 隐数坐标量子场论（HQ1–HQ6，接 RiemannHIBS）：真空=临界叶 r=√e 相位随机模式 + 涨落超临界⟹极化相变（Ising 型，数值 0.00→0.83）+ 相干能量 E=−J|Σexp(iθ)|²/N≤0 + 能量账本闭合（释放=耦合减少，非净产出）
+- [theory-gravity-control-algebra.md](./theory-gravity-control-algebra.md) — 控制引力场的代数系统（GCA0–GCA7）：逻辑基元=起伏能量二次型，布尔=层状区域族；不交/嵌套可交换，部分重叠不可交换
 - [log.md](./log.md)

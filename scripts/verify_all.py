@@ -92,7 +92,8 @@ def main():
                        "scripts/verify_plasma_fusion.py",
                        "scripts/verify_frc_compact.py",
                        "scripts/verify_hidden_qft.py",
-                       "scripts/verify_fusion_roadmap.py"]:
+                       "scripts/verify_fusion_roadmap.py",
+                       "scripts/verify_gravity_control.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -531,6 +532,30 @@ def main():
               and h7["fractal_gen"][-1]["total_100_cycles"] > 100
               and h7["conservative_without_postulate"])
 
+    gc = load_report("artifacts/gravitycontrol/report.json")
+    if gc:
+        res = gc["results"]
+        check("GCA1: P_A 幂等（P²=P）", res["N1_idempotent"]["P² = P（幂等）"])
+        n2 = res["N2_decision_functional"]
+        check("GCA2: Q ≥ 0 且 Q=0 ⟺ 区域常值，抹平后 Q=0",
+              n2["Q ≥ 0"] and n2["Q = 0 ⟺ 区域常值（200/200 常值场 vs 200/200 非常值场）"] and n2["抹平 ⟹ Q = 0"])
+        check("GCA2d: 抹平 ⟹ A 内部 ∇Φ 归零（边界跳变保留）",
+              res["N2b_gravity_interface"]["抹平 ⟹ 区域内部引力关闭（边界保留）"])
+        check("GCA3: 极化恒等式（二次型 → 内积）", res["N3_polarization"]["极化恒等式成立"])
+        check("GCA4: 起伏 ⟂ 常值", res["N4_orthogonal"]["起伏 ⟂ 常值"])
+        check("GCA5: (P, I−P) 互补投影对", res["N5_complementary_projection"]["互补投影对成立"])
+        check("GCA6: 层状族 ⟹ 可交换，部分重叠 ⟹ 不可交换",
+              res["N6_commutator_scan"]["层状族（不交或嵌套）⟹ 交换子 = 0"]
+              and res["N6_commutator_scan"]["部分重叠 ⟹ 交换子 > 0（全部）"])
+        check("GCA6a: 不交族分配律 + 格并幂等（布尔子代数）",
+              res["N7_boolean_vs_not"]["不交族 = 布尔子代数（分配律 + 格并幂等成立）"])
+        check("GCA6c: 交叠族布尔运算失效（交换子≠0 + 非投影）",
+              res["N7_boolean_vs_not"]["交叠族：布尔运算失效（交换子≠0 + 格并非投影）"])
+        check("GCA7: 基元是二次型（Q(t·v) = t²Q(v)）", res["N8_quadratic_signature"]["基元是二次型（2 次齐次）"])
+        n9 = res["N9_commute_absorb_witnesses"]
+        check("GCA6b/c 见证：部分重叠不可交换 / 嵌套吸收",
+              n9["部分重叠 ⟹ 次序不同结果不同"] and n9["嵌套 ⟹ 吸收（次序无关，同结果）"])
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -563,6 +588,9 @@ def main():
         "artifacts/fusionroadmap/fig_gate_funnel.png": 30_000,
         "artifacts/fusionroadmap/fig_mu_sensitivity_scaling.png": 30_000,
         "artifacts/fusionroadmap/fig_18m_quarterly.png": 30_000,
+        "artifacts/gravitycontrol/report.json": 2_000,
+        "artifacts/gravitycontrol/summary.txt": 500,
+        "artifacts/gravitycontrol/fig_gravity_control.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
