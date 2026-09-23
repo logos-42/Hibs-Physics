@@ -1,6 +1,7 @@
 ---
 title: 控制引力场的代数系统（GCA0–GCA7）
 source: session
+created: 2026-09-17
 last_confirmed: 2026-09-17
 audience: self
 stage: draft

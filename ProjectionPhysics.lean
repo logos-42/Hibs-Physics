@@ -16,6 +16,7 @@
 --   PauliMathlib.lean      Clifford mathlib 重写（C1'–C4'）
 --   MassCancellation.lean  反引力=抹平褶皱，质量取消 AMC1–AMC8
 --   GravityControl.lean    控制引力场的代数系统：基元=起伏能量二次型，布尔=层状族（GCA0–GCA7）
+--   MoireField.lean        魔角石墨烯场源账本：场天花板⟹密度⟹μ 窗口（MFC1–MFC7，死证定理）
 --
 --   【探索 = 胶球/色结构（frozen，2026-08-14 起不再加定理）】
 --   Explorations/SpinStatistics.lean     自旋统计硬约束（SS1–SS8）
@@ -105,6 +106,7 @@ import ProjectionPhysics.FrcCompact
 import ProjectionPhysics.HiddenQFT
 import ProjectionPhysics.MassCancellation
 import ProjectionPhysics.GravityControl
+import ProjectionPhysics.MoireField
 import ProjectionPhysics.Explorations.EntanglementHelix
 import ProjectionPhysics.Explorations.BlackHoleWormhole
 import ProjectionPhysics.Explorations.MaxwellFlow

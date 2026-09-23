@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-08-10
+last_confirmed: 2026-09-23
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,36 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-09-23 session（第十一轮）：魔角石墨烯场源账本——场天花板 → 密度 → μ 窗口（MFC1–MFC7 + B_death）
+
+leo 问题：魔角石墨烯（1° 夹角）方案若用来产生磁场、再由磁场引发引力场约束实现可控核聚变，
+**数据如何变化**？**做法**：不做新物理，把仓库已证条目（PF3 / FC1 / 二轮修正链 / FC11b）里的
+**场源**换成一个"有材料天花板 B ≤ B_c2"的场源，逐层看数字被截到哪，并给出死证。
+
+**七层账本（L1 材料 / L2 导体 / L3 场-密度 / L4 功率 / L5 输运 / L6 μ 窗口 / L7 制冷）**：
+
+- **L1**：MATBG(N=2) 面外 B_c2≈0.12 T、面内 B_c≈1.6 T（未显著违背 Pauli 限）；MATTG/MAT4G/MAT5G
+  (N≥3) 面内 >10 T（违背 2–3×）⟹ **"1° 夹角"不是问题，N=2 才是问题**。
+- **L3/L4**：B_min(n=1e20)=**1.099 T**；n_max ∝ B²、P ∝ B⁴ ⟹ 面外 0.12 T 功率 ×3.2e-8
+  （同功率体积 ×3.2e7）、面内 1.6 T ×9.99e-4（×1001）、35 T 压缩 ×229。
+- **L5/L6★**：X_req=(τ₀n/A)² ∝ B⁴ 对比 FC11 地板 m_e/m_i=2.194e-4 ⟹ 面外所需 (1−μ) ≤ 4.59e-8，
+  比地板低 **4.8e3 倍** ⟹ **μ 窗口关闭 = 代数无解**（不是"更难"）。
+- **★B_death(a) = 0.997·(0.2/a) T**：0.2m→0.997 T、0.1m→1.99 T、0.05m→3.99 T ⟹ 紧凑化把场门槛
+  抬到 N=2 面内天花板（1.6 T）之上——只有 N≥3 那一档能同时满足"1° 家族 + 小装置"。
+- **L2/L7 工程门（量级账）**：片超流密度缺口 1.3e4×、片电流缺口 4.0e5×（vs REBCO）；亚开尔文
+  制冷容量缺口 3.75e6×（ITER 75 kW@4.5K vs 稀释制冷机 20 mW@0.5K）+ Carnot 9.1×。
+- **顺带发现**：仓库自身 n=1e20 设计需 μ≥0.99968，其 (1−μ)=3.24e-4 只比 FC11 地板高 **1.48×**。
+
+**交付**：Lean `ProjectionPhysics/MoireField.lean`（主线目录，MFC1–MFC7，含 **MFC4★ 死证**
+"X_req ≤ m_e/m_i ⟹ ∄ 可行 μ" 与 **MFC6★ 阈值 ∝ 1/a²**，零 sorry 零 warning，挂入聚合根）+
+数值 `scripts/verify_moire_field.py`（M1–M8 → `artifacts/moirefield/`，4 图，挂入 make test
+断言 MF-M2…MF-M8）+ wiki：`theory-moire-field-ceiling.md`（结果）+ `moire-field-ceiling-plan.md`
+（计划）+ 7 条外部资料登记 `raw_sources.csv`。
+
+**诚实边界**：MFC 全是代数单调性/幂律/一次否定存在性（真但平凡）；材料 B_c2/n_s/I_c/制冷容量
+是外部实验值（取上界包络）；载流与制冷两门为量级账、未形式化；μ 主动产生 = 第二输入缺口
+（未变）；无新物理预言。
 
 ## ★ 2026-09-17 session（第十轮）：控制引力场的代数系统——基元 = 起伏能量二次型（GCA0–GCA7）
 

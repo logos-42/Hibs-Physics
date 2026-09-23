@@ -70,3 +70,10 @@ session-20260815-twistor-pair,local,ProjectionPhysics,artifact,twistor_pair_mass
 dengyu-pdf,local,leo,pdf,dengyu.pdf,../docs/dengyu.pdf,compiled,docs/wiki/,邓宇(?)空间场/辛体积可逆性原始资料
 masstozero-md,local,leo,markdown,masstozero.md,../docs/wiki/masstozero.md,compiled,docs/wiki/theory-plasma-antigravity.md,Cu/H 等离子体同位素特征矩阵 + 双流形反引力场设计原始资料
 slough2025cfr2,web,iopscience,paper,ae034d,https://iopscience.iop.org/article/10.1088/1741-4326/ae034d,compiled,docs/wiki/theory-frc-compact.md,MSNW/Helion 分段压缩 FRC CFR2: 12cm 燃烧室 7-9T→35T 压缩 G~10 (Nucl. Fusion 65 106019)
+matbg-cao2018,web,nature,paper,s41586-018-0246-5,https://www.nature.com/articles/s41586-018-0246-5,compiled,docs/wiki/theory-moire-field-ceiling.md,Cao 2018 Nature 556,43: 魔角(≈1.1°)双层石墨烯超导发现, Tc≈1.7 K
+matbg-cao2021-pauli,web,nature,paper,s41586-021-03685-y,https://www.nature.com/articles/s41586-021-03685-y,compiled,docs/wiki/theory-moire-field-ceiling.md,Cao 2021 Nature 595,526: MATTG 面内场>10T 仍超导(Pauli 违背 2-3x), MATBG 面内≈1.6T
+matbg-diezmerida2023,web,nature,paper,s41467-023-38005-7,https://www.nature.com/articles/s41467-023-38005-7,compiled,docs/wiki/theory-moire-field-ceiling.md,Diez-Merida 2023 NatCommun 14,2396: MATBG B_c2≈120 mT, theta=1.11°, 满填充 2.88e12 cm^-2
+matbg-qin2021-theory,web,aps,paper,PRL127-097001,https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.127.097001,compiled,docs/wiki/theory-moire-field-ceiling.md,Qin&MacDonald 2021 PRL 127,097001: MATBG 面内 B_c≈1.6 T (C2Mh 对称性解释 MATTG 差异)
+matbg-park2025-dynamics,web,nature,paper,s41467-025-58325-0,https://www.nature.com/articles/s41467-025-58325-0,compiled,docs/wiki/theory-moire-field-ceiling.md,Park 2025 NatCommun: MATBG 栅定义 JJ 体临界电流 250 nA + 准粒子/超流动力学
+matbg-nanolett2022-thermal,web,acs,paper,nanolett.1c04512,https://doi.org/10.1021/acs.nanolett.1c04512,compiled,docs/wiki/theory-moire-field-ceiling.md,Nano Lett 2022: MATBG Tc≈2.1 K, 最优掺杂 Hall 密度 1.96e11 cm^-2 (n_s 输入)
+rebco-senatore2024,web,iopscience,paper,ad7f95,https://iopscience.iop.org/article/10.1088/1361-6668/ad7f95/pdf,compiled,docs/wiki/theory-moire-field-ceiling.md,Senatore 2024 SUST: REBCO 非铜 Jc 1500-2000 A/mm^2 @4.2K/19T, Ic/width ~960-1220 A/cm

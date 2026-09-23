@@ -93,7 +93,8 @@ def main():
                        "scripts/verify_frc_compact.py",
                        "scripts/verify_hidden_qft.py",
                        "scripts/verify_fusion_roadmap.py",
-                       "scripts/verify_gravity_control.py"]:
+                       "scripts/verify_gravity_control.py",
+                       "scripts/verify_moire_field.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -556,6 +557,56 @@ def main():
         check("GCA6b/c 见证：部分重叠不可交换 / 嵌套吸收",
               n9["部分重叠 ⟹ 次序不同结果不同"] and n9["嵌套 ⟹ 吸收（次序无关，同结果）"])
 
+    mf = load_report("artifacts/moirefield/report.json")
+    if mf:
+        res = mf["results"]
+        m2 = res["M2_field_density"]
+        m2r = {r["key"]: r for r in m2["rows"]}
+        check("MF-M2: β≤1 撑住 n=1e20 需 B_min≈1.099 T（PF3/FC1 反解）",
+              abs(m2["B_min_design_T"] - 1.0991) < 5e-3)
+        check("MF-M2: 场源天花板 ⟹ 密度天花板 n_max(0.12T)=1.19e18 / (1.6T)=2.12e20",
+              abs(m2r["MATBG_N2_perp"]["n_max_perm3"] / 1.194e18 - 1) < 5e-3
+              and abs(m2r["MATBG_N2_par"]["n_max_perm3"] / 2.12e20 - 1) < 5e-3)
+        check("MF-M2: MATBG 面外 0.12T 下连 β≤1 都不可能（面内 1.6T 可以）",
+              m2r["MATBG_N2_perp"]["beta_impossible"]
+              and not m2r["MATBG_N2_par"]["beta_impossible"])
+        m3r = {r["key"]: r for r in res["M3_power"]["rows"]}
+        check("MF-M3: 功率 ∝ B⁴ —— MATBG 面内 1.6T ⟹ P×1e-3（体积×1000）",
+              abs(m3r["MATBG_N2_par"]["p_rel"] / 9.99e-4 - 1) < 0.02
+              and abs(m3r["MATBG_N2_par"]["V_rel_for_same_power"] / 1001.0 - 1) < 0.02)
+        check("MF-M3: MATBG 面外 0.12T ⟹ P×3.2e-8（同功率体积×3.2e7）；35T 压缩 ⟹ P×229",
+              abs(m3r["MATBG_N2_perp"]["p_rel"] / 3.16e-8 - 1) < 0.03
+              and abs(m3r["CFR2_comp"]["p_rel"] / 229.0 - 1) < 0.02)
+        m4 = res["M4_mu_window"]
+        m4r = {r["key"]: r for r in m4["rows"]}
+        check("MF-M4: FC11 地板 m_e/m_i = 2.194e-4（D-T 2.5u）",
+              abs(m4["floor_FC11"] - 2.1943e-4) < 1e-7)
+        check("MF-M4★: MATBG 面外 0.12T ⟹ X_req=4.6e-8 < 地板 ⟹ μ 窗口关闭（无解）",
+              not m4r["MATBG_N2_perp"]["feasible"]
+              and m4r["MATBG_N2_perp"]["chi_mu"] < 1e-3)
+        check("MF-M4: 面内 1.6T / MATTG 10T ⟹ 可行性裕度 1.48×（设计密度分支）",
+              m4r["MATBG_N2_par"]["feasible"] and m4r["MATTG_N3_par"]["feasible"]
+              and abs(m4["chi_mu_at_design"] - 1.476) < 0.03)
+        m5 = res["M5_death_threshold"]
+        check("MF-M5★: 死活判据 B_death(a=0.2m)=0.997 T（低于它 μ 窗口关闭）",
+              abs(m5["B_death_ref_T"] - 0.9966) < 3e-3)
+        sc = {r["a_m"]: r for r in m5["scan"]}
+        check("MF-M5: B_death ∝ 1/a（0.1m→1.99T、0.05m→3.99T ⟹ 紧凑化抬高场门槛）",
+              abs(sc[0.1]["B_death_T"] / m5["B_death_ref_T"] - 2.0) < 0.02
+              and abs(sc[0.05]["B_death_T"] / m5["B_death_ref_T"] - 4.0) < 0.03)
+        m6 = res["M6_current_gate"]
+        check("MF-M6: 载流门——REBCO 片超流密度 vs MATBG 满填充 ⟹ 1.31e4×",
+              abs(m6["ns_gap_full"] / 1.31e4 - 1) < 0.05)
+        check("MF-M6: 片电流 MATBG 2.5e-3 A/cm vs REBCO 1000 A/cm ⟹ 4.0e5×",
+              abs(m6["K_gap"] / 4.0e5 - 1) < 0.05)
+        m7 = res["M7_cryo_gate"]
+        check("MF-M7: 制冷门——ITER 冷量 75kW@4.5K vs 稀释制冷机 20mW@0.5K ⟹ 3.75e6×",
+              abs(m7["capacity_gap_05K"] / 3.75e6 - 1) < 0.02)
+        check("MF-M7: Carnot 因子 4.5K→0.5K 恶化 9.1×",
+              abs(m7["carnot_ratio"] - 9.1) < 0.2)
+        check("MF-M8: 数据变化总表 7 行（面外死/面内与 N≥3 活）",
+              len(res["M8_summary"]["rows"]) == 7)
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -591,6 +642,12 @@ def main():
         "artifacts/gravitycontrol/report.json": 2_000,
         "artifacts/gravitycontrol/summary.txt": 500,
         "artifacts/gravitycontrol/fig_gravity_control.png": 30_000,
+        "artifacts/moirefield/report.json": 4_000,
+        "artifacts/moirefield/summary.txt": 800,
+        "artifacts/moirefield/fig_field_ceiling_scaling.png": 30_000,
+        "artifacts/moirefield/fig_mu_window_verdict.png": 30_000,
+        "artifacts/moirefield/fig_Bdeath_vs_size.png": 30_000,
+        "artifacts/moirefield/fig_gate_gaps.png": 30_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)
