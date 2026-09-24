@@ -24,6 +24,7 @@
 --   它把第二输入缺口从"η 是哪来的"重述为"抹平功率是哪来的"（TD18）——
 --   缺口位置移动了，缺口本身还在。无新物理预言。
 
+import Mathlib.Data.Real.Sqrt
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
@@ -164,7 +165,58 @@ theorem full_gain_iff_zero_cost (A : Finset ι) (v v₀ : ι → ℝ) (κ : ℝ)
     exact flattenProgress_flat A v v₀ h0
       ((fluctuationEnergy_eq_zero_iff A v).mpr ((flattenCost_eq_zero_iff A v κ hκ).mp h))
 
+/-! ### TD19–TD21. 接到 FRC 的窗口判定与锁定关系（手册第 4 步）
+
+μ 动力学不是孤立的：FRC 的两条已证结论直接读 μ 的**轨道**——
+FC11b（RMF 窗口存在 ⟺ m_e < m_eff，窗口关闭 ⟺ μ ≥ 1 − m_e/m_i）与
+FC5b（μ 标度因子 = 1/√(1−μ)，同时作用于 S* 与 τ_E）。
+
+本节的接法：把 μ_n 的轨道代入这两条，得到**单调性与良定义性**两个可算结论。 -/
+
+/-- ★ TD19（窗口余量单调收窄）：m_eff,n = m_i(1−μ_n) 沿轨道**严格递减**。
+    接 FC11b：RMF 窗口的余量每步都更小，**不会自行恢复**——
+    想让窗口重新打开只能靠反向控制（η < 0 或重设 μ）。 -/
+theorem rmf_margin_strictly_decreasing (m_i μ η : ℝ) (hmi : 0 < m_i)
+    (hμ : μ < 1) (hη0 : 0 < η) (hη1 : η < 1) :
+    ∀ n : ℕ, m_i * (1 - muChain μ η (n + 1)) < m_i * (1 - muChain μ η n) := by
+  intro n
+  have hlt := muChain_strict_mono μ η hμ hη0 hη1 n
+  nlinarith [hmi]
+
+/-- ★★ TD20（锁定因子良定义）：FC5b 的 μ 标度因子 1/√(1−μ_n) 在整个轨道上
+    **分母永不为零**（TD8 的直接后果）——锁定的"死点"是渐近的，不可达。 -/
+theorem mu_scaling_well_defined (μ η : ℝ) (hμ : μ < 1) (hη0 : 0 < η) (hη1 : η < 1) :
+    ∀ n : ℕ, 0 < 1 - muChain μ η n := by
+  intro n
+  have hlt := muChain_lt_one μ η hμ hη0 hη1 n
+  linarith
+
+/-- ★★ TD20b（锁定因子单调递增）：1/√(1−μ_n) 每步都更大——轨道**单调逼近**
+    S*/τ_E 锁定的发散点，但每一步都有限（TD20）。 -/
+theorem mu_scaling_strictly_increasing (μ η : ℝ) (hμ : μ < 1) (hη0 : 0 < η)
+    (hη1 : η < 1) :
+    ∀ n : ℕ,
+      1 / Real.sqrt (1 - muChain μ η (n + 1)) > 1 / Real.sqrt (1 - muChain μ η n) := by
+  intro n
+  have hpos_n : 0 < 1 - muChain μ η n := mu_scaling_well_defined μ η hμ hη0 hη1 n
+  have hpos_n1 : 0 < 1 - muChain μ η (n + 1) :=
+    mu_scaling_well_defined μ η hμ hη0 hη1 (n + 1)
+  have hlt : 1 - muChain μ η (n + 1) < 1 - muChain μ η n := by
+    have := muChain_strict_mono μ η hμ hη0 hη1 n
+    linarith
+  have hsqrt : Real.sqrt (1 - muChain μ η (n + 1)) < Real.sqrt (1 - muChain μ η n) :=
+    Real.sqrt_lt_sqrt (le_of_lt hpos_n1) hlt
+  exact one_div_lt_one_div_of_lt (Real.sqrt_pos.2 hpos_n1) hsqrt
+
+/-- ★★ TD21（窗口关闭步的可算判据）：把闭式解代入 FC11b 阈值——
+    `1 − m_e/m_i ≤ μ_n  ⟺  (1−η)^n (1−μ₀) ≤ m_e/m_i`。
+    右边是纯代数式：给定 η 与初始 μ₀ 就能算**第几步窗口关闭**（工程侧可用）。 -/
+theorem rmf_window_threshold_iff (m_e m_i μ η : ℝ) (n : ℕ) :
+    (1 - m_e / m_i ≤ muChain μ η n ↔ (1 - η) ^ n * (1 - μ) ≤ m_e / m_i) := by
+  rw [muChain_closed_form]
+  constructor <;> intro h <;> linarith
+
 def MU_FIELD_COUPLING_SCOPE : String :=
-  "μ↔场控制桥: 增益=抹平进展 η=1−Q_A(v)/Q_A(v₀)(TD11) + 抹平一次⟹η=1⟹μ一步到1(TD12,复用GCA2c) + Q与η反向(TD13) + 顺序差=(1−μ)(1−η_before)(TD15/TD16) + 不可交换见证:先抹平后更新μ'=1 vs 先更新后抹平μ'=0(Fin2,TD17) + 满增益⟺零代价⟺区域已平坦(TD18); GCA6(两抹平算子)与本模块(抹平vs μ更新)是两种不同来源的不可交换; 缺口移动(不是消失): η物理来源⟹抹平功率来源; 无新物理预言"
+  "μ↔场控制桥: 增益=抹平进展 η=1−Q_A(v)/Q_A(v₀)(TD11) + 抹平一次⟹η=1⟹μ一步到1(TD12,复用GCA2c) + Q与η反向(TD13) + 顺序差=(1−μ)(1−η_before)(TD15/TD16) + 不可交换见证:先抹平后更新μ'=1 vs 先更新后抹平μ'=0(Fin2,TD17) + 满增益⟺零代价⟺区域已平坦(TD18) + FRC接缝(TD19 窗口余量单调收窄/TD20 锁定因子良定义+单调增/TD21 窗口关闭步判据); GCA6(两抹平算子)与本模块(抹平vs μ更新)是两种不同来源的不可交换; 缺口移动(不是消失): η物理来源⟹抹平功率来源; 无新物理预言"
 
 end ProjectionPhysics.MuFieldCoupling

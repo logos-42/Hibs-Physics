@@ -12,7 +12,7 @@ status: current
 
 # 当前状态
 
-## ★ 2026-09-24 session（第十二轮）：μ 动力学——状态方程 · 场控制桥 · 顺序不可交换（TD1–TD18）
+## ★ 2026-09-24 session（第十二轮）：μ 动力学——状态方程 · 场控制桥 · 顺序不可交换 · FRC 接缝（TD1–TD21）
 
 接行动手册（hushfusion `docs/PATH-ACTION-PLAYBOOK.md`）第 1–3 步：**把 μ 从静态参数变成
 状态变量；把 `flatten` 接进 μ 的演化；算控制顺序的交换子**。
@@ -35,8 +35,14 @@ TD13 Q 与 η 反向；**TD15/TD16 顺序差 = (1−μ)(1−η_before)——只�
 "η 是哪来的"变成"抹平功率是哪来的"（缺口仍在）。
 
 **交付**：Lean `PlasmaDynamics.lean`（④ 节）+ `MuFieldCoupling.lean`（新模块），零 sorry
-零 warning、挂入聚合根；数值 `scripts/verify_mu_dynamics.py`（N1–N14 → `artifacts/mudynamics/`，
-2×2 图）挂入 make test（断言 MUD-TD1a…TD18）；wiki `theory-mu-dynamics.md`。
+零 warning、挂入聚合根；数值 `scripts/verify_mu_dynamics.py`（N1–N15 → `artifacts/mudynamics/`，
+2×2 图）挂入 make test（断言 MUD-TD1a…TD21）；wiki `theory-mu-dynamics.md`。
+
+**④ 接 FRC（TD19–TD21，手册第 4 步）**：TD19 窗口余量 m_i(1−μ_n) 沿轨道**严格递减**
+（不自行恢复）；TD20 锁定因子 1/√(1−μ_n) **分母恒正**（良定义，TD8 的直接后果）且单调递增；
+**TD21 窗口关闭步判据** 1−m_e/m_i ≤ μ_n ⟺ (1−η)^n(1−μ₀) ≤ m_e/m_i（纯代数，工程可算）。
+数值例：η=0.05、D-T（m_e/m_i = 2.194e-4）**第 165 步窗口关闭** ⟹ **μ 的工作区间有上界**
+——"μ 的主动产生"除了"怎么产生"还要回答"**在哪一步停**"。
 
 **诚实边界**：状态方程与"η=抹平进展"都是**模型选择**，不是物理定律；全部定理 = 代数恒等 +
 序关系 + 有限维见证（真但平凡）；收敛域（η vs 2）在数值层，Lean 侧只形式化超调边界（η vs 1）；

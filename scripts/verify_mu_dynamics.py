@@ -292,6 +292,35 @@ def main():
     check("TD15/TD16: 顺序差 = (1−μ)(1−η_before)", N14["顺序差 = (1−μ)(1−η_before)"])
     check("TD18: 满增益 ⟺ 零代价 ⟺ 区域已平坦（缺口移动不消失）", N14["满增益 ⟺ 零代价（200 场）"])
 
+    # ── N15 接 FRC：窗口余量 / 锁定因子 / 窗口关闭步判据 ─────────────────────
+    m_i = 2.5
+    m_e_over_m_i = 2.194e-4                      # D-T（FrcCompact FC11 数值）
+    m_e = m_i * m_e_over_m_i
+    traj2 = mu_chain(0.0, 0.05, 400)
+    margin = m_i * (1.0 - traj2)
+    margin_dec = bool(np.all(np.diff(margin) < 0.0))
+    scale = 1.0 / np.sqrt(1.0 - traj2)
+    scale_well = bool(np.all(1.0 - traj2 > 0.0))
+    scale_inc = bool(np.all(np.diff(scale) > 0.0))
+    thr = 1.0 - m_e / m_i
+    _idx = np.flatnonzero(traj2 >= thr)
+    close_step = int(_idx[0]) if _idx.size else -1
+    kk = np.arange(traj2.size)
+    lhs = (1.0 - 0.05) ** kk * (1.0 - 0.0)
+    thr_ok = bool(np.array_equal(lhs <= m_e / m_i, traj2 >= thr))
+    N15 = {"窗口余量 m_i(1−μ_n) 严格递减": margin_dec,
+           "锁定因子 1/√(1−μ_n) 分母恒正（良定义）": scale_well,
+           "锁定因子严格递增（逼近发散点）": scale_inc,
+           "D-T 窗口关闭步 n*（阈值 μ ≥ 0.99978）": close_step,
+           "总步数（400 步内恒 μ_n<1）": int(traj2.size),
+           "阈值判据等价（逐点，闭式 ⟺ FC11b 阈值）": thr_ok}
+    results["N15_frc_interface"] = N15
+    check("TD19: RMF 窗口余量沿轨道严格收窄（不自行恢复）", margin_dec)
+    check("TD20: 锁定因子良定义 + 单调递增（逼近但不达发散点）", scale_well and scale_inc,
+          f"n*={close_step}")
+    check("TD21: 窗口关闭步判据（闭式解 ⟺ FC11b 阈值，逐点等价）", thr_ok,
+          f"n*={close_step}（η=0.05, D-T）")
+
     # ── 图 ──────────────────────────────────────────────────────────────────
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
     fig.suptitle("μ 动力学：状态方程 μ -> μ + η(1-μ) ／ 增益 = 抹平进展 ／ 顺序改变 μ 的演化", fontsize=13)
@@ -343,7 +372,7 @@ def main():
     plt.close(fig)
 
     # ── 落盘 ────────────────────────────────────────────────────────────────
-    report = {"title": "μ 动力学（TD1–TD18）数值验证",
+    report = {"title": "μ 动力学（TD1–TD21）数值验证",
               "date": str(date.today()),
               "state_equation": "μ(t+Δt) = μ(t) + η·(1 − μ(t))",
               "closed_form": "μ_n = 1 − (1 − η)^n (1 − μ₀)",
@@ -352,12 +381,13 @@ def main():
               "honest": ["状态方程是模型选择，不是物理定律",
                          "η 的物理来源仍是第二输入缺口（缺口从 'η 是哪来的' 移到 '抹平功率是哪来的'）",
                          "收敛域分析（η vs 2）在数值层给出；Lean 侧只形式化超调边界（η vs 1）",
+                         "FRC 接缝（TD19–TD21）是把 μ 轨道代入 FC11b/FC5b 的单调性/良定义性结论，不是新的物理机制",
                          "全部为代数/序关系/有限维见证；无新物理预言"]}
     with open(os.path.join(OUT, "report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2, default=float)
 
     lines = ["=" * 70,
-             "μ 动力学 —— 数值验证摘要（TD1–TD18）",
+             "μ 动力学 —— 数值验证摘要（TD1–TD21）",
              "=" * 70,
              "① 状态方程：μ ↦ μ + η(1−μ)   ② 桥：η = 抹平进展   ③ 顺序：改变 μ 演化",
              f"N1  有界不超调（441 网格点）        : 越界 {max(worst_lo, worst_hi):.1e}",
@@ -370,11 +400,13 @@ def main():
              f"N8  顺序不可交换（先抹平 1 vs 先更新 0） : {after:.3f} vs {before:.3f}",
              f"N9  顺序差 = (1−μ)(1−η_before)      : {gap_ok}",
              f"N10 满增益 ⟺ 零代价 ⟺ 区域已平坦    : {cost_ok}",
+             f"N11 接 FRC（TD19–TD21）             : 余量↓/锁定因子良定义↑/关闭步 n*={close_step}（η=0.05, D-T）",
              "-" * 70,
              "结论①：最小动力学下 μ 无限逼近 1 但有限步走不到 1 ⟹ 质量永不归零（TM2b 的动力学版）。",
              "结论②：增益由抹平进展给出（η = 1 − Q/Q₀）——GravityControl 的控制语言接进了 μ 的演化。",
              "结论③：先抹平再更新 μ（μ'=1）≠ 先更新再抹平（μ'=0）——控制顺序进入语义。",
              "结论④：满增益 ⟺ 零代价 ⟺ 区域已平坦（TD18）——缺口移动了：从 'η 是哪来的' 变成 '抹平功率是哪来的'。",
+             f"结论⑤：接 FRC（TD19–TD21）——窗口余量单调收窄、锁定因子良定义且单调增；D-T 下 η=0.05 第 {close_step} 步窗口关闭（μ 工作区间有上界）。",
              "诚实：状态方程是模型选择；η 物理来源 = 第二输入缺口未变；无新物理预言。"]
     summary = "\n".join(lines)
     print(summary)
