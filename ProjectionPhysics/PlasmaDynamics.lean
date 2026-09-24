@@ -14,6 +14,11 @@
 --    τ 比 = 质量比（Cu 1.15e5·τ₀ ≫ H 1836·τ₀ ⟹ Cu 离子温度与电子温度
 --    长时间解耦——三温度非平衡）；弛豫速率 1/τ 反比；温度差指数衰减
 --    且 τ 大衰减慢。
+-- ④ μ 动力学（2026-09-24，接行动手册第 1 步）：把 μ 从**静态参数**升级成
+--    **状态变量**。TM1–TM4 一直在问"若 μ 如此，则质量那样"，缺的是 μ 自己的
+--    演化方程。最小形式取饱和增长 μ ↦ μ + η(1−μ)：单调、有界、μ=1 是不动点但
+--    在 0<η<1 时**有限步不可达**（TD8 ⟹ 质量永不归零，TM2b 的动力学版）。
+--    诚实边界：给的是状态更新的**代数结构**，η 的物理来源仍是第二输入缺口。
 --
 -- 与既有主线的精确接轨：
 --   · 捕获环（MassCancellation AMC6–AMC7：保守势回绕和=0 + 切向流无径向逃逸）
@@ -222,8 +227,116 @@ theorem decay_slower_for_larger_q (ΔT₀ q₁ q₂ : ℝ) (hΔ : 0 < ΔT₀) (h
     pow_lt_pow_left₀ h hq₁ (ne_of_gt (lt_of_lt_of_le zero_lt_one ht))
   exact mul_lt_mul_of_pos_left hpow hΔ
 
+/-! ### ④ μ 动力学：把 μ 从静态参数升级成状态变量（TD1–TD10）
+
+TM1–TM4 把 μ 当作**输入参数**用（"若 μ 如此，则质量那样"）。本节补上缺失的
+另一半：**μ 自己的演化方程**。最小形式取**饱和增长**：
+
+    μ(t+Δt) = μ(t) + η·(1 − μ(t))          （η = 单步控制增益，0 < η ≤ 1）
+
+三条理由让它成为最小候选（这是**模型选择**，不是物理定律）：
+  (i) 单调不超调——μ 只增不减且不越过 1（对应 TM1"持续变化但有界"）；
+  (ii) μ = 1 是不动点；0 < η < 1 时**有限步不可达**（对应 TM2b"μ≠1 必有正质量"
+       ——把"接近 1 只能接近零质量"从静态判据升级成动力学结论，见 TD10）；
+  (iii) 增量 ∝ 剩余容量 (1−μ)——饱和增长，无需人为截断。
+
+诚实边界：本节给的是状态更新的**代数结构**，不是 η 的物理来源。
+"控制功率从哪来"（第二输入缺口）未变；η 的取值链（场、几何、能量账本）
+未建模，η 在本节里是自由参数。 -/
+
+/-- ★ TD1（状态更新，最小形式）：μ ↦ μ + η(1 − μ)。 -/
+def muStep (μ η : ℝ) : ℝ := μ + η * (1 - μ)
+
+/-- TD1a：有界性——μ ∈ [0,1] 且 η ∈ [0,1] ⟹ 更新后仍在 [0,1]（不超调）。 -/
+theorem muStep_bounded (μ η : ℝ) (hμ0 : 0 ≤ μ) (hμ1 : μ ≤ 1)
+    (hη0 : 0 ≤ η) (hη1 : η ≤ 1) :
+    0 ≤ muStep μ η ∧ muStep μ η ≤ 1 := by
+  unfold muStep
+  constructor
+  · nlinarith
+  · nlinarith [mul_nonneg (sub_nonneg.mpr hμ1) (sub_nonneg.mpr hη1)]
+
+/-- TD2★：严格推进——μ < 1 且 η > 0 ⟹ μ 严格增大（TM1 的"持续变化"）。 -/
+theorem muStep_strict_mono (μ η : ℝ) (hμ : μ < 1) (hη : 0 < η) :
+    μ < muStep μ η := by
+  unfold muStep
+  nlinarith [mul_pos hη (sub_pos.mpr hμ)]
+
+/-- ★★ TD3：μ = 1 一步不可达——0 < η < 1 且 μ < 1 ⟹ 更新后严格小于 1。
+    TM2b 的动力学对应：任何有限增益的一步都够不到满强度。 -/
+theorem muStep_lt_one (μ η : ℝ) (hμ : μ < 1) (_hη0 : 0 < η) (hη1 : η < 1) :
+    muStep μ η < 1 := by
+  unfold muStep
+  nlinarith [mul_pos (sub_pos.mpr hμ) (sub_pos.mpr hη1)]
+
+/-- TD4：μ = 1 是不动点（已达成的状态保持不动）。 -/
+theorem muStep_fixed_one (η : ℝ) : muStep 1 η = 1 := by
+  unfold muStep
+  ring
+
+/-- TD5：满增益 η = 1 ⟹ 一步到 1（与 TD3 对照：有限增益永远差一步）。 -/
+theorem muStep_full_gain (μ : ℝ) : muStep μ 1 = 1 := by
+  unfold muStep
+  ring
+
+/-- ★ TD3b：η > 1 超调——增益超过 1 时一步越过 1。
+    与 TD5（η = 1 恰好到 1）合起来给出完整判据：
+    **0 ≤ η ≤ 1 不超调，η > 1 超调**（稳定区边界 = 1）。 -/
+theorem muStep_overshoot_of_gain_gt_one (μ η : ℝ) (hμ : μ < 1) (hη : 1 < η) :
+    1 < muStep μ η := by
+  unfold muStep
+  nlinarith [mul_pos (sub_pos.mpr hμ) (sub_pos.mpr hη)]
+
+/-- ★ TD6：n 步迭代（状态方程的轨道）。 -/
+def muChain (μ η : ℝ) : ℕ → ℝ
+  | 0 => μ
+  | n + 1 => muStep (muChain μ η n) η
+
+/-- ★★ TD7（闭式解）：μ_n = 1 − (1 − η)^n (1 − μ)。
+    几何收敛：每步都按 (1−η) 的比例吃掉剩余容量。 -/
+theorem muChain_closed_form (μ η : ℝ) : ∀ n : ℕ,
+    muChain μ η n = 1 - (1 - η) ^ n * (1 - μ) := by
+  intro n
+  induction n with
+  | zero => simp [muChain]
+  | succ k ih =>
+    show muStep (muChain μ η k) η = 1 - (1 - η) ^ (k + 1) * (1 - μ)
+    rw [ih, pow_succ]
+    unfold muStep
+    ring
+
+/-- ★★★ TD8（有限步不可达，本轮落点）：0 ≤ μ < 1、0 < η < 1 ⟹ 任意有限步后
+    μ_n < 1。这把 TM2b"μ≠1 必有正质量"从**静态判据**升级成**动力学结论**：
+    最小动力学下的 μ 无限逼近 1，但走不到 1。 -/
+theorem muChain_lt_one (μ η : ℝ) (hμ : μ < 1) (_hη0 : 0 < η) (hη1 : η < 1) :
+    ∀ n : ℕ, muChain μ η n < 1 := by
+  intro n
+  rw [muChain_closed_form]
+  have h1μ : 0 < 1 - μ := by linarith
+  have hηpos : 0 < 1 - η := by linarith
+  have hpow : 0 < (1 - η) ^ n := pow_pos hηpos n
+  nlinarith [mul_pos hpow h1μ]
+
+/-- ★ TD9：轨道单调递增（每一步都严格更大）。 -/
+theorem muChain_strict_mono (μ η : ℝ) (hμ : μ < 1) (hη0 : 0 < η) (hη1 : η < 1) :
+    ∀ n : ℕ, muChain μ η n < muChain μ η (n + 1) := by
+  intro n
+  have hlt : muChain μ η n < 1 := muChain_lt_one μ η hμ hη0 hη1 n
+  show muChain μ η n < muStep (muChain μ η n) η
+  exact muStep_strict_mono _ _ hlt hη0
+
+/-- ★★★ TD10（与质量消除判据接——本节落点）：μ 沿最小动力学无限逼近 1，
+    但任意有限步 μ_n < 1 ⟹ **质量永不归零**（s ≠ 0）。
+    "接近 μ=1"只能给出"接近零质量"——TM2b 的动力学版本。 -/
+theorem muChain_mass_never_zero (s μ η : ℝ) (hs : s ≠ 0)
+    (hμ : μ < 1) (hη0 : 0 < η) (hη1 : η < 1) :
+    ∀ n : ℕ, anchorMassSq (s * (1 - muChain μ η n)) ≠ 0 := by
+  intro n
+  have hlt : muChain μ η n < 1 := muChain_lt_one μ η hμ hη0 hη1 n
+  exact mass_positive_below_one s (muChain μ η n) hs (ne_of_lt hlt)
+
 def PLASMA_DYNAMICS_SCOPE : String :=
-  "代数骨架: 双流形几何(DR1 闭合回绕和=0/DR2 双环线性+反向抵消/DR3 螺旋边界⟺环量≠0/DR4 切向流无径向漂移/DR5 双环保守) + 时变反引力(TM1 稳定变化两步平均有界/TM2 μ=1归零但μ≠1必正质量/TM3 维持条件旋转输入≥抹平成本/TM4 能量随B²增长) + 三温度弛豫(TE1 τ=质量比×基准/TE2 弛豫比=质量比/TE3 τ单调/TE4 速率反比/TE5 慢弛豫保温差); μ产生机制=第二输入缺口, 环流MHD未建模, 无新物理预言"
+  "代数骨架: 双流形几何(DR1 闭合回绕和=0/DR2 双环线性+反向抵消/DR3 螺旋边界⟺环量≠0/DR4 切向流无径向漂移/DR5 双环保守) + 时变反引力(TM1 稳定变化两步平均有界/TM2 μ=1归零但μ≠1必正质量/TM3 维持条件旋转输入≥抹平成本/TM4 能量随B²增长) + 三温度弛豫(TE1 τ=质量比×基准/TE2 弛豫比=质量比/TE3 τ单调/TE4 速率反比/TE5 慢弛豫保温差) + μ动力学(TD1 μ↦μ+η(1−μ)有界不超调/TD2 严格推进/TD3 μ=1一步不可达/TD5 满增益一步到/TD7 闭式 1−(1−η)^n(1−μ)/TD8 有限步不可达/TD9 单调/TD10 质量永不归零); η物理来源与μ产生机制=第二输入缺口, 环流MHD未建模, 无新物理预言"
 
 end PlasmaDynamics
 end

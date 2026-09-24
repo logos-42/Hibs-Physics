@@ -94,6 +94,7 @@ def main():
                        "scripts/verify_hidden_qft.py",
                        "scripts/verify_fusion_roadmap.py",
                        "scripts/verify_gravity_control.py",
+                       "scripts/verify_mu_dynamics.py",
                        "scripts/verify_moire_field.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -557,6 +558,31 @@ def main():
         check("GCA6b/c 见证：部分重叠不可交换 / 嵌套吸收",
               n9["部分重叠 ⟹ 次序不同结果不同"] and n9["嵌套 ⟹ 吸收（次序无关，同结果）"])
 
+    mud = load_report("artifacts/mudynamics/report.json")
+    if mud:
+        res = mud["results"]
+        check("TD1a: μ,η ∈ [0,1] ⟹ 更新后仍在 [0,1]（不超调）", res["N1_bounded"]["有界不超调"])
+        check("TD2: μ<1 且 η>0 ⟹ 严格推进（μ 增大）", res["N2_strict_mono"]["严格递增"])
+        check("TD3/TD3b: μ=1 一步不可达 / η>1 超调（稳定区 η≤1）",
+              res["N3_N4_reachable_overshoot"]["稳定区 = η ≤ 1"])
+        check("TD7: 闭式解 μ_n = 1 − (1−η)^n(1−μ₀) 与递推一致", res["N5_closed_form"]["闭式解成立"])
+        n678 = res["N6_N7_N8_never_reach"]
+        check("TD8: 有限步不可达（μ_n < 1）", n678["轨道最大值 < 1"], n678["严格性检查步数"])
+        check("TD9: 轨道单调递增", n678["单调递增"])
+        check("TD10: 质量永不归零（m_eff² > 0 始终）", n678["质量永不归零"])
+        check("TD5: 满增益 η=1 一步到 1", res["N9_full_gain"]["η=1 ⟹ μ'=1（100 点）"])
+        check("TD6: 无超调 η≤1 / 超调收敛 1<η<2 / 发散 η≥2（两临界值）",
+              res["N10_convergence_scan"]["两个临界值（1 = 无超调上界；2 = 收敛上界）"])
+        n11 = res["N11_N12_bridge"]
+        check("TD12: 抹平一次 ⟹ 增益 = 1（flatten 接入 μ 更新）", n11["抹平 ⟹ η = 1"])
+        check("TD13: 增益对起伏单调反向（Q 小 ⟹ η 大）", n11["Q 小 ⟹ η 大（单调反向，200 对）"])
+        check("TD17: 顺序不可交换（先抹平 μ'=1 vs 先更新 μ'=0）",
+              res["N13_order_witness"]["顺序改变 μ 演化"])
+        n14 = res["N14_gap_and_cost"]
+        check("TD15/TD16: 顺序差 = (1−μ)(1−η_before)", n14["顺序差 = (1−μ)(1−η_before)"])
+        check("TD18: 满增益 ⟺ 零代价 ⟺ 区域已平坦（缺口移动不消失）",
+              n14["满增益 ⟺ 零代价（200 场）"])
+
     mf = load_report("artifacts/moirefield/report.json")
     if mf:
         res = mf["results"]
@@ -642,6 +668,9 @@ def main():
         "artifacts/gravitycontrol/report.json": 2_000,
         "artifacts/gravitycontrol/summary.txt": 500,
         "artifacts/gravitycontrol/fig_gravity_control.png": 30_000,
+        "artifacts/mudynamics/report.json": 2_000,
+        "artifacts/mudynamics/summary.txt": 800,
+        "artifacts/mudynamics/fig_mu_dynamics.png": 30_000,
         "artifacts/moirefield/report.json": 4_000,
         "artifacts/moirefield/summary.txt": 800,
         "artifacts/moirefield/fig_field_ceiling_scaling.png": 30_000,

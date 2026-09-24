@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-09-23
+last_confirmed: 2026-09-24
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,36 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-09-24 session（第十二轮）：μ 动力学——状态方程 · 场控制桥 · 顺序不可交换（TD1–TD18）
+
+接行动手册（hushfusion `docs/PATH-ACTION-PLAYBOOK.md`）第 1–3 步：**把 μ 从静态参数变成
+状态变量；把 `flatten` 接进 μ 的演化；算控制顺序的交换子**。
+
+**① 状态方程**（`PlasmaDynamics.lean` 新增 ④ 节，TD1–TD10）：μ ↦ μ + η(1−μ)（饱和增长）。
+TD1a 有界不超调 / TD2 严格推进 / TD3 μ=1 一步不可达 / **TD3b η>1 超调（稳定区边界=1）** /
+TD5 η=1 一步到 1 / TD7 闭式解 μ_n = 1−(1−η)^n(1−μ) / **TD8 有限步不可达** / TD9 单调 /
+**TD10 质量永不归零**（TM2b 的动力学版）。
+数值 N10 扫出**两个临界值**：**η=1 无超调上界**、**η=2 收敛上界**——
+0≤η≤1 无超调收敛 / 1<η<2 超调但收敛 / η≥2 不收敛或发散。
+
+**② 桥**（新模块 `MuFieldCoupling.lean`，TD11–TD18）：增益不由天上掉下来，由抹平进展给出
+**η = 1 − Q_A(v)/Q_A(v₀)**。**TD12 抹平一次 ⟹ η=1 ⟹ μ 一步到 1**（复用 GCA2c）；
+TD13 Q 与 η 反向；**TD15/TD16 顺序差 = (1−μ)(1−η_before)——只来自增益的差**；
+**TD17 不可交换见证：先抹平后更新 μ'=1 vs 先更新后抹平 μ'=0（Fin 2）**；
+**TD18 满增益 ⟺ 零代价 ⟺ 区域已平坦**。
+
+**③ 结论**：非交换性**不来自抹平本身**，而来自"μ 更新读场"的**反馈耦合**——与 GCA6 的
+"两个抹平算子部分重叠"是**两种不同来源**的不可交换。第二输入缺口**移动了**：从
+"η 是哪来的"变成"抹平功率是哪来的"（缺口仍在）。
+
+**交付**：Lean `PlasmaDynamics.lean`（④ 节）+ `MuFieldCoupling.lean`（新模块），零 sorry
+零 warning、挂入聚合根；数值 `scripts/verify_mu_dynamics.py`（N1–N14 → `artifacts/mudynamics/`，
+2×2 图）挂入 make test（断言 MUD-TD1a…TD18）；wiki `theory-mu-dynamics.md`。
+
+**诚实边界**：状态方程与"η=抹平进展"都是**模型选择**，不是物理定律；全部定理 = 代数恒等 +
+序关系 + 有限维见证（真但平凡）；收敛域（η vs 2）在数值层，Lean 侧只形式化超调边界（η vs 1）；
+环流 MHD / 动理学未建模；无新物理预言。
 
 ## ★ 2026-09-23 session（第十一轮）：魔角石墨烯场源账本——场天花板 → 密度 → μ 窗口（MFC1–MFC7 + B_death）
 
