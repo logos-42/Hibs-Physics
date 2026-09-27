@@ -95,7 +95,12 @@ def main():
                        "scripts/verify_fusion_roadmap.py",
                        "scripts/verify_gravity_control.py",
                        "scripts/verify_mu_dynamics.py",
-                       "scripts/verify_moire_field.py"]:
+                       "scripts/verify_moire_field.py",
+                       "scripts/verify_device_first_principles.py",
+                       "scripts/verify_diagnostics_ladder.py",
+                       "scripts/verify_buildability.py",
+                       "scripts/verify_program_gates.py",
+                       "scripts/world_feed.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
@@ -641,6 +646,108 @@ def main():
         check("MF-M8: 数据变化总表 7 行（面外死/面内与 N≥3 活）",
               len(res["M8_summary"]["rows"]) == 7)
 
+    # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
+    dev = load_report("artifacts/device/report.json")
+    if dev:
+        a = {x["量"]: x for x in dev["D3_可锚定量"]}
+        q = a["稳态环半径上限（冷加工铜 σ_y=250MPa, t=0.5m, B=12.2T）"]
+        check("DV: 应力层最小环 R_max(12.2T, 冷加工铜, t=0.5m) = 2.111 m（PF7 反解）",
+              abs(q["值"] - 2.1107179881683646) < 1e-12 and q["原文"] == "R_max(B=12.2T) = 2.1m")
+        cap = a["紧凑装置机械门上限 B_cap（FC8 反解，σ_y=2GPa, t=1.35cm, r_s=10cm）"]
+        check("DV: FC8 机械上限 r_s=10cm（σ_y=2GPa, t=1.35cm）≈ 26.05 T",
+              abs(cap["值"] - 26.049645164097633) < 1e-9)
+        lo = a["FC12 选频带下沿 2·f_ci（B=9T）"]
+        hi = a["FC12 选频带上沿 5·f_ci（B=9T）"]
+        cl = a["装置光速响应上限 c/L（L=0.5m，脚本既有取值）"]
+        check("DV: FC12 选频带 [2,5]·f_ci(B=9T) = 110.56–276.41 MHz，完全落在 c/L = 599.58 MHz 之下",
+              abs(lo["值"] - 110.56404634988235) < 1e-9
+              and abs(hi["值"] - 276.41011587470587) < 1e-9
+              and abs(cl["值"] - 599.584916) < 1e-5 and hi["值"] < cl["值"])
+        check("DV: FC12 f_ci(B=9T) = 55.282 MHz 与 frccompact G6 行一致",
+              abs(a["RMF 离子回旋频率（B=9T, D-T, μ=0）"]["值"] - 55.28202317494117) < 1e-9)
+        check("DV: 装置线 18 个月 = 30.5 人·月、六道工序（roadmap §2.5）",
+              abs(dev["D4_装置线人·月合计"] - 30.5) < 1e-9
+              and len(dev["D4_工期锚点（装置线）"]) == 6)
+        check("DV: 反引力约束环自身几何为 [缺口]（清单非数字、不填默认值）",
+              len(dev["D5_缺口清单"]) >= 4
+              and all(isinstance(x, str) and x.strip() for x in dev["D5_缺口清单"])
+              and any("整机" in x or "包络" in x or "几何" in x
+                      for x in dev["D5_缺口清单"]))
+
+    dg = load_report("artifacts/diagnostics/report.json")
+    if dg:
+        lad = dg["G1_δ_到_μ_min_阶梯"]["1e-3/1e-4/1e-5"]
+        check("DG: δ=1e-4 ⟹ μ_min(1σ) = 9.9990e-05（R_ci 反解 μ_min = δ/(1+δ)）",
+              abs(lad["δ=1e-04"]["μ_min（1σ，roadmap §1 口径）"]
+                  - 9.999000099990002e-05) < 1e-18)
+        check("DG: 3σ 门 μ_min = 3δ/(1+3δ) = 2.9991e-04 > 1σ 门（生死门 G1 用 3σ）",
+              abs(lad["δ=1e-04"]["μ_min（3σ，G1 通过条件口径）"]
+                  - 0.00029991002699190244) < 1e-18
+              and lad["δ=1e-04"]["μ_min（3σ，G1 通过条件口径）"]
+              > lad["δ=1e-04"]["μ_min（1σ，roadmap §1 口径）"])
+        check("DG: FC11 硬天花板 μ = 1 − m_e/m_i = 0.999780568036375",
+              abs(dg["G3_与聚变级的量级差"]["FC11 天花板 μ_max"]
+                  - 0.999780568036375) < 1e-15)
+        check("DG: δ=1e-4 到 FC11 天花板差 4.00 个数量级（roadmap『差 4 个数量级』）",
+              abs(dg["G3_与聚变级的量级差"]["δ=1e-4 ⟹ 量级差 [decade]"] - 4.0) < 0.005)
+        check("DG: 生死门 G0+G1 = 15 人·月 = 1.29%（全周期 1161 人·月）",
+              dg["G4_生死门人·月依据"]["G0+G1"] == 15
+              and dg["G4_生死门人·月依据"]["判决期占比 [%]"] == 1.29
+              and dg["G4_生死门人·月依据"]["全周期人·月"] == 1161)
+
+    bd = load_report("artifacts/buildability/report.json")
+    if bd:
+        check("BD: 六道工序人·月合计 = 30.5（装置线）",
+              abs(sum(s["人·月"] for s in bd["B2_工序表"]) - 30.5) < 1e-9)
+        check("BD: 关键路径 = 除『诊断升级』外的五道，长度 18 个月（派生口径已显式）",
+              len(bd["B3_关键路径（派生）"]["序列"].split("→")) == 5
+              and bd["B3_关键路径（派生）"]["长度 [月]"] == 18)
+        check("BD: 首件 = 桌面判据台（M6, G1 生死门）；失败处置 = 停装置线",
+              "桌面判据台" in bd["B4_首件"]["首件"]
+              and "停装置线" in bd["B4_首件"]["首件失败处置（预写）"])
+        check("BD: 工件级自制/外购归属记为 [缺口]（页面无设备清单）",
+              "[缺口]" in bd["B5_自有 vs 外协"]["工件级归属"])
+
+    pg = load_report("artifacts/program/report.json")
+    if pg:
+        sch = pg["PG1_排期表（机器可读）"]
+        check("PG: 八门 Σ 人·月 = 1161 且 Σ 月数 = 60（人数 × 月数 = 人·月）",
+              sum(s["人·月"] for s in sch) == 1161
+              and sum(s["月数"] for s in sch) == 60
+              and all(s["人"] * s["月数"] == s["人·月"] for s in sch))
+        check("PG: 口径钉死——前 6 个月 1.29%（G0+G1）、前 18 个月 8.01%、M24 前 14.21%",
+              abs(pg["PG3_关键数字（与页面 §7 一致）"]["判决期 G0+G1 占全周期人力 [%]"] - 1.29) < 0.005
+              and abs(pg["PG3_关键数字（与页面 §7 一致）"]["前 18 个月（G0–G3）累计 [%]"] - 8.01) < 0.005
+              and abs(pg["PG3_关键数字（与页面 §7 一致）"]["M24 前累计 [%]"] - 14.21) < 0.005
+              and pg["PG3_关键数字（与页面 §7 一致）"]["峰值人数"] == 35)
+        check("PG: 已知取整差 1 处已登记（§3 G5 行 34.89% vs 计算 34.88%）",
+              len(pg["PG3b_取整差异登记（页面 vs 计算）"]) == 1)
+        check("PG: 措辞差异登记 10 项（页面为权威，数字全等）",
+              len(pg["PG7_措辞差异登记（页面 vs 脚本产物）"]) == 10)
+        check("PG: index.md 的 1.22% 口径差已登记",
+              len(pg["PG8_第三处口径差登记（index.md）"]) == 1)
+
+    wf = load_report("artifacts/world_feed/world_feed.json")
+    if wf:
+        check("WF: 47 条锚点、四段（状态/动作/目标/终止）齐、7 条缺口槽位",
+              len(wf["锚点"]) == 47
+              and all(wf["结论"]["按段计数"][s] > 0 for s in ("状态", "动作", "目标", "终止"))
+              and len(wf["缺口槽位"]) == 7)
+        check("WF: 每条锚点带来源文件 + 16 位 sha256（下游按 hash 去锚）",
+              all(len(x["来源文件 sha256_16"]) == 16 and x["来源文件"] for x in wf["锚点"]))
+        check("WF: 不引用本次新建的四轴产物（无循环引用）+ 缺口槽位不填默认值",
+              not any(x["来源文件"].startswith(
+                  ("artifacts/device/", "artifacts/diagnostics/",
+                   "artifacts/buildability/", "artifacts/program/"))
+                  for x in wf["锚点"])
+              and all("需要 leo 给什么" in g for g in wf["缺口槽位"]))
+        _k = {x["键名"]: x for x in wf["锚点"]}
+        _r = _k["target.device.应力层最小环上限（B=12.2T）"]
+        check("WF: 多数字引句必须显式声明取值锚（应力层最小环=2.1107m 而非引句里的 12.2）",
+              abs(float(_r["取值"]) - 2.110710) < 1e-5 and _r["单位"] == "m"
+              and _k["target.device.真空场（RMF 选频用 B，下限）"]["取值"] == "7"
+              and _k["terminate.gate.D1=0 ⟹ 停装置线"]["取值"] == "D1 = 0（M6）")
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -685,6 +792,20 @@ def main():
         "artifacts/moirefield/fig_mu_window_verdict.png": 30_000,
         "artifacts/moirefield/fig_Bdeath_vs_size.png": 30_000,
         "artifacts/moirefield/fig_gate_gaps.png": 30_000,
+        "artifacts/device/report.json": 6_000,
+        "artifacts/device/summary.txt": 800,
+        "artifacts/device/fig_device_anchors.png": 30_000,
+        "artifacts/diagnostics/report.json": 6_000,
+        "artifacts/diagnostics/summary.txt": 800,
+        "artifacts/diagnostics/fig_diagnostics_ladder.png": 30_000,
+        "artifacts/buildability/report.json": 6_000,
+        "artifacts/buildability/summary.txt": 800,
+        "artifacts/buildability/fig_buildability_gantt.png": 30_000,
+        "artifacts/program/report.json": 8_000,
+        "artifacts/program/summary.txt": 800,
+        "artifacts/program/fig_program_gates.png": 30_000,
+        "artifacts/world_feed/world_feed.json": 8_000,
+        "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
         p = os.path.join(REPO, rel)

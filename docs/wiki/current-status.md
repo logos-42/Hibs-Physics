@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-09-24
+last_confirmed: 2026-09-27
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,32 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-09-27 session（第十三轮）：硬件四轴机器可读化 + 下游（Forge μ 世界）feed
+
+把**四条硬件轴**（装置 / 诊断 / 建造-可造性 / 排期）从「写在 wiki 正文里的论述」升级为
+**可计算、可验收、可被下游读**的产物，并给下游一个**只搬运不造数**的锚点 feed。
+
+**五份新产物（每份 = 脚本 + report.json + summary.txt + 图，全部挂入 make test）**：
+
+| 轴 | 脚本 | 产物 | 核心可锚定量 |
+|---|---|---|---|
+| ① 装置 | `verify_device_first_principles.py` | `artifacts/device/` | 环几何 R_max=2.111m（PF7）/ B_cap=26.05T（FC8）/ FC12 选频带 110.6–276.4MHz vs c/L=599.6MHz（L=0.5m）/ 带内不越 c/L 的场强上限 19.52T / CFR2 锚点 12cm·7-9T→35T / 三层关键件 / 装置线 30.5 人·月 |
+| ② 诊断 | `verify_diagnostics_ladder.py` | `artifacts/diagnostics/` | δ→μ_min 阶梯（1e-3/1e-4/1e-5，1σ 与 3σ 两口径）/ FC11 天花板 0.999781 / δ=1e-4 到聚变级差 4.00 decade / 生死门 15 人·月 = 1.29% |
+| ③ 建造-可造性 | `verify_buildability.py` | `artifacts/buildability/` | 六道工序（Σ30.5 人·月）/ 关键路径 18 个月（派生口径显式）/ 首件=桌面判据台（M6，G1）/ 自有 vs 外协（工件级归属 = [缺口]） |
+| ④ 排期 | `verify_program_gates.py` | `artifacts/program/` | 八门机器可读表（门/月/人/月数/人·月/交付/通过/预写失败处置/累计占比）+ 恒等式 人数×月数=人·月、Σ=1161、累计占比逐行对 §3 表 |
+| 下游 feed | `world_feed.py` | `artifacts/world_feed/world_feed.json` | 47 条锚点（状态 9/动作 7/目标 26/终止 5）+ 源文件 16 位 sha256 + 7 条缺口槽位；只搬运不造数 |
+
+- **口径钉死**：该页正文/§7 曾打架（「前 18 个月 1.29%」），本轴断言「前 6 个月 1.29% / 前 18 个月
+  8.01% / M24 前 14.21%」且「前 18 个月 ⋯ 1.29%」的混用只允许留在 `>` 引用的改档说明行。
+- **两处上游口径差（只读不改，已登记交回 leo）**：①§3 表 G5 行 `34.89%`（应为 34.88%，405/1161 =
+  34.884%）；②`index.md` 描述行「判决期只占 1.22% 人力」（应为 1.29%）。另有页面 vs
+  `verify_fusion_roadmap.py` 门表的**措辞差异 10 项**（数字全等）登记在案。
+- **缺口（不编）**：反引力约束环自身几何/RMF 线圈工程参数/双流环几何/设备清单逐项与交期/判据台
+  绝对规格/δ 实际可达值/3σ 统计口径/零假设基准实现/η 物理来源/μ₀ 与抹平代价常数，合并 10 条，
+  全部写 `[缺口]` 并列在 `hardware-axes.md` 第 6 节。
+- **纪律自检**：金额不入库（产物做货币字样扫描）；图纸文字不含「缺口/未给出」；每条数值断言做过
+  变异测试（改数→红、改回→绿）。wiki：`hardware-axes.md`（entity_type: protocol）。
 
 ## ★ 2026-09-26：判决漏斗对外公开（站点侧）+ 修正本页 1.29% 口径
 

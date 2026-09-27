@@ -55,6 +55,7 @@
 - [theory-frc-compact.md](./theory-frc-compact.md) — FRC 迭代版紧凑装置 10cm 可行性转折报告（FC1–FC10）：β≈1 功率×400 + 高 n 劳森 τ 需求降 3 量级 + μ≈0.999 够 + 现实锚点 CFR2（Slough 2025：12cm 燃烧室 7-9T→35T 压缩 G~10）+ FC5★ 锁定定理（S*/τ_E 与 m,B 无关 ⟹ μ 改善输运必同因子恶化稳定性）+ FC10★ 唯一不变量 Θ=B²/m_eff（固定 S* 预算 ⟹ 增益∝m_eff→0）
 - [theory-antigravity-confinement.md](./theory-antigravity-confinement.md) — 反引力约束稳态自维持聚变环（装置设计）：时变引力场 μ(t) 替代 FRC 分段压缩，双流环 + RMF 时变场源，μ 工作区间 0<μ<0.99978
 - [fusion-program-roadmap.md](./fusion-program-roadmap.md) — 可控核聚变五年计划（判决漏斗）：3 判决量（D1 μ 回旋频移签名 / D2 Λ 锁定比 / D3 k 功率标度指数）+ 8 道门 + μ 数量级阶梯（每年一个数量级）+ 团队编成 + 预写失败处置；判决期只占 1.22% 人力
+- [hardware-axes.md](./hardware-axes.md) — 硬件四轴（装置 / 诊断 / 建造-可造性 / 排期）机器可读化：可锚定量（环几何 2.111m / 线圈 15.85–26.05T / FC12 选频带 110.6–276.4MHz vs c/L=599.6MHz / δ→μ_min 阶梯 1e-3…1e-5 / 八门 Σ=1161 人·月）+ 四份验收脚本产物（`artifacts/device|diagnostics|buildability|program`）+ 只搬运不造数的下游 feed（`artifacts/world_feed/world_feed.json`，47 条锚点）+ 缺口清单（需 leo 给的 10 项）
 - [mass-to-zero.md](./masstozero.md) — 铜-氢等离子体同位素特征矩阵（q=Z²/√m 锚定权重，PA/DR/TE 的源材料，Cu:H=106:1）
 - [theory-hidden-qft.md](./theory-hidden-qft.md) — 隐数坐标量子场论（HQ1–HQ6，接 RiemannHIBS）：真空=临界叶 r=√e 相位随机模式 + 涨落超临界⟹极化相变（Ising 型，数值 0.00→0.83）+ 相干能量 E=−J|Σexp(iθ)|²/N≤0 + 能量账本闭合（释放=耦合减少，非净产出）
 - [theory-gravity-control-algebra.md](./theory-gravity-control-algebra.md) — 控制引力场的代数系统（GCA0–GCA7）：逻辑基元=起伏能量二次型，布尔=层状区域族；不交/嵌套可交换，部分重叠不可交换
