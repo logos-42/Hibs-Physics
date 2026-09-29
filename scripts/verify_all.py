@@ -102,6 +102,7 @@ def main():
                        "scripts/verify_program_gates.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/fig_ring_twist_understanding.py",
+                       "scripts/fig_twisted_ring_math.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -831,6 +832,7 @@ def main():
         "artifacts/glueball_ring_twist/report.json": 4_000,
         "artifacts/glueball_ring_twist/fig_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_understanding_ring_twist.png": 30_000,
+        "artifacts/glueball_ring_twist/fig_twisted_ring_math.png": 30_000,
         "artifacts/moirefield/report.json": 4_000,
         "artifacts/moirefield/summary.txt": 800,
         "artifacts/moirefield/fig_field_ceiling_scaling.png": 30_000,

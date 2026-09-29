@@ -94,7 +94,10 @@ status: current
 
 - Lean：`ProjectionPhysics/Explorations/RingTwist.lean`（RT1–RT7，零 sorry 零 warning，挂聚合根 `ProjectionPhysics.lean`）
 - 数值：`scripts/verify_glueball_ring_twist.py`（RT-A/B/C → `artifacts/glueball_ring_twist/`，图 `fig_ring_twist.png`）
-- 概念图（leo 要的"图式"，助手对「环形螺旋扭转」的理解四格图）：`scripts/fig_ring_twist_understanding.py` → `artifacts/glueball_ring_twist/fig_understanding_ring_twist.png`
+- ★ 麻花几何图（由公式直接画出，leo 要的形状）：`scripts/fig_twisted_ring_math.py` → `artifacts/glueball_ring_twist/fig_twisted_ring_math.png`
+  内容：① q = 6 的扭量螺旋环（两股 s±(θ) = c(θ) ± a[cos(qθ)N + sin(qθ)B]，能数出缠绕数）② 剪开摊平 = 麻花（每 2 个交叉 = 1 圈扭转）
+  ③ 换 q = 1/2/3 ⟹ Tw = Lk = 1/2/3（扭转圈数是数出来的）④ 两股反向 ⟹ 净连接 0 ⟹ μ = 1（光子情形）⑤ 三个麻花环的集体项 ⟹ N = 3/6/7
+- 概念图（助手对「环形螺旋扭转」的**理解**四格图，非几何）：`scripts/fig_ring_twist_understanding.py` → `artifacts/glueball_ring_twist/fig_understanding_ring_twist.png`
 - 门：`make test` 里新增 **RT-A1…RT-C2 共 11 条断言**（含"7 不在对角型可达集"与"变体 II 前三个 N = {3,6,7}"两条卡死结论的断言）+ 产物完整性两条
 
 ## 6. 后续候选（按性价比）
