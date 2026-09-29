@@ -1,0 +1,407 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+胶球质量来源 = 扭量螺旋环（环扭转）验证 —— RT 系列
+
+leo (2026-09-29): 在原来的扭量数学上做**环扭转**,形成比普通螺旋线圈更扭转的
+"扭量螺旋环";环本身也带时空的变化 ⟹ 或许可以解释质量来源（胶球的 N 序列）。
+
+这一本账要回答仓库里两个**已标明的缺口**:
+  * `theory-twistor.md` TW6:质量 m = |⟨π₁,π₂⟩|（两扭量的相对方向）——缺"谁定这个方向"
+  * `artifacts/glueball/report.json`:m² = N·M₀²,N ∈ {3,6,7} 命中格点,但
+    "N 序列(3,6,7)与 M₀ 标定是假设/拟合,非第一性预言(第二输入缺口)"
+
+本脚本做三件事（都可核对,不含新物理）:
+  RT-A 扭环恒等式实测:环 + 标架 ⟹ **Lk = Tw + Wr**（Călugăreanu–White–Fuller）
+       用 Gauss 双积分直接算 Lk 与 Wr,再与给定扭转 Tw 对照。
+       顺带实测"双螺旋反向抵消"（+q 与 −q 两条 ⟹ 净 Lk = 0 ⟹ μ = 1 的光子情形）
+  RT-B 计数可达性（★ 核心）:N 若是"三个方向的独立绕数"的平方和（对角型 Σnᵢ²),
+       **7 取不到**（Legendre 三平方定理:7 = 4⁰(8·0+7) 不可表）⟹
+       要给出 N = 7 就必须有**非对角的(集体的)项** ⟹ "环扭转"不是可选项,是必需项。
+       给出最小集体规则与它给出的 {3,6,7} 实现,并列出**它同时给出的其它 N**(风险清单)。
+  RT-C 与格点/μ 的对接:比值 √3:√6:√7（只比比值,不用绝对标定）；
+       以及 μ 的连接数写法 μ = 1 − |Lk_net|/|Lk_gross| 与 FC11 地板 m_e/m_i 的
+       数量关系（把"残余连接数"变成一个可数目标）。
+
+诚实边界（与结果同时引用）:
+  - 质量 = |⟨π₁,π₂⟩| 是 Penrose 标准结果（仓库 TW6 已标注"复述"）;
+  - "扭转 → N" 是**模型选择**:本脚本只**否掉**对角模型、并给出最小集体实现,
+    **没有**导出选择规则;M₀ 仍需外部标定;
+  - Lk = Tw + Wr 是**经典定理**,本脚本是数值复核,不是新证明;
+  - 与格点只比比值（量级校验）,不构成预言。
+"""
+import json
+import math
+import os
+
+import numpy as np
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(REPO, "artifacts", "glueball_ring_twist")
+os.makedirs(OUT, exist_ok=True)
+
+ME_MI_DT = 2.194e-4          # FC11 地板（D-T）
+M0_GEV = 0.93                # 仓库口径的标定中值
+LATTICE = {"0++": (1.475, 1.75), "2++": (2.15, 2.40), "0-+": (2.30, 2.60)}
+
+report = {
+    "title": "胶球质量来源 = 扭量螺旋环（环扭转）",
+    "date": "2026-09-29",
+    "honest": ["质量=|⟨π₁,π₂⟩| 是 Penrose 标准结果（复述）",
+               "扭转→N 是模型选择:只否掉对角模型,未导出选择规则",
+               "Lk=Tw+Wr 是经典定理,本脚本是数值复核",
+               "与格点只比比值,是量级校验不是预言"],
+    "results": {},
+}
+
+print("=" * 74)
+print("胶球质量来源 = 扭量螺旋环（环扭转）· RT 系列")
+print("=" * 74)
+
+
+# ────────────────────────────── 数值工具 ──────────────────────────────
+def gauss_link(c1, c2, eps=1e-9):
+    """Gauss 双积分 = 两条闭合曲线的连接数（离散求和近似）。
+
+    Lk = 1/(4π) ∮∮ (r1−r2)·(dr1×dr2)/|r1−r2|³
+    """
+    r1, r2 = c1, c2
+    d1 = np.roll(r1, -1, axis=0) - r1
+    d2 = np.roll(r2, -1, axis=0) - r2
+    R1 = 0.5 * (r1 + np.roll(r1, -1, axis=0))
+    R2 = 0.5 * (r2 + np.roll(r2, -1, axis=0))
+    diff = R1[:, None, :] - R2[None, :, :]
+    dist = np.linalg.norm(diff, axis=2)
+    np.fill_diagonal(dist, np.inf)          # 自项去掉（离散近似惯用）
+    dist = np.maximum(dist, eps)
+    cross = np.cross(d1[:, None, :], d2[None, :, :])
+    # 符号约定:本仓取 cross(d1,d2) 并整体取负,使 q>0 的扭转给出 Lk>0
+    # (离散 Gauss 积分的定向与教科书相反,这里显式定死,免得两处互相抵消看不出来)
+    num = np.einsum("ijk,ijk->ij", diff, cross)
+    return float(np.sum(num / dist ** 3) / (4.0 * math.pi))
+
+
+def circle(n=721, R=1.0):
+    t = np.linspace(0.0, 2.0 * math.pi, n)
+    return np.stack([R * np.cos(t), R * np.sin(t), np.zeros_like(t)], axis=1)
+
+
+def ribbon_from_planar_circle(twist, n=721, R=1.0, w=1.0):
+    """平面圆 + 绕环扭转 q 圈（Tw = q）⟹ 两条边;Wr（平面）= 0 ⟹ Lk 应 ≈ q。"""
+    t = np.linspace(0.0, 2.0 * math.pi, n)
+    base = np.stack([R * np.cos(t), R * np.sin(t), np.zeros_like(t)], axis=1)
+    e_r = np.stack([np.cos(t), np.sin(t), np.zeros_like(t)], axis=1)      # 径向
+    e_z = np.stack([np.zeros_like(t), np.zeros_like(t), np.ones_like(t)], axis=1)
+    ang = twist * t
+    m = np.cos(ang)[:, None] * e_r + np.sin(ang)[:, None] * e_z          # 标架
+    edge1 = base + 0.5 * w * m
+    edge2 = base - 0.5 * w * m
+    return base, edge1, edge2
+
+
+def torus_knot(p, q, n=1201, R1=1.0, R2=0.35):
+    t = np.linspace(0.0, 2.0 * math.pi, n)
+    r = R1 + R2 * np.cos(q * t)
+    return np.stack([r * np.cos(p * t), r * np.sin(p * t), R2 * np.sin(q * t)], axis=1)
+
+
+def parallel_normal_frame(curve):
+    """沿曲线的近似平行标架（避免 Frenet 在拐点翻转）。"""
+    T = np.roll(curve, -1, axis=0) - np.roll(curve, 1, axis=0)
+    T /= np.linalg.norm(T, axis=1)[:, None]
+    ref = np.array([0.0, 0.0, 1.0])
+    n0 = np.cross(T[0], ref)
+    n0 /= np.linalg.norm(n0)
+    N = np.zeros_like(curve)
+    N[0] = n0
+    for i in range(1, len(curve)):
+        v = N[i - 1] - T[i] * np.dot(N[i - 1], T[i])
+        nv = np.linalg.norm(v)
+        N[i] = v / nv if nv > 1e-12 else N[i - 1]
+    B = np.cross(T, N)
+    return T, N, B
+
+
+# ─────────────────────── RT-A 扭环恒等式 Lk = Tw + Wr ───────────────────────
+print("\n【RT-A】环 + 标架:Lk = Tw + Wr（Gauss 双积分实测）")
+
+def ribbon_edges_trefoil(p, q, tw_add, n=2401, w=0.15):
+    """(p,q) 环面结 + 平行标架 + 额外扭转 tw_add 圈 ⟹ 两条边的曲线。"""
+    tk = torus_knot(p, q, n=n)
+    _T, N_, B_ = parallel_normal_frame(tk)
+    ang = tw_add * np.linspace(0.0, 2.0 * math.pi, n)
+    m = np.cos(ang)[:, None] * N_ + np.sin(ang)[:, None] * B_
+    return tk, tk + 0.5 * w * m, tk - 0.5 * w * m
+
+
+SIGN = -1.0     # Gauss 积分定向修正（见 gauss_link 里的注释）
+rows_a = []
+for q in (1, 2, 3, -2):
+    base, e1, e2 = ribbon_from_planar_circle(q)
+    Lk = SIGN * gauss_link(e1, e2)
+    Wr = SIGN * gauss_link(base, base)   # 平面圆:自拧 = 0
+    Tw = Lk - Wr
+    _, e1h, e2h = ribbon_from_planar_circle(q, n=1441)      # 收敛性:加密一倍
+    Lk_h = SIGN * gauss_link(e1h, e2h)
+    rows_a.append({"扭圈数 q": q, "Lk（两边 Gauss）": round(Lk, 4), "拐点加密后 Lk": round(Lk_h, 4),
+                   "Wr（曲线自拧）": round(Wr, 4), "Tw = Lk − Wr": round(Tw, 4),
+                   "恒等式残差": round(Tw - q, 4)})
+    print(f"   平面圆 + 扭转 q={q:+d}:Lk={Lk:+.3f}（加密 {Lk_h:+.3f}） Wr={Wr:+.3f} "
+          f"Tw=Lk−Wr={Tw:+.3f}（应 = {q:+d},残差 {Tw - q:+.2e}）")
+report["results"]["RT_A_identity_planar"] = {
+    "identity": "Lk = Tw + Wr（Călugăreanu–White–Fuller）",
+    "rows": rows_a,
+    "max|残差|": max(abs(r["恒等式残差"]) for r in rows_a),
+    "note": "平面圆 Wr = 0 ⟹ Lk 应等于给定扭转圈数;残差 ~1e-3–1e-2 来自离散化"
+            "（N=721 与 1441 两档对照,加密后残差下降 ⟹ 是离散误差不是模型误差）",
+}
+
+# 非平面:三叶结（trefoil = (2,3) 环面结）Wr ≠ 0
+tk = torus_knot(2, 3, n=2401)
+tk_h = torus_knot(2, 3, n=4801)
+Wr_tk = SIGN * gauss_link(tk, tk)
+T, N_, B_ = parallel_normal_frame(tk)
+rows_b = []
+lk_list = []
+for tw_add in (0.0, -1.0, -2.0):     # 取负 = 与本仓 Lk 定向一致的手性（⟹ ΔLk = +1/圈）
+    m = np.zeros_like(tk)
+    ang = tw_add * np.linspace(0.0, 2.0 * math.pi, len(tk))
+    m = np.cos(ang)[:, None] * N_ + np.sin(ang)[:, None] * B_
+    e1 = tk + 0.5 * 0.15 * m
+    e2 = tk - 0.5 * 0.15 * m
+    Lk = SIGN * gauss_link(e1, e2)
+    lk_list.append(Lk)
+    rows_b.append({"额外扭转（圈）": tw_add, "Lk（两边 Gauss）": round(Lk, 4),
+                   "Tw = Lk − Wr": round(Lk - Wr_tk, 4)})
+    print(f"   三叶结（2,3, N=2401）Wr={Wr_tk:+.3f} + 额外扭转 {tw_add:.0f} 圈:"
+          f"Lk={Lk:+.3f} ⟹ Tw=Lk−Wr={Lk - Wr_tk:+.3f}")
+d1 = lk_list[1] - lk_list[0]
+d2 = lk_list[2] - lk_list[1]
+print(f"   ★ 干净判据:加一圈扭转 ⟹ ΔLk = {d1:+.4f} / 再加一圈 ⟹ {d2:+.4f}（应 = +1.000,"
+      f"与 Wr 无关）")
+_, e1h, e2h = ribbon_edges_trefoil(2, 3, 0.0, n=4801, w=0.15)
+Lk_h0 = SIGN * gauss_link(e1h, e2h)
+Wr_h = SIGN * gauss_link(tk_h, tk_h)
+_, e1h1, e2h1 = ribbon_edges_trefoil(2, 3, -1.0, n=4801, w=0.15)
+Lk_h1 = SIGN * gauss_link(e1h1, e2h1)
+print(f"   （分辨率对照 N=2401 vs 4801:Wr {Wr_tk:+.3f} vs {Wr_h:+.3f};"
+      f"Lk(0 圈) {lk_list[0]:+.4f} vs {Lk_h0:+.4f};ΔLk {d1:+.4f} vs {Lk_h1 - Lk_h0:+.4f}）")
+report["results"]["RT_A_identity_trefoil"] = {
+    "trefoil_Wr (N=2401)": round(Wr_tk, 4), "rows": rows_b,
+    "ΔLk 每加一圈扭转": [round(d1, 4), round(d2, 4)],
+    "分辨率对照": {"Wr N=2401": round(Wr_tk, 4), "Wr N=4801": round(Wr_h, 4),
+                   "Lk(0圈) N=2401": round(lk_list[0], 4), "Lk(0圈) N=4801": round(Lk_h0, 4),
+                   "ΔLk N=2401": round(d1, 4), "ΔLk N=4801": round(Lk_h1 - Lk_h0, 4)},
+    "note": "非平面曲线 Wr ≠ 0（三叶结 |Wr|≈3）;最干净的判据是 ΔLk:每加一圈扭转 Lk 恰好 +1，"
+            "与 Wr 的取值无关 ⟹ 恒等式 Lk = Tw + Wr 在非平面情形同样成立。"
+            "**手性约定**:扭转方向相对曲线定向取负号时 ΔLk 才为 +1（⟹ Lk 的符号由手性决定,"
+            "这与 μ = 1 − |Lk_net|/|Lk_gross| 取绝对值是自洽的）",
+}
+
+# 双螺旋反向抵消 ⟹ μ = 1（光子情形）;同向 ⟹ μ = 0
+rows_c = []
+for qa, qb in ((1, -1), (2, -2), (1, 1)):
+    _, a1, a2 = ribbon_from_planar_circle(qa)
+    _, b1, b2 = ribbon_from_planar_circle(qb)
+    Lk_a, Lk_b = gauss_link(a1, a2), gauss_link(b1, b2)
+    gross = abs(Lk_a) + abs(Lk_b)
+    net = abs(Lk_a + Lk_b)
+    mu = 1.0 - (net / gross if gross else 0.0)
+    rows_c.append({"扭转对": [qa, qb], "Lk_a": round(Lk_a, 3), "Lk_b": round(Lk_b, 3),
+                   "μ = 1 − |Lk_net|/|Lk_gross|": round(mu, 4)})
+    print(f"   双螺旋对 ({qa:+d},{qb:+d}):Lk={Lk_a:+.3f},{Lk_b:+.3f} ⟹ μ={mu:.4f}")
+report["results"]["RT_A_double_helix_mu"] = {
+    "definition": "μ = 1 − |Lk_net| / |Lk_gross|",
+    "rows": rows_c,
+    "note": "反向对 ⟹ 净连接 0 ⟹ μ=1（仓库『双螺旋环向抵消 ⟹ 无质量』的光子情形）;"
+            "同向对 ⟹ μ=0。μ=1 需要精确抵消,而精确抵消不是连续可达的",
+}
+
+
+# ─────────────────── RT-B 计数可达性:7 逼出"集体项" ───────────────────
+print("\n【RT-B】N 的可达性:对角型（三独立绕数）拿不到 7")
+
+
+def diagonal_vals(R=6):
+    vs = {}
+    for a in range(-R, R + 1):
+        for b in range(-R, R + 1):
+            for c in range(-R, R + 1):
+                v = a * a + b * b + c * c
+                vs.setdefault(v, (a, b, c))
+    return vs
+
+
+def collective_vals(R=6, allow_triple_anywhere=True):
+    """N = Σnᵢ² + |μ̄₃|（三环集体不变量;两两连接为 0 的 Borromean 型）。
+
+    allow_triple_anywhere=True  → 变体 I:μ̄₃ 任何三元组都能取 1
+    allow_triple_anywhere=False → 变体 II:μ̄₃ 只在 max|nᵢ| ≥ 2 时允许取 1
+                                  （"要出现整体连接,必须有环被扭过两圈以上"）
+    """
+    vs = {}
+    for a in range(-R, R + 1):
+        for b in range(-R, R + 1):
+            for c in range(-R, R + 1):
+                if a == 0 or b == 0 or c == 0:
+                    continue                      # 三个方向都要在
+                base = a * a + b * b + c * c
+                allowed = (0, 1) if (allow_triple_anywhere or max(abs(a), abs(b), abs(c)) >= 2) else (0,)
+                for tri in allowed:
+                    vs.setdefault(base + tri, (a, b, c, tri))
+    return vs
+
+
+dv, cv = diagonal_vals(), collective_vals()          # cv = 变体 I
+cv2 = collective_vals(allow_triple_anywhere=False)   # 变体 II
+
+
+def first_n(d, k=3):
+    """可达值里最小的 k 个（用于对照仓库的 N 序列）。"""
+    return sorted(d)[:k]
+diag_small = sorted(v for v in dv if v <= 20)
+coll_small = sorted(cv)
+print(f"   对角型 Σnᵢ² 的可达值（≤20）:{diag_small}")
+print(f"   集体型 Σnᵢ²+|μ̄₃| 的可达值（|nᵢ|≥1, ≤20）:{[v for v in coll_small if v <= 20]}")
+print(f"   变体 II 可达值（≤20）:{[v for v in sorted(cv2) if v <= 20]}")
+print(f"   7 ∈ 对角型?{7 in dv}    7 ∈ 集体型?{7 in cv}")
+print(f"   ★ 变体 I  （μ̄₃ 任意）   前三个 N:{first_n(cv)}"
+      f"{'  ← 与仓库 {3,6,7} 一致' if first_n(cv) == [3, 6, 7] else '  ✗ 不一致'}")
+print(f"   ★ 变体 II （μ̄₃ 需被扭过两圈）前三个 N:{first_n(cv2)}"
+      f"{'  ← 与仓库 {3,6,7} 一致' if first_n(cv2) == [3, 6, 7] else '  ✗ 不一致'}")
+print(f"   变体 I 多出来的第一个态:N={first_n(cv, 6)[3] if len(first_n(cv, 6)) > 3 else None}"
+      f" ⟹ {math.sqrt(first_n(cv, 6)[3]) * M0_GEV:.3f} GeV（格点最轻的奇宇称态在 2.3–2.6 ⟹ 无此态）")
+report["results"]["RT_B_reachability"] = {
+    "对角型可达（≤20）": diag_small,
+    "变体 I（μ̄₃ 任意）前三个 N": first_n(cv),
+    "变体 II（μ̄₃ 需 max|nᵢ|≥2）前三个 N": first_n(cv2),
+    "仓库观测到的 N 序列": [3, 6, 7],
+    "集体型可达（≤20）": [v for v in coll_small if v <= 20],
+    "7 在对角型": bool(7 in dv),
+    "7 在集体型": bool(7 in cv),
+    "选中的变体": "II（μ̄₃ 需要 max|nᵢ| ≥ 2）—— 变体 I 会多出一个 1.86 GeV 的奇宇称态,"
+                  "而格点最轻的奇宇称态在 2.3–2.6 GeV ⟹ 数据选 II",
+    "对角型最小实现": {str(v): dv[v] for v in [1, 3, 6] if v in dv},
+    "集体型最小实现（变体 II）": {str(v): cv2[v] for v in [3, 6, 7] if v in cv2},
+    "定理": "Legendre 三平方定理:n 可表为三平方和 ⟺ n ≠ 4^a(8b+7);7 = 4⁰(8·0+7) ⟹ 7 不可表",
+    "note": "仓库的 0-+ 态 N=7 ⟹ 只要保留它,任何『三个独立绕数』的模型都被自己的数据否掉 "
+            "⟹ 必须引入非对角(集体/Borromean)项 —— 这正是『环扭转』的数学位置",
+}
+
+print("\n   最小集体实现（Σnᵢ²+|μ̄₃|）:")
+assign = {"0++": 3, "2++": 6, "0-+": 7}
+ladder = {}
+for state, N in assign.items():
+    impl = cv2.get(N) or cv.get(N)
+    m = math.sqrt(N) * M0_GEV
+    lo, hi = LATTICE[state]
+    ladder[state] = {"N": N, "实现 (n₁,n₂,n₃,μ̄₃)": impl, "m = √N·M₀ (GeV)": round(m, 3),
+                     "格点区间": [lo, hi], "落区间内": bool(lo <= m <= hi)}
+    print(f"     {state}: N={N} 实现={impl} ⟹ m={m:.3f} GeV  格点 {lo}–{hi}  ⟹ {lo <= m <= hi}")
+report["results"]["RT_B_ladder"] = ladder
+
+
+# ───────── RT-C 比值对接 + 集体规则的"多余态"风险清单 ─────────
+print("\n【RT-C】与格点只比比值 + 集体规则给出的其它态（风险清单）")
+r63 = math.sqrt(6 / 3)
+r73 = math.sqrt(7 / 3)
+lat_21 = (LATTICE["2++"][0] / LATTICE["0++"][1], LATTICE["2++"][1] / LATTICE["0++"][0])
+lat_31 = (LATTICE["0-+"][0] / LATTICE["0++"][1], LATTICE["0-+"][1] / LATTICE["0++"][0])
+print(f"   √(6/3) = {r63:.4f}（格点 2++/0++ 区间 {lat_21[0]:.3f}–{lat_21[1]:.3f}）")
+print(f"   √(7/3) = {r73:.4f}（格点 0-+/0++ 区间 {lat_31[0]:.3f}–{lat_31[1]:.3f}）")
+
+extra = []
+for N in [v for v in sorted(cv2) if 3 < v <= 19]:
+    impl = cv2[N]
+    extra.append({"N": N, "实现": impl, "m = √N·M₀": round(math.sqrt(N) * M0_GEV, 3),
+                  "状态": "已被仓库占用" if N in assign.values() else "未指定 J^PC"})
+    print(f"   N={N:2d} 实现={impl} ⟹ {math.sqrt(N) * M0_GEV:.3f} GeV")
+report["results"]["RT_C_ratios"] = {
+    "√(6/3)": round(r63, 4), "格点 2++/0++ 区间": [round(x, 3) for x in lat_21],
+    "√(7/3)": round(r73, 4), "格点 0-+/0++ 区间": [round(x, 3) for x in lat_31],
+    "多余态清单（风险：规则过宽）": extra,
+    "note": "集体规则能给出 3/6/7 ✓,但也给出 4/5/9/11… ⟹ 选择规则尚未导出;"
+            "把多余的 N 当作可证伪的预言,而不是当噪声滤掉",
+}
+
+# μ 与 FC11 地板的连接数读法
+G_floor = 1.0 / ME_MI_DT
+report["results"]["RT_C_mu_floor_linkage"] = {
+    "FC11 地板 m_e/m_i": ME_MI_DT,
+    "1/(m_e/m_i)": round(G_floor, 2),
+    "读法": "若净残余连接数 = 1,则毛连接数 G ≈ 1/(m_e/m_i) ≈ 4558",
+    "note": "μ = 1 − |Lk_net|/|Lk_gross| ⟹ 地板 m_e/m_i 等价于『残余/毛 ≈ 2.19e-4』;"
+            "这是一个可数目标(不是新物理结论),也是 μ 与 N 用同一个扭转角时的过度决定检验点",
+}
+print(f"\n   FC11 地板 {ME_MI_DT:.3e} ⟹ 若净残余 = 1 个连接单位,毛连接数 ≈ {G_floor:.0f}")
+
+# ────────────────────────────── 图 ──────────────────────────────
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+
+# 中文字体（与仓库其它绘图脚本同一套:先 PingFang 再 Hiragino）
+for _fp in ("/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/Hiragino Sans GB.ttc"):
+    if os.path.exists(_fp):
+        fm.fontManager.addfont(_fp)
+        plt.rcParams["font.sans-serif"] = [fm.FontProperties(fname=_fp).get_name()]
+        break
+plt.rcParams["axes.unicode_minus"] = False
+
+fig = plt.figure(figsize=(15, 4.6))
+ax1 = fig.add_subplot(1, 3, 1, projection="3d")
+base, e1, e2 = ribbon_from_planar_circle(3, n=361)
+ax1.plot(base[:, 0], base[:, 1], base[:, 2], "k--", lw=1, label="环轴（基础曲线）")
+ax1.plot(e1[:, 0], e1[:, 1], e1[:, 2], "#c0392b", lw=1.6, label="边 1（螺旋）")
+ax1.plot(e2[:, 0], e2[:, 1], e2[:, 2], "#2471a3", lw=1.6, label="边 2（反向螺旋）")
+ax1.set_title("RT-A:环 + 标架 → Lk = Tw + Wr\n(Tw=3, Wr=0 → Lk=3)", fontsize=10)
+ax1.legend(fontsize=7, loc="upper right")
+ax1.set_axis_off()
+
+ax2 = fig.add_subplot(1, 3, 2)
+vals = sorted(set(list(dv.keys()) + list(cv.keys())))
+ax2.scatter([v for v in diag_small], [1.0] * len(diag_small), c="#2471a3", s=28,
+            label="对角型 Σn_i²（三独立绕数）")
+ax2.scatter([v for v in coll_small if v <= 20], [0.0] * len([v for v in coll_small if v <= 20]),
+            c="#c0392b", s=28, label="集体型 Σn_i²+|μ̄₃|（三环整体）")
+ax2.axvline(7, color="k", ls=":", lw=1)
+ax2.annotate("N=7 对角型拿不到\n(Legendre 三平方定理)", xy=(7, 0.5), xytext=(8.5, 0.55),
+             fontsize=8, arrowprops=dict(arrowstyle="->", lw=0.8))
+ax2.set_yticks([0, 1])
+ax2.set_yticklabels(["集体", "对角"], fontsize=9)
+ax2.set_xlabel("N（质量² 的条数因子）")
+ax2.set_title("RT-B:N 的可达值\n(仓库 0-+ 的 N=7 逼出集体项)", fontsize=10)
+ax2.legend(fontsize=7, loc="lower right")
+ax2.grid(alpha=0.25)
+
+ax3 = fig.add_subplot(1, 3, 3)
+Ns = [3, 6, 7]
+ms = [math.sqrt(N) * M0_GEV for N in Ns]
+for i, st in enumerate(["0++", "2++", "0-+"]):
+    lo, hi = LATTICE[st]
+    ax3.fill_betweenx([i - 0.3, i + 0.3], lo, hi, color="#95a5a6", alpha=0.45)
+    ax3.plot([ms[i]], [i], "o", color="#c0392b", ms=8)
+    ax3.text(ms[i] + 0.03, i, f"{st}\nN={Ns[i]}", fontsize=8, va="center")
+ax3.set_yticks([])
+ax3.set_xlabel("m = √N·M₀ (GeV),M₀=0.93")
+ax3.set_title("RT-C:与格点只比比值\n(灰带 = 格点观测区间)", fontsize=10)
+ax3.grid(alpha=0.25, axis="x")
+
+plt.tight_layout()
+fig_path = os.path.join(OUT, "fig_ring_twist.png")
+plt.savefig(fig_path, dpi=130)
+plt.close()
+
+with open(os.path.join(OUT, "report.json"), "w", encoding="utf-8") as f:
+    json.dump(report, f, ensure_ascii=False, indent=2)
+
+print("\n" + "-" * 74)
+print(f"图 → {fig_path}")
+print(f"报告 → {os.path.join(OUT, 'report.json')}")
+print("RT 结论:① Lk = Tw + Wr 数值复核成立（平面残差 ~1e-3–1e-2,加密后下降 ⟹ 离散误差;"
+      "非平面用 ΔLk=+1/圈 这条与 Wr 无关的判据）;"
+      "② 7 ∉ 三平方和 ⟹ 对角模型被仓库自己的 N=7 否掉 ⟹ 必须集体项;"
+      "③ 比值 √3:√6:√7 落在格点区间（量级校验）;"
+      "④ 变体 II 仍给出 9/10/11/12… 这些多余态 ⟹ 选择规则仍未导出（诚实缺口）。")

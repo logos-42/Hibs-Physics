@@ -59,6 +59,7 @@
 - [mass-to-zero.md](./masstozero.md) — 铜-氢等离子体同位素特征矩阵（q=Z²/√m 锚定权重，PA/DR/TE 的源材料，Cu:H=106:1）
 - [theory-hidden-qft.md](./theory-hidden-qft.md) — 隐数坐标量子场论（HQ1–HQ6，接 RiemannHIBS）：真空=临界叶 r=√e 相位随机模式 + 涨落超临界⟹极化相变（Ising 型，数值 0.00→0.83）+ 相干能量 E=−J|Σexp(iθ)|²/N≤0 + 能量账本闭合（释放=耦合减少，非净产出）
 - [theory-gravity-control-algebra.md](./theory-gravity-control-algebra.md) — 控制引力场的代数系统（GCA0–GCA7）：逻辑基元=起伏能量二次型，布尔=层状区域族；不交/嵌套可交换，部分重叠不可交换
+- [theory-glueball-ring-twist.md](./theory-glueball-ring-twist.md) — 胶球质量来源 = 扭量螺旋环（环扭转，RT1–RT7）：Q=a²+b²+c²+ab+bc+ca 可写成平方和且正定（只有零态给零）+ N 序列 {3,6,7} 的三个最小集体实现 + **对角型（三个独立绕数）取不到 N=7（Legendre 三平方定理）⟹ 集体项必需** + Lk=Tw+Wr 数值复核（平面残差 1.3e-2；非平面 ΔLk≈0.98–0.99/圈）+ 双螺旋反向 ⟹ μ=1（光子）
 - [theory-mu-dynamics.md](./theory-mu-dynamics.md) — μ 动力学（TD1–TD21）：状态方程 μ↦μ+η(1−μ)（有限步不可达 μ=1 ⟹ 质量永不归零）+ 增益=抹平进展（flatten 接入 μ 演化）+ 控制顺序不可交换（先抹平 μ'=1 vs 先更新 μ'=0）+ FRC 接缝（窗口余量单调收窄 / 窗口关闭步判据）
 - [moire-field-ceiling-plan.md](./moire-field-ceiling-plan.md) — 魔角石墨烯 × 聚变场天花板账本（**计划**：七层账本 + 判决量 + 门表 + 执行清单）
 - [theory-moire-field-ceiling.md](./theory-moire-field-ceiling.md) — 魔角石墨烯场源账本（**结果**）：场天花板 → 密度 → μ 窗口判决（MFC1–MFC7，B_death ∝ 1/a，含死证定理）

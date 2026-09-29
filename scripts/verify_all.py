@@ -100,6 +100,8 @@ def main():
                        "scripts/verify_diagnostics_ladder.py",
                        "scripts/verify_buildability.py",
                        "scripts/verify_program_gates.py",
+                       "scripts/verify_glueball_ring_twist.py",
+                       "scripts/fig_ring_twist_understanding.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -748,6 +750,46 @@ def main():
               and _k["target.device.真空场（RMF 选频用 B，下限）"]["取值"] == "7"
               and _k["terminate.gate.D1=0 ⟹ 停装置线"]["取值"] == "D1 = 0（M6）")
 
+    # 3b. 胶球环扭转（RT 系列：环扭转 → 条数 N 与 μ 的连接数写法）
+    rt = load_report("artifacts/glueball_ring_twist/report.json")
+    if rt:
+        res = rt["results"]
+        pa = res["RT_A_identity_planar"]
+        check("RT-A1: 扭环恒等式 Lk = Tw + Wr（平面圆,Wr=0 ⟹ Lk = 扭转圈数）",
+              pa["max|残差|"] < 0.05, pa["max|残差|"])
+        pt = res["RT_A_identity_trefoil"]
+        dlk = pt["ΔLk 每加一圈扭转"]
+        check("RT-A2: 加一圈扭转 ⟹ ΔLk = +1（非平面,与 Wr 无关）",
+              all(abs(d - 1.0) < 0.05 for d in dlk), dlk)
+        check("RT-A3: 非平面自拧 Wr ≠ 0（三叶结 |Wr| ≈ 3）",
+              abs(abs(pt["trefoil_Wr (N=2401)"]) - 3.0) < 0.4, pt["trefoil_Wr (N=2401)"])
+        pm = res["RT_A_double_helix_mu"]
+        mus = {tuple(r["扭转对"]): r["μ = 1 − |Lk_net|/|Lk_gross|"] for r in pm["rows"]}
+        check("RT-A4: 双螺旋反向对 ⟹ μ = 1（光子情形）/ 同向对 ⟹ μ = 0",
+              mus.get((1, -1)) == 1.0 and mus.get((2, -2)) == 1.0 and mus.get((1, 1)) == 0.0, mus)
+        pb = res["RT_B_reachability"]
+        check("RT-B1: 对角型（三个独立绕数）取不到 N = 7",
+              pb["7 在对角型"] is False and 7 not in pb["对角型可达（≤20）"])
+        check("RT-B2: 集体型（Σnᵢ²+|μ̄₃|）能取到 N = 7", pb["7 在集体型"] is True)
+        check("RT-B3: 变体 II 的最小三个 N = {3,6,7}（与仓库胶球账本一致）",
+              pb["变体 II（μ̄₃ 需 max|nᵢ|≥2）前三个 N"] == [3, 6, 7],
+              pb["变体 II（μ̄₃ 需 max|nᵢ|≥2）前三个 N"])
+        check("RT-B4: 变体 I 会多出多余态（记录:选择规则尚未导出）",
+              pb["变体 I（μ̄₃ 任意）前三个 N"] != [3, 6, 7],
+              pb["变体 I（μ̄₃ 任意）前三个 N"])
+        pl = res["RT_B_ladder"]
+        check("RT-B5: 3/6/7 三个态都落在格点观测区间内（只比比值）",
+              all(v["落区间内"] for v in pl.values()),
+              {k: v["m = √N·M₀ (GeV)"] for k, v in pl.items()})
+        pc = res["RT_C_ratios"]
+        check("RT-C1: √(6/3) 与 √(7/3) 落在格点比值区间内",
+              pc["格点 2++/0++ 区间"][0] <= pc["√(6/3)"] <= pc["格点 2++/0++ 区间"][1] and
+              pc["格点 0-+/0++ 区间"][0] <= pc["√(7/3)"] <= pc["格点 0-+/0++ 区间"][1],
+              [pc["√(6/3)"], pc["√(7/3)"]])
+        pf = res["RT_C_mu_floor_linkage"]
+        check("RT-C2: FC11 地板的连接数读法（1/(m_e/m_i) ≈ 4558）",
+              4550 < pf["1/(m_e/m_i)"] < 4570, pf["1/(m_e/m_i)"])
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -786,6 +828,9 @@ def main():
         "artifacts/mudynamics/report.json": 2_000,
         "artifacts/mudynamics/summary.txt": 800,
         "artifacts/mudynamics/fig_mu_dynamics.png": 30_000,
+        "artifacts/glueball_ring_twist/report.json": 4_000,
+        "artifacts/glueball_ring_twist/fig_ring_twist.png": 30_000,
+        "artifacts/glueball_ring_twist/fig_understanding_ring_twist.png": 30_000,
         "artifacts/moirefield/report.json": 4_000,
         "artifacts/moirefield/summary.txt": 800,
         "artifacts/moirefield/fig_field_ceiling_scaling.png": 30_000,
