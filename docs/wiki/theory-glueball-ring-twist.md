@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: low
-entity_type: exploration
+entity_type: claim
 tags: [glueball, twistor, ring-twist, helicity, mu, mass-source]
 status: current
 ---

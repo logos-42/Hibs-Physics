@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [qft, excited-state, entanglement, global, rank, twistor, space-flow, exploration]
 status: current
 ---

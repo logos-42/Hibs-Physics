@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: measurement
+entity_type: claim
 tags: [space-fold, topology, boundary-potential, measurement, fold-excess]
 status: current
 ---

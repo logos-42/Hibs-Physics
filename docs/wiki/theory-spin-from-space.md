@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [spin, clifford, three-directions, su2, double-cover, thomas-precession]
 status: current
 ---

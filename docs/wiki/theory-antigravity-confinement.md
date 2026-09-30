@@ -3,12 +3,13 @@ title: 反引力约束稳态自维持聚变环——时变引力场替代 FRC �
 source: session
 created: 2026-09-04
 audience: self
-stage: design
+stage: draft
 schema_version: 2
-confidence: engineering-estimate
-entity_type: design
+confidence: low
+entity_type: concept
 tags: [anti-gravity-confinement, steady-state-fusion, frc, time-varying-gravity, dual-ring]
 status: current
+last_confirmed: 2026-09-04
 ---
 
 # 反引力约束稳态自维持聚变环（装置设计）

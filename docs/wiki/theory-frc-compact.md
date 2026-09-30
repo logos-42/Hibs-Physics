@@ -5,9 +5,10 @@ created: 2026-09-02
 audience: self
 stage: draft
 schema_version: 2
-confidence: engineering-estimate
+confidence: low
 tags: [frc, compact-fusion, plasma, feasibility-turnaround]
 status: current
+last_confirmed: 2026-09-02
 ---
 
 # FRC 迭代版紧凑装置——10cm 可行性转折报告

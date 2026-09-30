@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [mathlib, dirac, minimal-core, gamma-matrices, chiral, anchoring]
 status: current
 ---

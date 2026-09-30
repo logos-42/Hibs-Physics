@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: hypothesis
+entity_type: claim
 tags: [fractal, cosmic-web, kbc-void, hubble-tension, space-flow]
 status: current
 ---

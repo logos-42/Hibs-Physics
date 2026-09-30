@@ -6,8 +6,9 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theory
+entity_type: concept
 tags: [time-freeze, symplectic, mass-cancellation, horizon, steady-state]
+last_confirmed: 2026-08-20
 ---
 
 # 时空冻结（TimeFreeze）

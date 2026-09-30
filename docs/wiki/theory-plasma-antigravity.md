@@ -6,8 +6,9 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theory
+entity_type: concept
 tags: [plasma, anti-gravity, two-stream, isotope, mass-cancellation]
+last_confirmed: 2026-08-20
 ---
 
 # 等离子体双流形 → 持续反引力场（PlasmaAntiGravity）

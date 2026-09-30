@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [space-field, 3d, curl, divergence, spin, charge, maxwell]
 status: current
 ---

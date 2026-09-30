@@ -3,12 +3,13 @@ title: 可控核聚变五年计划——判决漏斗（季度/半年/年节律 +
 source: session
 created: 2026-09-15
 audience: public
-stage: design
+stage: draft
 schema_version: 2
-confidence: planning-estimate
-entity_type: plan
+confidence: low
+entity_type: meta
 tags: [fusion-roadmap, gate-funnel, mu-metrology, team-planning, pre-registration]
 status: current
+last_confirmed: 2026-09-26
 ---
 
 # 可控核聚变五年计划（判决漏斗）

@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [maxwell, electromagnetism, space-field, kinematics, new-derivation]
 status: current
 ---

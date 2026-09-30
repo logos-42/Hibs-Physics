@@ -5,9 +5,10 @@ created: 2026-08-28
 audience: self
 stage: draft
 schema_version: 2
-confidence: engineering-estimate
+confidence: low
 tags: [fusion, plasma, engineering, space-fold, modulation]
 status: current
+last_confirmed: 2026-08-28
 ---
 
 # 磁约束时变引力场可控核聚变——工程计算

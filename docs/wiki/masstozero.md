@@ -3,11 +3,12 @@ title: 铜-氢等离子体同位素特征矩阵
 source: session
 created: 2026-08-20
 audience: self
-stage: raw
+stage: draft
 schema_version: 2
-entity_type: raw-source
+entity_type: meta
 tags: [plasma, isotope, cu-h, two-stream, mass-cancellation]
 status: current
+last_confirmed: 2026-09-04
 ---
 
 如果混合了同位素铜和同位素氢并制作高温离子态混合物，不产生化合物的情况下隔离，只依赖电子交互，这个情况下是什么特征，分矩阵区分不同同位素配比的特征?

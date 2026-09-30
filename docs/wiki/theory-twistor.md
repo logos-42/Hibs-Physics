@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: hypothesis
+entity_type: claim
 tags: [twistor, photon, electron, positron, gluon, penrose]
 status: current
 ---

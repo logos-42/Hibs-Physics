@@ -5,9 +5,10 @@ created: 2026-08-28
 audience: self
 stage: draft
 schema_version: 2
-confidence: algebraic-skeleton
+confidence: low
 tags: [hidden-numbers, qft, vacuum, polarization, riemannhibs]
 status: current
+last_confirmed: 2026-08-31
 ---
 
 # 隐数坐标量子场论：真空极化 → 能量涌现

@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: low
-entity_type: exploration
+entity_type: claim
 tags: [glueball, spherical-harmonics, normal-vector, three-directions, GR, angular-momentum]
 status: current
 ---

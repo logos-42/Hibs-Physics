@@ -7,7 +7,7 @@ audience: self
 stage: draft
 schema_version: 2
 confidence: medium
-entity_type: theorem
+entity_type: claim
 tags: [double-slit, wave-particle-duality, helix, interference, decoherence]
 status: current
 ---
