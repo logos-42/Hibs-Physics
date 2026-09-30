@@ -99,6 +99,7 @@ import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.Explorations.RingTwist
 import ProjectionPhysics.Explorations.BraidThree
+import ProjectionPhysics.Explorations.TemperleyLiebThree
 import ProjectionPhysics.SpaceGravity
 import ProjectionPhysics.SpaceFold
 import ProjectionPhysics.TimeFreeze

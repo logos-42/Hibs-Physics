@@ -101,6 +101,7 @@ def main():
                        "scripts/verify_buildability.py",
                        "scripts/verify_program_gates.py",
                        "scripts/verify_glueball_ring_twist.py",
+                       "scripts/verify_tl3_jones.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -848,6 +849,26 @@ def main():
         g3 = pg["③ 辫词字典（几何 → 辫词）"]["行"]
         check("RT-G3: 三股几何 ⟹ 辫词 (σ₁σ₂)^{3q}（Σ = 3q ⟹ e = 6q 自洽）",
               all(r["⟹ 指数和 e = 2Σ"] == 6 * r["q（两两连接数，RT-D 实测）"] for r in g3), g3)
+        tj = load_report("artifacts/glueball_ring_twist/tl3_jones.json")
+        if tj:
+            h1 = tj["1) TL₃(δ) 5 维左正则表示"]
+            check("RT-H1: TL₃ 定义关系成立且结合律 0 违例（125 组全过）",
+                  h1["定义关系成立"] and h1["结合律违例数"] == 0, h1["结合律违例数"])
+            h2 = tj["2) 中心"]
+            check("RT-H2: TL₃ 中心维数 = 2 且有**显式非纯量中心元**（对照 BT3 的纯量局面）",
+                  h2["维数"] == 2 and h2["Z 是中心元"] and not h2["Z 是纯量"],
+                  {"维数": h2["维数"], "Z 中心": h2["Z 是中心元"], "Z 纯量": h2["Z 是纯量"]})
+            h3 = tj["3) 骨架形式 σ = A + A⁻¹e（δ = −(A²+A⁻²)）"]
+            check("RT-H3: 骨架 braid 关系 + Δ 中心但**非纯量**（两个标量、多重度 1 与 4）",
+                  h3["braid 关系成立"] and h3["Δ 是中心元"] and not h3["Δ 是纯量"]
+                  and sorted(m for _, m in h3["Δ 的特征值（多重度）"]) == [1, 4],
+                  {"braid": h3["braid 关系成立"], "Δ 中心": h3["Δ 是中心元"],
+                   "Δ 纯量": h3["Δ 是纯量"], "多重度": [m for _, m in h3["Δ 的特征值（多重度）"]]})
+            h4 = tj["4) 融合奇偶规则（导出，独立于 TL）"]
+            fus = h4["n 股融合的 J 集合"]
+            parity = all(all(round(2 * j) % 2 == int(n) % 2 for j in fus[n]) for n in fus)
+            check("RT-H4: 融合奇偶规则 2J ≡ n (mod 2) 成立 ⟹ \"永远三股\"被否证（0++/2++ 的 J 是偶数）",
+                  parity and h4["奇偶规则自洽"], {"J 集合": fus, "股数分配": h4["自洽股数分配"]})
         pd = res["RT_D_braid"]
         check("RT-D1: m 股麻花辫的每对连接数 = q（m = 2/3/4，q = 1/2/3）",
               all(r["max|Lk − q|"] < 0.05 for r in pd["rows"]),
@@ -899,6 +920,7 @@ def main():
         "artifacts/mudynamics/summary.txt": 800,
         "artifacts/mudynamics/fig_mu_dynamics.png": 30_000,
         "artifacts/glueball_ring_twist/report.json": 4_000,
+        "artifacts/glueball_ring_twist/tl3_jones.json": 3_000,
         "artifacts/glueball_ring_twist/fig_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_understanding_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_twisted_ring_math.png": 30_000,
