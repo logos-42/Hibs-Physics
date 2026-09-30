@@ -102,6 +102,7 @@ def main():
                        "scripts/verify_program_gates.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
+                       "scripts/verify_conformal_blocks.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -869,6 +870,22 @@ def main():
             parity = all(all(round(2 * j) % 2 == int(n) % 2 for j in fus[n]) for n in fus)
             check("RT-H4: 融合奇偶规则 2J ≡ n (mod 2) 成立 ⟹ \"永远三股\"被否证（0++/2++ 的 J 是偶数）",
                   parity and h4["奇偶规则自洽"], {"J 集合": fus, "股数分配": h4["自洽股数分配"]})
+        cb = load_report("artifacts/glueball_ring_twist/conformal_blocks.json")
+        if cb:
+            i1 = cb["1) 融合空间多重度"]
+            check("RT-I1: 融合空间自检 —— k ≥ n 时 Σ_J mult_J(n)² = Catalan(n)（违例 0）",
+                  i1["自检违例数"] == 0, i1["自检违例数"])
+            t3 = {int(r["k"]): r for r in cb["2) J 作为导出量（n = 3）"]["表"]}
+            check("RT-I2: n=3 只给奇数 J（宇称）；J = 3 出现 ⟺ k ≥ 3",
+                  all(sorted(r["允许的 J（= c）"]) == ([1] if r["k"] <= 2 else [1, 3])
+                      for r in t3.values()),
+                  {k: t3[k]["允许的 J（= c）"] for k in list(t3)[:6]})
+            i3 = cb["3) 与 RT-H 的 TL₃ 对位"]
+            check("RT-I3: TL₃ 单模维数 [1,2] = 融合扇区多重度；相位 3/(k+2) = h(J=3) − h(J=1)（全 k）",
+                  all(r["相等"] for r in i3["表"]), i3["表"][:3])
+            i4 = cb["4) 格点最轻 7 态（容量/奇偶）"]
+            check("RT-I4: 格点最轻 7 态的奇偶规则 + 容量约束都过（是约束，不是预测）",
+                  i4["奇偶全过"] and i4["容量允许"], i4["指配"][:3])
         pd = res["RT_D_braid"]
         check("RT-D1: m 股麻花辫的每对连接数 = q（m = 2/3/4，q = 1/2/3）",
               all(r["max|Lk − q|"] < 0.05 for r in pd["rows"]),
@@ -921,6 +938,7 @@ def main():
         "artifacts/mudynamics/fig_mu_dynamics.png": 30_000,
         "artifacts/glueball_ring_twist/report.json": 4_000,
         "artifacts/glueball_ring_twist/tl3_jones.json": 3_000,
+        "artifacts/glueball_ring_twist/conformal_blocks.json": 3_000,
         "artifacts/glueball_ring_twist/fig_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_understanding_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_twisted_ring_math.png": 30_000,
