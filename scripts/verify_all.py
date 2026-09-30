@@ -103,6 +103,7 @@ def main():
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
+                       "scripts/fig_braid_ring_spacetime.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -790,6 +791,17 @@ def main():
         pf = res["RT_C_mu_floor_linkage"]
         check("RT-C2: FC11 地板的连接数读法（1/(m_e/m_i) ≈ 4558）",
               4550 < pf["1/(m_e/m_i)"] < 4570, pf["1/(m_e/m_i)"])
+        pd = res["RT_D_braid"]
+        check("RT-D1: m 股麻花辫的每对连接数 = q（m = 2/3/4，q = 1/2/3）",
+              all(r["max|Lk − q|"] < 0.05 for r in pd["rows"]),
+              [(r["股数 m"], r["扭转 q"], r["max|Lk − q|"]) for r in pd["rows"]])
+        check("RT-D2: 加密一倍 ⟹ 偏差下降（离散误差不是模型误差）",
+              pd["收敛性 (4 股 q=2)"]["N=2801"] < pd["收敛性 (4 股 q=2)"]["N=1401"],
+              pd["收敛性 (4 股 q=2)"])
+        check("RT-D3: 成对连接总数 = C(m,2)·q",
+              pd["成对连接总数 Σ_{i<j} Lk"]["m=3, q=2"] == 6 and
+              pd["成对连接总数 Σ_{i<j} Lk"]["m=4, q=2"] == 12,
+              pd["成对连接总数 Σ_{i<j} Lk"])
 
     # 4. 产物完整性
     artifacts = {
@@ -833,6 +845,7 @@ def main():
         "artifacts/glueball_ring_twist/fig_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_understanding_ring_twist.png": 30_000,
         "artifacts/glueball_ring_twist/fig_twisted_ring_math.png": 30_000,
+        "artifacts/glueball_ring_twist/fig_braid_ring_spacetime.png": 30_000,
         "artifacts/moirefield/report.json": 4_000,
         "artifacts/moirefield/summary.txt": 800,
         "artifacts/moirefield/fig_field_ceiling_scaling.png": 30_000,

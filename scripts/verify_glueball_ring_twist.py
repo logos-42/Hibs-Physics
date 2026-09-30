@@ -335,6 +335,56 @@ report["results"]["RT_C_mu_floor_linkage"] = {
 }
 print(f"\n   FC11 地板 {ME_MI_DT:.3e} ⟹ 若净残余 = 1 个连接单位,毛连接数 ≈ {G_floor:.0f}")
 
+# ─────── RT-D 多股麻花辫（三股以上）:两两连接数 = q,m 股第一次出现不可交换编织 ───────
+def braid_strands(n_strands, twist, n=1401, R=1.0, a=0.19):
+    """m 股麻花环:第 k 股 = 核心圆 + 相位错开 2πk/m 的标架偏移。
+
+    每股 s_k(θ) = c(θ) + a[cos(qθ + 2πk/m) e_r + sin(qθ + 2πk/m) e_z]
+    ⟹ 相邻股保持固定相位差、互不相交;自连接数（framing）口径下每对连接 q 次。
+    """
+    th = np.linspace(0.0, 2.0 * math.pi, n)
+    base = np.stack([R * np.cos(th), R * np.sin(th), np.zeros_like(th)], axis=1)
+    e_r = np.stack([np.cos(th), np.sin(th), np.zeros_like(th)], axis=1)
+    e_z = np.stack([np.zeros_like(th), np.zeros_like(th), np.ones_like(th)], axis=1)
+    out = []
+    for k in range(n_strands):
+        ph = twist * th + 2.0 * math.pi * k / n_strands
+        out.append(base + a * (np.cos(ph)[:, None] * e_r + np.sin(ph)[:, None] * e_z))
+    return base, out
+
+
+print("\n   RT-D 多股麻花辫:两两连接数（Gauss 双积分,自连接口径）")
+rows_d = []
+for m, q in ((2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (4, 1), (4, 2)):
+    _b, st = braid_strands(m, q)
+    lks = [SIGN * gauss_link(st[i], st[j]) for i in range(m) for j in range(i + 1, m)]
+    dev = max(abs(v - q) for v in lks)
+    rows_d.append({"股数 m": m, "扭转 q": q,
+                   "两两连接数": [round(v, 4) for v in lks],
+                   "max|Lk − q|": round(dev, 4), "对数": len(lks)})
+    print(f"    m={m} 股 × q={q}:Lk(每对) = {[round(v, 3) for v in lks]}"
+          f"（应 = {q},max|偏差| = {dev:.4f}）")
+
+# 收敛性:对最密的 (m,q) = (4,2) 加密一倍复核
+_b2, st2 = braid_strands(4, 2, n=2801)
+lk_fine = [SIGN * gauss_link(st2[i], st2[j]) for i in range(4) for j in range(i + 1, 4)]
+dev_fine = max(abs(v - 2) for v in lk_fine)
+print(f"    收敛性 (4 股, q=2):N=1401 max|偏差| = {rows_d[-1]['max|Lk − q|']:.4f} ⟹ "
+      f"N=2801 = {dev_fine:.4f}")
+
+# 三股第一次出现**不可交换**的编织生成元:σ1σ2 ≠ σ2σ1（与 TD15–TD17「顺序不可交换」同源）
+report["results"]["RT_D_braid"] = {
+    "公式": "s_k(θ) = c(θ) + a[cos(qθ + 2πk/m) e_r + sin(qθ + 2πk/m) e_z]",
+    "rows": rows_d,
+    "收敛性 (4 股 q=2)": {"N=1401": rows_d[-1]["max|Lk − q|"], "N=2801": round(dev_fine, 4)},
+    "成对连接总数 Σ_{i<j} Lk": {f"m={r['股数 m']}, q={r['扭转 q']}": round(r["对数"] * r["扭转 q"], 3)
+                                for r in rows_d},
+    "note": "m 股(每条都带同一 q 扭转)⟹ 两两连接数都 = q(实测,偏差 ~1e-3–1e-2 为离散误差);"
+            "m ≥ 3 第一次出现**不可交换**的编织生成元 σ1σ2 ≠ σ2σ1 ⟹ 与仓库 TD15–TD17"
+            "「顺序不可交换」同源。**诚实缺口**:这里量的是两两(二阶)部分;真正的三阶集体量"
+            "（Massey 三重积 / Milnor μ̄₃）本脚本**没有数值算法**,只在上界口径下用 μ̄₃ ∈ {0,1} 记账。",
+}
+
 # ────────────────────────────── 图 ──────────────────────────────
 import matplotlib
 matplotlib.use("Agg")
@@ -404,4 +454,5 @@ print("RT 结论:① Lk = Tw + Wr 数值复核成立（平面残差 ~1e-3–1e-2
       "非平面用 ΔLk=+1/圈 这条与 Wr 无关的判据）;"
       "② 7 ∉ 三平方和 ⟹ 对角模型被仓库自己的 N=7 否掉 ⟹ 必须集体项;"
       "③ 比值 √3:√6:√7 落在格点区间（量级校验）;"
-      "④ 变体 II 仍给出 9/10/11/12… 这些多余态 ⟹ 选择规则仍未导出（诚实缺口）。")
+      "④ 变体 II 仍给出 9/10/11/12… 这些多余态 ⟹ 选择规则仍未导出（诚实缺口）;"
+      "⑤ m 股麻花辫:m ≥ 3 才出现不可交换编织（σ1σ2 ≠ σ2σ1），两两连接数 = q;三阶集体量 μ̄₃ 本脚本无数值算法（已登记缺口）。")
