@@ -103,6 +103,7 @@ def main():
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
+                       "scripts/verify_mu_power.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -898,6 +899,63 @@ def main():
               pd["成对连接总数 Σ_{i<j} Lk"]["m=4, q=2"] == 12,
               pd["成对连接总数 Σ_{i<j} Lk"])
 
+
+    # 3c. μ 的功率账本 + 与胶球 N 的同源检验（MP 系列）
+    mp = load_report("artifacts/mu_power/report.json")
+    if mp:
+        mp1 = mp["MP1_同源检验"]
+        wA = mp1["Lean 互锁见证 A（同 N=3，μ 不同）"]
+        wB = mp1["Lean 互锁见证 B（同 μ=0，N 不同）"]
+        check("MP1: 同源 ≠ 互相决定 —— 存在同 N 不同 μ 与同 μ 不同 N 的见证（各 > 0 组）",
+              mp1["同 N 不同 μ 的组合数"] > 0 and mp1["同 μ 不同 N 的组合数"] > 0
+              and wA[0]["N"] == 3 and wA[1]["N"] == 3 and str(wA[0]["μ"]) != str(wA[1]["μ"])
+              and str(wB[0]["μ"]) == str(wB[1]["μ"]) and wB[0]["N"] != wB[1]["N"],
+              {"见证A": [(w["n"], w["N"], str(w["μ"])) for w in wA],
+               "见证B": [(w["n"], w["N"], str(w["μ"])) for w in wB]})
+        check("MP1b: Lean 侧 MuPower.lean 的 MW4/MW5 与这两个见证互锁（同 N 不同 μ / 同 μ 不同 N）",
+              os.path.exists(os.path.join(REPO, "ProjectionPhysics/Explorations/MuPower.lean"))
+              and "MW4_same_N_diff_mu" in open(os.path.join(
+                  REPO, "ProjectionPhysics/Explorations/MuPower.lean"), encoding="utf-8").read()
+              and "MW5_same_mu_diff_N" in open(os.path.join(
+                  REPO, "ProjectionPhysics/Explorations/MuPower.lean"), encoding="utf-8").read())
+
+        mp2 = mp["MP2_天花板逆问题"]
+        feas = mp2["逐残余量子的可行性"]
+        check("MP2: FC11 天花板 = 0.999780568036375 与残余比 = 1 − 天花板（口径不许混）",
+              abs(mp2["μ 天花板（仓库 FC11）"] - 0.999780568036375) < 1e-15
+              and abs(mp2["残余比 = 1 − 天花板"] - (1 - 0.999780568036375)) < 1e-18,
+              {"天花板": mp2["μ 天花板（仓库 FC11）"], "残余比": mp2["残余比 = 1 − 天花板"]})
+        check("MP2b: 奇偶律 —— 毛与净同奇偶：残余 1 配奇 gross、残余 3 配偶 gross 被判否",
+              mp["MP2b_奇偶律"]["违例数"] == 0
+              and feas["1"]["gross"] % 2 == 1 and feas["1"]["奇偶一致"] is True
+              and feas["3"]["奇偶一致"] is False,
+              {"残余1": feas["1"]["gross"], "残余3": feas["3"]["gross"],
+               "残余3 奇偶一致": feas["3"]["奇偶一致"]})
+        check("MP3: 同源+同计数单位 ⟹ μ 载体落在 N 阶梯高档位（|n| ≈ 4557，质量 6.30 TeV = 6296 GeV）",
+              6000.0 < mp["MP3_同源高档位推论"]["质量 = √N·M₀ [GeV]"] < 6600.0,
+              {"N": mp["MP3_同源高档位推论"]["对应 N = 2n²"],
+               "质量 GeV": mp["MP3_同源高档位推论"]["质量 = √N·M₀ [GeV]"]})
+        eps = mp["MP4_ε 候选"]
+        check("MP4: 三个 ε 候选跨越 34 个量级（磁管 ~0.6 GJ / 热涨落 ~1e-17 J / 光子 ~1e-25 J）",
+              eps["磁管能量 ε_mag [J]"] > 1e8 and eps["热涨落 ε_th [J]"] < 1e-16
+              and eps["回旋光子 ε_ph [J]"] < 1e-24)
+        tt = mp["MP5_分辨率代价权衡"]["ε=磁管"]["行"]
+        check("MP5: 分辨率-代价权衡单调 —— μ 目标越小，所需 gross 越大、代价越高",
+              tt[0]["所需 gross ≥"] < tt[1]["所需 gross ≥"] < tt[2]["所需 gross ≥"]
+              and tt[0]["W [J]"] < tt[1]["W [J]"] < tt[2]["W [J]"],
+              [{"μ": r["μ 目标"], "gross ≥": r["所需 gross ≥"], "W J": r["W [J]"]} for r in tt])
+        lb = mp["MP6_ε 下界"]
+        check("MP6: 由「μ≈1 不普遍」反推 ε 下界 ⟹ 磁管量级过线、热涨落/光子量级不过线",
+              lb["候选是否过线"]["磁管能量"] is True
+              and lb["候选是否过线"]["热涨落"] is False
+              and lb["候选是否过线"]["回旋光子"] is False,
+              {"下界 J": lb["ε 的下界 [J]"], "过线": lb["候选是否过线"]})
+        sc = mp["MP7_自洽"]
+        check("MP7: 自洽检查全过（4 项）", all(v is True for v in sc.values()), sc)
+        check("MP8: 与 hushfusion 公开漏斗同号（R_ci / μ 阶梯 / 判决漏斗）",
+              "缺失" not in mp.get("MP8_跨仓同号", {}) or mp["MP8_跨仓同号"]["缺失"] == [],
+              mp.get("MP8_跨仓同号"))
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -961,6 +1019,9 @@ def main():
         "artifacts/program/report.json": 8_000,
         "artifacts/program/summary.txt": 800,
         "artifacts/program/fig_program_gates.png": 30_000,
+        "artifacts/mu_power/report.json": 6_000,
+        "artifacts/mu_power/summary.txt": 400,
+        "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/world_feed/world_feed.json": 8_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
