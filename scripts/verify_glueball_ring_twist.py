@@ -513,12 +513,168 @@ report["results"]["RT_E_lattice"] = {
         "与 TABLE XXI 对比": {"TABLE XXI M₀": round(mean5, 1), "散布": round(scatter5, 2)},
         "被跳过的 N=11 的对位": {"我们": round(math.sqrt(11) * at_mean), "格点态": st_ex,
                                  "格点 M (MeV)": round(m_ex), "反推 N": round(n_ex, 2),
-                                 "偏差 %": round((math.sqrt(11) * at_mean - m_ex) / m_ex * 100, 2)},
+                                 "偏差 %": round((math.sqrt(11) * at_mean - m_ex) / m_ex * 100, 2),
+                                 "σ 数": round((m_ex - math.sqrt(11) * at_mean) / (0.040 * SQRT_SIGMA_AT), 1),
+                                 "判读": "该态落在阶梯两档（N=11 → %.0f、N=12 → %.0f）**之间**："
+                                         "与低档差 %+.2f%%、与高档差 %+.2f%% ⟹ 既非命中也不在格点上"
+                                         "（19 MeV 的格点误差下这是 %.1fσ 的偏离）⟹ 空隙**没有被填上**，"
+                                         "RT-E7 只记录『这里确实有激发态』，不算命中" % (
+                                             math.sqrt(11) * at_mean, math.sqrt(12) * at_mean,
+                                             (math.sqrt(11) * at_mean - m_ex) / m_ex * 100,
+                                             (math.sqrt(12) * at_mean - m_ex) / m_ex * 100,
+                                             abs(m_ex - math.sqrt(11) * at_mean) / (0.040 * SQRT_SIGMA_AT))},
     },
     "诚实边界": "我们这边零 QCD 输入：N 阶梯与 M₀ 都是本仓自己的模型选择；格点误差 ±(50–180) MeV 量级，"
                 "所以「偏差 ≤1.6%」不等于「精度 1.6%」——只能说**全部落在格点误差带内**；"
                 "自旋/宇称不是算出来的（J^PC 是按质量序指派的）；宽度/衰变/产生率完全没碰；"
                 "比的是淬火（纯规范）格点，对「纯胶」对象是合适的参照，但真实世界有夸克混合。",
+}
+
+# ─────── RT-F ① J^PC 能不能从几何**导出**（穷举否定）+ ② 全谱命中率 + ③ 两个具体点 ───────
+# 数据：Athenodorou–Teper, JHEP 11 (2020) 172, Table 17（连续极限，M_G/√σ），
+#       = 该文能识别 J^PC 的全部 20 个态；星号为其自己的拟合质量旗标（* 一般，** 显著不确定）。
+AT_ALL = [  # (J^PC, M/√σ, 误差, 旗标)
+    ("0++",   3.405, 0.021, ""), ("0-+",   5.276, 0.045, ""),
+    ("0*++",  5.855, 0.041, ""), ("0*-+",  7.29,  0.13,  ""),
+    ("2++",   4.894, 0.022, ""), ("2-+",   6.32,  0.09,  ""),
+    ("2+-",   8.74,  0.12,  "*"), ("2--",  8.08,  0.15,  ""),
+    ("2*++",  6.788, 0.040, ""), ("2*-+",  8.18,  0.08,  ""),
+    ("1-+",   8.48,  0.12,  ""), ("1+-",   6.065, 0.040, ""), ("1--", 8.31, 0.10, ""),
+    ("1*-+",  8.57,  0.13,  "*"), ("1*+-", 7.82,  0.06,  ""),
+    ("1**-+", 8.66,  0.15,  "*"),
+    ("3++",   7.71,  0.09,  "*"), ("3+-",  7.27,  0.12,  ""),
+    ("4++",   7.60,  0.12,  "*"), ("4+-",  9.02,  0.10,  "**"),
+]
+SQ_AT = R0SQRT_SIGMA[0] * R0_INV_MEV            # 475.6 MeV
+M0_AT = at_mean                                  # 949.1 MeV（RT-E6 拟出）
+
+# ── ① J^PC 导出性：穷举「两个自然 ℤ₂ 不变量」的所有线性规则 ──
+# 几何能给的不变量只有两个：a = Σ|nᵢ| mod 2（总绕数奇偶）、b = μ̄₃（集体连接）
+# 候选规则族：P = (−1)^(a·e1 + b·e2 + d1)，C = (−1)^(a·z1 + b·z2 + d2)，e,z,d ∈ {0,1} ⟹ 64 种
+# 判定：按质量升序把阶梯前 7 项与格点最轻 7 个态对位，要求**J 由规则给出且 P,C 全中**
+ladder7 = [(3, (1, 1, 1, 0)), (6, (2, 1, 1, 0)), (7, (2, 1, 1, 1)), (9, (2, 2, 1, 0)),
+           (10, (2, 2, 1, 1)), (13, (2, 2, 2, 1)), (14, (3, 2, 1, 0))]
+lat7_pc = [("0", "+", "+"), ("2", "+", "+"), ("0", "-", "+"), ("1", "+", "-"),
+           ("2", "-", "+"), ("3", "+", "-"), ("3", "+", "+")]
+J_RULES = {
+    "J=Σ(|nᵢ|−1)": lambda n: sum(abs(x) - 1 for x in n[:3]),
+    "J=max|nᵢ|−1": lambda n: max(abs(x) for x in n[:3]) - 1,
+    "J=|n₁|+|n₂|−|n₃|−1": lambda n: abs(n[0]) + abs(n[1]) - abs(n[2]) - 1,
+    "J=Σ|nᵢ|−3+|μ̄₃|": lambda n: sum(abs(x) for x in n[:3]) - 3 + n[3],
+}
+best = None
+hits_table = []
+for jname, jf in J_RULES.items():
+    for e1 in (0, 1):
+        for e2 in (0, 1):
+            for d1 in (0, 1):
+                for z1 in (0, 1):
+                    for z2 in (0, 1):
+                        for d2 in (0, 1):
+                            ok = 0
+                            for (_N, impl), (Jlat, Plat, Clat) in zip(ladder7, lat7_pc):
+                                n = impl
+                                a = sum(abs(x) for x in n[:3]) % 2
+                                b = n[3]
+                                P = -1 if (a * e1 + b * e2 + d1) % 2 else 1
+                                C = -1 if (a * z1 + b * z2 + d2) % 2 else 1
+                                J = jf(n)
+                                good = (str(abs(J)) == Jlat) and (("+" if P > 0 else "-") == Plat) \
+                                       and (("+" if C > 0 else "-") == Clat)
+                                ok += int(good)
+                            hits_table.append((jname, (e1, e2, d1), (z1, z2, d2), ok))
+                            if best is None or ok > best[-1]:
+                                best = (jname, (e1, e2, d1), (z1, z2, d2), ok)
+tot_rules = len(hits_table)
+print(f"\n   RT-F ① J^PC 导出性:穷举 {tot_rules} 条「两个 ℤ₂ 不变量的线性规则」（4 个 J 候选 × 64 个奇偶指配）")
+print(f"    最好的一条命中 {best[3]}/7 项（J 规则 = {best[0]}；P 用 (e1,e2,d1) = {best[1]}；"
+      f"C 用 (z1,z2,d2) = {best[2]}）")
+full = [h for h in hits_table if h[3] == 7]
+print(f"    能全中 7 项的规则数 = {len(full)} ⟹ "
+      f"{'存在' if full else '**不存在**（在这个规则族里 J^PC 无法从 (Σ|nᵢ| mod 2, μ̄₃) 线性导出）'}")
+# 结构性理由：格点出现的 (P,C) 组合有 4 种
+combos = sorted({(p, c) for (_J, p, c) in lat7_pc})
+print(f"    格点最轻 7 态出现 {len(combos)} 种 (P,C) 组合：{combos}；"
+      f"而两个 ℤ₂ 不变量的线性规则最多也只能给 4 种 ⟹ 局限不在「组合数不够」而在**指配不上**")
+
+# ── ② 全谱命中率 + 随机基线 ──
+import random
+random.seed(20260929)
+rows_f = []
+for st, v, e, star in AT_ALL:
+    M = v * SQ_AT
+    err = e * SQ_AT
+    n_impl = (M / M0_AT) ** 2
+    near = min(sorted(cv2), key=lambda x: abs(x - n_impl))
+    pred = math.sqrt(near) * M0_AT
+    rows_f.append({"J^PC": st, "M (MeV)": round(M), "±": round(err), "旗标": star,
+                   "反推 N": round(n_impl, 2), "最近阶梯 N": near, "阶梯预言 (MeV)": round(pred),
+                   "偏差 (MeV)": round(pred - M), "命中 1σ": bool(abs(pred - M) <= err),
+                   "命中 2σ": bool(abs(pred - M) <= 2 * err)})
+n1 = sum(r["命中 1σ"] for r in rows_f)
+n2 = sum(r["命中 2σ"] for r in rows_f)
+print(f"\n   RT-F ② 全谱（{len(rows_f)} 个可识别 J^PC 态）命中率：1σ 内 {n1}/{len(rows_f)} = "
+      f"{n1/len(rows_f)*100:.0f}%；2σ 内 {n2}/{len(rows_f)} = {n2/len(rows_f)*100:.0f}%")
+
+# 随机基线：同样的阶梯，拿 20 个随机质量（落在数据跨度内）比
+lo, hi = min(r["M (MeV)"] for r in rows_f), max(r["M (MeV)"] for r in rows_f)
+rel_errs = [e * SQ_AT / (v * SQ_AT) for (_st, v, e, _s) in AT_ALL]      # 与数据同分布的相对误差
+trials, base1, base1w = 20000, 0, 0
+for _ in range(trials):
+    c = cw = 0
+    for _k in range(len(rows_f)):
+        M = random.uniform(lo, hi)
+        err = random.choice(rel_errs) * M
+        n_imp = (M / M0_AT) ** 2
+        nr = min(sorted(cv2), key=lambda x: abs(x - n_imp))
+        if abs(math.sqrt(nr) * M0_AT - M) <= err:
+            c += 1
+        if abs(math.sqrt(nr) * M0_AT - M) <= 0.03 * M:      # 3% 宽口径（对照）
+            cw += 1
+    base1 += c
+    base1w += cw
+base_pct = base1 / trials / len(rows_f) * 100
+base_pct_w = base1w / trials / len(rows_f) * 100
+print(f"    随机基线（{trials} 次 × {len(rows_f)} 个随机质量，**误差与数据同分布**）：{base_pct:.1f}%"
+      f"；宽口径（3% 误差）{base_pct_w:.1f}% ⟹ 我们 {n1/len(rows_f)*100:.0f}% vs 随机 {base_pct:.1f}%"
+      f"（宽口径 {base_pct_w:.1f}%）")
+# 旗标相关性（③）
+clean = [r for r in rows_f if r["旗标"] == ""]
+star = [r for r in rows_f if r["旗标"] != ""]
+print(f"    ③ 旗标相关性：格点自己标「好拟合」的 {len(clean)} 个态命中 {sum(r['命中 1σ'] for r in clean)} 个"
+      f"（{sum(r['命中 1σ'] for r in clean)/len(clean)*100:.0f}%）；标了星的 {len(star)} 个态命中 "
+      f"{sum(r['命中 1σ'] for r in star)} 个（{sum(r['命中 1σ'] for r in star)/len(star)*100:.0f}%）")
+for st in ("0*++", "2*++"):
+    r = [x for x in rows_f if x["J^PC"] == st][0]
+    print("    ③ {st}：格点 {m}±{e} MeV，反推 N = {n}（最近阶梯 N={nn} → {p} MeV，偏差 {d:+d} MeV，旗标 [{f}]）"
+          .format(st=st, m=r["M (MeV)"], e=r["±"], n=r["反推 N"], nn=r["最近阶梯 N"],
+                  p=r["阶梯预言 (MeV)"], d=r["偏差 (MeV)"], f=r["旗标"] or "无"))
+
+report["results"]["RT_F_jpc_and_fullspectrum"] = {
+    "① J^PC 导出性（穷举）": {
+        "规则族": "P = (−1)^(a·e1+b·e2+d1)、C = (−1)^(a·z1+b·z2+d2)，其中 a = Σ|nᵢ| mod 2、b = μ̄₃；"
+                  "J 取 4 个几何候选（Σ(|nᵢ|−1) / max|nᵢ|−1 / |n₁|+|n₂|−|n₃|−1 / Σ|nᵢ|−3+μ̄₃）",
+        "穷举条数": tot_rules,
+        "最好命中": f"{best[3]}/7（{best[0]}）",
+        "全中条数": len(full),
+        "结论": "**不存在**能复现格点最轻 7 态 J^PC 的规则 ⟹ J^PC 仍**不可从 (Σ|nᵢ| mod 2, μ̄₃) 导出**；"
+                "格点谱里 4 种 (P,C) 组合都出现，而几何只提供两个 ℤ₂ ⟹ 指配上无解（不是组合数不够）",
+    },
+    "② 全谱命中率": {
+        "数据": "Athenodorou–Teper JHEP 11 (2020) 172, Table 17（20 个可识别 J^PC 态）",
+        "1σ 命中": f"{n1}/{len(rows_f)}", "2σ 命中": f"{n2}/{len(rows_f)}",
+        "随机基线（误差与数据同分布）%": round(base_pct, 1),
+        "随机基线（宽口径 3% 误差）%": round(base_pct_w, 1),
+        "行": rows_f,
+    },
+    "③ 旗标相关性": {
+        "格点标「好拟合」的态": {"个数": len(clean), "命中 1σ": sum(r["命中 1σ"] for r in clean)},
+        "格点标星（拟合一般/不确定）的态": {"个数": len(star), "命中 1σ": sum(r["命中 1σ"] for r in star)},
+        "读法": "若漏掉的态集中在标星者 ⟹ 可用格点自身的不确定性解释；若集中在干净态 ⟹ 是真实的否证点",
+    },
+    "诚实边界": "命中率只说明「阶梯的格子密度与格点谱的分布是否相容」，不等于物理吻合；"
+                "对位用的是**质量升序**（因为 J^PC 不可导出，见 ①），所以 ② 的命中率仍带对位自由度；"
+                "随机基线用的是均匀分布而不是真实谱的先验分布，只作量级参照。",
 }
 
 # ────────────────────────────── 图 ──────────────────────────────
