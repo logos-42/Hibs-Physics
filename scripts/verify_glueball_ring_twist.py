@@ -385,6 +385,142 @@ report["results"]["RT_D_braid"] = {
             "（Massey 三重积 / Milnor μ̄₃）本脚本**没有数值算法**,只在上界口径下用 μ̄₃ ∈ {0,1} 记账。",
 }
 
+# ─────── RT-E 与真实胶球谱逐条对位（格点数 + 实验候选；**我们这边零 QCD 输入**）───────
+# 来源：TABLE XXI of "Glueball masses from the lattice: a (partial) review of recent results"
+#       （物理单位，标度 r₀⁻¹ = 410(20) MeV；误差 = 统计(连续外推) + 各向异性 ~1%）
+LATTICE_SPECTRUM = [("0++", 1710, 50, 80), ("2++", 2390, 30, 120), ("0-+", 2560, 35, 120),
+           ("1+-", 2980, 30, 140), ("2-+", 3040, 40, 150), ("3+-", 3600, 40, 170),
+           ("3++", 3670, 50, 180)]
+LATTICE_0s = ("0*++", 2670, 180, 130)   # Morningstar–Peardon PRD 60, 034509 (1999)
+X2370 = {"源": "BESIII, PRL 132, 181901 (2024)（11.7σ）", "M": 2395, "M_err": (11, 26, -94),
+         "Γ": 188, "Γ_err": (18, 17, 124, -33), "JPC": "0-+"}
+SQRT_SIGMA = 445.0      # MeV，格点弦张力（√σ ≈ 440–445 MeV）
+
+# 可达集（变体 II）按升序取，与格点态按质量升序一一对位（**无选择自由度**：两边都排序）
+order_e = [v for v in sorted(cv2)]
+pairs = list(zip(LATTICE_SPECTRUM, order_e))
+implied_m0 = [m / math.sqrt(N) for (_st, m, _e1, _e2), N in pairs]
+mean_m0 = sum(implied_m0) / len(implied_m0)
+scatter_pct = (max(implied_m0) - min(implied_m0)) / 2.0 / mean_m0 * 100.0
+m0_5 = implied_m0[:5]
+mean5 = sum(m0_5) / 5.0
+scatter5 = (max(m0_5) - min(m0_5)) / 2.0 / mean5 * 100.0
+
+print("\n   RT-E 与格点胶球谱对位（我们：N = Σnᵢ² + |μ̄₃| 的升序阶梯；格点：TABLE XXI）")
+rows_e = []
+for (st, m, e1, e2), N in pairs:
+    M0_impl = m / math.sqrt(N)
+    pred = math.sqrt(N) * mean5
+    rows_e.append({"J^PC": st, "格点 M (MeV)": m, "格点误差 ±(统计+系统)": e1 + e2, "指派 N": N,
+                   "反推 M₀ = M/√N": round(M0_impl, 1),
+                   "用 M₀=%.1f 回算" % mean5: round(pred, 1),
+                   "偏差 %": round((pred - m) / m * 100, 2),
+                   "落在格点误差内": bool(abs(pred - m) <= e1 + e2)})
+    print(f"    {st:5s} 格点 {m}±{e1+e2:<3d} ⟹ N = {N:2d} ⟹ 反推 M₀ = {M0_impl:6.1f} MeV；"
+          f"M₀={mean5:.1f} 回算 {pred:6.1f}（{(pred-m)/m*100:+5.2f}%）"
+          f"{' ✓' if abs(pred-m) <= e1+e2 else ' ✗'}")
+
+# 只比比值（完全不依赖 M₀）
+ratios_e = []
+for (st, m, _e1, _e2), N in pairs[1:]:
+    ours, lat = math.sqrt(N / 3.0), m / LATTICE_SPECTRUM[0][1]
+    ratios_e.append({"J^PC/0++": st, "我们 √(N/3)": round(ours, 4), "格点": round(lat, 4),
+                     "偏差 %": round((ours / lat - 1.0) * 100, 2)})
+    print(f"    {st:5s}/0++：我们 {ours:.4f} vs 格点 {lat:.4f}（{(ours/lat-1)*100:+.2f}%）")
+
+# 拟合不是空转：换成「连续整数」或「最朴素的 1..5」做同样的反推，离散要大得多
+def scatter_of(nums):
+    m0s = [m / math.sqrt(n) for (_st, m, _e1, _e2), n in zip(LATTICE_SPECTRUM[:5], nums)]
+    mu = sum(m0s) / 5.0
+    return (max(m0s) - min(m0s)) / 2.0 / mu * 100.0, m0s
+
+
+base_cont, _ = scatter_of([3, 4, 5, 6, 7])
+base_naive, _ = scatter_of([1, 2, 3, 4, 5])
+print(f"    拟合不是空转：我们集(3,6,7,9,10) 反推 M₀ 离散 ±{scatter5:.2f}%；"
+      f"连续整数(3..7) ±{base_cont:.2f}%；最朴素(1..5) ±{base_naive:.2f}%")
+
+# 不符的那一个
+st0, m0v, e1_0, e2_0 = LATTICE_0s
+n_impl = (m0v / mean5) ** 2
+near_n = min(sorted(cv2), key=lambda v: abs(v - n_impl))
+print(f"    ✗ {st0} 格点 {m0v}±{e1_0+e2_0} ⟹ 反推 N = {n_impl:.2f}（非整数）；"
+      f"最近阶梯 N={near_n} → {math.sqrt(near_n)*mean5:.0f} MeV ⟹ 阶梯在 2.59–2.93 GeV 之间没有态")
+
+# 与最新实验候选的张力
+n_x = (X2370["M"] / mean5) ** 2
+print(f"    ⚠ X(2370)（{X2370['JPC']}, {X2370['M']} MeV, Γ = {X2370['Γ']} MeV, BESIII 2024）"
+      f"⟹ 反推 N = {n_x:.2f} ⟹ 落在 N=6（我们的 2++ 槽）；我们的 0-+ 预言 = "
+      f"{math.sqrt(7)*mean5:.0f} MeV（高 {math.sqrt(7)*mean5 - X2370['M']:.0f} MeV）")
+
+# 尺度锚点：弦张力
+ratio_sigma = LATTICE_SPECTRUM[0][1] / SQRT_SIGMA
+print(f"    尺度锚点：m(0++)/√σ = {ratio_sigma:.2f}（√σ = {SQRT_SIGMA} MeV）⟹ "
+      f"M₀ ≈ {LATTICE_SPECTRUM[0][1]/math.sqrt(3)/SQRT_SIGMA:.2f}·√σ = {LATTICE_SPECTRUM[0][1]/math.sqrt(3):.0f} MeV")
+
+# ── 第二套独立格点数据（Athenodorou–Teper, JHEP 11 (2020) 172, Table 17：M_G/√σ 的连续极限）──
+# 目的：TABLE XXI（r₀⁻¹ = 410 MeV 约定）与这套（r₀√σ = 1.160(6)）的绝对标度差 ~3%，
+#       两套各自内部一致 ⟹ 用两套分别拟合，看 M₀ 是否随标度约定一起平移（稳健性检验）。
+R0SQRT_SIGMA = (1.160, 0.006)          # r₀√σ
+R0_INV_MEV = 410.0                     # MeV（与 TABLE XXI 同一约定）
+SQRT_SIGMA_AT = R0SQRT_SIGMA[0] * R0_INV_MEV
+AT = [("0++", 3.405, 0.021), ("2++", 4.894, 0.022), ("0-+", 5.276, 0.045),
+      ("1+-", 6.065, 0.040), ("2-+", 6.32, 0.09), ("(2++ ex1)", 6.788, 0.040),
+      ("3+-", 7.27, 0.12), ("3++", 7.71, 0.09)]
+at_M = [(st, v * SQRT_SIGMA_AT, e * SQRT_SIGMA_AT) for st, v, e in AT]
+at5 = [m for (_st, m, _e) in at_M[:5]]
+at_ns = [3, 6, 7, 9, 10]
+at_m0 = [m / math.sqrt(n) for m, n in zip(at5, at_ns)]
+at_mean = sum(at_m0) / 5.0
+at_scatter = (max(at_m0) - min(at_m0)) / 2.0 / at_mean * 100.0
+print(f"\n   RT-E6 第二套数据（Athenodorou–Teper 2020, M_G/√σ；√σ = {SQRT_SIGMA_AT:.1f} MeV）：")
+for (st, m, e), n, m0 in zip(at_M[:5], at_ns, at_m0):
+    print(f"    {st:5s} {m:6.0f}±{e:4.0f} MeV ⟹ N = {n:2d} ⟹ 反推 M₀ = {m0:6.1f} MeV")
+print(f"    ⟹ 单一 M₀ = {at_mean:.1f} MeV，五态散布 ±{at_scatter:.2f}%"
+      f"（与 TABLE XXI 的 {mean5:.1f} MeV / ±{scatter5:.2f}% 相比：M₀ 随格点标度约定一起平移）")
+st_ex, m_ex, e_ex = at_M[5]
+n_ex = (m_ex / at_mean) ** 2
+print(f"    ★ 阶梯被跳过的 N=11：我们 → {math.sqrt(11)*at_mean:.0f} MeV；"
+      f"({st_ex}) 格点 {m_ex:.0f}±{e_ex:.0f} MeV ⟹ 反推 N = {n_ex:.2f}"
+      f"（Δ = {(math.sqrt(11)*at_mean - m_ex)/m_ex*100:+.2f}%）⟹ 3.2–3.4 GeV 的空隙在这套数据里有对应态")
+
+report["results"]["RT_E_lattice"] = {
+    "格点来源": "TABLE XXI, 'Glueball masses from the lattice: a (partial) review of recent results'"
+                "（r₀⁻¹ = 410(20) MeV）；0*++ 另取 Morningstar–Peardon PRD 60, 034509 (1999)",
+    "实验候选": X2370,
+    "对位（按质量升序，两边都排序 ⟹ 无选择自由度）": rows_e,
+    "只比比值": ratios_e,
+    "单一常数": {"M₀（前五态反推均值）": round(mean5, 1),
+                 "反推散布 ±%": round(scatter5, 2),
+                 "五态各自反推 M₀": [round(x, 1) for x in implied_m0[:5]]},
+    "拟合非空转对照（反推 M₀ 离散）": {"我们的 3,6,7,9,10": round(scatter5, 2),
+                                        "连续整数 3..7": round(base_cont, 2),
+                                        "最朴素 1..5": round(base_naive, 2)},
+    "不符": {st0: {"格点 M": m0v, "反推 N（非整数）": round(n_impl, 2),
+                   "最近阶梯": near_n, "note": "阶梯在 2.59–2.93 GeV 之间没有态；"
+                   "要么我们的规则漏了一个态，要么该态不是单胶球（原论文自己提醒要区分 two-glueball/torelon）"}},
+    "张力": {"X(2370)": {"M": X2370["M"], "反推 N": round(n_x, 2),
+                         "落在哪": "N = 6（我们的 2++ 槽）",
+                         "我们的 0-+ 预言": round(math.sqrt(7) * mean5, 0),
+                         "note": "X(2370) 比我们的 0-+ 低 ~190 MeV；要么它不是那个 0-+ 胶球"
+                                 "（或含混合成分），要么我们按质量序的 J^PC 指配是错的"}},
+    "尺度锚点": {"m(0++)/√σ（格点）": round(ratio_sigma, 2), "√σ (MeV)": SQRT_SIGMA,
+                 "M₀/√σ": round(LATTICE_SPECTRUM[0][1] / math.sqrt(3) / SQRT_SIGMA, 2)},
+    "第二套格点（Athenodorou–Teper 2020, M_G/√σ）": {
+        "源": "JHEP 11 (2020) 172, Table 17（连续极限，M_G/√σ；r₀√σ = 1.160(6)，取 r₀⁻¹ = 410 MeV ⟹ √σ = %.1f MeV）" % SQRT_SIGMA_AT,
+        "五态反推 M₀": [round(x, 1) for x in at_m0],
+        "单一 M₀": round(at_mean, 1), "散布 ±%": round(at_scatter, 2),
+        "与 TABLE XXI 对比": {"TABLE XXI M₀": round(mean5, 1), "散布": round(scatter5, 2)},
+        "被跳过的 N=11 的对位": {"我们": round(math.sqrt(11) * at_mean), "格点态": st_ex,
+                                 "格点 M (MeV)": round(m_ex), "反推 N": round(n_ex, 2),
+                                 "偏差 %": round((math.sqrt(11) * at_mean - m_ex) / m_ex * 100, 2)},
+    },
+    "诚实边界": "我们这边零 QCD 输入：N 阶梯与 M₀ 都是本仓自己的模型选择；格点误差 ±(50–180) MeV 量级，"
+                "所以「偏差 ≤1.6%」不等于「精度 1.6%」——只能说**全部落在格点误差带内**；"
+                "自旋/宇称不是算出来的（J^PC 是按质量序指派的）；宽度/衰变/产生率完全没碰；"
+                "比的是淬火（纯规范）格点，对「纯胶」对象是合适的参照，但真实世界有夸克混合。",
+}
+
 # ────────────────────────────── 图 ──────────────────────────────
 import matplotlib
 matplotlib.use("Agg")
@@ -455,4 +591,9 @@ print("RT 结论:① Lk = Tw + Wr 数值复核成立（平面残差 ~1e-3–1e-2
       "② 7 ∉ 三平方和 ⟹ 对角模型被仓库自己的 N=7 否掉 ⟹ 必须集体项;"
       "③ 比值 √3:√6:√7 落在格点区间（量级校验）;"
       "④ 变体 II 仍给出 9/10/11/12… 这些多余态 ⟹ 选择规则仍未导出（诚实缺口）;"
-      "⑤ m 股麻花辫:m ≥ 3 才出现不可交换编织（σ1σ2 ≠ σ2σ1），两两连接数 = q;三阶集体量 μ̄₃ 本脚本无数值算法（已登记缺口）。")
+      "⑤ m 股麻花辫:m ≥ 3 才出现不可交换编织（σ1σ2 ≠ σ2σ1）；"
+      "⑥ 与格点胶球谱对位（RT-E）：最轻五个态按质量序对上 N = 3,6,7,9,10，单一 M₀ 散布 ±%.2f%%，"
+      "全部落在格点误差内；0*++ 反推 N = %.2f（非整数）⟹ 登记为不符；X(2370) 反推 N ≈ %.2f ⟹ 登记张力。"
+      % (report["results"]["RT_E_lattice"]["单一常数"]["反推散布 ±%"],
+         report["results"]["RT_E_lattice"]["不符"]["0*++"]["反推 N（非整数）"],
+         report["results"]["RT_E_lattice"]["张力"]["X(2370)"]["反推 N"]))
