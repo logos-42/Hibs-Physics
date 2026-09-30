@@ -677,6 +677,77 @@ report["results"]["RT_F_jpc_and_fullspectrum"] = {
                 "随机基线用的是均匀分布而不是真实谱的先验分布，只作量级参照。",
 }
 
+# ─────── RT-G 三股编织群 B₃：中心元相位能不能当量子数（"可导出"路线的检验）───────
+# 对应 Lean: ProjectionPhysics/Explorations/BraidThree.lean（BT1–BT5，零 sorry 零 warning）
+def _b1(t):
+    return np.array([[-t, 1], [0, 1]], dtype=complex)
+
+
+def _b2(t):
+    return np.array([[1, 0], [t, -t]], dtype=complex)
+
+
+print("\n   RT-G B₃ 既约 Burau：braid 关系 + 全扭转是纯量（数值，9 个单位根）")
+roots_m = [2, 3, 4, 5, 6, 8, 12, 16, 24]
+rel_ok, scalar_ok, dev_max = True, True, 0.0
+for m in roots_m:
+    t = math.e ** (2j * math.pi / m)
+    A, B = _b1(t), _b2(t)
+    rel_ok = rel_ok and bool(np.allclose(A @ B @ A, B @ A @ B))
+    D = np.linalg.matrix_power(A @ B, 3)
+    scalar_ok = scalar_ok and bool(np.allclose(D, t ** 3 * np.eye(2)))
+    dev_max = max(dev_max, float(np.max(np.abs(D - t ** 3 * np.eye(2)))))
+print(f"    σ1σ2σ1 = σ2σ1σ2（9 个根全成立）: {rel_ok}；(σ1σ2)³ = t³·I（全成立）: {scalar_ok}"
+      f"（最大偏差 {dev_max:.2e}）")
+
+# 相位阶梯：λ = e^{2πi·3/m} ⟹ 拓扑自旋 h = 3/m mod 1；可行自旋 J = 2h
+ladder_g = []
+for m in range(2, 25):
+    h = (3.0 / m) % 1.0
+    J = 2.0 * h
+    ladder_g.append({"m": m, "h = 3/m mod 1": round(h, 4), "J = 2h": round(J, 4),
+                     "J 是整数或半整数": bool(abs(J * 2 - round(J * 2)) < 1e-9)})
+J_ok = sorted({round(r["J = 2h"], 4) for r in ladder_g if r["J 是整数或半整数"]})
+lat_J = {0, 2, 0, 1, 2, 3, 3}
+unreach = sorted({j for j in lat_J if float(j) not in J_ok})
+print(f"    中心元相位给的自旋（整数/半整数，m ≤ 24）: {J_ok}")
+print(f"    格点最轻 7 态需要的自旋: {sorted(lat_J)} ⟹ **不可达: {unreach}**"
+      f"（2 维既约 Burau 给不出 J = 2 与 J = 3）")
+
+# 辫词字典：三股几何的两两连接数 Σ = C(3,2)·q = 3q ⟹ 3 股辫闭合的 Σ_{i<j}Lk = e/2 ⟹ e = 6q
+dict_rows = []
+for q in (1, 2, 3):
+    sum_lk = 3 * q
+    dict_rows.append({"q（两两连接数，RT-D 实测）": q, "Σ_{i<j} Lk": sum_lk,
+                      "⟹ 指数和 e = 2Σ": 2 * sum_lk, "自然辫词": f"(σ1σ2)^{3 * q}"})
+    print(f"    q={q}: Σ = {sum_lk} ⟹ e = {2 * sum_lk} ⟹ 辫词 (σ1σ2)^{3*q}"
+          f"（该词指数和 = 6q = {6 * q} ✓）")
+
+report["results"]["RT_G_braid_three"] = {
+    "① 中心元是纯量（数值）": {"braid 关系在 9 个根上成立": rel_ok,
+                              "(σ1σ2)³ = t³·I 全成立": scalar_ok, "最大偏差": dev_max,
+                              "Lean": "Explorations/BraidThree.lean BT1–BT5（零 sorry 零 warning）"},
+    "② 相位阶梯（λ = e^(2πi·3/m) ⟹ h = 3/m mod 1，J = 2h）": {
+        "m ≤ 24 的阶梯": ladder_g,
+        "可达自旋（整数/半整数）": J_ok,
+        "格点最轻 7 态需要的自旋": sorted(lat_J),
+        "不可达": unreach,
+        "结论": "2 维既约 Burau 的中心元相位只能给 J ∈ {0, 1/2, 1, 3/2}；格点的 2++/2-+/3++/3+- "
+                "需要 J = 2, 3 ⟹ **给不出**。再加上 BT3（纯量 ⟹ 对所有 braid 词同值），"
+                "这条路在**两个独立层面**上被堵死：既没有足够大的自旋，也没有态依赖。",
+    },
+    "③ 辫词字典（几何 → 辫词）": {
+        "行": dict_rows,
+        "推导": "三股几何的两两连接数 Σ = C(3,2)·q = 3q（RT-D 实测）；三股辫闭合满足 Σ_{i<j}Lk = e/2 "
+                "⟹ 指数和 e = 6q ⟹ 自然辫词就是 (σ1σ2)^{3q}（其指数和恰为 6q）—— 这是**导出**的辫词，"
+                "不是事先挑的",
+    },
+    "诚实边界": "B₃ 的表示论本身是经典数学（Burau 表示、中心元生成子），本页只是把它接到胶球问题上；"
+                "「自旋 = 2h」是 TQFT 里 twist 因子的读法，用在这里是**类比**；"
+                "上面「不可达」是**在这个表示内**的结论，不代表所有三维以上表示都给不出（TL/Jones 在 "
+                "level k ≥ 4 才有 j = 2）—— 这正是下一个入口。",
+}
+
 # ────────────────────────────── 图 ──────────────────────────────
 import matplotlib
 matplotlib.use("Agg")

@@ -98,6 +98,7 @@ import ProjectionPhysics.SpaceMetric
 import ProjectionPhysics.RelativityDeviation
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.Explorations.RingTwist
+import ProjectionPhysics.Explorations.BraidThree
 import ProjectionPhysics.SpaceGravity
 import ProjectionPhysics.SpaceFold
 import ProjectionPhysics.TimeFreeze
@@ -121,4 +122,3 @@ import ProjectionPhysics.Explorations.GlueballCoupling
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
-import ProjectionPhysics.Explorations.RingTwist
