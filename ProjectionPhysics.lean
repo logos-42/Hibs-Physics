@@ -102,6 +102,7 @@ import ProjectionPhysics.Explorations.BraidThree
 import ProjectionPhysics.Explorations.TemperleyLiebThree
 import ProjectionPhysics.Explorations.FusionSelection
 import ProjectionPhysics.Explorations.MuPower
+import ProjectionPhysics.Explorations.MuTopology
 import ProjectionPhysics.SpaceGravity
 import ProjectionPhysics.SpaceFold
 import ProjectionPhysics.TimeFreeze

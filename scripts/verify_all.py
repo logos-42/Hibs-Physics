@@ -104,6 +104,7 @@ def main():
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
                        "scripts/verify_mu_power.py",
+                       "scripts/verify_mu_topology.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -956,6 +957,41 @@ def main():
               "缺失" not in mp.get("MP8_跨仓同号", {}) or mp["MP8_跨仓同号"]["缺失"] == [],
               mp.get("MP8_跨仓同号"))
 
+
+    # 3d. 非局部性：把「改变净连接数非局部」落成指数和与阈值代价（MT-N 系列）
+    mt = load_report("artifacts/mu_topology/report.json")
+    if mt:
+        n1 = mt["MT-N1_载体对齐"]
+        check("MT-N1: 载体对齐 —— e = 2·Σ_{i<j}Lk（与 RT-D 报告表对齐，7 个 (m,q) 点）",
+              n1["最大相对偏差"] is not None and n1["最大相对偏差"] < 1e-9 and len(n1["行"]) == 7,
+              {"最大相对偏差": n1["最大相对偏差"], "点数": len(n1["行"])})
+        n2 = mt["MT-N2_局部不变性"]
+        check("MT-N2: 局部变形（braid 关系式 / 共轭 / 循环置换）**全不改** e（三类违例全 0）",
+              n2["a 违例"] == 0 and n2["b 违例"] == 0 and n2["c 违例"] == 0,
+              {"关系式违例": n2["a 违例"], "共轭违例": n2["b 违例"], "循环违例": n2["c 违例"]})
+        check("MT-N3: 非局部见证 —— 加股（Markov 稳定化）使 e 变 ±1 ⟹ 改 e 必须改计数",
+              len(n2["(d) 加股改 e（见证）"]) > 0
+              and all(abs(r["e"] - sum(sv for _, sv in r["w"])) == 1
+                      for r in n2["(d) 加股改 e（见证）"]),
+              n2["(d) 加股改 e（见证）"])
+        n4 = mt["MT-N4_阈值代价"]
+        check("MT-N4: 代价语义 = 阈值能量（1e6–1e9 J，整管口径 0.6 GJ ≈ 装置级）",
+              n4["逐口径"][0]["能量 [J]"] < n4["整管（ε_mag 口径）[J]"] < 1e9
+              and abs(n4["装置尺度"]["装置储磁场能（整管口径）[J]"] - n4["整管（ε_mag 口径）[J]"]) < 1.0,
+              {"δ=0.5mm": n4["逐口径"][0]["能量 [J]"], "整管": n4["整管（ε_mag 口径）[J]"]})
+        n5 = mt["MT-N5_与 RT-H4 交叉核对"]
+        check("MT-N5: 与 RT-H4 交叉核对 —— 股数取值 >1 种 ⟹ 与「改 μ 要改股数」自洽",
+              n5["一致"] is True and len(n5["股数取值集合"]) > 1,
+              {"股数取值": n5["股数取值集合"]})
+        check("MT-N6: Lean 侧 MuTopology.lean 的 MT1–MT7 与 MT-N 互锁（指数和形式化）",
+              os.path.exists(os.path.join(REPO, "ProjectionPhysics/Explorations/MuTopology.lean"))
+              and all(k in open(os.path.join(REPO, "ProjectionPhysics/Explorations/MuTopology.lean"),
+                                encoding="utf-8").read()
+                      for k in ["MT1_e_append", "MT3_stabilization_changes_e",
+                                "MT5_conjugation_preserves_e"]))
+        check("MT-N7: 未做项登记（S3 局部/全局实验设计）存在",
+              len(mt["TODO_S3"]) >= 2, len(mt["TODO_S3"]))
+
     # 4. 产物完整性
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
@@ -1022,6 +1058,8 @@ def main():
         "artifacts/mu_power/report.json": 6_000,
         "artifacts/mu_power/summary.txt": 400,
         "artifacts/mu_power/fig_mu_power.png": 30_000,
+        "artifacts/mu_topology/report.json": 3_000,
+        "artifacts/mu_topology/summary.txt": 300,
         "artifacts/world_feed/world_feed.json": 8_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
