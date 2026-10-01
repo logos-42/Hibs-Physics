@@ -107,6 +107,7 @@ def main():
                        "scripts/verify_mu_topology.py",
                        "scripts/verify_vibration_statistics.py",
                        "scripts/verify_vibration_closure.py",
+                       "scripts/verify_spin_statistics_connection.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -722,6 +723,30 @@ def main():
         check("VBC-C5: 运动时内部频率按 1/γ 减慢（β=0.6 ⟹ 0.8 = 时间膨胀）",
               abs(dil[0.6] - 0.8) < 1e-12)
 
+    # 3d. 自旋-统计的代数内核：把 σ ∈ {±1} 从定义升级成定理
+    ssc = load_report("artifacts/spinstatisticsconnection/report.json")
+    if ssc:
+        res = ssc["results"]
+        s1 = res["S1_two_values_only"]
+        check("VSS-S1★★: σ²=1 在单位圆上只有两个解（α = 0 玻色 / α = π 费米）",
+              s1["零点个数（模 2π 去重）"] == 2, s1["|σ²−1| < 1e−6 的零点位置（rad）"])
+        s2 = res["S2_anyon_excluded"]
+        check("VSS-S2❌: 任意子被排除（α=2π/3 ⟹ |σ²−1| = √3 ≠ 0）",
+              abs(s2["|σ² − 1|"] - math.sqrt(3)) < 1e-9, s2["|σ² − 1|"])
+        s3 = res["S3_double_cover"]
+        check("VSS-S3: SU(2) 双覆盖 —— 2π 变号（e^{iπσ}=−I）+ 4π 复原（e^{2iπσ}=I）",
+              s3["2π 变号最大偏差"] < 1e-12 and s3["4π 复原最大偏差"] < 1e-12)
+        s4 = res["S4_spin_matching"]
+        check("VSS-S4★: 自旋-统计配对 = (−1)^{2j}（j=0,1/2,1,3/2,2 全中，且 R(2π) 是纯量）",
+              s4["整数自旋 ⟹ +1（玻色型）/ 半整数自旋 ⟹ −1（费米型）"]
+              and all(r["是否纯量（中心）"] for r in s4["表"])
+              and all(abs(r["R(2π) 的标量"] - r["(−1)^{2j}"]) < 1e-9 for r in s4["表"]))
+        s5 = res["S5_interface_VBS"]
+        tbl = {r["绕数 α"]: r for r in s5["表"]}
+        check("VSS-S5★: 接口 —— 绕数整数/半整数满足 4π 复原，一般绕数（任意子）不满足",
+              tbl[1.0]["满足 4π 复原"] and tbl[0.5]["满足 4π 复原"]
+              and not tbl[1.0 / 3.0]["满足 4π 复原"] and not tbl[1.7]["满足 4π 复原"])
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1128,6 +1153,10 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/spinstatisticsconnection/report.json": 4_000,
+        "artifacts/spinstatisticsconnection/summary.txt": 300,
+        "artifacts/spinstatisticsconnection/fig_two_values.png": 30_000,
+        "artifacts/spinstatisticsconnection/fig_spin_matching.png": 30_000,
         "artifacts/vibrationclosure/report.json": 4_000,
         "artifacts/vibrationclosure/summary.txt": 300,
         "artifacts/vibrationclosure/fig_phase_modes.png": 30_000,

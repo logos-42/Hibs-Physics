@@ -128,3 +128,4 @@ import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
 import ProjectionPhysics.Explorations.VibrationStatistics
 import ProjectionPhysics.Explorations.VibrationClosure
+import ProjectionPhysics.Explorations.VibrationSpinStatistics
