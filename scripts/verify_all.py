@@ -108,6 +108,7 @@ def main():
                        "scripts/verify_vibration_statistics.py",
                        "scripts/verify_vibration_closure.py",
                        "scripts/verify_spin_statistics_connection.py",
+                       "scripts/verify_spin_anisotropy.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -747,6 +748,33 @@ def main():
               tbl[1.0]["满足 4π 复原"] and tbl[0.5]["满足 4π 复原"]
               and not tbl[1.0 / 3.0]["满足 4π 复原"] and not tbl[1.7]["满足 4π 复原"])
 
+    # 3e. 自旋能不能当旋钮用？边界（方向不进入质量）+ 开口（带死法的新假设）
+    spn = load_report("artifacts/spinanisotropy/report.json")
+    if spn:
+        r = spn["results"]
+        s1 = r["SA1_orientation_blind"]
+        gens = s1["三个生成元的最大相对变化"]
+        check("SPN-SA1★: 锚定对 σ₁/σ₂/σ₃ + 随机 SU(2) + 全局相位全不变（自旋方向不进入质量）",
+              all(v < 1e-12 for v in gens.values())
+              and s1["随机 SU(2) 的最大相对变化"] < 1e-12
+              and s1["全局相位的最大相对变化"] < 1e-12,
+              gens)
+        s2 = r["SA2_up_down_degenerate"]
+        check("SPN-SA2★: ↑↓ 两自旋态质量简并（= 实验要检验的零假设）",
+              s2["差"] == 0.0 and s2["↑ 态锚定"] == s2["↓ 态锚定"], s2["差"])
+        s3 = r["SA3_D1_spin_split"]
+        check("SPN-SA3★★: 自旋分辨 D1 劈裂 = −2ε/((1−μ)(1−ε²)) 且 |劈裂| ≥ 2ε",
+              s3["解析 vs 数值最大相对偏差"] < 1e-9 and s3["全部满足 |劈裂| ≥ 2ε"],
+              s3["解析 vs 数值最大相对偏差"])
+        s4 = r["SA4_linewidth_gate"]
+        tbl = {row["T_i [eV]"]: row["可分辨 ε ≥"] for row in s4["表"]}
+        check("SPN-SA4: 诊断门槛 —— 1 keV ⟹ ε ≳ 1.46e−3；10 keV ⟹ ε ≳ 4.6e−3",
+              abs(tbl[1000.0] - 1.46e-3) < 1e-4 and abs(tbl[10000.0] - 4.62e-3) < 1e-4)
+        s5 = r["SA5_diagnostic_ladder"]
+        check("SPN-SA5: 诊断阶梯单调（热谱线 → 冷诊断 → 单粒子，可分辨 ε 逐级下降）",
+              all(s5["阶梯"][i]["可分辨 ε"] > s5["阶梯"][i + 1]["可分辨 ε"]
+                  for i in range(len(s5["阶梯"]) - 1)))
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1153,6 +1181,10 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/spinanisotropy/report.json": 5_000,
+        "artifacts/spinanisotropy/summary.txt": 400,
+        "artifacts/spinanisotropy/fig_spin_split.png": 30_000,
+        "artifacts/spinanisotropy/fig_diagnostic_ladder.png": 30_000,
         "artifacts/spinstatisticsconnection/report.json": 4_000,
         "artifacts/spinstatisticsconnection/summary.txt": 300,
         "artifacts/spinstatisticsconnection/fig_two_values.png": 30_000,
