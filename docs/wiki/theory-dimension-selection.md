@@ -114,3 +114,22 @@ Hopf link：`C₁ = {单位圆, z=0}`、`C₂ = {x=0, 圆心 (0,1,0), 半径 1}`
 
 **本页自纠一处 bug**：D2 的相位扫描第一版用了 `endpoint=False`，导致 α = π **落在网格外**
 （π 不是 2π/200001 的整数倍）⟹ 只数到 1 个零点（应 2）。改回 `endpoint=True` 后为 2。
+
+## 10. 补登记：与传统文献的关系（**本条的重叠面**）
+
+写完本页后去查文献。结果必须写清（与本轮 ES 页漏接 `BraidThree` 是同一类错）：
+
+| 本页的哪一半 | 文献里已有？ | 出处 |
+|---|---|---|
+| **R2 —— 用「只有三维有非平凡纽结/连接」来**选择**三维** | **已发表** | Berera, Buniy, Kephart, Päs, Rosa, *Knotty inflation and the dimensionality of spacetime*, **Eur. Phys. J. C (2017)**, arXiv:1508.01458, DOI 10.1140/epjc/s10052-017-5253-3。原话：「flux tube knots and links will only be topologically stable (or metastable) in three spatial dimensions… provides a dynamical explanation for the existence of **exactly three** large spatial dimensions」 |
+| **R1 —— d = 2 给 ℤ、d ≥ 3 给 ℤ₂ ⟹ 只有 ±1** | **已发表**（本页引的 Fox–Neuwirth 1962 只是群论来源；**物理陈述**是他们的） | Leinaas & Myrheim, *On the theory of identical particles*, Nuovo Cimento B **37**, 1 (1977)；Wilczek 1982（任意子命名） |
+| **两条串起来**（同一个「四维里纽结都平凡」的事实同时解释「三维只有 ±1」与「二维有任意子」） | **已由 Wilczek 公开讲过** | F. Wilczek, *Inside the Knotty World of 'Anyon' Particles*, **Quanta Magazine 2017-02-28**：同篇并列写「in four space dimensions it is trivial: all knots can be unraveled」与「in three space dimensions… the only consistent exchange factors are 1 and −1」 |
+| 本页用的两个例子（**三叶结、Hopf link**） | **也是他们的例子** | EPJ C 2017 原文举 overhand/**trefoil** 与 **Hopf link** |
+| 「为什么 3+1」是**已知体裁** | **多篇** | Tegmark, *On the dimensionality of spacetime*, Class. Quantum Grav. **14**, L69 (1997)（论据不同：可预测性/稳定性/复杂度）；arXiv:0711.1111 *The Spin-Statistics Theorem in Arbitrary Dimensions*（D = 8n+3, 4, 5） |
+
+**⟹ 本页对物理学界没有新东西。** 两条要求都是老的；「用它们夹出三维」这件事也已经有人做过——
+只是物理语境不同：**他们把纽结稳定性当作暴胀的前提，我们把扭转非平凡当作质量机制的前提**。
+本页唯一新的东西是**对本框架的**：把 P3 拆成两条可分别判死的要求（一个账本动作），不是新事实。
+
+**教训（写死）**：写「维数选择」这类看似新颖的论证前，**必须先搜** `dimension selection` /
+`why three spatial dimensions`；不能因为推理链是自己搭的，就当成自己的。

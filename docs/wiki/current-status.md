@@ -71,6 +71,21 @@ leo：「先做第二条，然后把第一条做完。」本条 = **第一条**�
 
 **产物**：Lean `Explorations/DimensionSelection.lean`；数值 `verify_dimension_selection.py` +
 `artifacts/dimensionselection/`（3 图）；门禁断言 DS-A1★★…A6★ 共 6 条；wiki `theory-dimension-selection.md`（新）+ index + 本段。
+### ⚠ 补登记（同日）：DS 轮的引用缺口
+
+leo 问「今天做的事里有没有以前物理学家没想到的地方」→ 去查文献，查出**DS 轮漏引已有文献**（与 ES 轮漏接 `BraidThree` 同类错）。**结论一字未改**，补的是引用与定性：
+
+- **R2 已被发表**：Berera–Buniy–Kephart–Päs–Rosa, *Knotty inflation and the dimensionality of spacetime*,
+  **Eur. Phys. J. C (2017)**（arXiv:1508.01458）—— 「只有三维有非平凡纽结/连接」用来**选择三维**已经发表；
+  语境不同（他们当暴胀前提，我们当质量机制前提），但重叠面是实的。
+- **R1 的物理陈述**：Leinaas & Myrheim 1977（d=2 给 ℤ、d≥3 给 ℤ₂ ⟹ 只有 ±1）；Wilczek 1982。
+- **两条串起来**：Wilczek, Quanta Magazine 2017-02-28 —— 同篇并列写「四维里纽结都平凡」与「三维只有 1 与 −1」。
+- **例子也撞**：EPJ C 2017 举 overhand/**trefoil** 与 **Hopf link**，与本轮 D3/D4 同两个例子。
+- **「为什么 3+1」是已知体裁**：Tegmark 1997（CQG 14, L69；论据不同）；arXiv:0711.1111（D = 8n+3,4,5）。
+
+⟹ **本页对物理学界零新东西**；唯一新的是**对本框架的**（把 P3 拆成两条可分别判死的要求）。
+**教训**：写「维数选择」这类论证前先搜 `dimension selection` / `why three spatial dimensions`。
+
 **本轮自纠一处 bug**：D2 的相位扫描第一版用 `endpoint=False`，导致 **α = π 落在网格外**
 （π 不是 2π/200001 的整数倍）⟹ 只数到 1 个零点（应 2）；改回 `endpoint=True` 后为 2。
 
