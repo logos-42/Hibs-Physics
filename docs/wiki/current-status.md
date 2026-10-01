@@ -89,6 +89,27 @@ leo：「交换回路与 2π 旋转回路同伦后续。」目标：把 VBS 那�
 **本页自纠两处 bug**：① 第一版收缩族用「θ ↦ U(s·θ) 同时缩放」——**不是回路同伦**（中间态端点跑到 −I
 不是闭曲线），改成纬线族 H(u,φ)；② 图标题里 `Z`(U+2124) **字体缺字形**渲染成空白 → 全换 `Z₂`/`Z`。
 
+### ⚠ 补登记（同日，推送 `e32c1f5` 之后）：漏接仓库已有「辫 / TL」线程
+
+推送后跑整库门禁，在 pre-commit 的 `lake build` 里发现仓库**已有** `Explorations/BraidThree.lean`
+（2026-09-29，BT1–BT5）与 `TemperleyLiebThree.lean` / `RingTwist.lean` 线程。逐条核对结果：
+**本轮部分内容与它们同结论**，当时没登记（**结论一字未改**，补的是引用与定性）：
+
+- `BraidThree.BT2` + **`BT3_full_twist_commutes_with_everything`**：全扭转**中心纯量**、与任意矩阵交换
+  ⟹ **这正是 ES8 所假设的「相位只依赖类」的矩阵层证明**（BT3 = `FactorsThroughClass` 的具体实现）。
+- **`BraidThree.BT4_at_minus_one`**：t = −1 时 Δ = −1 ⟹ `two_class_phase_values` 非平凡支的**显式实现**。
+- **`RingTwist.RT5_half_turn` / `RT5_full_turn` / `RT5_spinor_double_cover`**：**半整数圈 → −1、整数圈 → +1（双覆盖）**
+  ⟹ **与 ES5/E4 同结论；「双覆盖给 ±1」仓库早已有（cos 形式）**。ES5 的贡献只是**换语言（角色/阿贝尔化）+ 补群论理由**，
+  E4 补显式 SU(2) 提升与收缩族——**不是新发现**。
+- `BraidThree.BT5`（Δ 特征值只有 t³，二重）= 2 维既约 Burau 的否定；
+  `TemperleyLiebThree.ZNS_Z_not_scalar`（TL₃ 的 Z 非纯量）= 堵点在 TL 解除 ⟹ **任意子自由度在 TL/Jones 落地**，与本节第 3 部分互锁。
+- `MuTopology.MT1/MT2/MT5`（局部变形不改指数和）与「交换 = 全扭转」是**类层面**陈述相自洽。
+
+⟹ **ES 轮真正新增的只有四项**：(i) **群论理由**（`S_N^ab ≅ Z₂` vs `B_N^ab ≅ Z`，Fox–Neuwirth 1962）
++ 同一方程在两种群里的分裂对比；(ii) **ES8** 定义 ⟹ 条件定理；(iii) 一般 **ES4**（阶 N 的群 ⟹ N 次单位根）；
+(iv) **E4** 显式 SU(2) 提升 + 收缩族。
+**教训（写死）**：动手前先全库搜关键词（辫 / braid / 同伦 / 双覆盖 / 任意子 / π₁ / 配置空间）——本轮漏掉的正是这一步。
+
 **产物**：Lean `Explorations/ExchangeStatistics.lean`；数值 `verify_exchange_statistics.py` +
 `artifacts/exchangestatistics/`；门禁断言 ES-E1/E2/E3/E4/E5/E6 共 6 条；wiki 本页 + VBS 页同步改写。
 
