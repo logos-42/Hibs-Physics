@@ -105,6 +105,7 @@ def main():
                        "scripts/verify_conformal_blocks.py",
                        "scripts/verify_mu_power.py",
                        "scripts/verify_mu_topology.py",
+                       "scripts/verify_vibration_statistics.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -654,6 +655,40 @@ def main():
         check("MF-M8: 数据变化总表 7 行（面外死/面内与 N≥3 活）",
               len(res["M8_summary"]["rows"]) == 7)
 
+    # 3b. 振动闭包 => 费米/玻色（统计性、频率、秩的正交性）
+    vs = load_report("artifacts/vibrationstatistics/report.json")
+    if vs:
+        res = vs["results"]
+        n1 = res["N1_closure_factor"]
+        check("VBS-N1: 整数 k 的闭包相因子 = +1（玻色型）",
+              n1["整数 k 的 |sigma - 1| 最大值"] < 1e-12, n1["整数 k 的 |sigma - 1| 最大值"])
+        check("VBS-N1: 半整数 k 的闭包相因子 = -1（费米型）",
+              n1["半整数 k 的 |sigma + 1| 最大值"] < 1e-12, n1["半整数 k 的 |sigma + 1| 最大值"])
+        check("VBS-N1: 一般 k 落在任意子带（距 ±1 ≥ 0.3）",
+              n1["一般 k 到 {+1,-1} 的最小距离"] > 0.3, n1["一般 k 到 {+1,-1} 的最小距离"])
+        n2 = res["N2_period"]
+        check("VBS-N2★: 费米型 2pi 变号（|f+|=0）+ 4pi 复原（|f-|=0）",
+              n2["费米型 k=0.5 的 max|f(t+2pi) + f(t)|（应为 0：变号）"] < 1e-12
+              and n2["费米型 k=0.5 的 max|f(t+4pi) - f(t)|（应为 0：复原）"] < 1e-12)
+        check("VBS-N2: 玻色型 2pi 即复原",
+              n2["玻色型 k=1 的 max|f(t+2pi) - f(t)|（应为 0：复原）"] < 1e-12)
+        n3 = res["N3_phase_additive"]
+        check("VBS-N3★: 统计相位可加 sigma(k1)sigma(k2)=sigma(k1+k2)",
+              n3["12 组随机 k1,k2 的 max|乘积 - 和|"] < 1e-12
+              and n3["Z2 类别可加性（整数/半整数奇偶）全过"])
+        n4 = res["N4_rank_vs_frequency"]
+        check("VBS-N4★★: 同一个 omega 下光子 det=0 与电子 det>0 并存（频率正交于秩）",
+              n4["同一频率扫描（401 个 w）光子 max|det|"] < 1e-12
+              and n4["电子 det（秩 2，= |<pi1,pi2>|^2，辛内积）"] > 0.1
+              and n4["同一频率扫描（401 个 w）电子 det 最大相对偏差"] < 1e-12)
+        check("VBS-N4: det(p1+p2) = |<pi1,pi2>|^2（辛内积，TW6/GQN 恒等）",
+              n4["det(p1+p2) 与 |<pi1,pi2>|^2（辛内积）的偏差"] < 1e-12)
+        n5 = res["N5_dissipation_defect"]
+        check("VBS-N5★: 闭包(delta=0) max eps = 0（守恒，与 GQC1 一致）",
+              n5["delta=0（闭包）max eps"] < 1e-12, n5["delta=0（闭包）max eps"])
+        check("VBS-N5: 相位漂移 ⟹ 泄漏单调增（来源 = 第二输入缺口）",
+              n5["严格单调（泄漏随漂移增）"])
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1060,6 +1095,10 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/vibrationstatistics/report.json": 4_000,
+        "artifacts/vibrationstatistics/summary.txt": 300,
+        "artifacts/vibrationstatistics/fig_closure_statistics.png": 30_000,
+        "artifacts/vibrationstatistics/fig_rank_vs_frequency.png": 30_000,
         "artifacts/world_feed/world_feed.json": 8_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }

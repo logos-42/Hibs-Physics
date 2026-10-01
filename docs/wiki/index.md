@@ -65,4 +65,5 @@
 - [theory-mu-dynamics.md](./theory-mu-dynamics.md) — μ 动力学（TD1–TD21）：状态方程 μ↦μ+η(1−μ)（有限步不可达 μ=1 ⟹ 质量永不归零）+ 增益=抹平进展（flatten 接入 μ 演化）+ 控制顺序不可交换（先抹平 μ'=1 vs 先更新 μ'=0）+ FRC 接缝（窗口余量单调收窄 / 窗口关闭步判据）
 - [moire-field-ceiling-plan.md](./moire-field-ceiling-plan.md) — 魔角石墨烯 × 聚变场天花板账本（**计划**：七层账本 + 判决量 + 门表 + 执行清单）
 - [theory-moire-field-ceiling.md](./theory-moire-field-ceiling.md) — 魔角石墨烯场源账本（**结果**）：场天花板 → 密度 → μ 窗口判决（MFC1–MFC7，B_death ∝ 1/a，含死证定理）
+- [theory-vibration-statistics.md](./theory-vibration-statistics.md) — 振动闭包 × 费米/玻色（VBS1–VBS8）：统计性 = **闭包相因子** `f(θ+2π)=σf(θ)`（σ=+1 玻色 / σ=−1 费米 / 一般 任意子）；**统计相位可加**（ℤ₂ 群律：费米×费米=玻色）与奇偶律；★ 显式见证 = 半角螺旋（4π）费米 vs 全角螺旋（2π）玻色——**同一个振动只差基础周期**；★ 裁决 leo「同一个场只是频率不同」：若频率=ω（能量）**证伪**（同一 ω 下光子 det=0 与电子 det>0 并存），若频率=绕数 k **成立**；★ 耗散 = **闭包缺陷** ε（ε≡0 ⟺ 守恒 = GQC1），故「宇宙级耗散结构」等价于补一类**非酉公设** = 第二输入缺口
 - [log.md](./log.md)

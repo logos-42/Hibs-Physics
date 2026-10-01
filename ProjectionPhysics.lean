@@ -126,3 +126,4 @@ import ProjectionPhysics.Explorations.GlueballCoupling
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
+import ProjectionPhysics.Explorations.VibrationStatistics
