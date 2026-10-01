@@ -110,6 +110,7 @@ def main():
                        "scripts/verify_spin_statistics_connection.py",
                        "scripts/verify_spin_anisotropy.py",
                        "scripts/verify_exchange_statistics.py",
+                       "scripts/verify_scale_accounting.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -810,6 +811,38 @@ def main():
         check("ES-E6★★: 接口 —— 交换相因子 = 闭包相因子（VBS 定义升级为条件定理）",
               all(row["差"] == 0.0 for row in e6["表"]))
 
+    # 3g. 标度类缺口账本更正：单位类（可溶解）vs 比值类（真缺口）
+    sca = load_report("artifacts/scaleaccounting/report.json")
+    if sca:
+        r = sca["results"]
+        s1 = r["S1_unit_vs_ratio"]
+        hb = s1["ħ 三种单位制下的数值"]
+        check("SC-A1★: ħ 的数值随单位制变（SI 1.055e−34 / 自然 1 / 普朗克 1）⟹ 它是坐标不是不变量",
+              len(hb) == 3 and abs(hb[1] - 1.0) < 1e-15 and abs(hb[2] - 1.0) < 1e-15
+              and abs(hb[0] / 1.054571817e-34 - 1.0) < 1e-9, hb)
+        check("SC-A2★★: 单位类（M₀ 的坐标跨 37 个数量级）而比值 m_e/M₀ 跨单位制完全相同",
+              s1["m_e/M₀ 的跨单位制最大相对差"] < 1e-12
+              and max(s1["M₀ 三种单位制下的数值"]) / min(s1["M₀ 三种单位制下的数值"]) > 1e20,
+              "M₀ 坐标比 = %.1e；m_e/M₀ 最大相对差 = %.2e" % (
+                  max(s1["M₀ 三种单位制下的数值"]) / min(s1["M₀ 三种单位制下的数值"]),
+                  s1["m_e/M₀ 的跨单位制最大相对差"]))
+        check("SC-A3★★: 尺度协变性 —— 扫 7 个量级下一切比值恒定（残差 ~1e−16）",
+              r["S2_scale_covariance"]["比值残差最大（应 ~1e−16）"] < 1e-12)
+        check("SC-A4★★: 自由度计数 3 − 3 = 0（框架的 c/ħ/M₀ 恰好够定义 M/L/T ⟹ 全是单位）",
+              r["S3_degrees_of_freedom"]["计数"] == "3 − 3 = 0")
+        led = r["S4_gap_ledger"]
+        cnt = led["计数"]
+        ratio_gaps = " ".join(row["缺口"] for row in led["表"] if row["类"] == "比值类")
+        check("SC-A5★★: 缺口重排 = 4 单位类 / 5 比值类 / 1 未定类；比值类含 966× 与 v/M₀",
+              cnt["单位类（可溶解）"] == 4 and cnt["比值类（真缺口）"] == 5
+              and cnt["未定类"] == 1 and "966" in ratio_gaps and "v/M₀" in ratio_gaps,
+              cnt)
+        check("SC-A6★★: ħ 在框架里的全部出现位置都可被单位吸收 ⟹ 无可归约的无量纲组合",
+              r["S5_hbar_audit"]["全部可吸收"] is True)
+        check("SC-A7★: 真缺口的干净名字 = 层级问题 v/M₀ ≈ 252（标准理论也没解决）",
+              abs(r["S6_hierarchy"]["值"]["v/M₀"] - 252) < 1.0,
+              r["S6_hierarchy"]["值"]["v/M₀"])
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1216,6 +1249,11 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/scaleaccounting/report.json": 5_000,
+        "artifacts/scaleaccounting/summary.txt": 400,
+        "artifacts/scaleaccounting/fig_unit_vs_ratio.png": 30_000,
+        "artifacts/scaleaccounting/fig_scale_covariance.png": 30_000,
+        "artifacts/scaleaccounting/fig_gap_ledger.png": 60_000,
         "artifacts/exchangestatistics/report.json": 5_000,
         "artifacts/exchangestatistics/summary.txt": 400,
         "artifacts/exchangestatistics/fig_phase_space.png": 30_000,
