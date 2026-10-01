@@ -111,6 +111,7 @@ def main():
                        "scripts/verify_spin_anisotropy.py",
                        "scripts/verify_exchange_statistics.py",
                        "scripts/verify_scale_accounting.py",
+                       "scripts/verify_dimension_selection.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -843,6 +844,36 @@ def main():
               abs(r["S6_hierarchy"]["值"]["v/M₀"] - 252) < 1.0,
               r["S6_hierarchy"]["值"]["v/M₀"])
 
+    # 3h. 维数选择：「振动 → 三方向」的唯一性论证（两条硬要求的交 = {3}）
+    dsl = load_report("artifacts/dimensionselection/report.json")
+    if dsl:
+        r = dsl["results"]
+        d1 = r["D1_two_dim_phase_set"]
+        check("DS-A1★★: 二维（Z 型群）相位取值是连续统 ⟹ 任意子排除不掉（α=π/3 虚部 = √3/2）",
+              d1["落在 ±1 上的比例"] < 1e-3
+              and abs(d1["α = π/3 虚部（解析 √3/2）"] - d1["√3/2"]) < 1e-15,
+              "落在 ±1 上的比例 = %.2e" % d1["落在 ±1 上的比例"])
+        check("DS-A2★★: 三维（Z2 型群，阶 2）相位只有两类",
+              r["D2_three_dim_phase_set"]["满足 σ² = 1 的相位数（模 2π 去重）"] == 2)
+        d3 = r["D3_unlink_in_four_dim"]
+        check("DS-A3★★★: d ≥ 4 显式解结 —— 三叶结 3 个交叉被第 4 维全部解开且 R⁴ 无自交",
+              d3["3D 投影交叉数"] == 3 and d3["被解开的交叉数"] == 3
+              and d3["R⁴ 中加鼓包后最小非相邻点距（应 > 0 ⟹ 仍嵌入）"] > 0.01,
+              "3/3 解开；R⁴ 最小距离 = %.4f" % d3["R⁴ 中加鼓包后最小非相邻点距（应 > 0 ⟹ 仍嵌入）"])
+        d4 = r["D4_two_dim_cannot_link"]
+        check("DS-A4★★: d = 2 互连不可能 —— Hopf link 互不相交且 |Lk| ≈ 1，压到平面后必然相交",
+              d4["3D 中两环最小距离（应 > 0 ⟹ 互不相交）"] > 0.01
+              and abs(abs(d4["Gauss 双积分环绕数（应 ≈ 1）"]) - 1.0) < 0.01
+              and d4["投影 z=0 后两曲线的像的**几何**交点数（聚类）"] >= 1)
+        d5 = r["D5_dimension_verdict"]
+        check("DS-A5★★: 维数判定表 —— 只有 d = 3 同时满足两条要求（唯一性）",
+              d5["唯一同时满足的维数"] == 3
+              and sum(1 for row in d5["表"] if row["同时满足"] in ("是", "**是**")) == 1,
+              [row["d"] for row in d5["表"] if row["同时满足"] in ("是", "**是**")])
+        check("DS-A6★: 反例齐备 —— d=2 不满足 R1、d=4 不满足 R2（两条要求都不可省）",
+              any(row["d"] == 2 and row["统计两类?"] in ("否", "**否**") for row in d5["表"])
+              and any(row["d"] == 4 and row["非平凡连接?"] in ("否", "**否**") for row in d5["表"]))
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1249,6 +1280,11 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/dimensionselection/report.json": 5_000,
+        "artifacts/dimensionselection/summary.txt": 400,
+        "artifacts/dimensionselection/fig_phase_sets.png": 30_000,
+        "artifacts/dimensionselection/fig_unknot_r4.png": 30_000,
+        "artifacts/dimensionselection/fig_dimension_verdict.png": 30_000,
         "artifacts/scaleaccounting/report.json": 5_000,
         "artifacts/scaleaccounting/summary.txt": 400,
         "artifacts/scaleaccounting/fig_unit_vs_ratio.png": 30_000,
