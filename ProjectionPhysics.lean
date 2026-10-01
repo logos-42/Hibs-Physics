@@ -127,3 +127,4 @@ import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
 import ProjectionPhysics.Explorations.VibrationStatistics
+import ProjectionPhysics.Explorations.VibrationClosure

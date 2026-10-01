@@ -106,6 +106,7 @@ def main():
                        "scripts/verify_mu_power.py",
                        "scripts/verify_mu_topology.py",
                        "scripts/verify_vibration_statistics.py",
+                       "scripts/verify_vibration_closure.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -689,6 +690,38 @@ def main():
         check("VBS-N5: 相位漂移 ⟹ 泄漏单调增（来源 = 第二输入缺口）",
               n5["严格单调（泄漏随漂移增）"])
 
+    # 3c. 振动闭合：从「空间是振动 = 空间以光速运动」推出的三件事 + 一条撤回
+    vc = load_report("artifacts/vibrationclosure/report.json")
+    if vc:
+        res = vc["results"]
+        c1 = res["C1_open_mode"]
+        check("VBC-C1: 开放模（f=θ）无恒定闭包相因子（比值标准差 ≫ 0）",
+              c1["比值 f(θ+2π)/f(θ) 的标准差"] > 1.0, c1["比值 f(θ+2π)/f(θ) 的标准差"])
+        c2 = res["C2_closed_modes"]
+        check("VBC-C2★: 三类模（玻色 +1 / 费米 −1 / 任意子 e^{2πi/3}）的 σ 数值精确",
+              c2["数值 σ 最大误差"] < 1e-12, c2["数值 σ 最大误差"])
+        check("VBC-C2: 费米型 2π 变号 + 4π 复原",
+              c2["费米型 max|f(t+2π) + f(t)|（2π 变号，应 0）"] < 1e-12
+              and c2["费米型 max|f(t+4π) - f(t)|（4π 复原，应 0）"] < 1e-12)
+        c3 = res["C3_winding_integral"]
+        check("VBC-C3★★: 闭合路径 ∮dθ/(2π) 恒为整数（绕数整数化不是公设）",
+              c3["闭合路径（1000 条，n ∈ [-5,5]）max|∮dθ/2π − n|"] < 1e-12
+              and c3["开放路径（1000 条，均匀连续）落在整数上的比例"] == 0.0,
+              c3["闭合路径（1000 条，n ∈ [-5,5]）max|∮dθ/2π − n|"])
+        c4 = res["C4_time_is_closing_count"]
+        check("VBC-C4★: 闭合 ⟹ 时间：f(θ+n·2π) = σⁿ f(θ)（n = 闭合次数）",
+              c4["n=0..10 的 max 误差"] < 1e-12, c4["n=0..10 的 max 误差"])
+        c5 = res["C5_retraction_and_fix"]
+        check("VBC-C5❌: 撤回「欧氏等速 ⟹ 2πr=λ」——等速模型顶部 rim 点超光速",
+              c5["反例（等速模型）"]["是否超过 c"]
+              and c5["反例（等速模型）"]["顶部 rim 点经典合成速度"] > 1.0)
+        check("VBC-C5: 修正版 r = ƛ ⟺ 静止时 ħω₀ = m c²（数值精确）",
+              abs(c5["修正版（可用的相对论陈述）"]["静止：ħω₀/(m c²)"] - 1.0) < 1e-9)
+        dil = {d["beta"]: d["1/γ"] for d in
+               c5["修正版（可用的相对论陈述）"]["运动：内部频率比 = 1/γ（时间膨胀）"]}
+        check("VBC-C5: 运动时内部频率按 1/γ 减慢（β=0.6 ⟹ 0.8 = 时间膨胀）",
+              abs(dil[0.6] - 0.8) < 1e-12)
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1095,6 +1128,10 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/vibrationclosure/report.json": 4_000,
+        "artifacts/vibrationclosure/summary.txt": 300,
+        "artifacts/vibrationclosure/fig_phase_modes.png": 30_000,
+        "artifacts/vibrationclosure/fig_winding_integral.png": 30_000,
         "artifacts/vibrationstatistics/report.json": 4_000,
         "artifacts/vibrationstatistics/summary.txt": 300,
         "artifacts/vibrationstatistics/fig_closure_statistics.png": 30_000,
