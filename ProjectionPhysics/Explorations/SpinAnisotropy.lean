@@ -177,7 +177,9 @@ theorem two_eps_le_spinMassRatio_sub_one (ε : ℝ) (h0 : 0 ≤ ε) (h1 : ε < 1
     field_simp
     ring
   rw [hkey, le_div_iff₀ hpos]
-  nlinarith [sq_nonneg ε, h0]
+  -- 显式构造 2ε ≥ 0（把 h0 真正用进证明项，避免 unused variable 警告）
+  have h2ε : (0 : ℝ) ≤ 2 * ε := by linarith
+  nlinarith [h2ε, sq_nonneg ε]
 
 -- ---------------------------------------------------------------------------
 -- ③ 与既有判决量 D1 合流
