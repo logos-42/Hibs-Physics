@@ -109,6 +109,7 @@ def main():
                        "scripts/verify_vibration_closure.py",
                        "scripts/verify_spin_statistics_connection.py",
                        "scripts/verify_spin_anisotropy.py",
+                       "scripts/verify_exchange_statistics.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -775,6 +776,40 @@ def main():
               all(s5["阶梯"][i]["可分辨 ε"] > s5["阶梯"][i + 1]["可分辨 ε"]
                   for i in range(len(s5["阶梯"]) - 1)))
 
+    # 3f. 交换回路 ≅ 2π 旋转回路：把「统计性 = 闭包相因子」从定义升级成条件定理
+    exs = load_report("artifacts/exchangestatistics/report.json")
+    if exs:
+        r = exs["results"]
+        e1 = r["E1_two_class_phases"]
+        check("ES-E1★: Z₂ 角色只有两个（χ(2)=1 且 χ(2)=χ(1)² ⟹ χ(1)²=1 ⟹ 只能 ±1）",
+              e1["零点个数"] == 2, e1["扫描 |χ(1)²−1| < 1e−6 的零点（rad，模 2π 去重）"])
+        e2 = r["E2_double_exchange"]
+        # 自由度 = **存在**非 ±1 的取值（α=0 与 α=π 本来就是两个退化点，用 any 不用 all）
+        check("ES-E2★★: 二维 χ(2) = χ(1)²（两次交换 = 一次 2π 旋转）且 χ(1) 自由",
+              e2["最大偏差"] < 1e-12
+              and any(row["χ(1) 不是 ±1（任意子相位）"] for row in e2["抽样表"]),
+              "max|χ(2)−χ(1)²| = %.2e；非 ±1 抽样数 = %d/%d" % (
+                  e2["最大偏差"],
+                  sum(1 for row in e2["抽样表"] if row["χ(1) 不是 ±1（任意子相位）"]),
+                  len(e2["抽样表"])))
+        e3 = r["E3_reachable_phases"]
+        check("ES-E3: 三维可达相位 2 个 vs 二维整个 U(1)",
+              e3["三维（π₁ 的阿贝尔化 = Z₂）"]["可达相位个数"] == 2)
+        e4 = r["E4_double_cover_lift"]
+        check("ES-E4★★: SU(2) 提升 —— 2π 端点 = −1（非闭合）/ 4π 端点 = +1（闭合）+ 显式收缩族",
+              abs(e4["2π 提升端点距 +1（应为 2）"] - 2.0) < 1e-9
+              and e4["4π 提升端点距 +1（应为 0）"] < 1e-12
+              and e4["收缩族 H(u,φ)：|q|−1 最大偏差"] < 1e-12
+              and e4["收缩族 H(u,φ)：每条曲线闭合性 max|H(0,φ)−H(2π,φ)|"] < 1e-12
+              and e4["收缩族 H(u,π/2) 距常值最大偏差"] < 1e-12)
+        e5 = r["E5_belt_parity"]
+        check("ES-E5★★: 皮带诡计不变量 = 扭转数奇偶（2π 奇不可归零 / 4π 偶可归零）",
+              e5["局部分配保持 Σ 扭转（数值验证）"]
+              and e5["T=1 能否归零"] is False and e5["T=2 能否归零"] is True)
+        e6 = r["E6_interface_VBS_VSS"]
+        check("ES-E6★★: 接口 —— 交换相因子 = 闭包相因子（VBS 定义升级为条件定理）",
+              all(row["差"] == 0.0 for row in e6["表"]))
+
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
     if dev:
@@ -1181,6 +1216,10 @@ def main():
         "artifacts/mu_power/fig_mu_power.png": 30_000,
         "artifacts/mu_topology/report.json": 3_000,
         "artifacts/mu_topology/summary.txt": 300,
+        "artifacts/exchangestatistics/report.json": 5_000,
+        "artifacts/exchangestatistics/summary.txt": 400,
+        "artifacts/exchangestatistics/fig_phase_space.png": 30_000,
+        "artifacts/exchangestatistics/fig_belt_parity.png": 30_000,
         "artifacts/spinanisotropy/report.json": 5_000,
         "artifacts/spinanisotropy/summary.txt": 400,
         "artifacts/spinanisotropy/fig_spin_split.png": 30_000,
