@@ -320,3 +320,29 @@ python3 scripts/sim_two_flow_ring_gpu.py                        # CPU 快档（~
 python3 scripts/sim_two_flow_ring_gpu.py --device mps --scale mps   # 本机 GPU（~105 s）
 python3 scripts/sim_two_flow_ring_gpu.py --device cuda --scale full # A100（容器恢复后）
 ```
+
+#### 10.6.4 A100 full 档跑完（9/9）—— 两档结论一致，且修正了一条判据
+
+容器重启后（值守自己抓到 PID 1 变化：`Sun Sep 27 03:25:56` → `Fri Oct 2 09:58:53`），
+预置作业在 **A100（GPU 0）** 上以 `--device cuda --scale full` 跑完：**9/9 通过，墙钟 6.89 s**
+（nseg 2048 / **96³ 网格 = 884,736 点** / 10⁶ 粒子 / **float64**）。
+
+| 量 | A100 full（float64 / 2048 / 96³ / 10⁶） | 本机 MPS（float32 / 512 / 48³ / 2×10⁵） |
+|---|---|---|
+| 轴上 B_z(0)（λ=1.5） | **−1.6455962657928467** | −1.6455962657928467（**逐位相同**） |
+| 内层干净零点 r\*（λ=0.4） | 0.242937368321263 | 0.24293730407953262（相对差 2.6e−07，即 float32 的精度极限） |
+| 99% 捕获容差 ξ | **≤ 0.001** | ≤ 0.001（**一致**） |
+| 96³ 全场 | max\|B\| = 22.07 T | 未跑 |
+| 墙钟 | **6.89 s** | 96.63 s（A100 快 **14×**） |
+
+⟹ **两档一致**：§10.6.1 的设计结论与 ξ 容差**不是小尺寸/单精度的伪影**——14 倍分辨率 + 双精度下复现。
+
+**★ 修正一条判据（本轮实测推翻）**：**操作级判据是 `nvidia-smi` + `torch`，不是裸设备 open。**
+重启后这个容器里 `nvidia-smi` 正常、`torch.cuda.is_available() = True`、4096² 矩阵乘实算通过，
+**而 `/dev/nvidiactl` 与 `/dev/nvidia0` 直接 open 仍报 EPERM**。我先前把裸设备探针当成"GPU 恢复"的门，
+导致**值守拒跑**（它按 `nvidia0 OK` 判断，没自动起跑，是手动起的）。裸设备探针只能当
+「`nvidia-smi` 挂掉时」的**诊断**用，不能当**正向判据**。
+
+**诚实**：A100 那次**没有出图** —— 服务器的 `vllm-cu128` env 没装 matplotlib，
+`report_a100_full.json` 里如实记着 `图_失败: ModuleNotFoundError: No module named 'matplotlib'`；
+仓库里的图是本机 MPS 档的（同一函数、结构相同）。
