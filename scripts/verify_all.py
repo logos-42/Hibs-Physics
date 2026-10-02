@@ -104,6 +104,7 @@ def main():
                        "scripts/sim_two_flow_ring.py",
                        "scripts/sim_two_flow_ring_gpu.py",
                        "scripts/verify_two_flow_ring_axial.py",
+                       "scripts/verify_two_flow_ring_axial_env.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
@@ -1217,6 +1218,28 @@ def main():
               len(mt["TODO_S3"]) >= 2, len(mt["TODO_S3"]))
 
     # 4. 产物完整性
+    # ── 轴向分离三步（零场面 / 包络 / 有限截面）：读 report.json 复核硬数字 ──
+    ax = load_report("artifacts/twoflowring_axial_env/report.json")
+    c3 = ax["③_有限截面"]
+    check("轴向三步-③: 有限截面使所需分离距离略增，且修正量 < 1%（点丝口径够用）",
+          0 < c3["截面_d_star_m"] - c3["点丝_d_star_m"] < 0.01
+          and abs(c3["点丝_d_star_m"] - 1.090526) < 1e-5,
+          {"点丝": c3["点丝_d_star_m"], "截面": c3["截面_d_star_m"]})
+    c1 = ax["①_零场面"]
+    check("轴向三步-①: 干净零点分支过原点、轴向跨度有限、到导体表面有净空",
+          c1["轴向跨度_m"][0] < 0 < c1["轴向跨度_m"][1] and c1["到导体表面最小净空_m"] > 0.05
+          and abs(c1["原点_B_z_T"]) < 1e-8,
+          {"净空_m": c1["到导体表面最小净空_m"], "跨度": c1["轴向跨度_m"]})
+    e2 = ax["②_装置包络"]
+    check("轴向三步-②: 四条硬界同时满足（FC12 / PF7 / 围包 / 环厚）",
+          e2["工作场强_B_T"] < e2["FC12上界_B_T"]
+          and 0.63 <= e2["PF7允许半径_m"] and 0.63 <= e2["装置尺度_L_m"] / 2.0
+          and e2["环厚上限_t_max_m"] > 0.10 and e2["轴向包络_m"] <= e2["装置尺度_L_m"] + 1e-9,
+          {k: e2[k] for k in ("装置尺度_L_m", "工作场强_B_T", "FC12上界_B_T", "PF7允许半径_m")})
+    check("轴向三步-④: 全部机器判据通过（report 内 checks 全绿）",
+          len(ax["checks"]) >= 11 and all(c["通过"] for c in ax["checks"]),
+          f"{sum(1 for c in ax['checks'] if c['通过'])}/{len(ax['checks'])}")
+
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
         "artifacts/maxwellspace/maxwell_residuals.png": 30_000,
@@ -1331,6 +1354,9 @@ def main():
         "artifacts/twoflowring_axial/report.json": 1_500,
         "artifacts/twoflowring_axial/summary.txt": 80,
         "artifacts/twoflowring_axial/fig_axial_null.png": 30_000,
+        "artifacts/twoflowring_axial_env/report.json": 3_000,
+        "artifacts/twoflowring_axial_env/summary.txt": 100,
+        "artifacts/twoflowring_axial_env/fig_axial_envelope.png": 60_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
