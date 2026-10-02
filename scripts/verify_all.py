@@ -103,6 +103,7 @@ def main():
                        "scripts/verify_two_flow_ring.py",
                        "scripts/sim_two_flow_ring.py",
                        "scripts/sim_two_flow_ring_gpu.py",
+                       "scripts/verify_two_flow_ring_axial.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
@@ -1327,6 +1328,9 @@ def main():
         "artifacts/twoflowring_gpu/report.json": 2_000,
         "artifacts/twoflowring_gpu/summary.txt": 60,
         "artifacts/twoflowring_gpu/fig_gpu_structure.png": 30_000,
+        "artifacts/twoflowring_axial/report.json": 1_500,
+        "artifacts/twoflowring_axial/summary.txt": 80,
+        "artifacts/twoflowring_axial/fig_axial_null.png": 30_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
