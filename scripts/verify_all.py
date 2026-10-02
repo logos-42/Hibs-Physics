@@ -100,6 +100,7 @@ def main():
                        "scripts/verify_diagnostics_ladder.py",
                        "scripts/verify_buildability.py",
                        "scripts/verify_program_gates.py",
+                       "scripts/verify_two_flow_ring.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
@@ -1311,6 +1312,10 @@ def main():
         "artifacts/vibrationstatistics/fig_closure_statistics.png": 30_000,
         "artifacts/vibrationstatistics/fig_rank_vs_frequency.png": 30_000,
         "artifacts/world_feed/world_feed.json": 8_000,
+        "artifacts/twoflowring/report.json": 4_000,
+        "artifacts/twoflowring/summary.txt": 100,
+        "artifacts/twoflowring/fig_two_flow_ring.png": 30_000,
+        "artifacts/twoflowring/fig_feasible_region.png": 30_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():

@@ -56,6 +56,7 @@
 - [theory-antigravity-confinement.md](./theory-antigravity-confinement.md) — 反引力约束稳态自维持聚变环（装置设计）：时变引力场 μ(t) 替代 FRC 分段压缩，双流环 + RMF 时变场源，μ 工作区间 0<μ<0.99978
 - [fusion-program-roadmap.md](./fusion-program-roadmap.md) — 可控核聚变五年计划（判决漏斗）：3 判决量（D1 μ 回旋频移签名 / D2 Λ 锁定比 / D3 k 功率标度指数）+ 8 道门 + μ 数量级阶梯（每年一个数量级）+ 团队编成 + 预写失败处置；判决期只占 1.22% 人力
 - [hardware-axes.md](./hardware-axes.md) — 硬件四轴（装置 / 诊断 / 建造-可造性 / 排期）机器可读化：可锚定量（环几何 2.111m / 线圈 15.85–26.05T / FC12 选频带 110.6–276.4MHz vs c/L=599.6MHz / δ→μ_min 阶梯 1e-3…1e-5 / 八门 Σ=1161 人·月）+ 四份验收脚本产物（`artifacts/device|diagnostics|buildability|program`）+ 只搬运不造数的下游 feed（`artifacts/world_feed/world_feed.json`，47 条锚点）+ 缺口清单（需 leo 给的 10 项）
+- [design-two-flow-ring.md](./design-two-flow-ring.md) — **双流环设计：缺口容忍的可行域**。把 hardware-axes §2.4 缺口 #2 的五个待填数换成**一个由已证条件界定的域**：`Γ=v·L`（PlasmaDynamics 的显式定义）+ DR2b ⟹ **速度比被半径比锁死**（`v_H/v_Cu=R_Cu/R_H`，且布置唯一）；FC12 给 `L·B<9.7613 m·T`、PF7 给 `R·B²≤2μ₀σ_y t`、FC8 给 `B≤26.05 T` —— 三条重算与锚点逐位一致。**容错三档**：硬界 / 可调旋钮 / 仍未定（μ 主动产生与 η 来源，不填数，改为 G1 前置判决）。**真发现**：PF7 锚点的 t=0.5 m 与 FC12 的 c/L 上界打架（`t_max=0.2024 m`，κ=2）⟹ 两条硬界把环厚度夹成区间，**区间内任取都可行**。17 条断言 + 3 次变异测试。
 - [mass-to-zero.md](./masstozero.md) — 铜-氢等离子体同位素特征矩阵（q=Z²/√m 锚定权重，PA/DR/TE 的源材料，Cu:H=106:1）
 - [theory-hidden-qft.md](./theory-hidden-qft.md) — 隐数坐标量子场论（HQ1–HQ6，接 RiemannHIBS）：真空=临界叶 r=√e 相位随机模式 + 涨落超临界⟹极化相变（Ising 型，数值 0.00→0.83）+ 相干能量 E=−J|Σexp(iθ)|²/N≤0 + 能量账本闭合（释放=耦合减少，非净产出）
 - [theory-gravity-control-algebra.md](./theory-gravity-control-algebra.md) — 控制引力场的代数系统（GCA0–GCA7）：逻辑基元=起伏能量二次型，布尔=层状区域族；不交/嵌套可交换，部分重叠不可交换
