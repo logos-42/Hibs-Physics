@@ -105,6 +105,7 @@ def main():
                        "scripts/sim_two_flow_ring_gpu.py",
                        "scripts/verify_two_flow_ring_axial.py",
                        "scripts/verify_two_flow_ring_axial_env.py",
+                       "scripts/verify_two_flow_ring_gravity.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
@@ -1240,6 +1241,22 @@ def main():
           len(ax["checks"]) >= 11 and all(c["通过"] for c in ax["checks"]),
           f"{sum(1 for c in ax['checks'] if c['通过'])}/{len(ax['checks'])}")
 
+    # ── 双流环**引力场**（GCA2 判定泛函 → η → μ → 引力响应）──
+    gr = load_report("artifacts/twoflowring_gravity/report.json")
+    check("引力场-1: 地基 —— 同半径 + 反环量的两环其空间流**精确抵消**（η = 1，Q_A = 0）",
+          abs(gr["eta_同半径对"] - 1.0) < 1e-12,
+          f"η(同半径对) = {gr['eta_同半径对']}")
+    check("引力场-2: 按 FRC 挑的几何（R_H=0.35 / R_Cu=0.60）在目标区**给不出引力关闭**（η < 0，如实登记）",
+          gr["η"] < 0,
+          f"η = {gr['η']:+.4f}；Q_A 单环 {gr['Q_A']['单Cu环']:.4e} → 双环 {gr['Q_A']['双环']:.4e}")
+    check("引力场-3: 容差实测存在（径向/轴向两个方向；径向宽容、轴向苛刻）",
+          gr["容差_m"]["径向(η≥0.5)"] is not None and gr["容差_m"]["轴向(η≥0.5)"] is not None
+          and gr["容差_m"]["径向(η≥0.5)"] > 0.05,
+          {k: v for k, v in gr["容差_m"].items()})
+    check("引力场-4: 全部机器判据通过（report 内 checks 全绿）",
+          len(gr["checks"]) >= 11 and all(c["通过"] for c in gr["checks"]),
+          f"{sum(1 for c in gr['checks'] if c['通过'])}/{len(gr['checks'])}")
+
     artifacts = {
         "artifacts/maxwellspace/three_fields.png": 30_000,
         "artifacts/maxwellspace/maxwell_residuals.png": 30_000,
@@ -1357,6 +1374,9 @@ def main():
         "artifacts/twoflowring_axial_env/report.json": 3_000,
         "artifacts/twoflowring_axial_env/summary.txt": 100,
         "artifacts/twoflowring_axial_env/fig_axial_envelope.png": 60_000,
+        "artifacts/twoflowring_gravity/report.json": 4_000,
+        "artifacts/twoflowring_gravity/summary.txt": 100,
+        "artifacts/twoflowring_gravity/fig_gravity_field.png": 60_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():

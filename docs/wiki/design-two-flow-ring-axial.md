@@ -14,6 +14,11 @@ tags: [two-flow-ring, axial-separation, null-surface, field-reversed, design-anc
 
 # 轴向分离双流环：把中性面从导体上搬进空间
 
+> **目标校正（2026-10-02，leo）**：「要的是双环方案产生的引力场，不是 FRC。」
+> 本页是**磁位形**那条线（中性面 / 分界面 / 芯部几何），**不是**当前目标；
+> 引力场那条线见 [design-two-flow-ring-gravity.md](./design-two-flow-ring-gravity.md)。
+> 本页的量（零点、分界面、闭合磁面）仍是对的，但**别再把它们当设计目标引用**。
+
 ## 0. 这一页是什么：一个**目标**，不是又一轮笔记
 
 `design-two-flow-ring.md` §10.6.1 的结论是：**共面布置下，场变号点恰好落在内环半径上**
