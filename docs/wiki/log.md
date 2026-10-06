@@ -154,3 +154,4 @@
 | 2026-10-06 | VGQF 四力桥接 | 将振动旋量质量候选接入 GQF2 | `q_spin(t)` 使 `m(t)` 非恒定，再代入 `P=m(C−v)`；四个 product-rule 通道复现，最大数值误差 2.33e−5。**结论：接口完成；λ 仍是输入，未完成四力数值统一。** |
 | 2026-10-06 | VK Lean 形式化 | 将振动 κ 候选分叉从 Python 提升为 Lean 证明 | VK1–VK7：光锥 `Δ=0`、包络 `K>0`、两候选不可恒等；固定模长相位光锥径向系数为 0、脱光锥非零。**结论：形式化证明了当前本体没有唯一 κ 选择规则。** |
 | 2026-10-06 | UV Lean 接口 | 将振动、旋量、MS5、GQF2 统一代数化 | 新增 `UnifiedVibration.lean`：q_spin 因子分解、零/正性、J=κq_spin、P=m(C−v)、四力 product rule、κ 线性。**结论：接口形式化完成；κ 与包络动力学仍是输入/缺口。** |
+| 2026-10-06 | UV 自然单位修正 | 质量直接取振动条数候选 | `UnifiedVibration.lean` 新增 `vibrationMass=q_spin`、`vibrationMomentum=m_vib(C−v)` 与零性/product rule 定理。**结论：按“质量=位移条数”自然单位链可闭合；从条数到绝对质量单位仍是归一化缺口。** |

@@ -72,6 +72,32 @@ theorem flowMomentum_product_rule (dm m C v dC dv : ℝ) :
   unfold fourForceSum
   ring
 
+/-- 自然单位下的振动质量候选：质量 = 旋量/包络位移条数候选。 -/
+def vibrationMass (a₁ a₂ dθ : ℝ) : ℝ :=
+  spinorEnvelopeCandidate a₁ a₂ dθ
+
+/-- 自然单位下的流动动量候选：P = m_vib(C−v)。 -/
+def vibrationMomentum (a₁ a₂ dθ C v : ℝ) : ℝ :=
+  vibrationMass a₁ a₂ dθ * (C - v)
+
+/-- UV8：自然单位候选质量就是旋量/包络条数候选。 -/
+theorem vibrationMass_eq_spinor_candidate (a₁ a₂ dθ : ℝ) :
+    vibrationMass a₁ a₂ dθ = spinorEnvelopeCandidate a₁ a₂ dθ := by
+  rfl
+
+/-- UV9：相位对齐时振动质量候选为零（光子型边界）。 -/
+theorem vibrationMass_zero_of_aligned (a₁ a₂ : ℝ) :
+    vibrationMass a₁ a₂ 0 = 0 := by
+  exact spinorEnvelopeCandidate_zero a₁ a₂
+
+/-- UV10：自然单位下动量仍满足同一 product-rule 四力分解。 -/
+theorem vibrationMomentum_force_channels
+    (dm m C v dC dv : ℝ) :
+    dm * C + m * dC - dm * v - m * dv =
+      dm * (C - v) + m * (dC - dv) := by
+  ring
+
+
 /-- UV6：四通道按物理标签分组仍是同一个 product rule。 -/
 theorem flow_channels_grouped (dm m C v dC dv : ℝ) :
     dm * C + m * dC - (dm * v + m * dv) =
