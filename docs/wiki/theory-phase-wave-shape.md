@@ -543,3 +543,48 @@ m·dC  = 0.60
 
 **这条链已经运行，但 κ=1 是接口归一化，不是物理推导值。**因此 KVIB 是“全链配置测试”，
 不是“统一理论完成”。绝对 `κ`、质量单位、电子质量、胶球阶梯和第二标度仍未由振动本体推出。
+
+
+## 20. VGQF：振动旋量质量候选接入四力 product rule（2026-10-06）
+
+仓库已有 GQF2：
+
+```text
+P = m(C−v)
+dP/dt = dm·C + m·dC − dm·v − m·dv
+```
+
+本轮令：
+
+```text
+q_spin(t)=|A₁(t)A₂(t)|² sin²(Δθ(t)/2)
+m(t)=m₀ + λ q_spin(t)
+```
+
+再代入 `P=m(C−v)`，数值验证 product rule 最大误差：
+
+```text
+2.33e−5
+```
+
+四个通道仍然保持：
+
+```text
+dm·C        电场通道
+m·dC        核力通道
+−dm·v       磁场通道
+−m·dv       万有引力/惯性通道
+```
+
+这实现了：
+
+```text
+振动相位/包络
+  → 旋量质量候选 q_spin
+  → m(t)
+  → GQF2 四力通道
+```
+
+但 `λ` 仍是显式输入，且本轮没有从振动本体推出它。因此这是**动力学接口测试**，不是四力数值统一。
+
+VGQF1–VGQF3 已挂入 `verify_all.py`；产物：`scripts/verify_vibration_gqf_bridge.py`、`artifacts/vibrationgqf/`。

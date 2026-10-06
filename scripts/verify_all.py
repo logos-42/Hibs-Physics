@@ -131,6 +131,7 @@ def main():
                        "scripts/verify_spinor_source_closure.py",
                        "scripts/verify_spinor_source_dimensions.py",
                        "scripts/verify_k_from_vibration.py",
+                       "scripts/verify_vibration_gqf_bridge.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -1022,6 +1023,15 @@ def main():
         check("KVIB2★★: κ仍是接口归一化而非物理推导",
               "不是物理推导值" in kvib["unified_chain"]["status"],
               kvib["unified_chain"]["status"])
+
+    vgqf = load_report("artifacts/vibrationgqf/report.json")
+    if vgqf:
+        check("VGQF1★: 振动旋量质量候选使 m(t) 非恒定",
+              vgqf["mass_range"][1] > vgqf["mass_range"][0], vgqf["mass_range"])
+        check("VGQF2★: 振动质量源接入 GQF2 product rule",
+              vgqf["max_product_rule_error"] < 2e-3, vgqf["max_product_rule_error"])
+        check("VGQF3★★: lambda 仍显式是输入",
+              vgqf["lambda_input"] == 0.4, vgqf["lambda_input"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
