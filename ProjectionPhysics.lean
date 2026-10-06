@@ -134,3 +134,4 @@ import ProjectionPhysics.Explorations.ExchangeStatistics
 import ProjectionPhysics.Explorations.ScaleCovariance
 import ProjectionPhysics.Explorations.DimensionSelection
 import ProjectionPhysics.Explorations.PhaseField
+import ProjectionPhysics.Explorations.VibrationKappa

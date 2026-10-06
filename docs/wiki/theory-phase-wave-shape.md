@@ -588,3 +588,18 @@ m·dC        核力通道
 但 `λ` 仍是显式输入，且本轮没有从振动本体推出它。因此这是**动力学接口测试**，不是四力数值统一。
 
 VGQF1–VGQF3 已挂入 `verify_all.py`；产物：`scripts/verify_vibration_gqf_bridge.py`、`artifacts/vibrationgqf/`。
+
+
+## 21. VK：振动本体中 κ 候选分叉的 Lean 证明（2026-10-06）
+
+新增 `Explorations/VibrationKappa.lean`，不使用 Python 作为证明，形式化以下事实：
+
+- `dispersionDefect(c,k,ω)=c²k²−ω²`；
+- 光锥 `ω=c·k` 时，`dispersionDefect=0`；
+- 正包络参数 `c_env>0` 时，`envelopeCurvature=c_env/2>0`；
+- 同一光锥振动上，两个候选严格分离：`Δ=0` 而 `K_shape>0`；
+- 因此当前定义不能证明 `Δ=K_shape`，也不能从现有振动结构唯一选择 κ。
+
+这是本轮要求的“直接按猜想进行的形式化”结果：**形式化证明了候选分叉和当前缺口，而不是把任意一个候选冒充最终 κ。**
+
+VK1–VK5 是 Lean 定理，聚合根 build 通过。
