@@ -128,6 +128,7 @@ def main():
                        "scripts/verify_phase_source_closure.py",
                        "scripts/verify_spinor_phase_interface.py",
                        "scripts/verify_spinor_envelope_mass.py",
+                       "scripts/verify_spinor_source_closure.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -993,6 +994,14 @@ def main():
     if sem:
         check("SEM1★★: TW6 质量候选 = 包络幅值因子×相对旋转因子",
               sem["max_error"] < 1e-12, sem["max_error"])
+
+    ssc = load_report("artifacts/spinorsourceclosure/report.json")
+    if ssc:
+        check("SSC1★★: 旋量质量候选可作为 MS5 源项形状",
+              all(abs(row["J_kappa_1"]-row["spinor_q"]) < 1e-12 for row in ssc["rows"]),
+              ssc["rows"])
+        check("SSC2★★: MS5 绝对耦合 kappa 仍是输入",
+              ssc["kappa_is_input"] is True, ssc["kappa_is_input"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

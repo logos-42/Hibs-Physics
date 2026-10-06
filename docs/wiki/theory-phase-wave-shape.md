@@ -453,3 +453,32 @@ TW6 双旋量质量候选
 也未把该候选归一化到电子质量、胶球阶梯或第二标度。
 
 SEM1 已挂入 `verify_all.py`；产物：`scripts/verify_spinor_envelope_mass.py`、`artifacts/spinorenvelope/`。
+
+
+## 17. SSC：旋量质量候选能否闭合 MS5 源项（2026-10-06）
+
+SEM 已得到双旋量候选：
+
+```text
+q_spin = |det(ψ₁,ψ₂)|² = |A₁A₂|² sin²(Δθ/2)
+```
+
+本轮测试最小源闭合形式：
+
+```text
+J = κ · q_spin
+```
+
+三组不同包络和旋量相对方向均满足 `J/κ=q_spin`，说明旋量质量候选可以作为 MS5 源项的**形状**。
+但 `κ` 仍是绝对耦合输入：改变 κ 会整体改变 J，而现有公设没有给出 κ。
+
+**结论**：电子旋量拓扑、包络形状和 MS5 源项已经可以放进同一个候选接口：
+
+```text
+ψ=A U_y(θ)ψ₀ → q_spin → J=κ q_spin → □C=J
+```
+
+但这还不是完全闭合的统一理论，因为 κ 的来源、单位和动力学方程仍未推导。
+若 κ 只能手输，这只是把“质量归一化缺口”搬到 MS5 源项。
+
+SSC1/SSC2 已挂入 `verify_all.py`；产物：`scripts/verify_spinor_source_closure.py`、`artifacts/spinorsourceclosure/`。
