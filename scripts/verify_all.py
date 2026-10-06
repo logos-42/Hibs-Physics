@@ -120,6 +120,7 @@ def main():
                        "scripts/verify_dimension_selection.py",
                        "scripts/verify_phase_wave_shape.py",
                        "scripts/verify_phase_wave_coupling.py",
+                       "scripts/verify_phase_anchor_interface.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -913,6 +914,15 @@ def main():
               res["PW4"])
         check("PW5★★: 脱流残差与 SM3 偏离量 1-v² 成正比",
               res["PW5"]["比例离散度"] < 1e-10, res["PW5"]["比例离散度"])
+
+    pwa = load_report("artifacts/phaseanchor/report.json")
+    if pwa:
+        check("PWA1★★: PW3 不能直接等同 MC1（s=1-v 的误差非零）",
+              pwa["max_abs_error"]["s=1-v"] > 1e-3, pwa["max_abs_error"])
+        check("PWA2★★: PW3 不能直接等同 MC1（s=1-v² 的误差非零）",
+              pwa["max_abs_error"]["s=1-v²"] > 1e-3, pwa["max_abs_error"])
+        check("PWA3★: 令 s=sqrt(PW3) 可逐点匹配，但属于定义匹配",
+              pwa["max_abs_error"]["s=sqrt(PW3)"] == 0.0, pwa["max_abs_error"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
