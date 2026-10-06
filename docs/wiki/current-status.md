@@ -1418,3 +1418,5 @@ PW1/PW2：`A(x−t)exp(iθ(x−t))` 同流时残差为 0；PW3：包络速度 `v
 **VGQF 追加**：令 `m(t)=m₀+λq_spin(t)` 后接入既有 GQF2，product rule 最大误差 2.33e-5，四通道保持；**λ=0.4 仍为输入，故只完成振动→四力接口测试，不是数值统一。**
 
 **VK Lean 追加**：`VibrationKappa.lean` 已形式化证明色散缺陷与包络曲率候选分叉，以及固定模长相位场的光锥/脱光锥径向系数；不是 Python 拟合。
+
+**UV Lean 追加**：`UnifiedVibration.lean` 已将包络×旋量→`q_spin`→MS5 源项→`P=m(C−v)`→GQF2 四力 product rule 形式化；κ 保留为显式接口参数，绝对动力学仍未闭合。
