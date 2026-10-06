@@ -1,0 +1,75 @@
+{
+  "dispersion_candidates": [
+    {
+      "k": 1.0,
+      "omega": 1.0,
+      "dispersion_defect": 0.0,
+      "on_shell": true
+    },
+    {
+      "k": 1.0,
+      "omega": 0.8,
+      "dispersion_defect": 0.3599999999999999,
+      "on_shell": false
+    },
+    {
+      "k": 2.0,
+      "omega": 1.0,
+      "dispersion_defect": 3.0,
+      "on_shell": false
+    },
+    {
+      "k": 3.0,
+      "omega": 2.0,
+      "dispersion_defect": 5.0,
+      "on_shell": false
+    }
+  ],
+  "envelope_candidates": [
+    {
+      "c_env": 0.25,
+      "K_shape": 0.125,
+      "ratio": 1.0
+    },
+    {
+      "c_env": 1.0,
+      "K_shape": 0.5,
+      "ratio": 1.0
+    },
+    {
+      "c_env": 4.0,
+      "K_shape": 2.0,
+      "ratio": 1.0
+    },
+    {
+      "c_env": 9.0,
+      "K_shape": 4.5,
+      "ratio": 1.0
+    },
+    {
+      "c_env": 16.0,
+      "K_shape": 8.0,
+      "ratio": 1.0
+    }
+  ],
+  "unified_chain": {
+    "A1": 1.3,
+    "A2": 0.8,
+    "theta_delta": 1.5707963267948966,
+    "q_spin": 0.5408,
+    "kappa_interface": 1.0,
+    "MS5_J": 0.5408,
+    "k_candidates": {
+      "dispersion_defect": 0.3599999999999999,
+      "envelope_curvature": 2.0
+    },
+    "four_force_channels": {
+      "electric_dm_C": 0.2,
+      "magnetic_dm_v": -0.06,
+      "nuclear_m_dC": 0.6000000000000001,
+      "gravity_m_dv": -0.15000000000000002
+    },
+    "status": "结构链已运行；κ=1 只是归一化接口，不是物理推导值"
+  },
+  "conclusion": "振动本体给出色散缺陷与包络曲率两个κ候选；旋量相对方向给源项形状；绝对κ仍未由公设推出。"
+}

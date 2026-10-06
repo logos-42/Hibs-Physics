@@ -130,6 +130,7 @@ def main():
                        "scripts/verify_spinor_envelope_mass.py",
                        "scripts/verify_spinor_source_closure.py",
                        "scripts/verify_spinor_source_dimensions.py",
+                       "scripts/verify_k_from_vibration.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -1012,6 +1013,15 @@ def main():
               ssd)
         check("SSD2★★: kappa 当前不是框架推导量",
               ssd["kappa"]["derived"] is False, ssd["kappa"])
+
+    kvib = load_report("artifacts/kfromvibration/report.json")
+    if kvib:
+        check("KVIB1★★: 振动本体链已运行（κ候选+旋量q+MS5 J+四力通道）",
+              "unified_chain" in kvib and len(kvib["unified_chain"]["four_force_channels"]) == 4,
+              kvib.get("unified_chain"))
+        check("KVIB2★★: κ仍是接口归一化而非物理推导",
+              "不是物理推导值" in kvib["unified_chain"]["status"],
+              kvib["unified_chain"]["status"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
