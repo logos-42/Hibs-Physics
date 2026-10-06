@@ -239,3 +239,22 @@ PW3 残差 = MC1 锚定质量平方
 
 产物：`scripts/verify_phase_anchor_interface.py`、`artifacts/phaseanchor/report.json`、`summary.txt`；
 PWA1–PWA3 已挂入 `verify_all.py`。
+
+
+## 10. PWW：相位绕数不能单独固定锚定归一化（2026-10-06）
+
+进一步测试闭合相位 `θ=2π n x/L` 是否能固定 PW3 的归一化系数 `K`。
+绕数扫描 `n={1,2,3,5}` 全部整数化；但同一绕数下改变包络形状参数 `c={1,4,9,16}`，归一化曲率离散度分别为：
+
+```text
+n=1: 2.999975
+n=2: 0.749994
+n=3: 0.333331
+n=5: 0.119999
+```
+
+**结论**：相位闭合和绕数能提供离散拓扑标签，但不能单独给出 PW3→MC1 所需的归一化。
+同一个绕数仍允许不同包络曲率，因此 `K` 需要额外动力学或归一化输入。
+这把最后的缺口定位得更精确：不是缺绕数，而是缺“包络形状 → 锚定强度”的动力学映射。
+
+PWW1/PWW2 已挂入 `verify_all.py`；产物：`scripts/verify_phase_winding_anchor.py`、`artifacts/phasewindinganchor/`。

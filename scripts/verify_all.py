@@ -121,6 +121,7 @@ def main():
                        "scripts/verify_phase_wave_shape.py",
                        "scripts/verify_phase_wave_coupling.py",
                        "scripts/verify_phase_anchor_interface.py",
+                       "scripts/verify_phase_winding_anchor.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -923,6 +924,15 @@ def main():
               pwa["max_abs_error"]["s=1-v²"] > 1e-3, pwa["max_abs_error"])
         check("PWA3★: 令 s=sqrt(PW3) 可逐点匹配，但属于定义匹配",
               pwa["max_abs_error"]["s=sqrt(PW3)"] == 0.0, pwa["max_abs_error"])
+
+    pww = load_report("artifacts/phasewindinganchor/report.json")
+    if pww:
+        check("PWW1★: 相位闭合绕数扫描整数化",
+              all(abs(v - round(v)) < 1e-10 for v in pww["winding_numbers"].values()),
+              pww["winding_numbers"])
+        check("PWW2★★: 同绕数下 K 仍随包络形状变化（绕数不能单独定标）",
+              all(v > 1e-3 for v in pww["spread_by_winding"].values()),
+              pww["spread_by_winding"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
