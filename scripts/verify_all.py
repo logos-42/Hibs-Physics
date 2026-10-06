@@ -126,6 +126,7 @@ def main():
                        "scripts/verify_phase_dynamics_origin.py",
                        "scripts/verify_phase_norm_feedback.py",
                        "scripts/verify_phase_source_closure.py",
+                       "scripts/verify_spinor_phase_interface.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -973,6 +974,19 @@ def main():
               psc["rows"][0]["J_zero"], psc["rows"])
         check("PSC2★★: 脱光锥相位需要非零 MS5 源项",
               all(not row["J_zero"] for row in psc["rows"][1:]), psc["rows"])
+
+    spw = load_report("artifacts/spinorphase/report.json")
+    if spw:
+        check("SPW1★★: 2π 旋量变号、4π 复原",
+              spw["SPW1"]["norm_2pi"] < 1e-12 and spw["SPW1"]["norm_4pi"] < 1e-12,
+              spw["SPW1"])
+        check("SPW2★: 旋量范数沿 SU(2) 旋转不变",
+              spw["SPW2"]["norm_spread"] < 1e-12, spw["SPW2"])
+        check("SPW3★★: 双旋量相对方向质量候选可变化",
+              abs(spw["SPW3"]["mass_candidate_at_0"]-1) < 1e-12 and
+              abs(spw["SPW3"]["mass_candidate_at_pi"]) < 1e-12 and
+              abs(spw["SPW3"]["mass_candidate_at_2pi"]-1) < 1e-12,
+              spw["SPW3"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
