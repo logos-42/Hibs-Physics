@@ -1424,3 +1424,22 @@ PW1/PW2：`A(x−t)exp(iθ(x−t))` 同流时残差为 0；PW3：包络速度 `v
 **自然单位 UV 追加**：按“质量=位移条数”把 `m_vib:=q_spin`、`P_vib:=m_vib(C−v)` 写入 Lean；相位对齐质量候选为 0，GQF2 product rule 保持。**自然单位接口闭合，绝对质量归一化仍未推导。**
 
 **CF Lean 追加**：正电荷/负电荷已写成位移流散度的正源/负汇接口；Lean 证明源汇互斥、取负翻转、零散度中性、幅值绝对值不变。连续三维散度动力学和 e 的数值仍未闭合。
+
+## ★ 2026-10-06 session：临界叶对数半值与自旋半步（CS1–CS5）
+
+leo：「如果把根号 e 的对数等于 1/2 的这个概念当做自旋的输入项，把费米子的自旋解决出来。能量和质量的这个变化。」
+
+**概念链（接口代数，不新增公设）**：临界叶 r=√e（RiemannHIBS 包络反演 w↦e/w 的不动圆；HQ1/HQ1b）→ ln(√e)=½·ln e=½（平凡恒等式，深度在坐标系：包络反射 s↦1−s 在对数坐标下的不动点**必须**坐在 ½ 处，因为 ln e=1）→ 自旋 ½ = 同一「半步」的角色名（开方=数半步、半角=相位半步、双覆盖=两圈复原）→ 能量-质量：E∝m² ⟹ ln E=2·ln m（能量一步、质量半步，「2」=自旋 ½ 的倒数）。
+
+**Lean `Explorations/CriticalHalfSpin.lean`（CS1–CS5，零 sorry 零 warning，挂聚合根 4348 jobs 全绿）**：
+- **CS1 ★** `log_critical_half`：ln(√e) = ½
+- **CS2 ★★** `inversion_fixed_iff_log_half`：r>0 时 `r=e/r ⟺ ln r=½`——**反演不动 ⟺ 对数半值**（把 `envelope_inversion_fixed_circle` 翻译进 ln 坐标）
+- **CS3 ★** `critical_sheet_fixed_by_inversion`：临界叶自身是反演不动点（CS2 实例）
+- **CS4 ★★** `half_angle_phase_fermionic`：`exp(iθ/2)` 是闭包相因子 −1 的费米型见证（2π 变号 ⟹ 4π 复原）——VBS7 半角螺旋的复相位版，开方（数）与半角（相位）合一
+- **CS5 ★** `log_e_eq_two_log_critical`：ln e = 2·ln(√e)
+
+**诚实边界（写死）**：全是 log/exp 恒等式（真但平凡），深度在坐标系选择；给的是**自旋的值（½）在仓库内的位置**，不是费米子统计的另一半（相位⟹场算符反对易仍需场算符语言，VSS 缺口未变）——**仍是半条定理**；零新可检验预言。
+
+**死法**：若在 ln 坐标下找到第二个非平凡反射不动结构（ln≠½），或包络反射对称不再唯一，本解读死。
+
+**产物**：Lean `Explorations/CriticalHalfSpin.lean` + 聚合根；提交 `1758d2e`（已推送）。
