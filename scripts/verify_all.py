@@ -127,6 +127,7 @@ def main():
                        "scripts/verify_phase_norm_feedback.py",
                        "scripts/verify_phase_source_closure.py",
                        "scripts/verify_spinor_phase_interface.py",
+                       "scripts/verify_spinor_envelope_mass.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -987,6 +988,11 @@ def main():
               abs(spw["SPW3"]["mass_candidate_at_pi"]) < 1e-12 and
               abs(spw["SPW3"]["mass_candidate_at_2pi"]-1) < 1e-12,
               spw["SPW3"])
+
+    sem = load_report("artifacts/spinorenvelope/report.json")
+    if sem:
+        check("SEM1★★: TW6 质量候选 = 包络幅值因子×相对旋转因子",
+              sem["max_error"] < 1e-12, sem["max_error"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
