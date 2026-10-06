@@ -129,6 +129,7 @@ def main():
                        "scripts/verify_spinor_phase_interface.py",
                        "scripts/verify_spinor_envelope_mass.py",
                        "scripts/verify_spinor_source_closure.py",
+                       "scripts/verify_spinor_source_dimensions.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -1002,6 +1003,15 @@ def main():
               ssc["rows"])
         check("SSC2★★: MS5 绝对耦合 kappa 仍是输入",
               ssc["kappa_is_input"] is True, ssc["kappa_is_input"])
+
+    ssd = load_report("artifacts/spinorsourcedim/report.json")
+    if ssd:
+        check("SSD1★★: q_spin 无量纲而 kappa 承担 Box(C) 量纲",
+              ssd["q_spin"]["dimension"] == "1" and
+              ssd["kappa"]["required_dimension"] == "[Box(C)]",
+              ssd)
+        check("SSD2★★: kappa 当前不是框架推导量",
+              ssd["kappa"]["derived"] is False, ssd["kappa"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

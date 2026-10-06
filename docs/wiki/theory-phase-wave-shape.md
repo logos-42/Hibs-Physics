@@ -482,3 +482,26 @@ J = κ · q_spin
 若 κ 只能手输，这只是把“质量归一化缺口”搬到 MS5 源项。
 
 SSC1/SSC2 已挂入 `verify_all.py`；产物：`scripts/verify_spinor_source_closure.py`、`artifacts/spinorsourceclosure/`。
+
+
+## 18. SSD：旋量源项闭合的量纲审计（2026-10-06）
+
+`q_spin=|det(ψ₁,ψ₂)|²` 在归一化旋量下是无量纲量；但 MS5 的源项 `J` 具有 `□C` 的量纲。
+因此最小闭合形式：
+
+```text
+J = κ q_spin
+```
+
+必然要求：
+
+```text
+[κ] = [□C]
+```
+
+当前框架没有从相位闭合、旋量拓扑或 MS3 推出这个 `κ`。所以 SEM/SSC 已经完成了**源项形状**的统一，
+但还没有完成参数自由的动力学闭合。
+
+这把剩余问题明确成：**能否从现有 C 的单位/尺度结构导出 κ；否则 κ 就是新的带量纲输入，也就是标度缺口的另一种写法。**
+
+SSD1/SSD2 已挂入 `verify_all.py`；产物：`scripts/verify_spinor_source_dimensions.py`、`artifacts/spinorsourcedim/`。

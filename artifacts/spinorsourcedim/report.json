@@ -1,0 +1,15 @@
+{
+  "q_spin": {
+    "dimension": "1",
+    "origin": "normalized spinor relative direction"
+  },
+  "MS5_J": {
+    "dimension": "[Box(C)]",
+    "origin": "space-field source term"
+  },
+  "kappa": {
+    "required_dimension": "[Box(C)]",
+    "derived": false
+  },
+  "conclusion": "SEM supplies a dimensionless source shape; MS5 requires kappa with Box(C) dimensions. The closure is structural, not parameter-free."
+}

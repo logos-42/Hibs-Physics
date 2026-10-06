@@ -1,0 +1,1 @@
+SEM supplies a dimensionless source shape; MS5 requires kappa with Box(C) dimensions. The closure is structural, not parameter-free.
