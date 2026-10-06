@@ -119,6 +119,7 @@ def main():
                        "scripts/verify_scale_accounting.py",
                        "scripts/verify_dimension_selection.py",
                        "scripts/verify_phase_wave_shape.py",
+                       "scripts/verify_phase_wave_coupling.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -897,6 +898,19 @@ def main():
               res["KV5"]["结论"])
         check("KV6★: 守恒量 ∝ c^{3/2} —— 形状谱只依赖一个参数 c",
               res["KV6"]["C2/c^{3/2} 偏差"] < 1e-2, res["KV6"]["C2/c^{3/2} 偏差"])
+
+    pwc = load_report("artifacts/phasewavecoupling/report.json")
+    if pwc:
+        res = pwc["results"]
+        check("PW1★: ψ=A exp(iθ) 同流复相位场波动残差为零",
+              res["PW1"]["复相位场分解残差"] < 1e-12, res["PW1"]["复相位场分解残差"])
+        check("PW2★: 同流包络与相位不产生相对锚定残差",
+              res["PW2"]["同流包络相位残差"] == 0.0, res["PW2"]["同流包络相位残差"])
+        check("PW3★★: 脱流包络产生非零波动残差",
+              res["PW3"]["脱流包络残差峰值"] > 1e-3, res["PW3"]["脱流包络残差峰值"])
+        check("PW4★: KdV 包络层与线性空间波动层可同时成立",
+              res["PW4"]["KdV包络残差"] < 1e-12 and res["PW4"]["线性波动残差"] == 0.0,
+              res["PW4"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
