@@ -1,0 +1,12 @@
+{
+  "fixed_norm": "|C|=c",
+  "null_phase": {
+    "radial_BoxC_component": 0.0,
+    "Box_theta": 0.0
+  },
+  "off_lightcone_phase": {
+    "radial_BoxC_component": -1.6689749999999997,
+    "Box_theta": 0.0
+  },
+  "conclusion": "固定模长 C=c(cosθ,sinθ) 与无源线性波动结合时，只允许光锥相位；不会自动产生局域包络。"
+}

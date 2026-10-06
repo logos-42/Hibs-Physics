@@ -124,6 +124,7 @@ def main():
                        "scripts/verify_phase_winding_anchor.py",
                        "scripts/verify_phase_anchor_shape_map.py",
                        "scripts/verify_phase_dynamics_origin.py",
+                       "scripts/verify_phase_norm_feedback.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -955,6 +956,15 @@ def main():
         check("PDO3★★: 产生包络的非线性候选需要新动力学输入",
               pdo["candidate_dynamics"]["cubic_envelope"]["new_input"] is True,
               pdo["candidate_dynamics"])
+
+    pnf = load_report("artifacts/phasenormfeedback/report.json")
+    if pnf:
+        check("PNF1★: 固定模长光锥相位的径向波动分量为零",
+              abs(pnf["null_phase"]["radial_BoxC_component"]) < 1e-12,
+              pnf["null_phase"])
+        check("PNF2★★: 脱离光锥相位产生固定模长约束残差",
+              abs(pnf["off_lightcone_phase"]["radial_BoxC_component"]) > 1e-3,
+              pnf["off_lightcone_phase"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
