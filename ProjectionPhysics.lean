@@ -133,3 +133,4 @@ import ProjectionPhysics.Explorations.SpinAnisotropy
 import ProjectionPhysics.Explorations.ExchangeStatistics
 import ProjectionPhysics.Explorations.ScaleCovariance
 import ProjectionPhysics.Explorations.DimensionSelection
+import ProjectionPhysics.Explorations.PhaseField

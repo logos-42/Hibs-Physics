@@ -118,6 +118,7 @@ def main():
                        "scripts/verify_exchange_statistics.py",
                        "scripts/verify_scale_accounting.py",
                        "scripts/verify_dimension_selection.py",
+                       "scripts/verify_phase_wave_shape.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -879,6 +880,23 @@ def main():
         check("DS-A6★: 反例齐备 —— d=2 不满足 R1、d=4 不满足 R2（两条要求都不可省）",
               any(row["d"] == 2 and row["统计两类?"] in ("否", "**否**") for row in d5["表"])
               and any(row["d"] == 4 and row["非平凡连接?"] in ("否", "**否**") for row in d5["表"]))
+
+    # KV 轮：相位场形状谱 / KdV 估值配置测试
+    pw = load_report("artifacts/phasewave/report.json")
+    if pw:
+        res = pw["results"]
+        check("KV1★: 形状锁尺度 —— 孤子振幅×宽度² = 常数（与 c 无关）",
+              abs(res["KV1"]["常数"] - 6.214555) < 1e-3, res["KV1"]["常数"])
+        check("KV3★: sech² 是 KdV 精确解 —— 解析导数残差机器精度",
+              res["KV3"]["单孤子最大误差"] < 1e-9, res["KV3"]["单孤子最大误差"])
+        check("KV4★: 守恒量 C1/C2/C3 演化零变化（可积、无耗散）",
+              all(abs(v) < 1e-6 for v in res["KV4"]["守恒量变化"].values()),
+              res["KV4"]["守恒量变化"])
+        check("KV5★★: 形状族单参数 ⟹ 配不出质量阶梯 3,6,7（无排除力）",
+              "单参数" in res["KV5"]["结论"] and "3,6,7" in res["KV5"]["结论"],
+              res["KV5"]["结论"])
+        check("KV6★: 守恒量 ∝ c^{3/2} —— 形状谱只依赖一个参数 c",
+              res["KV6"]["C2/c^{3/2} 偏差"] < 1e-2, res["KV6"]["C2/c^{3/2} 偏差"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")
