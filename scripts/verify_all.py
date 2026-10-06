@@ -123,6 +123,7 @@ def main():
                        "scripts/verify_phase_anchor_interface.py",
                        "scripts/verify_phase_winding_anchor.py",
                        "scripts/verify_phase_anchor_shape_map.py",
+                       "scripts/verify_phase_dynamics_origin.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -944,6 +945,16 @@ def main():
               all(abs(r["candidate_s_sq"] / r["shape_factor"] - r["velocity_factor"]) < 1e-12
                   for r in pws["separable"]),
               pws["separable"])
+
+    pdo = load_report("artifacts/phasedynamicsorigin/report.json")
+    if pdo:
+        check("PDO1★: 纯相位同流波动残差为零",
+              pdo["pure_phase_wave_residual"] == 0.0, pdo["pure_phase_wave_residual"])
+        check("PDO2★★: 纯相位没有包络曲率",
+              pdo["pure_phase_envelope_curvature"] == 0.0, pdo["pure_phase_envelope_curvature"])
+        check("PDO3★★: 产生包络的非线性候选需要新动力学输入",
+              pdo["candidate_dynamics"]["cubic_envelope"]["new_input"] is True,
+              pdo["candidate_dynamics"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

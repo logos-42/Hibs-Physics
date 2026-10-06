@@ -1,0 +1,25 @@
+{
+  "pure_phase_wave_residual": 0.0,
+  "pure_phase_envelope_curvature": 0.0,
+  "candidate_dynamics": {
+    "MS3_linear": {
+      "equation": "Box(theta)=0",
+      "localization": false,
+      "intrinsic_scale": false,
+      "new_input": false
+    },
+    "cubic_envelope": {
+      "equation": "Box(psi)+beta*|psi|^2*psi=0",
+      "localization": "candidate",
+      "intrinsic_scale": "only with beta and boundary/state data",
+      "new_input": true
+    },
+    "massive_envelope": {
+      "equation": "Box(psi)+mu^2*psi+beta*|psi|^2*psi=0",
+      "localization": "candidate",
+      "intrinsic_scale": "mu supplied; beta supplied",
+      "new_input": true
+    }
+  },
+  "conclusion": "纯相位二次振动只给传播；包络局域化需要非线性/边界，绝对标度还需要新增参数或跑动机制。"
+}
