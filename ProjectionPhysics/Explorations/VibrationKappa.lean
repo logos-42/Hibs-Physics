@@ -5,7 +5,7 @@
 --   VK2  sech² 包络曲率候选 K(c_env)=c_env/2；c_env>0 ⟹ K>0
 --   VK3  在同一光锥振动上 Δ=0 而 K>0 ⟹ 两个候选不能由现有结构自动等同
 --   VK4  若把 κ 选为 Δ，则光锥上 κ=0；若选为 K，则 κ>0
---        ⟹ 现有振动本体尚未选择唯一 κ 映射
+--   VK5  固定模长相位嵌入的径向波动系数 = c(θx²−θt²)，光锥上为 0
 --
 -- 诚实边界：这是候选映射的形式化否定/分叉证明，不是质量定理；
 -- 没有新增公设，没有证明哪一个候选才是物理 κ。
@@ -25,6 +25,10 @@ def dispersionDefect (c k omega : ℝ) : ℝ :=
 /-- sech² 包络族的曲率候选：K_shape = c_env / 2。 -/
 def envelopeCurvature (cEnv : ℝ) : ℝ :=
   cEnv / 2
+
+/-- 固定模长相位嵌入的径向波动系数：`c(θx²−θt²)`。 -/
+def fixedNormRadialCoeff (c thetaT thetaX : ℝ) : ℝ :=
+  c * (c ^ 2 * thetaX ^ 2 - thetaT ^ 2)
 
 /-- VK1：光锥色散关系 ω=c·k 使色散缺陷严格为零。 -/
 theorem dispersionDefect_on_lightcone (c k : ℝ) :
@@ -68,6 +72,24 @@ theorem no_candidate_identity :
     norm_num
   rw [hD, hK] at hEq
   norm_num at hEq
+
+/-- VK6：固定模长相位场在光锥上的径向系数为零。 -/
+theorem fixedNormRadialCoeff_on_lightcone (c k : ℝ) :
+    fixedNormRadialCoeff c (c * k) k = 0 := by
+  unfold fixedNormRadialCoeff
+  ring
+
+/-- VK7：脱离光锥且 c≠0 时，固定模长相位嵌入出现非零径向系数。 -/
+theorem fixedNormRadialCoeff_ne_zero_of_off_lightcone
+    {c thetaT thetaX : ℝ} (hc : c ≠ 0)
+    (hneq : thetaT ^ 2 ≠ c ^ 2 * thetaX ^ 2) :
+    fixedNormRadialCoeff c thetaT thetaX ≠ 0 := by
+  unfold fixedNormRadialCoeff
+  intro hz
+  have hmul : c * (c ^ 2 * thetaX ^ 2 - thetaT ^ 2) = 0 := hz
+  have heq : c ^ 2 * thetaX ^ 2 = thetaT ^ 2 :=
+    sub_eq_zero.mp ((mul_eq_zero.mp hmul).resolve_left hc)
+  exact hneq heq.symm
 
 end
 end ProjectionPhysics.VibrationKappa
