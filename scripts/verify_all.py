@@ -125,6 +125,7 @@ def main():
                        "scripts/verify_phase_anchor_shape_map.py",
                        "scripts/verify_phase_dynamics_origin.py",
                        "scripts/verify_phase_norm_feedback.py",
+                       "scripts/verify_phase_source_closure.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -965,6 +966,13 @@ def main():
         check("PNF2★★: 脱离光锥相位产生固定模长约束残差",
               abs(pnf["off_lightcone_phase"]["radial_BoxC_component"]) > 1e-3,
               pnf["off_lightcone_phase"])
+
+    psc = load_report("artifacts/phasesourceclosure/report.json")
+    if psc:
+        check("PSC1★: 光锥相位的 MS5 源项为零",
+              psc["rows"][0]["J_zero"], psc["rows"])
+        check("PSC2★★: 脱光锥相位需要非零 MS5 源项",
+              all(not row["J_zero"] for row in psc["rows"][1:]), psc["rows"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

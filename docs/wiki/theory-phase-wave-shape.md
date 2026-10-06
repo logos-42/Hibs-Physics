@@ -334,3 +334,33 @@ C = c (cos θ, sin θ)
 若推不出来，新增非线性就是公设而非推论。
 
 PNF1/PNF2 已挂入 `verify_all.py`；产物：`scripts/verify_phase_norm_feedback.py`、`artifacts/phasenormfeedback/`。
+
+
+## 14. PSC：MS5 源项不能自动闭合相位自作用（2026-10-06）
+
+现有 MS5 是：
+
+```text
+□C = J
+```
+
+把固定模长相位场 `C=c(cosθ,sinθ)` 代入后，`J=□C` 可以被计算：
+
+| 相位 | MS5 源项径向系数 |
+|---|---:|
+| `θ=k(x−t)` | `0` |
+| `θ=k(x−0.8t)` | `1.0404` |
+| `θ=k(x−0.65t)` | `1.668975` |
+| `θ=kx` | `2.89` |
+
+因此 MS5 能**接受**由相位运动计算出的源项，但当前系统没有一个闭合的本构关系：
+
+```text
+J = J(C, θ, A, ∂C, ∂θ, ...)
+```
+
+所以脱光锥相位产生的 `J` 仍是接口输入，不是空间场自发推出的非线性。
+这把“从振动本体推导”的下一跳钉得更清楚：需要从现有 `|C|=c`、MS3、MS5 和相位闭合中推出 `J` 的闭合表达式；
+如果只能指定 `J`，就没有完成统一描述。
+
+PSC1/PSC2 已挂入 `verify_all.py`；产物：`scripts/verify_phase_source_closure.py`、`artifacts/phasesourceclosure/`。
