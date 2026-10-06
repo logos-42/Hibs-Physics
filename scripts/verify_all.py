@@ -132,6 +132,7 @@ def main():
                        "scripts/verify_spinor_source_dimensions.py",
                        "scripts/verify_k_from_vibration.py",
                        "scripts/verify_vibration_gqf_bridge.py",
+                       "scripts/verify_sink_contract_3d.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",

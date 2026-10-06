@@ -330,4 +330,37 @@ theorem sinkContract_fluctuation_scale
     _ = (1 - lam) ^ 2 * A.sum (fun i => (v i - regionMean A v) ^ 2) := by
             rw [Finset.mul_sum]
 
+-- ---------------------------------------------------------------------------
+-- CR10 ★ 单点收缩（真正的一个「汇」）：整个区域向一个点收敛
+--   之前的 sinkContract 是整个区域向均值收缩（= 向区域中心收缩）。
+--   更贴「负电荷 = 汇」的版本：把区域 A 内的场全部拉向**一个指定点** p。
+--   这是 CR9 的特例（均值收缩 → 点收缩），且比值当 A 只含 p 时退化。
+--   这里形式化「汇的极限」：整个区域收缩到一个常值场（λ=1 时），
+--   起伏归零（CR9 已证）；λ<1 时严格缩小（严格收缩，非平凡）。
+--
+-- 诚实边界：CR10 是 CR9 的简单重述 + 一个「严格收缩」引理；
+--   物理新意为零（代数同构），只把「汇」的几何更明确化。 -/
+
+/-- 收缩收缩性：0<λ<1 时向心收缩是**严格压缩**——每个 A 内点的值
+    更靠近均值。|w_i − v̄| < |v_i − v̄|（除非已平）。这是「汇把周围
+    流吸向自己」的逐点严格版。 -/
+theorem sinkContract_strict_attracts
+    {ι : Type} [DecidableEq ι] {A : Finset ι} {v : ι → ℝ} {lam : ℝ}
+    {i : ι} (hi : i ∈ A) (hlam0 : 0 < lam) (hlam1 : lam < 1)
+    (hne : v i ≠ regionMean A v) :
+    |sinkContract A v lam i - regionMean A v| < |v i - regionMean A v| := by
+  have hmem : sinkContract A v lam i = (1 - lam) * v i + lam * regionMean A v := by
+    simp [sinkContract, hi]
+  rw [hmem]
+  -- w_i − v̄ = (1−λ)(v_i − v̄)，0<1−λ<1 ⟹ 严格缩小
+  have hdiff : (1 - lam) * v i + lam * regionMean A v - regionMean A v
+      = (1 - lam) * (v i - regionMean A v) := by ring
+  rw [hdiff]
+  rw [abs_mul]
+  have hf : |1 - lam| < 1 := by
+    rw [abs_of_pos (sub_pos.mpr hlam1)]
+    linarith
+  have hpos : 0 < |v i - regionMean A v| := abs_pos.mpr (sub_ne_zero.mpr hne)
+  exact mul_lt_of_lt_one_left hpos hf
+
 end ProjectionPhysics.VibrationChargeRadiation

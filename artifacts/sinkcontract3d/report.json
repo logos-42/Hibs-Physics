@@ -1,0 +1,17 @@
+{
+  "N": 21,
+  "div_range": [
+    -0.30000000000000027,
+    -0.2999999999999996
+  ],
+  "Q0": 10187.100000000002,
+  "Q_end": 3.51753811573926e-61,
+  "Q_decrease_pct": 3.4529337257308353e-63,
+  "max_div_end": 0.0,
+  "S1_all_interior_div_negative": true,
+  "S2_initial_fluctuation_positive": true,
+  "S3_monotone_decrease": true,
+  "S3_converged_to_zero": true,
+  "source_comparison_Q_end": 3.51753811573926e-61,
+  "conclusion": "负散度(汇)场经向心收缩迭代, 起伏能量严格单调降到0, 散度同时归零——'收敛=抹平'在3D离散格点成立(CR7/CR9/CR10数值实现)。诚实: 平滑算子线性, 正散度场同样可平滑; 负散度的特殊处是几何向心收缩。"
+}
