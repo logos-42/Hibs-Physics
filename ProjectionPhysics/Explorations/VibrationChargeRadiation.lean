@@ -45,10 +45,13 @@ import ProjectionPhysics.Explorations.VibrationChargeFlow
 import ProjectionPhysics.PlasmaDynamics
 import ProjectionPhysics.MuFieldCoupling
 import ProjectionPhysics.HiddenQFT
+import ProjectionPhysics.GravityControl
 
 namespace ProjectionPhysics.VibrationChargeRadiation
 
 open ProjectionPhysics
+open ProjectionPhysics.GravityControl
+open scoped BigOperators
 
 -- ---------------------------------------------------------------------------
 -- CR1 ★ 源时变 ⟹ 空间场时变
@@ -253,5 +256,78 @@ theorem sink_release_positive {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε) :
   unfold sinkEnergyRelease
   rw [HiddenQFT.sqrt_potential_drop]
   linarith
+
+-- ---------------------------------------------------------------------------
+-- CR9 ★★ 离散格点上的严格定理：向心收缩（汇）以平方因子抹平起伏
+--   把 CR7 的「收敛 = 抹平」从语义同位升级为**离散代数恒等式**。
+--   定义向心收缩（负电荷吸流的离散模型）：
+--     sinkContract A v λ := 区域 A 内每点向区域均值靠拢 λ 步
+--     （λ=0 不动，λ=1 一步到均值 = flatten，λ∈(0,1) 部分收缩）
+--   定理 CR9：Q_A(sinkContract A v λ) = (1−λ)² · Q_A(v)
+--   物理读法：汇的每次「向内收缩」把起伏能量乘 (1−λ)²——
+--   收敛流的抹平是**平方衰减**，不是线性；λ=1 时一步归零（=flatten）。
+--   这是「为什么是负电荷」的严格代数内核：向心收缩（汇）就是抹平算子族。
+--
+-- 诚实边界（写死）：
+--   · 这是离散格点定理（仓库风格：差分离散 = 连续偏导的代数种子）；
+--     连续 3D 版的逐点对应未形式化（仓库明确未支持连续 ∇·）。
+--   · 向心收缩是**模型选择**（把「负电荷吸流」翻译成收缩变换），
+--     不是从 Maxwell 动力学推出的演化算子。
+--   · λ 的物理来源（收缩步长 = 电荷强度？）未给出 —— 仍是第二输入缺口。
+--   · 无新可检验预言。 -/
+
+/-- 向心收缩：区域 A 内每点向区域均值靠拢 λ 步（λ=0 不动，λ=1 到均值）。
+    这是「负电荷把周围空间流吸向自己」的离散模型。 -/
+noncomputable def sinkContract {ι : Type} [DecidableEq ι] (A : Finset ι) (v : ι → ℝ) (lam : ℝ) : ι → ℝ :=
+  fun i => if i ∈ A then (1 - lam) * v i + lam * regionMean A v else v i
+
+/-- 收缩不改变区域均值：向心收缩保留 A 的总流率（与 flatten 守恒同调，
+    GCA1b）。收缩 = 保守重排，不是注入/抽取流量。
+    证明：A 内每点 v_i ↦ (1−λ)v_i + λ·v̄，A 内求和 = (1−λ)Σv + λ·card·v̄
+    = (1−λ)S + λ·S = S（因 v̄ = S/card）。 -/
+lemma sinkContract_mean_eq {ι : Type} [DecidableEq ι] (A : Finset ι) (v : ι → ℝ) (lam : ℝ) :
+    regionMean A (sinkContract A v lam) = regionMean A v := by
+  by_cases hA : A.card = 0
+  · have hA0 : A = ∅ := Finset.card_eq_zero.mp hA
+    simp [regionMean, sinkContract, hA0]
+  · have hA' : (A.card : ℝ) ≠ 0 := by exact_mod_cast hA
+    unfold sinkContract regionMean
+    apply congrArg (fun x : ℝ => x / (A.card : ℝ))
+    calc
+      (A.sum (fun i => (if i ∈ A then (1 - lam) * v i + lam * (A.sum v / (A.card : ℝ)) else v i)))
+          = (A.sum (fun i => ((1 - lam) * v i + lam * (A.sum v / (A.card : ℝ))))) := by
+              apply Finset.sum_congr rfl
+              intro i hi
+              simp [hi]
+      _ = (1 - lam) * A.sum v + (A.card : ℝ) * (lam * (A.sum v / (A.card : ℝ))) := by
+              rw [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_const, nsmul_eq_mul]
+      _ = A.sum v := by
+              field_simp [hA']
+              ring
+
+/-- ★★ CR9：向心收缩以 (1−λ)² 的平方因子抹平起伏。
+    Q_A(sinkContract v) = (1−λ)²·Q_A(v) —— 汇的收敛是**平方衰减**抹平；
+    λ=1 一步归零（= flatten，GCA2c 的连续版）；λ∈(0,1) 指数收敛。
+    这是「收敛 = 抹平」的离散代数内核。 -/
+theorem sinkContract_fluctuation_scale
+    {ι : Type} [DecidableEq ι] (A : Finset ι) (v : ι → ℝ) (lam : ℝ) :
+    fluctuationEnergy A (sinkContract A v lam) = (1 - lam) ^ 2 * fluctuationEnergy A v := by
+  unfold fluctuationEnergy
+  have hmean : regionMean A (sinkContract A v lam) = regionMean A v :=
+    sinkContract_mean_eq A v lam
+  rw [hmean]
+  calc
+    A.sum (fun i => (sinkContract A v lam i - regionMean A v) ^ 2)
+        = A.sum (fun i => ((1 - lam) * (v i - regionMean A v)) ^ 2) := by
+            apply Finset.sum_congr rfl
+            intro i hi
+            simp [sinkContract, hi]
+            ring
+    _ = A.sum (fun i => (1 - lam) ^ 2 * (v i - regionMean A v) ^ 2) := by
+            apply Finset.sum_congr rfl
+            intro i hi
+            ring
+    _ = (1 - lam) ^ 2 * A.sum (fun i => (v i - regionMean A v) ^ 2) := by
+            rw [Finset.mul_sum]
 
 end ProjectionPhysics.VibrationChargeRadiation
