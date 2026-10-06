@@ -138,3 +138,4 @@ import ProjectionPhysics.Explorations.VibrationKappa
 import ProjectionPhysics.Explorations.UnifiedVibration
 import ProjectionPhysics.Explorations.VibrationChargeFlow
 import ProjectionPhysics.Explorations.CriticalHalfSpin
+import ProjectionPhysics.Explorations.VibrationChargeRadiation
