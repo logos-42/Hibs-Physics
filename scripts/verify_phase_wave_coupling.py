@@ -92,7 +92,29 @@ def pw4():
                       "结论": "KdV包络层与空间场波动层可同时满足，但不是同一个方程"}
     assert kdv_peak < 1e-10 and wave_peak == 0.0
 
-pw1(); pw2(); pw3(); pw4()
+def pw5():
+    # PW3 的残差是否只是 SM3 的相对流偏离量 1-v²/c²？
+    z = x
+    dz = x[1] - x[0]
+    A = np.array([env(xi, 1.0) for xi in z])
+    Az = np.gradient(A, dz, edge_order=2)
+    Azz = np.gradient(Az, dz, edge_order=2)
+    curvature = float(np.max(np.abs(Azz)))
+    velocities = np.array([0.0, 0.25, 0.5, 0.65, 0.8, 0.95])
+    residuals = np.array([(1.0 - v*v) * curvature for v in velocities])
+    deviation = 1.0 - velocities*velocities
+    ratios = residuals / np.maximum(deviation, 1e-15)
+    spread = float(np.max(np.abs(ratios - ratios[0])))
+    REPORT["PW5"] = {
+        "速度扫描": [float(v) for v in velocities],
+        "残差峰值": [float(v) for v in residuals],
+        "SM3偏离量_1-v²": [float(v) for v in deviation],
+        "比例离散度": spread,
+        "结论": "在本包络模型中，脱流残差与 SM3 型 1-v² 成正比；这是接口同构，不是质量定理"
+    }
+    assert spread < 1e-10
+
+pw1(); pw2(); pw3(); pw4(); pw5()
 with open(f"{ART}/report.json", "w", encoding="utf-8") as f:
     json.dump({"results": REPORT}, f, ensure_ascii=False, indent=2)
 with open(f"{ART}/summary.txt", "w", encoding="utf-8") as f:

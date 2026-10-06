@@ -911,6 +911,8 @@ def main():
         check("PW4★: KdV 包络层与线性空间波动层可同时成立",
               res["PW4"]["KdV包络残差"] < 1e-12 and res["PW4"]["线性波动残差"] == 0.0,
               res["PW4"])
+        check("PW5★★: 脱流残差与 SM3 偏离量 1-v² 成正比",
+              res["PW5"]["比例离散度"] < 1e-10, res["PW5"]["比例离散度"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

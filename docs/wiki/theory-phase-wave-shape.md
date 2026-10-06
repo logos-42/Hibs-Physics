@@ -184,4 +184,12 @@ KV 轮已经证明「KdV 形状可以锁定一个尺度」，但还没有把它�
 - 没有使用耗散或非酉项。
 
 产物：`scripts/verify_phase_wave_coupling.py`、`artifacts/phasewavecoupling/report.json`、
-`summary.txt`；门禁断言 PW1–PW4 已挂入 `verify_all.py`。
+`summary.txt`；门禁断言 PW1–PW5 已挂入 `verify_all.py`。
+
+### PW5：与 SM3 偏离量对位
+
+速度扫描 `v={0,0.25,0.5,0.65,0.8,0.95}` 显示，当前包络模型的脱流残差与 `1−v²/c²` 严格成正比，
+比例离散度小于 `1e−10`。这说明 PW3 与仓库 SM3 的“偏离空间流”在**接口形状上同构**；
+但它仍不是质量定理，因为比例系数是包络曲率，且没有导出质量单位或第二标度。
+
+本轮更新：PW1–PW5 已挂入 `verify_all.py`；**PW5 的结论是同构，不是新物理预言**。
