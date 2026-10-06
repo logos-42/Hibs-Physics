@@ -1,0 +1,142 @@
+{
+  "rows": [
+    {
+      "c": 0.25,
+      "K_shape": 0.1249996666626283,
+      "expected_c_over_2": 0.125,
+      "relative_error": 2.666698973641246e-06
+    },
+    {
+      "c": 1.0,
+      "K_shape": 0.49999466670777504,
+      "expected_c_over_2": 0.5,
+      "relative_error": 1.066658444992541e-05
+    },
+    {
+      "c": 4.0,
+      "K_shape": 1.9999146697630386,
+      "expected_c_over_2": 2.0,
+      "relative_error": 4.266511848072252e-05
+    },
+    {
+      "c": 9.0,
+      "K_shape": 4.499568035252945,
+      "expected_c_over_2": 4.5,
+      "relative_error": 9.599216601231654e-05
+    },
+    {
+      "c": 16.0,
+      "K_shape": 7.998634864713291,
+      "expected_c_over_2": 8.0,
+      "relative_error": 0.00017064191083859814
+    }
+  ],
+  "separable": [
+    {
+      "c": 0.25,
+      "v": 0.0,
+      "candidate_s_sq": 0.1249996666626283,
+      "velocity_factor": 1.0,
+      "shape_factor": 0.1249996666626283
+    },
+    {
+      "c": 0.25,
+      "v": 0.5,
+      "candidate_s_sq": 0.09374974999697122,
+      "velocity_factor": 0.75,
+      "shape_factor": 0.1249996666626283
+    },
+    {
+      "c": 0.25,
+      "v": 0.8,
+      "candidate_s_sq": 0.04499987999854617,
+      "velocity_factor": 0.3599999999999999,
+      "shape_factor": 0.1249996666626283
+    },
+    {
+      "c": 1.0,
+      "v": 0.0,
+      "candidate_s_sq": 0.49999466670777504,
+      "velocity_factor": 1.0,
+      "shape_factor": 0.49999466670777504
+    },
+    {
+      "c": 1.0,
+      "v": 0.5,
+      "candidate_s_sq": 0.3749960000308313,
+      "velocity_factor": 0.75,
+      "shape_factor": 0.49999466670777504
+    },
+    {
+      "c": 1.0,
+      "v": 0.8,
+      "candidate_s_sq": 0.17999808001479894,
+      "velocity_factor": 0.3599999999999999,
+      "shape_factor": 0.49999466670777504
+    },
+    {
+      "c": 4.0,
+      "v": 0.0,
+      "candidate_s_sq": 1.9999146697630386,
+      "velocity_factor": 1.0,
+      "shape_factor": 1.9999146697630386
+    },
+    {
+      "c": 4.0,
+      "v": 0.5,
+      "candidate_s_sq": 1.499936002322279,
+      "velocity_factor": 0.75,
+      "shape_factor": 1.9999146697630386
+    },
+    {
+      "c": 4.0,
+      "v": 0.8,
+      "candidate_s_sq": 0.7199692811146936,
+      "velocity_factor": 0.3599999999999999,
+      "shape_factor": 1.9999146697630386
+    },
+    {
+      "c": 9.0,
+      "v": 0.0,
+      "candidate_s_sq": 4.499568035252945,
+      "velocity_factor": 1.0,
+      "shape_factor": 4.499568035252945
+    },
+    {
+      "c": 9.0,
+      "v": 0.5,
+      "candidate_s_sq": 3.374676026439708,
+      "velocity_factor": 0.75,
+      "shape_factor": 4.499568035252945
+    },
+    {
+      "c": 9.0,
+      "v": 0.8,
+      "candidate_s_sq": 1.6198444926910596,
+      "velocity_factor": 0.3599999999999999,
+      "shape_factor": 4.499568035252945
+    },
+    {
+      "c": 16.0,
+      "v": 0.0,
+      "candidate_s_sq": 7.998634864713291,
+      "velocity_factor": 1.0,
+      "shape_factor": 7.998634864713291
+    },
+    {
+      "c": 16.0,
+      "v": 0.5,
+      "candidate_s_sq": 5.998976148534968,
+      "velocity_factor": 0.75,
+      "shape_factor": 7.998634864713291
+    },
+    {
+      "c": 16.0,
+      "v": 0.8,
+      "candidate_s_sq": 2.8795085512967837,
+      "velocity_factor": 0.3599999999999999,
+      "shape_factor": 7.998634864713291
+    }
+  ],
+  "conclusion": "包络曲率给出相对锚定强度 s²∝(c/2)(1-v²)，但绝对归一化/质量单位仍未导出。"
+}

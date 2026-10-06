@@ -122,6 +122,7 @@ def main():
                        "scripts/verify_phase_wave_coupling.py",
                        "scripts/verify_phase_anchor_interface.py",
                        "scripts/verify_phase_winding_anchor.py",
+                       "scripts/verify_phase_anchor_shape_map.py",
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
@@ -933,6 +934,16 @@ def main():
         check("PWW2★★: 同绕数下 K 仍随包络形状变化（绕数不能单独定标）",
               all(v > 1e-3 for v in pww["spread_by_winding"].values()),
               pww["spread_by_winding"])
+
+    pws = load_report("artifacts/phaseanchorshape/report.json")
+    if pws:
+        check("PWS1★★: sech² 包络形状曲率 K_shape ≈ c/2",
+              max(r["relative_error"] for r in pws["rows"]) < 2e-3,
+              pws["rows"])
+        check("PWS2★: 候选 s² 可分离为形状因子×速度因子",
+              all(abs(r["candidate_s_sq"] / r["shape_factor"] - r["velocity_factor"]) < 1e-12
+                  for r in pws["separable"]),
+              pws["separable"])
 
     # 4a. 硬件四轴（装置/诊断/建造-可造性/排期）+ 下游 feed 的回归锚点
     dev = load_report("artifacts/device/report.json")

@@ -258,3 +258,28 @@ n=5: 0.119999
 这把最后的缺口定位得更精确：不是缺绕数，而是缺“包络形状 → 锚定强度”的动力学映射。
 
 PWW1/PWW2 已挂入 `verify_all.py`；产物：`scripts/verify_phase_winding_anchor.py`、`artifacts/phasewindinganchor/`。
+
+
+## 11. PWS：包络曲率到锚定强度的最小候选（2026-10-06）
+
+对 `A_c(x)=(c/2)sech²(√c x/2)`，定义无量纲形状曲率：
+
+```text
+K_shape = max|A''| / max|A| ≈ c/2
+```
+
+数值扫描 `c={0.25,1,4,9,16}` 的最大相对误差小于 `2e−3`。结合 PW3：
+
+```text
+s_candidate² ∝ K_shape · (1−v²/c²) ≈ (c/2)(1−v²/c²)
+```
+
+这个候选把锚定候选拆成两个因素：
+
+- 形状因素：`c/2`；
+- 脱流因素：`1−v²/c²`。
+
+**但这仍不是 MC1 质量定理**：绝对归一化、质量单位以及 `s_candidate` 到 `anchorMassSq(s)` 的物理映射都没有从现有公设推出。
+当前最小缺口已经从“缺一个任意残差系数”收窄为：**是否存在由相位闭合/拓扑/空间场动力学导出的归一化方程**。
+
+PWS1/PWS2 已挂入 `verify_all.py`；产物：`scripts/verify_phase_anchor_shape_map.py`、`artifacts/phaseanchorshape/`。
