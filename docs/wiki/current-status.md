@@ -1422,3 +1422,5 @@ PW1/PW2：`A(x−t)exp(iθ(x−t))` 同流时残差为 0；PW3：包络速度 `v
 **UV Lean 追加**：`UnifiedVibration.lean` 已将包络×旋量→`q_spin`→MS5 源项→`P=m(C−v)`→GQF2 四力 product rule 形式化；κ 保留为显式接口参数，绝对动力学仍未闭合。
 
 **自然单位 UV 追加**：按“质量=位移条数”把 `m_vib:=q_spin`、`P_vib:=m_vib(C−v)` 写入 Lean；相位对齐质量候选为 0，GQF2 product rule 保持。**自然单位接口闭合，绝对质量归一化仍未推导。**
+
+**CF Lean 追加**：正电荷/负电荷已写成位移流散度的正源/负汇接口；Lean 证明源汇互斥、取负翻转、零散度中性、幅值绝对值不变。连续三维散度动力学和 e 的数值仍未闭合。
