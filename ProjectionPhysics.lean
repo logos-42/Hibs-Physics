@@ -141,3 +141,4 @@ import ProjectionPhysics.Explorations.CriticalHalfSpin
 import ProjectionPhysics.Explorations.VibrationChargeRadiation
 import ProjectionPhysics.Explorations.MassGap
 import ProjectionPhysics.Explorations.YangMillsSeed
+import ProjectionPhysics.Explorations.YangMillsLattice
