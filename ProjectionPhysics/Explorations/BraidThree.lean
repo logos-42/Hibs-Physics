@@ -49,7 +49,7 @@ theorem BT2_full_twist_is_scalar : (b1 * b2) ^ 3 = Delta := by
   simp only [pow_succ]
   ext i j
   all_goals (fin_cases i <;> fin_cases j <;>
-    simp [b1, b2, Delta, mul_apply, Fin.sum_univ_two] <;> ring)
+    simp [b1, b2, Delta, mul_apply, Fin.sum_univ_two] <;> ring_nf)
 
 /-- BT3：★ 推论 —— Δ := (σ₁σ₂)³ 与**任意** 2×2 矩阵交换。
     即：从 Δ 读出的任何相位/符号对**所有** braid 词相同 ⟹ 该表示不含态依赖的量子数。 -/
@@ -57,7 +57,7 @@ theorem BT3_full_twist_commutes_with_everything (M : Matrix (Fin 2) (Fin 2) (Pol
     (b1 * b2) ^ 3 * M = M * (b1 * b2) ^ 3 := by
   rw [BT2_full_twist_is_scalar]
   ext i j
-  all_goals (fin_cases i <;> fin_cases j <;> simp [Delta, mul_apply] <;> ring)
+  all_goals (fin_cases i <;> fin_cases j <;> simp [Delta, mul_apply] <;> ring_nf)
 
 /-- BT3′：特别地 Δ 与两个生成元都交换。 -/
 theorem BT3_commutes_with_generators :
