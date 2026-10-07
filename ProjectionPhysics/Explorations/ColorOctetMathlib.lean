@@ -54,7 +54,8 @@ theorem cycle3_sq_add_cycle3_add_one_ne_zero :
 
 /-- ★ CM2b：C₃ 循环矩阵的三阶幂 = 单位（C³ = I，三阶循环色代数的精确矩阵恒等式）。 -/
 theorem cycle3_cubed : cycle3 * cycle3 * cycle3 = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;> simp [cycle3, Matrix.mul_apply, Fin.sum_univ_three] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [cycle3, Matrix.mul_apply, Fin.sum_univ_three]
 
 /-- ★ CM3：旋量维度 2³ = 8 = 色八重态维度（8 个胶子）。
     Cℓ(6) 的复旋量空间 8 维（CliffordSix.lean 构造了显式 8 维表示），

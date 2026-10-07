@@ -142,3 +142,4 @@ import ProjectionPhysics.Explorations.VibrationChargeRadiation
 import ProjectionPhysics.Explorations.MassGap
 import ProjectionPhysics.Explorations.YangMillsSeed
 import ProjectionPhysics.Explorations.YangMillsLattice
+import ProjectionPhysics.Explorations.YangMillsStrict

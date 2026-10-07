@@ -45,8 +45,8 @@ def σ₃ : Mat2C := !![ 1, 0; 0, -1 ]
     "第三个方向不是独立的，是从平面涌现的"。 -/
 theorem normal_direction_emerges :
     σ₃ = (-Complex.I : ℂ) • (σ₁ * σ₂) := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, σ₂, σ₃, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, σ₂, σ₃]
 
 /-- ★ 自旋的法向量运动：自旋非零 ⟹ 法向量方向的旋量流非零（σ₃ψ ≠ 0）。
     "自旋应该有一个法向量方向的运动轨迹导致质量产生"（leo）——
@@ -56,8 +56,8 @@ theorem spin_normal_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
     σ₃.mulVec ψ ≠ 0 := by
   -- σ₃² = 1（Clifford），σ₃ 可逆 ⟹ 非零旋量映射到非零旋量
   have hsq : σ₃ * σ₃ = 1 := by
-    ext i j <;> fin_cases i <;> fin_cases j <;>
-      simp [σ₃, Matrix.mul_apply] <;> ring
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [σ₃, Matrix.mul_apply]
   intro hz
   apply h
   -- ψ = σ₃(σ₃ψ) = σ₃ 0 = 0
@@ -66,9 +66,9 @@ theorem spin_normal_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
       have : σ₃.mulVec (σ₃.mulVec ψ) = (σ₃ * σ₃).mulVec ψ := by
         simp [Matrix.mulVec_mulVec]
       rw [this, hsq]
-      simp [Matrix.mulVec]
+      simp
     _ = σ₃.mulVec 0 := by rw [hz]
-    _ = 0 := by simp [Matrix.mulVec]
+    _ = 0 := by simp
 
 /-- 旋量流：σ₁ψ（空间运动在旋量上的作用）。 -/
 def spinFlow (ψ : Spinor) : Spinor := σ₁.mulVec ψ
@@ -81,8 +81,8 @@ def anchorMassSq (ψ : Spinor) : ℝ :=
 
 /-- σ₁² = 1（Clifford 关系，mathlib 一行）。 -/
 theorem sigma1_sq : σ₁ * σ₁ = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, Matrix.mul_apply]
 
 /-- σ₁ 交换旋量分量：(σ₁ψ)₀ = ψ₁。 -/
 theorem spinFlow_0 (ψ : Spinor) :
@@ -188,7 +188,7 @@ theorem entangled_triplet_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
     simp [σ₁, σ₂, σ₃]
     -- det = 1·(−1) − (1−i)(1+i) = −1 − 2 = −3 ≠ 0
     have h2 : (1 + -Complex.I) * (1 + Complex.I) = 2 := by
-      apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+      apply Complex.ext <;> norm_num
     rw [h2]
     norm_num
   -- 矩阵可逆（det = −3 可逆 ⟹ Invertible）
@@ -206,7 +206,7 @@ theorem entangled_triplet_flow_nonzero (ψ : Spinor) (h : ψ ≠ 0) :
       rw [this]
       simp
     _ = (σ₁ + σ₂ + σ₃)⁻¹.mulVec 0 := by rw [hz]
-    _ = 0 := by simp [Matrix.mulVec]
+    _ = 0 := by simp
 
 end MinimalCoreMathlib
 

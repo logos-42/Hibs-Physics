@@ -37,13 +37,13 @@ def σ₃ : Mat2 := ⟨1, 0, 0, -1⟩         -- σ_z
 -- ---------------------------------------------------------------------------
 
 theorem sigma1_sq : matMul σ₁ σ₁ = 1 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma2_sq : matMul σ₂ σ₂ = 1 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma3_sq : matMul σ₃ σ₃ = 1 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 -- ---------------------------------------------------------------------------
 -- (C2) 反交换：σᵢσⱼ + σⱼσᵢ = 0 (i ≠ j)
@@ -51,15 +51,15 @@ theorem sigma3_sq : matMul σ₃ σ₃ = 1 := by
 
 theorem sigma1_sigma2_anticommute :
     matMul σ₁ σ₂ + matMul σ₂ σ₁ = 0 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma1_sigma3_anticommute :
     matMul σ₁ σ₃ + matMul σ₃ σ₁ = 0 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₁, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma2_sigma3_anticommute :
     matMul σ₂ σ₃ + matMul σ₃ σ₂ = 0 := by
-  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+  apply Mat2.ext <;> apply ℂ.ext <;> simp [σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 -- ---------------------------------------------------------------------------
 -- (C3) ★ 虚数单位的涌现：(σ₁σ₂)² = -1
@@ -68,8 +68,7 @@ theorem sigma2_sigma3_anticommute :
 theorem i_emerges_from_clifford :
     matMul (matMul σ₁ σ₂) (matMul σ₁ σ₂) = -1 := by
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 -- ---------------------------------------------------------------------------
 -- (C4) 完整乘法表：σᵢσⱼ (i ≠ j)
@@ -79,38 +78,32 @@ theorem i_emerges_from_clifford :
 theorem sigma1_sigma2_eq : matMul σ₁ σ₂ = matMul (scalar2 (-cI)) σ₃ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma2_sigma1_eq : matMul σ₂ σ₁ = matMul (scalar2 cI) σ₃ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma1_sigma3_eq : matMul σ₁ σ₃ = matMul (scalar2 cI) σ₂ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma3_sigma1_eq : matMul σ₃ σ₁ = matMul (scalar2 (-cI)) σ₂ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma2_sigma3_eq : matMul σ₂ σ₃ = matMul (scalar2 (-cI)) σ₁ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 theorem sigma3_sigma2_eq : matMul σ₃ σ₂ = matMul (scalar2 cI) σ₁ := by
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 -- ---------------------------------------------------------------------------
 -- (C4') 完整乘法表总结（含 C1 的平方项）：
@@ -126,8 +119,7 @@ theorem sigma3_from_sigma1_sigma2 :
   -- σ₁σ₂ = -i·σ₃，故 σ₃ = i·σ₁σ₂（-i·i = 1）
   unfold scalar2
   apply Mat2.ext <;> apply ℂ.ext <;>
-    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im,
-          Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub] <;> omega
+    simp [σ₁, σ₂, σ₃, matMul, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im] <;> omega
 
 -- ---------------------------------------------------------------------------
 -- (C5) 旋量表示：2×2 复矩阵 = Cℓ(3) 的自旋表示（载体空间 = 旋量空间）

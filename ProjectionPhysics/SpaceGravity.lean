@@ -57,7 +57,8 @@ def gordonMetric (v c : ℝ) : Mat2R :=
 theorem gordon_flat_is_minkowski (c : ℝ) (_hc : c ≠ 0) :
     gordonMetric 0 c = !![ 1, 0; 0, -1/(c*c) ] := by
   unfold gordonMetric
-  ext i j <;> fin_cases i <;> fin_cases j <;> simp
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp
 
 /-- ★ SG2：det(g) = −1/c²——空间流动保体积（坐标变换层面）。
     与 SpaceMetric.metric_det 一致：流动是几何的重新参数化，
@@ -80,7 +81,8 @@ def gordonInverse (v c : ℝ) : Mat2R :=
 theorem gordon_inverse_mul (v c : ℝ) (hc : c ≠ 0) :
     gordonInverse v c * gordonMetric v c = 1 := by
   unfold gordonInverse gordonMetric
-  ext i j <;> fin_cases i <;> fin_cases j <;>
+  ext i j
+  fin_cases i <;> fin_cases j <;>
     simp [Matrix.mul_apply] <;> field_simp [hc] <;> ring
 
 /-! ### ② 动量守恒 -/

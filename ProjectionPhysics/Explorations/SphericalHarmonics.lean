@@ -65,20 +65,25 @@ theorem sphere_normal_sq (x y z : ℝ) (h : x^2 + y^2 + z^2 = 1) :
     "整体来看的球谐函数" = 三方向耦合算符是标量（Y_0^0 球对称）。 -/
 theorem triplet_operator_sq_is_three :
     (σ₁ + σ₂ + σ₃) * (σ₁ + σ₂ + σ₃) = (3 : ℂ) • (1 : Mat2C) := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
+  ext i j
+  fin_cases i <;> fin_cases j <;>
     simp [σ₁, σ₂, σ₃, Matrix.mul_apply]
   · -- (0,0): 1 + (1-I)(1+I) = 3
     have h2 : (1 + -Complex.I) * (1 + Complex.I) = 2 := by
-      apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+      ring_nf
+      rw [sq, Complex.I_mul_I]
+      norm_num
     rw [h2]
     norm_num
   · -- (0,1): 1 - I + (I + -1) = 0
-    apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+    ring_nf
   · -- (1,0): 1 + I + (-I + -1) = 0
-    apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+    ring_nf
   · -- (1,1): (1+I)(1-I) + 1 = 3（乘法顺序反了）
     have h2' : (1 + Complex.I) * (1 + -Complex.I) = 2 := by
-      apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+      ring_nf
+      rw [sq, Complex.I_mul_I]
+      norm_num
     rw [h2']
     norm_num
 

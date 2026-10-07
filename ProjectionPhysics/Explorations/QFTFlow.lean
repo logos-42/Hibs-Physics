@@ -54,6 +54,11 @@ import ProjectionPhysics.PauliMathlib
 import ProjectionPhysics.Explorations.SphericalHarmonics
 import ProjectionPhysics.Explorations.Twistor
 
+-- 历史遗留 linter 处理：GQN 段用 `variable [Fintype N] [DecidableEq N]`，
+-- `outer_sum_eq_conj_mul` 自身未直接用 DecidableEq（其它定理依赖它），
+-- 无法用 omit 消除（本版 lean 的 omit-in 语法对该位置不可用），故全局关闭。
+set_option linter.unusedSectionVars false
+
 noncomputable section
 open Matrix
 open PauliMathlib
@@ -161,7 +166,7 @@ theorem three_direction_invertible :
   rw [Matrix.det_fin_two]
   simp [σ₁, σ₂, σ₃]
   have h2 : (1 + -Complex.I) * (1 + Complex.I) = 2 := by
-    apply Complex.ext <;> simp [Complex.I_re, Complex.I_im] <;> ring
+    apply Complex.ext <;> norm_num [Complex.I_re, Complex.I_im]
   rw [h2]
   norm_num
 
@@ -304,7 +309,7 @@ theorem triple_outer_eq_conj_mul (a b c : TriTwistor) :
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [tripleOuterSum, triMatrix, Matrix.vecMulVec, Matrix.mul_apply,
-          Matrix.conjTranspose, Fin.sum_univ_three] <;> ring
+          Matrix.conjTranspose, Fin.sum_univ_three]
 
 /-! ### GQ2. 三扭量 det 恒等（胶球质量 = 体积形式） -/
 
@@ -525,7 +530,7 @@ theorem triple_outer_eq_general (a b c : TriTwistor) :
       outerSumN (fun i j => triMatrix a b c i j) := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [tripleOuterSum, outerSumN, triMatrix, Matrix.vecMulVec, Fin.sum_univ_three] <;> ring
+    simp [tripleOuterSum, outerSumN, triMatrix, Matrix.vecMulVec, Fin.sum_univ_three]
 
 /-- ★ GQN6b：det 一致性——GQ2 的 det₃ = 一般 N 恒等在 N=3 时的值。
     形式化验证："一般定理 ⟹ 特例"（GQN2 蕴含 GQ2）。 -/
@@ -578,7 +583,10 @@ def pairDetSum (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) : ℂ :=
 /-- 辅助：s·star s = (normSq s : ℂ)——ℂ 值模平方 = 非负实数嵌入。 -/
 lemma mul_star_self_ofReal_normSq (s : ℂ) :
     s * star s = (Complex.normSq s : ℂ) := by
-  apply Complex.ext <;> simp [Complex.normSq] <;> ring
+  apply Complex.ext
+  · simp [Complex.normSq]
+  · simp [Complex.normSq]
+    ring
 
 /-- 辅助：非零 ⟹ s·star s ≠ 0（模平方的 ℂ 值非零）。 -/
 lemma mul_star_self_ne_zero_of_ne_zero (s : ℂ) (h : s ≠ 0) : s * star s ≠ 0 := by
@@ -819,7 +827,7 @@ theorem outer_sum_m2_det {m : ℕ} (π : Fin m → Fin 2 → ℂ) :
         (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by
           have h2 : (∑ i : Fin m, ∑ j : Fin m, if i = j then T2 π i j else 0) =
               ∑ i : Fin m, T2 π i i := by
-            simp [Finset.sum_ite_eq']
+            simp
           rw [h2]
     _ = (∑ i : Fin m, ∑ j : Fin m, if i < j then T2 π i j else 0) + 0 +
         (∑ i : Fin m, ∑ j : Fin m, if i > j then T2 π i j else 0) := by

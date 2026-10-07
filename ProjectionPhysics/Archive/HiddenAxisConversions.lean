@@ -50,18 +50,15 @@ theorem swapImagHidden_involutive (x : HiddenTriAxis) :
 
 theorem swapHiddenReal_preserves_dot (x y : HiddenTriAxis) :
     triAxisDot (swapHiddenReal x) (swapHiddenReal y) = triAxisDot x y := by
-  simp [swapHiddenReal, triAxisDot, Int.mul_comm, Int.add_comm,
-    Int.add_left_comm] <;> omega
+  simp [swapHiddenReal, triAxisDot, Int.add_comm] <;> omega
 
 theorem swapRealImag_preserves_dot (x y : HiddenTriAxis) :
     triAxisDot (swapRealImag x) (swapRealImag y) = triAxisDot x y := by
-  simp [swapRealImag, triAxisDot, Int.mul_comm, Int.add_comm,
-    Int.add_left_comm] <;> omega
+  simp [swapRealImag, triAxisDot, Int.add_comm] <;> omega
 
 theorem swapImagHidden_preserves_dot (x y : HiddenTriAxis) :
     triAxisDot (swapImagHidden x) (swapImagHidden y) = triAxisDot x y := by
-  simp [swapImagHidden, triAxisDot, Int.mul_comm, Int.add_comm,
-    Int.add_left_comm] <;> omega
+  simp [swapImagHidden, triAxisDot, Int.add_comm] <;> omega
 
 structure OrthogonalAxisConversion where
   forward : HiddenTriAxis → HiddenTriAxis

@@ -82,7 +82,7 @@ theorem charge_conjugation_flips_normal :
     (Complex.I : ℂ) • σ₂ * σ₃ + σ₃ * ((Complex.I : ℂ) • σ₂) = 0 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [σ₂, σ₃, Matrix.smul_apply, Matrix.mul_apply] <;> norm_num
+    simp [σ₂, σ₃]
 
 /-- ★ 电荷共轭保持总动量：C 是反线性的（conj），动量 p = π⊗π̄ 在
     电荷共轭下 π → conj π 保持 det = 0（无质量）——正反粒子的
@@ -138,7 +138,7 @@ theorem charge_conjugation_preserves_pair_mass (a₁ b₁ a₂ b₂ : ℂ) :
     ((star a₁ * star b₂ - star a₂ * star b₁)
        * star (star a₁ * star b₂ - star a₂ * star b₁))
     = ((a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁)) := by
-  simp [star_sub, star_mul, star_star]
+  simp [star_sub, star_mul]
   ring
 
 /-! ### TW8. 电性 = 法向量（双扭量版）：C 翻转总法向量投影 -/

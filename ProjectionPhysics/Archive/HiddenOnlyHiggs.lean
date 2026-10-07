@@ -299,7 +299,7 @@ def hiddenVacuumPartner (vacuum : PureHiddenNumber) : PureHiddenNumber :=
   ⟨-vacuum.value⟩
 
 theorem hidden_vacuum_partner_has_zero_potential
-    (vacuum : PureHiddenNumber) (point : HiddenPoint) :
+    (vacuum : PureHiddenNumber) (_point : HiddenPoint) :
     hiddenPotential vacuum (hiddenVacuumPartner vacuum) = 0 := by
   simp [hiddenPotential, hiddenVacuumPartner, Int.neg_mul_neg]
 

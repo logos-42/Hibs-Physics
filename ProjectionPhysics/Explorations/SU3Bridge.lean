@@ -99,30 +99,27 @@ def su3Cycle2Matrix : Mat3 :=
 
 theorem su3_identity_matrix_unitary : MatrixUnitary su3IdentityMatrix := by
   apply Mat3.ext <;> apply ℂ.ext <;>
-    simp [MatrixUnitary, su3IdentityMatrix, mat3One, mat3Adjoint, mat3Mul,
-      complexConj]
+    simp [su3IdentityMatrix, mat3One, mat3Adjoint, mat3Mul, complexConj]
 
 theorem su3_identity_matrix_det_one : MatrixDetOne su3IdentityMatrix := by
   apply ℂ.ext <;>
-    simp [MatrixDetOne, su3IdentityMatrix, mat3One, mat3Det, complexSub] <;> omega
+    simp [su3IdentityMatrix, mat3One, mat3Det, complexSub] <;> omega
 
 theorem su3_cycle_matrix_unitary : MatrixUnitary su3CycleMatrix := by
   apply Mat3.ext <;> apply ℂ.ext <;>
-    simp [MatrixUnitary, su3CycleMatrix, mat3One, mat3Adjoint, mat3Mul,
-      complexConj]
+    simp [su3CycleMatrix, mat3One, mat3Adjoint, mat3Mul, complexConj]
 
 theorem su3_cycle_matrix_det_one : MatrixDetOne su3CycleMatrix := by
   apply ℂ.ext <;>
-    simp [MatrixDetOne, su3CycleMatrix, mat3Det, complexSub] <;> omega
+    simp [su3CycleMatrix, mat3Det, complexSub] <;> omega
 
 theorem su3_cycle2_matrix_unitary : MatrixUnitary su3Cycle2Matrix := by
   apply Mat3.ext <;> apply ℂ.ext <;>
-    simp [MatrixUnitary, su3Cycle2Matrix, mat3One, mat3Adjoint, mat3Mul,
-      complexConj]
+    simp [su3Cycle2Matrix, mat3One, mat3Adjoint, mat3Mul, complexConj]
 
 theorem su3_cycle2_matrix_det_one : MatrixDetOne su3Cycle2Matrix := by
   apply ℂ.ext <;>
-    simp [MatrixDetOne, su3Cycle2Matrix, mat3Det, complexSub] <;> omega
+    simp [su3Cycle2Matrix, mat3Det, complexSub] <;> omega
 
 def su3Identity : SU3Matrix :=
   { matrix := su3IdentityMatrix

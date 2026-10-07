@@ -72,7 +72,7 @@ theorem sigma12_eq_i_sigma3 :
     σ₁ * σ₂ = (Complex.I : ℂ) • ((-Complex.I : ℂ) • (σ₁ * σ₂)) := by
       ext i j
       fin_cases i <;> fin_cases j <;>
-        simp [σ₁, σ₂, Matrix.smul_apply, Matrix.mul_apply] <;> norm_num
+        simp [σ₁, σ₂, Matrix.smul_apply, Matrix.mul_apply]
     _ = (Complex.I : ℂ) • σ₃ := by rw [← h₃]
 
 /-! ### SFS3. 自旋算符 = 空间旋转生成元 -/
@@ -86,7 +86,7 @@ theorem spin_commutator_12 :
   have hanti : σ₂ * σ₁ = -(σ₁ * σ₂) := by
     ext i j
     fin_cases i <;> fin_cases j <;>
-      simp [σ₁, σ₂, Matrix.mul_apply] <;> norm_num
+      simp [σ₁, σ₂, Matrix.mul_apply]
   calc
     σ₁ * σ₂ - σ₂ * σ₁ = σ₁ * σ₂ - (-(σ₁ * σ₂)) := by rw [hanti]
     _ = 2 • (σ₁ * σ₂) := by abel
@@ -121,7 +121,7 @@ theorem spin_squared_casimir :
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [PauliMathlib.σ₁, PauliMathlib.σ₂, PauliMathlib.σ₃,
-          Matrix.smul_apply, Matrix.mul_apply] <;> ring_nf <;> norm_num
+          Matrix.smul_apply] <;> ring_nf <;> norm_num
 
 /-! ### 结论注释 -/
 

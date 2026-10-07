@@ -55,7 +55,7 @@ theorem photon_velocity_sum_invariant (c v : ℝ) (hc : c ≠ 0) (hv : v ≠ c) 
     w_经典 = c − v（差值显式，光速依赖观测者速度）
     w_相对论 = c（差值被抵消，光速不变）
     差值项 (c−v) 是经典极限的产物，相对论把它消除。 -/
-theorem galilean_vs_relativistic (c v : ℝ) (hc : c ≠ 0) (hv : v ≠ c) :
+theorem galilean_vs_relativistic (c v : ℝ) (_hc : c ≠ 0) (_hv : v ≠ c) :
     galileanDiff c v ≠ relativisticDiff c v → v ≠ 0 := by
   -- 若 v = 0 则两者都是 c
   intro hneq hzero
@@ -73,7 +73,7 @@ def gammaSqDeviation (c u : ℝ) : ℝ := 1 / (1 - (c - u)^2 / c^2)
 
 /-- ★ RD3：两种参数化等价——γ²(c, c−u) = γ²_dev(c, u)。
     （差值参数化不是新公式，是同一公式用 (c−v) 重写） -/
-theorem gammaSq_eq_deviation_form (c u : ℝ) (hc : c ≠ 0) :
+theorem gammaSq_eq_deviation_form (c u : ℝ) (_hc : c ≠ 0) :
     gammaSq c (c - u) = gammaSqDeviation c u := by
   unfold gammaSq gammaSqDeviation
   congr 1

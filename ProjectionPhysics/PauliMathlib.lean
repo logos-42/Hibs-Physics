@@ -37,34 +37,34 @@ def σ₃ : Mat2C := !![ 1, 0; 0, -1 ]
 
 /-- ★ C1'：生成元平方 = 单位矩阵（度规正定方向）。 -/
 theorem sigma1_sq : σ₁ * σ₁ = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, Matrix.mul_apply]
 
 theorem sigma2_sq : σ₂ * σ₂ = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₂, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₂, Matrix.mul_apply]
 
 theorem sigma3_sq : σ₃ * σ₃ = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₃, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₃, Matrix.mul_apply]
 
 /-- ★ C2'：反交换 σ₁σ₂ + σ₂σ₁ = 0（Clifford 关系，旋量的代数根源）。 -/
 theorem sigma1_sigma2_anticommute :
     σ₁ * σ₂ + σ₂ * σ₁ = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, σ₂, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, σ₂]
 
 /-- ★ C3'：(σ₁σ₂)² = -1（虚数单位 i 从矩阵涌现——
     两个反交换的平方为 I 的生成元之积给出 -1）。 -/
 theorem sigma12_sq : (σ₁ * σ₂) * (σ₁ * σ₂) = -1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, σ₂, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, σ₂]
 
 /-- ★ C4'：σ₃ = -i·σ₁σ₂（第三个生成元从前两个涌现，
     对应项目 C4"法向量从平面内运动涌现"）。 -/
 theorem sigma3_from_sigma12 : σ₃ = (-Complex.I : ℂ) • (σ₁ * σ₂) := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [σ₁, σ₂, σ₃, Matrix.mul_apply] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [σ₁, σ₂, σ₃]
 
 /-- 汇总：Clifford 三定理在 mathlib 下同时成立（对照 Clifford.lean C1-C3）。 -/
 theorem clifford_core_mathlib :

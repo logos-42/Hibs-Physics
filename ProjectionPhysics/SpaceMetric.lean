@@ -121,8 +121,8 @@ theorem deviation_implies_mass (c : ℝ) (dt dx : ℝ)
 
 /-- ★ SM3b：质量粒子（偏离空间流动 u ≠ 0）在低于光速时花时间。 -/
 theorem massive_deviation_positive_time (c : ℝ) (dt dx : ℝ)
-    (hc : c ≠ 0) (hdt : dt ≠ 0)
-    (hu : deviationFromSpaceFlow c dt dx ≠ 0) (h : |dx| < |c * dt|) :
+    (hc : c ≠ 0) (_hdt : dt ≠ 0)
+    (_hu : deviationFromSpaceFlow c dt dx ≠ 0) (h : |dx| < |c * dt|) :
     0 < properTimeSq c dt dx := by
   exact massive_proper_time_positive c dt dx hc h
 
@@ -145,7 +145,7 @@ theorem proper_time_eq_metric (c : ℝ) (dt dx : ℝ) :
 /-- ★ SM5：det(g) = −1/c²——空间流动不改变时空"体积"。
     这意味着流动是坐标变换层面的（保体积），
     为"空间流动 = 惯性力而非引力"提供了代数证据。 -/
-theorem metric_det (c : ℝ) (hc : c ≠ 0) :
+theorem metric_det (c : ℝ) (_hc : c ≠ 0) :
     (metric c) ⟨0, by decide⟩ ⟨0, by decide⟩ *
       (metric c) ⟨1, by decide⟩ ⟨1, by decide⟩ -
     (metric c) ⟨0, by decide⟩ ⟨1, by decide⟩ *

@@ -53,7 +53,8 @@ def IsLorentz (Λ : Matrix (Fin 2) (Fin 2) ℝ) : Prop :=
 theorem boost_is_lorentz (θ : ℝ) : IsLorentz (boost θ) := by
   unfold IsLorentz boost eta
   -- 展开矩阵乘法（2×2）：对角元 -cosh²+sinh² = -1，非对角 0
-  ext i j <;> fin_cases i <;> fin_cases j <;>
+  ext i j
+  fin_cases i <;> fin_cases j <;>
     simp [Matrix.mul_apply] <;> ring_nf <;>
     rw [← Real.cosh_sq_sub_sinh_sq θ] <;> ring
 
@@ -83,7 +84,8 @@ theorem gamma_sq_minus_beta_sq (θ : ℝ) :
 theorem boost_mul_boost (θ₁ θ₂ : ℝ) :
     boost θ₁ * boost θ₂ = boost (θ₁ + θ₂) := by
   unfold boost
-  ext i j <;> fin_cases i <;> fin_cases j <;>
+  ext i j
+  fin_cases i <;> fin_cases j <;>
     simp [Matrix.mul_apply, Real.sinh_add, Real.cosh_add] <;> ring
 
 /-- ★ LR3b：快度加法 = 速度加法定理（相对论速度加法）。

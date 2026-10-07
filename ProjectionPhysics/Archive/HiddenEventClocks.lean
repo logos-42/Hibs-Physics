@@ -63,7 +63,7 @@ theorem mass_event_count_append
   | cons head tail ih =>
       by_cases h : head.massSquared = 0
       · simp [massEventCount, h, ih]
-      · simp [massEventCount, h, ih, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+      · simp [massEventCount, h, ih, Nat.add_comm, Nat.add_left_comm]
 
 theorem mass_event_count_append_nonzero
     (history : HiddenEventHistory) (event : HiddenSpatialEvent)

@@ -51,55 +51,55 @@ def ψR (ψ : DiracSpinor) : Fin 2 → ℂ := fun i => ψ ⟨i.val + 2, by omega
 
 /-- ★ DB1'：gamma0² = 1（时间方向平方 = +1——度规时间分量签名）。 -/
 theorem gamma0_sq : gamma0 * gamma0 = 1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma0, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma0, Matrix.mul_apply, Fin.sum_univ_four]
 
 /-- ★ DB2a'：gamma1² = −1（空间方向平方 = −1——度规空间分量签名）。
     这就是"时间特殊"的代数内容：时间方向 +1，空间方向 −1。 -/
 theorem gamma1_sq : gamma1 * gamma1 = -1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma1, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma1, Matrix.mul_apply, Fin.sum_univ_four]
 
 theorem gamma2_sq : gamma2 * gamma2 = -1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma2, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma2, Matrix.mul_apply, Fin.sum_univ_four]
 
 theorem gamma3_sq : gamma3 * gamma3 = -1 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma3, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma3, Matrix.mul_apply, Fin.sum_univ_four]
 
 /-! ### DB3'–DB4'：反交换 -/
 
 /-- ★ DB3'：gamma0gamma1 + gamma1gamma0 = 0（时间与空间方向反交换）。 -/
 theorem gamma0_gamma1_anticommute :
     gamma0 * gamma1 + gamma1 * gamma0 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma0, gamma1, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma0, gamma1]
 
 theorem gamma0_gamma2_anticommute :
     gamma0 * gamma2 + gamma2 * gamma0 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma0, gamma2, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma0, gamma2]
 
 theorem gamma0_gamma3_anticommute :
     gamma0 * gamma3 + gamma3 * gamma0 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma0, gamma3, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma0, gamma3]
 
 theorem gamma1_gamma2_anticommute :
     gamma1 * gamma2 + gamma2 * gamma1 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma1, gamma2, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma1, gamma2]
 
 theorem gamma1_gamma3_anticommute :
     gamma1 * gamma3 + gamma3 * gamma1 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma1, gamma3, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma1, gamma3]
 
 theorem gamma2_gamma3_anticommute :
     gamma2 * gamma3 + gamma3 * gamma2 = 0 := by
-  ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [gamma2, gamma3, Matrix.mul_apply, Fin.sum_univ_four] <;> ring
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [gamma2, gamma3]
 
 /-! ### DB5'：质量方程 = 手征耦合 -/
 

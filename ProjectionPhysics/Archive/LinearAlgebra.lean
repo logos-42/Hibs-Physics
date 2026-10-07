@@ -92,7 +92,7 @@ theorem reProj_linear : LinearMap cVecSpace intVecSpace reProj := by
   constructor
   · exact reProj_add
   · intro a x
-    simpa [cVecSpace, intVecSpace, reProj_smul]
+    simp [cVecSpace, intVecSpace, reProj_smul]
 
 -- ---------------------------------------------------------------------------
 -- (L4) kernel 子空间：数乘封闭（补 K1 的加法封闭）
@@ -109,7 +109,7 @@ theorem kernel_smul_closed {V W : Type} [Add V] [Add W] [Zero V] [Zero W]
 /-- 核是子空间：加法封闭（K1）+ 数乘封闭（L4）。 -/
 theorem kernel_is_subspace {V W : Type} [Add V] [Add W] [Zero V] [Zero W]
     (VS : VecSpace V) (WS : VecSpace W) (T : V → W)
-    (hT : LinearMap VS WS T) (h0 : T 0 = 0) :
+    (hT : LinearMap VS WS T) (_h0 : T 0 = 0) :
     (∀ x y : V, T x = 0 → T y = 0 → T (x + y) = 0) ∧
     (∀ (a : Int) (x : V), T x = 0 → T (VS.smul a x) = 0) := by
   constructor
@@ -137,7 +137,7 @@ structure Basis (V : Type) (n : Nat) [Add V] [Zero V] (VS : VecSpace V) where
 
 /-- 基的维度。 -/
 def BasisDim {V : Type} {n : Nat} [Add V] [Zero V] {VS : VecSpace V}
-    (B : Basis V n VS) : Nat := n
+    (_B : Basis V n VS) : Nat := n
 
 /-- 子空间基：张成子空间 { v | P v }（不要求张成整个空间）。
     ker π 的基是 SubBasis，不是 Basis。 -/
@@ -150,7 +150,7 @@ structure SubBasis (V : Type) (n : Nat) [Add V] [Zero V] (VS : VecSpace V) (P : 
 
 /-- 子空间基的维度。 -/
 def SubBasisDim {V : Type} {n : Nat} [Add V] [Zero V] {VS : VecSpace V}
-    {P : V → Prop} (B : SubBasis V n VS P) : Nat := n
+    {P : V → Prop} (_B : SubBasis V n VS P) : Nat := n
 
 -- ---------------------------------------------------------------------------
 -- (L6) ★ rank-nullity 具体验证：ℂ 的实部投影
@@ -209,7 +209,7 @@ theorem imRe_span : ∀ v : Int, ∃ c : Fin 1 → Int,
     v = vecSum 1 (fun i => intVecSpace.smul (c i) (imReBasis i)) := by
   intro v
   refine ⟨fun _ => v, ?_⟩
-  simpa [vecSum, imReBasis, intVecSpace]
+  simp [vecSum, imReBasis, intVecSpace]
 
 -- im(Re) 的线性无关
 theorem imRe_independent : ∀ c : Fin 1 → Int,

@@ -188,24 +188,24 @@ theorem matMul_add_right (M N K : Mat2) :
     matMul M (N + K) = matMul M N + matMul M K := by
   apply Mat2.ext
   · apply ℂ.ext
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, Int.mul_add]
       omega
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
-      omega
-  · apply ℂ.ext
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
-      omega
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_im, Int.mul_add]
       omega
   · apply ℂ.ext
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, Int.mul_add]
       omega
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_im, Int.mul_add]
       omega
   · apply ℂ.ext
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, Int.mul_add]
       omega
-    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, ℂ.mul_im, Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub]
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_im, Int.mul_add]
+      omega
+  · apply ℂ.ext
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_re, Int.mul_add]
+      omega
+    · simp [matMul, Mat2.add_a, Mat2.add_b, Mat2.add_c, Mat2.add_d, ℂ.add_re, ℂ.add_im, ℂ.mul_im, Int.mul_add]
       omega
 
 end ProjectionPhysics

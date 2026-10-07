@@ -59,7 +59,7 @@ def triDirectionalSpace (c2 a b c : Int) (h : a * a + b * b + c * c = c2) :
     空间同时沿 x、y、z 三方向运动，模为普适常数。 -/
 theorem tri_directional_space_has_universal_speed
     (c2 a b c : Int) (h : a * a + b * b + c * c = c2)
-    (v w : SpaceVelocity c2) :
+    (v _w : SpaceVelocity c2) :
     a * a + b * b + c * c =
       v.x * v.x + v.y * v.y + v.z * v.z := by
   calc
@@ -116,13 +116,13 @@ theorem anchor_mass_zero_of_photon (s : MatterState c2)
     anchorMassOf s = 0 := by
   rw [anchorMassOf, hspin]
   rw [hrel]
-  simp [IsComoving, relativeMotionZero]
+  simp [relativeMotionZero]
 
 /-- 光子零锚定的显式落地（#eval 可算）。 -/
 theorem photon_anchor_zero_example :
     anchorMassOf ({ space := xDirectionalSpace 1, relative := relativeMotionZero,
                     spin := 0 } : MatterState 1) = 0 := by
-  simp [anchorMassOf, xDirectionalSpace, relativeMotionZero]
+  simp [anchorMassOf, relativeMotionZero]
 
 /-! ### SLS3. 内部运动 ⟹ 锚定非零 -/
 
@@ -290,17 +290,17 @@ def observedPhotonVelocity (o : Observer) : RelativeMotion :=
 /-- observedPhotonVelocity 的 x 分量：0 − 观测者相对运动。 -/
 theorem observedPhotonVelocity_x (o : Observer) :
     (observedPhotonVelocity o).x = 0 - o.relative.x := by
-  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+  simp [observedPhotonVelocity, relativeMotionZero]
 
 /-- observedPhotonVelocity 的 y 分量：0 − 观测者相对运动。 -/
 theorem observedPhotonVelocity_y (o : Observer) :
     (observedPhotonVelocity o).y = 0 - o.relative.y := by
-  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+  simp [observedPhotonVelocity, relativeMotionZero]
 
 /-- observedPhotonVelocity 的 z 分量：0 − 观测者相对运动。 -/
 theorem observedPhotonVelocity_z (o : Observer) :
     (observedPhotonVelocity o).z = 0 - o.relative.z := by
-  simp [observedPhotonVelocity, relativeMotionZero, RelativeMotion.sub_x]
+  simp [observedPhotonVelocity, relativeMotionZero]
 
 /-- ★ 光速不变（新假设版）：任何随空间观测者（惯性系）测到的
     光速恒为零相对运动 ⟹ 光速 = 空间流动速度，普适常数。

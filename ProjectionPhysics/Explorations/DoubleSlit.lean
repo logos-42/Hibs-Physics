@@ -45,7 +45,7 @@ theorem helix_xy_projection_is_circle (R ω : ℝ) (t : ℝ) :
     (R * Real.cos (ω * t)) ^ 2 + (R * Real.sin (ω * t)) ^ 2
         = R ^ 2 * ((Real.cos (ω * t)) ^ 2 + (Real.sin (ω * t)) ^ 2) := by ring
     _ = R ^ 2 := by
-      simpa [add_comm] using Real.sin_sq_add_cos_sq (ω * t)
+      simp
 
 /-- ★ 螺旋的截面投影是谐波（波纹）：x 分量随传播坐标 z 呈 cos 变化。
     光（随空间流动，SLS2）沿螺旋运动 ⟹ 观测到的"波动" = 螺旋在
@@ -80,7 +80,7 @@ theorem interference_identity (α β : ℝ) :
 theorem two_slit_intensity_identity (δ : ℝ) :
     4 * (Real.cos δ) ^ 2 = 2 * (1 + Real.cos (2 * δ)) := by
   have h1 : (Real.cos δ) ^ 2 + (Real.sin δ) ^ 2 = 1 := by
-    simpa [add_comm] using Real.sin_sq_add_cos_sq δ
+    simp
   have h2 : Real.cos (2 * δ) = (Real.cos δ) ^ 2 - (Real.sin δ) ^ 2 := Real.cos_two_mul' δ
   nlinarith
 

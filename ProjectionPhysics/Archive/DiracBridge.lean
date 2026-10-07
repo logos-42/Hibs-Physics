@@ -137,22 +137,22 @@ theorem gamma0_sq : mat4Mul gamma0 gamma0 = 1 := by
   · -- a 块: 0·0 + 1·1 = 1
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [matMul, ℂ.mul_re, ℂ.mul_im,
+      simp [ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
   · -- b 块: 0·1 + 1·0 = 0
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [matMul, ℂ.mul_re, ℂ.mul_im,
+      simp [ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
   · -- c 块: 1·0 + 0·1 = 0
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [matMul, ℂ.mul_re, ℂ.mul_im,
+      simp [ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
   · -- d 块: 1·1 + 0·0 = 1
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [matMul, ℂ.mul_re, ℂ.mul_im,
+      simp [ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
 
 /-! ### DB4. 静止质量方程：手征耦合 -/
@@ -207,12 +207,12 @@ theorem gamma0_gamma1_anticommute :
   · -- b 块：0
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [σ₁, ℂ.mul_re, ℂ.mul_im, ℂ.neg_re, ℂ.neg_im,
+      simp [σ₁, ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
   · -- c 块：0
     simp [matMul]
     apply Mat2.ext <;> apply ℂ.ext <;>
-      simp [σ₁, ℂ.mul_re, ℂ.mul_im, ℂ.neg_re, ℂ.neg_im,
+      simp [σ₁, ℂ.mul_re, ℂ.mul_im,
         ℂ.ofNat0_re, ℂ.ofNat0_im, ℂ.ofNat1_re, ℂ.ofNat1_im] <;> omega
   · -- d 块：σ₁ + (-σ₁) = 0
     simp [matMul]
