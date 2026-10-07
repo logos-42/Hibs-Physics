@@ -21,31 +21,47 @@ Charge, Antigravity, and the Photon in Flowing Space}
 
 \begin{abstract}
 We extend the flowing-space framework in two geometric directions and
-join them into one chain.  (i)~\emph{The half-phase of the critical
-sheet}: the inversion fixed point of the envelope reflection
-$w\mapsto e/w$ sits at $|w|=\sqrt{e}$, so $\ln(\sqrt e)=1/2$; the square
-root is the half-step operator of the multiplicative group, and in phase
-space the same half-step is the half-angle phase
-$\exp(i\theta/2)$, whose closure factor is $-1$ --- the explicit
-fermionic witness of spin~$1/2$.  (ii)~\emph{Charge as flow
-divergence}: positive charge is a source (positive divergence),
+join them into one chain.  The motivation is cumulative and has passed
+through several abandoned forms.  It began with the Riemann hypothesis
+\cite{riemann1859ueber}: the critical line $\operatorname{Re}s=1/2$ is
+the fixed set of the reflection $s\mapsto 1-s$, and the value $1/2$
+seemed too physical to be a coincidence.  That led to an attempt to
+build a ``hidden-number space'' on the critical sheet; the attempt was
+abandoned when it could not accommodate the distinction between fermions
+and bosons.  The next goal was to unify the photon, the fermion, and the
+boson --- and to understand where the glueball mass comes from.  The
+answer arrived as a realization: taken together, the failures pointed at
+a single primitive.  Space is not a background; it flows.  Mass is
+anchoring against that flow; charge is its divergence; a converging
+divergence is a sink; and a sink that fully contracts is flattening ---
+and a flattened flow is massless and neutral, the photon.
+
+This paper turns that realization into theorems.  (i)~\emph{Charge as
+flow divergence}: positive charge is a source (positive divergence),
 negative charge a sink (negative divergence), mutually exclusive,
-flipped under $\rho\to-\rho$, neutral at zero.  A time-varying source
-forces the space field to vary (CR1); a varying field activates the
-nuclear channel $m\,dC$ of the four-force decomposition (CR2); and a
-sink --- a converging flow --- is geometrically a flattening: the
-inward contraction $v_i\mapsto(1-\lambda)v_i+\lambda\bar v$ reduces the
-fluctuation energy $Q_A$ by the square factor $(1-\lambda)^2$ (CR9,
-exact discrete theorem).  Joining the framework's own $\mu$-bridge
-(one flattening gives $\mu=1$), the chain closes conditionally:
+flipped under $\rho\to-\rho$, neutral at zero.  (ii)~\emph{The
+conditional chain}: a time-varying source forces the space field to vary
+(CR1); a varying field activates the nuclear channel $m\,dC$ of the
+four-force decomposition (CR2); joining the framework's own $\mu$-bridge
+(one flattening gives $\mu=1$), the chain closes conditionally ---
 accelerated charge $\Rightarrow$ antigravity field $\Rightarrow$ the
-photon (mass zero and neutral).  As a device-level application, the
+photon.  (iii)~\emph{The sink is a flattening}: the inward contraction
+$v_i\mapsto(1-\lambda)v_i+\lambda\bar v$ reduces the fluctuation energy
+$Q_A$ by the square factor $(1-\lambda)^2$ (CR9, exact discrete
+theorem); this is what makes negative charge the natural carrier of the
+antigravity field.  (iv)~\emph{The half-phase geometry}: the fixed point
+of the envelope reflection is $\ln(\sqrt e)=1/2$, and the half-angle
+phase $\exp(i\theta/2)$ is the fermionic closure witness with factor
+$-1$ --- spin~$1/2$ located, in the precise sense that the reflection's
+fixed point must sit at $1/2$.  As a device-level application, the
 self-flattening of circulating electrons shortens the approach to the
-working window $\mu=0.999$ from $132$ to $85$ steps and reaches it
-with halved external RMF drive.  All statements are formalized in
-Lean~4 with zero \texttt{sorry}; the honest status is stated:
-$\lambda$ (the sink contraction rate) and $\delta,\varepsilon$ (the
-sink energy scale) are inputs, and the continuum 3D
+working window $\mu=0.999$ from $132$ to $85$ steps and reaches it with
+halved external RMF drive.
+
+All statements are formalized in Lean~4 with zero \texttt{sorry}; the
+honest status is stated: the chain is conditional (\emph{if} a
+flattening occurs, any anchored substance becomes a photon), $\lambda$
+and $\delta,\varepsilon$ are inputs, and the continuum 3D
 divergence-to-functional correspondence is not yet formalized.
 \end{abstract}
 
@@ -159,6 +175,56 @@ anchored substance becomes a photon; it does not prove that an
 accelerated charge \emph{automatically} flattens its flow.  That
 boundary, and the status of the input parameters $\lambda,\delta,
 \varepsilon$, are stated plainly in Sec.~IX.
+
+\paragraph{How this paper came to be: a short intellectual history.}
+The motivation is cumulative, and each of its earlier forms was
+abandoned for a concrete reason.  It began with the Riemann hypothesis
+\cite{riemann1859ueber}.  The critical line $\operatorname{Re}s=1/2$
+is the fixed set of the reflection $s\mapsto 1-s$; a value of $1/2$
+forced by a symmetry, rather than put in by hand, seemed too physical
+to be a coincidence.  That led to an attempt to build a hidden-number
+space on the critical sheet, and the attempt failed in an instructive
+way: a single sheet could not accommodate the distinction between
+fermions and bosons --- one object, one sheet, no room for two
+statistics.  The next goal was to unify the photon, the fermion, and
+the boson, and to understand where the glueball mass comes from; the
+lattice spectrum \cite{morningstar1999glueball,chen2006glueball} gives
+the masses but not their origin.  The resolution arrived as a
+realization rather than a derivation: the failures shared a single
+cause.  Space is not a background in which things happen; it is the
+medium that happens.  In that medium mass is anchoring, charge is
+divergence, a sink is a converging flow, and a fully contracted sink is
+a flattened flow --- massless and neutral, the photon.  Each ingredient
+of this paper is a theorem that makes one step of that realization
+precise.
+
+\paragraph{Relation to existing physics: what is kept, what is
+contradicted, what is new.}
+The framework is deliberately conservative where standard physics is
+well tested.  It keeps the Einstein field equations at the level of
+their weak-field content (gravitation is the non-uniformity of the
+flow, matching $\Phi=\tfrac12 v^2$ \cite{einstein1915feldgleichungen,
+gordon1923lichtfortpflanzung}); it keeps the Maxwell equations as the
+kinematics of the flow (the Faraday law is an identity, the
+Amp\`ere--Maxwell law is the wave equation of the space field
+\cite{maxwell1996dynamical}); it keeps the quantum relations
+\cite{planck1978gesetz,de1924recherches,heisenberg1927anschaulichen}
+as consequences of helix geometry rather than as postulates.  In these
+places the framework \emph{rewrites the ontology without touching the
+numerics}: the same equations, a different primitive.  In two places it
+goes further and contradicts the standard ontology directly.  (i)~The
+spin--statistics connection: the standard account reads the value
+$1/2$ off Dirac's equation \cite{dirac1928quantum} or Pauli's exclusion
+principle \cite{pauli1925zusammenhang}; here $1/2$ is the fixed point
+of a reflection, and the fermionic sign is the closure factor of a
+half-angle phase.  (ii)~Charge: the standard model posits the
+hypercharge assignments and never explains why accelerating charge
+radiates photons; here charge is the divergence of the flow, and the
+radiation of a photon from an accelerated charge is the conditional
+consequence of the sink contracting to neutrality.  What is new, and
+flagged as such, is the claim that these two --- spin~$1/2$ and
+charge --- are two faces of one geometric fact: a quadratic quantity
+reduced by a square factor.
 
 \section{Postulates of the flowing-space framework}
 \label{sec:postulates}
