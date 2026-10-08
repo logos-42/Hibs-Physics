@@ -143,3 +143,4 @@ import ProjectionPhysics.Explorations.MassGap
 import ProjectionPhysics.Explorations.YangMillsSeed
 import ProjectionPhysics.Explorations.YangMillsLattice
 import ProjectionPhysics.Explorations.YangMillsStrict
+import ProjectionPhysics.Explorations.YangMillsContinuum
