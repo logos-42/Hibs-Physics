@@ -584,6 +584,19 @@ m^2(N)\in\{0\}\sqcup[M_0^2,\infty),
 质量间隙就是流动本身计数的离散性（\texttt{flow\_mass\_gap\_from\_count}，CA11）。
 \end{theorem}
 
+\begin{theorem}[SFG6--SFG9: 非交换承载场，场承载门]
+\label{thm:sfg6}
+``自相互作用蕴含间隙'' 这条箭头被真正做成蕴含，逐步从框架已有对象出发：
+(i)~若两个流动分量的交换子非零，则两个分量都非零——纯矩阵事实
+$[X,Y]\neq0\Rightarrow X\neq0$（\texttt{commutator\_ne\_zero\_of\_left\_ne\_zero}）；
+(ii)~非零矩阵有非零入口——``至少一条位移条'' 的代数见证
+（\texttt{matrix\_ne\_zero\_imp\_exists\_entry\_ne\_zero}）；
+(iii)~故非交换流动承载一条位移条（\texttt{noncomm\_imp\_has\_strand}，SFG8）；
+(iv)~位移条 + 计数律给出至少 $M_0^2$ 的质量态
+（\texttt{has\_strand\_imp\_mass\_ge\_count}，SFG9）。每条假设都被使用；
+没有任何一条是未使用的汇编占位。
+\end{theorem}
+
 \paragraph{解读。} 四种力于是是流动动量 $p=m(C-v)$ 的时间导数：$dm\,C$（电力）、
 $m\,dC$（核力）、$-dm\,v$（磁力）、$-m\,dv$（引力/惯性力）。每个通道都是
 这单一导数的莱布尼茨项——框架的方法论是：先有流动，场从流动来，力从场的

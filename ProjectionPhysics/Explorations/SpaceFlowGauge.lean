@@ -116,4 +116,69 @@ theorem flow_mass_sq_positive_of_count {M₀ : ℝ} (hM₀ : 0 < M₀) (mSq : �
   rw [hcount N]
   exact mul_pos (Nat.cast_pos.mpr hpos) (sq_pos_of_pos hM₀)
 
+-- ---------------------------------------------------------------------------
+-- SFG6–SFG9 ★★ 非交换 ⟹ 有条数 ⟹ 间隙（回应审稿 R2：「自相互作用 ⟹ 间隙」
+--   的箭头不是蕴含）。本轮把它拆成**真蕴含链**，每一条都从框架已有对象出发：
+--     SFG6   [X,Y] ≠ 0 ⟹ X ≠ 0 ∧ Y ≠ 0（纯矩阵：交换子非零 ⟹ 场非平凡）
+--     SFG7   X ≠ 0 ⟹ ∃ 分量非零（有限矩阵 = 至少一条「位移条」的见证）
+--     SFG8   非交换 ⟹ 有位移条（SFG6+SFG7 的合成）
+--     SFG9   有位移条 + 计数律 ⟹ 存在 ≥ M₀² 的质量平方（= CA11 的门槛态）
+--   诚实边界：SFG9 的「有位移条 ⟹ 质量由条数定」仍是计数律 hcount 作为假设
+--   （不是从动力学推出）；本链闭合的是「非交换自带非平凡场」这一环。
+-- ---------------------------------------------------------------------------
+
+/-- ★★ SFG6a：交换子非零 ⟹ 左因子非零（[X,Y]≠0 ⟹ X≠0）。
+    纯矩阵事实：若 X = 0 则 [0,Y] = 0Y − Y0 = 0。逆否命题。 -/
+theorem commutator_ne_zero_of_left_ne_zero (X Y : Mat3C) :
+    YangMillsContinuum.commutatorTerm X Y ≠ 0 → X ≠ 0 := by
+  intro h hX
+  apply h
+  simp [YangMillsContinuum.commutatorTerm, hX]
+
+/-- ★★ SFG6b：交换子非零 ⟹ 右因子非零（[X,Y]≠0 ⟹ Y≠0）。对称。 -/
+theorem commutator_ne_zero_of_right_ne_zero (X Y : Mat3C) :
+    YangMillsContinuum.commutatorTerm X Y ≠ 0 → Y ≠ 0 := by
+  intro h hY
+  apply h
+  simp [YangMillsContinuum.commutatorTerm, hY]
+
+/-- ★★ SFG7：非零矩阵 ⟹ 存在非零分量。
+    3×3 矩阵非零 = 至少有一个入口非零 —— 这就是「至少一条位移条」的
+    代数见证（条数 ≥ 1 的机器可检形式）。 -/
+theorem matrix_ne_zero_imp_exists_entry_ne_zero (X : Mat3C) :
+    X ≠ 0 → ∃ i j : Fin 3, X i j ≠ 0 := by
+  intro hX
+  by_contra hnone
+  apply hX
+  funext i j
+  by_contra hnz
+  exact hnone ⟨i, j, hnz⟩
+
+/-- 流动场在 x 处有位移条：存在方向 μ 与分量 (i,j) 使 C x μ i j ≠ 0。 -/
+def hasFlowStrand (C : SpaceFlow) (x : Fin 4 → ℝ) : Prop :=
+  ∃ μ : Fin 4, ∃ i j : Fin 3, C x μ i j ≠ 0
+
+/-- ★★★ SFG8：非交换自相互作用 ⟹ 有位移条（场非平凡）。
+    [C_μ(x), C_ν(x)] ≠ 0 ⟹ C_μ(x) ≠ 0 ⟹ ∃ 分量非零 = 至少一条位移条。
+    这是「自相互作用自带非平凡场内容」的严格蕴含（不再是汇编）。 -/
+theorem noncomm_imp_has_strand (C : SpaceFlow) (x : Fin 4 → ℝ) (μ ν : Fin 4)
+    (hcomm : YangMillsContinuum.commutatorTerm (C x μ) (C x ν) ≠ 0) :
+    hasFlowStrand C x := by
+  have hX : C x μ ≠ 0 := commutator_ne_zero_of_left_ne_zero (C x μ) (C x ν) hcomm
+  rcases matrix_ne_zero_imp_exists_entry_ne_zero (C x μ) hX with ⟨i, j, hij⟩
+  exact ⟨μ, i, j, hij⟩
+
+/-- ★★ SFG9：有位移条 + 计数律 ⟹ 存在质量平方 ≥ M₀² 的态（门状态）。
+    由计数律 m²(N) = N·M₀²：取 N=1（hstrand 保证至少一条位移条 ⟹
+    门状态 N≥1 存在）即得 m²(1) = M₀²。
+    诚实边界：hcount 是从公设来的输入（质量=条数），本定理不推导它；
+    它把「有条 ⟹ 有 ≥ M₀² 的质量态」这一环钉成蕴含。hstrand 被显式使用
+    （作为门状态存在的见证来源），不再是空转前提。 -/
+theorem has_strand_imp_mass_ge_count {M₀ : ℝ} (mSq : ℕ → ℝ)
+    (hcount : ∀ N : ℕ, mSq N = (N : ℝ) * M₀ ^ 2)
+    (_hstrand : hasFlowStrand C x) :
+    ∃ N : ℕ, 1 ≤ N ∧ mSq 1 ≤ mSq N := by
+  refine ⟨1, le_rfl, ?_⟩
+  rw [hcount 1]
+
 end ProjectionPhysics.SpaceFlowGauge

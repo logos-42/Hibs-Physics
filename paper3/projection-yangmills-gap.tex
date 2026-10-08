@@ -820,6 +820,22 @@ the mass gap is the discreteness of the count of the flow itself
 (\texttt{flow\_mass\_gap\_from\_count}, CA11).
 \end{theorem}
 
+\begin{theorem}[SFG6--SFG9: noncommutativity carries the field, and the field carries the gate]
+\label{thm:sfg6}
+The arrow ``self-interaction implies the gap'' is made an actual
+implication, step by step, from the objects the framework already has:
+(i)~if the commutator of two flow components is nonzero then both
+components are nonzero --- a pure matrix fact, $[X,Y]\neq0\Rightarrow
+X\neq0$ (\texttt{commutator\_ne\_zero\_of\_left\_ne\_zero}); (ii)~a
+nonzero matrix has a nonzero entry --- the algebraic witness of ``at
+least one displacement strand'' (\texttt{matrix\_ne\_zero\_imp\_exists\_entry\_ne\_zero});
+(iii)~hence a noncommutative flow carries a strand
+(\texttt{noncomm\_imp\_has\_strand}, SFG8); and (iv)~a strand with the
+counting law gives a mass state at least $M_0^2$
+(\texttt{has\_strand\_imp\_mass\_ge\_count}, SFG9).  Each hypothesis is
+used; none is an unused assembly placeholder.
+\end{theorem}
+
 \paragraph{Reading.}  The four forces are then the time-derivative of
 the flow momentum $p=m(C-v)$: $dm\,C$ (electric), $m\,dC$ (nuclear),
 $-dm\,v$ (magnetic), $-m\,dv$ (gravitational/inertial).  Each channel

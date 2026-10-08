@@ -941,6 +941,15 @@ def main():
               and all(v["四通道之和是否=dp"] for v in s7["四力逐条（电场/核/磁场/惯性）"].values())
               and s7["正/负散度异号（电荷=流动散度的源/汇）"])
 
+        s8 = c["S8_非交换⟹有条数⟹间隙"]
+        check("YM-S8★★: 非交换 ⟹ 有条数 ⟹ 间隙（SFG6–SFG9）—— "
+              "交换子非零 ⟹ 场非平凡（cycle3/diag123 各含非零分量）⟹ 有位移条 "
+              "⟹ 计数律 ⟹ 存在 ≥ M₀² 的质量态（门状态 m²(1) = M₀² = 954529）",
+              s8["SFG6 交换子非零 ⟹ 场非平凡（cycle3/diag123 各含非零分量）"]["[cycle3,diag123] 非零"]
+              and s8["SFG7 非零矩阵 ⟹ 非零入口（条数见证 ≥ 1）"]
+              and s8["SFG8 非交换 ⟹ 有条数（组合）"]
+              and s8["SFG9 有条数 + 计数律 ⟹ 存在 ≥ M₀² 的质量态"])
+
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
     if pw:
