@@ -148,16 +148,20 @@ in phase space, the half-angle phase $\exp(i\theta/2)$ whose closure
 factor is $-1$.
 
 \paragraph{One fact, two faces.}
-The two additions are independent in content but share one theorem-level
-fact: \emph{a quadratic quantity is reduced by a square factor}.  For
-spin, the half-angle phase returns to itself with factor
-$-1=(-1)^2$-free of any square: the half step of the variable
-$\theta$ is the square root in logarithmic coordinates, and the
-fermionic witness is $\exp(i\theta/2)$.  For charge, the fluctuation
-energy of a converging flow is reduced by $(1-\lambda)^2$ per
-contraction step; the sink is a self-flattening structure, and a sink
-at full strength ($\lambda\to 1$) brings the fluctuation to zero, mass
-to zero, and charge to neutrality --- the photon.
+The two additions share a numeric coincidence at the level of the
+exponent $2$: a square factor in one case, a square root in the
+other.  For spin, the half-angle phase $f(\\theta)=\\exp(i\\theta/2)$
+returns to itself only after $4\\pi$: $f(\\theta+2\\pi)=-f(\\theta)$,
+the fermionic closure factor $-1$ (a rotation by $2\\pi$ flips the sign
+--- the half step of the variable $\\theta$ is the square root in
+logarithmic coordinates).  For charge, the fluctuation energy of a
+converging flow is reduced by $(1-\\lambda)^2$ per contraction step;
+the sink is a self-flattening structure, and a sink at full strength
+($\\lambda\\to 1$) brings the fluctuation to zero, mass to zero, and
+charge to neutrality --- the photon.  The two facts are the phase
+geometry of a half step and the energy geometry of a square decay;
+the suggestion that they are one fact is an interpretive claim, not a
+theorem, and it is flagged as such in Sec.~IX.
 
 \paragraph{The chain, and the plan of the paper.}
 Section~II recalls the three postulates needed here.  Section~III
@@ -341,25 +345,39 @@ channel activates}
 \label{sec:accel}
 
 The story now turns from statics to dynamics.  If charge is the
-divergence of the flow, an accelerated charge is a time-varying
-divergence: a source whose strength changes with time.  What does that
-do to the space field $C$?  The sourced wave equation --- the
-framework's equation of motion for the medium, in the same family as
-light propagation through a dielectric \cite{gordon1923lichtfortpflanzung}
---- answers in one stroke.
+divergence of the flow, a moving charge is a time-varying
+divergence field: the source term at a fixed position changes with
+time as the charge moves (uniform motion already does this; the
+sharper statement for acceleration is that the field pattern cannot
+remain static, and this is what the formalized theorem captures).
+What does that do to the space field $C$?  The sourced wave equation
+--- the framework's equation of motion for the medium, in the same
+family as light propagation through a dielectric
+\cite{gordon1923lichtfortpflanzung} --- answers in one stroke.
 
 \begin{theorem}[CR1; time-varying source forces a varying field]
 \label{thm:cr1}
 In the sourced wave equation
 $\partial_t^2 C=c^2\partial_x^2 C+J$ (MS5), a static field implies a
 static source: if $\partial_t C\equiv 0$, then $J(t{+}1)=J(t)$ for all
-$t$.  Hence a time-varying source (an accelerated charge) forbids a
+$t$.  Hence a time-varying source (a moving charge) forbids a
 static space field.
+\emph{Formal status.}  The formalization is a $1{+}1$-dimensional
+discrete forward-difference statement (MaxwellSpace, $\mathbb
+Z^2$-lattice); the continuum PDE notation here is the framework's
+narrative shorthand, and the exact discrete theorem is what is
+machine-checked.  In particular ``accelerated'' is used in the weak
+sense of ``time-varying source pattern'', which includes uniform
+motion; the stronger electrodynamic claim (radiation under
+acceleration) is not part of this theorem.
 \end{theorem}
 
 The contrapositive is the physical content: a field that does not
-change can only be fed by a source that does not change.  Shake the
-charge, and the medium must shake with it --- the field varies.
+change can only be fed by a source that does not change.  Move the
+charge, and the medium must respond --- the field varies.  The step
+from ``the field varies'' to ``the nuclear channel activates''
+(CR2) is the next link; the step from there to the flattening
+action is the second-input gap stated in Sec.~IX.
 
 \begin{theorem}[CR2; the nuclear channel activates]
 \label{thm:cr2}
@@ -373,10 +391,13 @@ comes from the medium changing underneath the body, not from the body
 changing its own motion.
 
 The missing link between the nuclear channel and the antigravity
-parameter $\mu$ is not invented here: the framework already contains
-its own $\mu$-bridge.  The bridge is the flattening progress of the
-flow --- how much of the fluctuation energy has been removed --- and it
-feeds $\mu$ directly.
+parameter $\mu$ --- \emph{who applies the flattening} --- is not
+derived in this paper.  The framework defines the update rule
+$\mu'=\mu+\eta(1-\mu)$ (the flattening progress $\eta$ feeds $\mu$
+directly), and the theorems below describe what happens \emph{if} a
+flattening of a given strength is applied; the physical origin of the
+flattening power is the second-input gap, stated plainly in
+Sec.~IX.
 
 \begin{theorem}[CR3; one flattening gives $\mu=1$]
 \label{thm:cr3}
@@ -642,8 +663,16 @@ experimental predictions:
 \begin{itemize}
 \item 3D $21^3$ lattice, negative-divergence field $v=-r$: every
 interior point has $\operatorname{div} v<0$; initial fluctuation
-$Q=10187$; 200 sink-contraction steps drive $Q\to 3.5\times10^{-61}$
-with $|{\rm div}|\to 0$, monotonically (verify\_sink\_contract\_3d).
+$Q=10187$.  The first $\sim107$ steps follow the theoretical decay
+$Q\to(1-\lambda)^2 Q$ exactly; thereafter the float64 mean of the
+symmetric $21^3$ sum reaches the floating-point floor and $Q$ stops
+decreasing near $3.5\times10^{-61}$ --- a rounding floor, not a
+theorem witness (verify\_sink\_contract\_3d).  The same operator
+flattens a \emph{positive}-divergence (source) field identically;
+smoothing is a property of the contraction operator, not of the sign
+of the divergence.  The theorem-level content of the numerical check
+is the exact $(1-\lambda)^2$ scaling, reproduced independently of the
+floor.
 \item Sink contraction scaling $Q\to(1-\lambda)^2Q$ reproduced exactly
 (CR9 witness); strict pointwise attraction (CR10) monotone in
 $\lambda$.
