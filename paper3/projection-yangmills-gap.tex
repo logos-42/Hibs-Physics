@@ -11,8 +11,7 @@
 
 \begin{document}
 
-\title{The Mass Gap and Self-Interaction in Flowing Space:\\
-Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure}
+\title{Counting, Not Confinement}
 
 \author{Yuan-Jie Liu}
 \email{yuanjieliu65@gmail.com}
@@ -129,7 +128,7 @@ construction is an algebraic skeleton, the topological limit of the
 lattice spacing is not formalized, and the numerical inputs
 $\lambda$, $M_0$ are not derived.  These boundaries, and the
 conditions under which the program dies, are stated in
-Sec.~IX.  What the paper does claim is narrower and verifiable: the
+Sec.~X.  What the paper does claim is narrower and verifiable: the
 two names of the problem are one mechanism, and each step is a
 machine-checked theorem.
 
@@ -138,7 +137,7 @@ Sections~II--IV carry the central claim (postulates; mass gap from
 discreteness; self-interaction from noncommutativity) and suffice for
 the reader who wants it.  Sections~V--VII give the lattice mechanics
 and its strict estimates; Sec.~VIII assembles the full chain;
-Secs.~IX--X assess honestly and list the open problems.  The
+Secs.~X--XI assess honestly and list the open problems.  The
 motivation --- how the framework grew from the Riemann hypothesis ---
 is told in Sec.~II; the dialogue with existing physics is in
 Sec.~VIII.
@@ -364,7 +363,7 @@ states themselves.  The empirical anchor --- a lightest glueball at
 about $1.6$ GeV with a gap above the vacuum --- is the same shape
 \cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
 the framework's unit is not yet tied to GeV, and that calibration is
-an open problem (Sec.~X).
+an open problem (Sec.~XI).
 
 \paragraph{Why this is not circular.}
 The mass gap of the Yang--Mills problem is an existence statement
@@ -745,7 +744,7 @@ $\dot p=\dot m(C-v)+m(\dot C-\dot v)$ is exactly the time derivative
 of the flow momentum.  The four channels are the terms of a real
 calculus identity.  This is the strict version of the continuum
 mechanism of CA8 --- in the scalar setting; the matrix-valued
-generalization is an open problem (Sec.~X).  Formalized as
+matrix-valued generalization is an open problem (Sec.~XI).  Formalized as
 \texttt{flow\_momentum\_derivative} in \texttt{YangMillsStrict.lean}.
 
 \begin{theorem}[L3: nuclear channel norm-nonzero]
@@ -773,7 +772,7 @@ the continuum $[A_\mu,A_\nu]$ --- is the one layer not yet
 formalized.  It is stated, not blurred.  The strict estimates above
 are the norm prerequisites of that limit; the limit itself, and the
 matrix-valued generalization of the derivative theorem L2, are the
-open items named in Sec.~X.
+open items named in Sec.~XI.
 
 \section{The assembled chain}
 \label{sec:chain}
@@ -828,6 +827,90 @@ $[A,A]$ by gauge invariance; here it is a theorem about the
 noncommutativity of sink contractions, and the two facts --- gap and
 self-interaction --- are identified as one mechanism.  What is new,
 and flagged as such, is that identification itself.
+
+\section{Relation to the Yang--Mills problem as posed}
+\label{sec:relation}
+
+A referee will ask four questions, and they deserve direct answers.
+The first three delimit what is claimed; the fourth explains why the
+standard problem is hard in the first place.
+
+\paragraph{Where our statement differs from the one posed.}
+The Yang--Mills problem as posed by Jaffe and Witten
+\cite{jaffe2000yang} asks for a quantum field theory on
+$\mathbb{R}^4$, satisfying the Wightman axioms, with strictly positive
+mass.  Our statement differs in four precise ways.
+(i)~\emph{Space.}  We work on a one-dimensional lattice
+$\mathbb{Z}$, not on the continuum $\mathbb{R}^4$.
+(ii)~\emph{Content.}  We prove structural facts --- discreteness of
+the mass spectrum, noncommutativity of the self-interaction --- not
+the existence of a measure or of an interacting field.
+(iii)~\emph{Form.}  Our theorems are algebraic (integer arithmetic,
+commutator identities, norm bounds), not analytic
+existence theorems.
+(iv)~\emph{Status.}  The mass gap is derived from a postulate of the
+framework (mass is an integer count), not proved for a given
+Lagrangian.  Each difference shrinks the claim; none of them makes
+it a different claim.
+
+\paragraph{Whether our derivation implies theirs.}
+It does not, in the present state of the repository, and the honest
+reason is the lattice-to-continuum limit.  The chain of implications
+in this paper is complete at the algebraic level: the discrete field
+strength, the commutator identity, the norm bounds (L1--L3) are the
+precursors that such a limit needs --- boundedness of the
+self-interaction under refinement, and a strict derivative identity
+--- but the limit itself (a lattice field sequence converging to a
+continuum field, and the commutator converging to $[A_\mu,A_\nu]$)
+is not formalized (Sec.~\ref{sec:strict}).  What the framework does
+provide is the \emph{mechanism} by which the standard problem would
+be answered on its own terms: the discreteness that produces the gap
+is not an artifact of the lattice but a theorem about counts, and the
+noncommutativity that produces self-interaction is a theorem about
+sinks.  If the topological limit is completed, the Jaffe--Witten
+existence claim would follow in the framework's sense; until then,
+the implication is conditional, and stated as such.
+
+\paragraph{Why we can say something about the problem at all.}
+Because the framework changes the primitive, and with it the
+difficulty of the two facts.  In the standard framework,
+self-interaction is a postulate (gauge invariance forces $[A,A]$)
+and the mass gap is a non-perturbative measurement; neither is
+derivable from anything simpler, and the problem is hard because the
+two are unrelated.  In the flowing-space framework both facts are
+theorems about a single primitive.  Mass is a count, so the gap is
+integer arithmetic --- a fact about the integers, not about
+confinement.  The sink is a contraction, so self-interaction is the
+noncommutativity of two contractions --- a fact about geometry.  The
+problem is not ``solved'' in the sense of constructing a measure;
+rather, its two structural ingredients are traced to primitives that
+make them unavoidable.  This is why the result is not a special
+case: the discreteness argument uses only the fact that an integer
+count has no values strictly between $0$ and $1$, and the
+noncommutativity argument uses only the fact that two distinct
+points can hold different field values.  Neither uses the particular
+group, the particular lattice size, or any other special input.
+
+\paragraph{Why the four-dimensional gauge field is hard.}
+The standard problem is hard for a reason that this framework
+exposes.  A four-dimensional continuum gauge field is asked to carry
+two structures at once: \emph{discreteness} (the mass spectrum of a
+confining theory) and \emph{continuity} (smooth fields on
+$\mathbb{R}^4$, the analytic apparatus of the theory).  These are
+the two halves that the framework keeps separate.  Discreteness
+lives in the strand count $N$; continuity lives in the four-force
+derivative, the change rates of the flow.  The standard framework
+merges them --- a smooth field whose spectrum is discrete --- and
+the merge is where the difficulty lives: no perturbative handle on
+the gap (the gluons are massless in perturbation theory), no
+existence proof for the measure \cite{jaffe2000yang,weinberg1995quantum}.
+The framework's answer is not to solve the merged problem but to
+show that the merging was the obstacle: separated, each structure
+is a theorem about a primitive, and the chain between them is
+explicit (Sec.~\ref{sec:chain}).  Whether the merged problem can be
+reconstructed from the separated one --- the topological limit, and
+its $3{+}1$-dimensional extension --- is the open program of
+Sec.~\ref{sec:strict} and Sec.~\ref{sec:honest}.
 
 \section{Honest assessment}
 \label{sec:honest}
