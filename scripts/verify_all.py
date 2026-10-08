@@ -17,6 +17,7 @@
 import json
 import math
 import os
+import shlex
 import subprocess
 import sys
 
@@ -107,7 +108,7 @@ def main():
                        "scripts/sim_two_flow_ring_gpu.py",
                        "scripts/verify_two_flow_ring_axial.py",
                        "scripts/verify_two_flow_ring_axial_env.py",
-                       "scripts/verify_two_flow_ring_gravity.py",
+                       "scripts/verify_two_flow_ring_gravity.py --scan",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
@@ -141,7 +142,7 @@ def main():
                        "scripts/fig_braid_ring_spacetime.py",
                        "scripts/verify_yang_mills_strict.py",
                        "scripts/world_feed.py"]:
-            r = run(["python3", script], timeout=420)
+            r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
 
     # 3. 关键物理断言（回归锚点，数字基准不可改）
@@ -922,12 +923,23 @@ def main():
         s6 = c["S6_四维群T4上的配分函数"]
         check("YM-S6★★★: 四维紧致群 T⁴ 上的格点配分函数 |Z| ≤ 1 无条件成立"
               "（CC10d；常数作用量 |Z| = 1，非常数 |Z| ≈ 0 ⟹ Haar 总测度 = 1）",
-              s6["两个 |Z| 是否都 ≤ 1（CC10d 无条件界）"] and s6["非常数作用量的 |Z|（傅里叶 ⟹ ≈ 0）"] < 0.05
+              s6["两个 |Z| 是否都 ≤ 1（CC10d 无条件界；常数支含 1e−9 浮点容差）"] and s6["非常数作用量的 |Z|（傅里叶 ⟹ ≈ 0）"] < 0.05
               and abs(s6["常数作用量的 |Z|（应 = 1）"] - 1.0) < 0.02)
         s5 = c["S5_计数律给出间隙"]
         check("YM-S5★★: 计数律 ⟹ 间隙（CA11 mass_gap_from_count_law）；且交换情形同一间隙成立"
               " ⟹ 非交换不是该间隙来源（R2 诚实登记）",
               s5["m²(N)=0 ⟺ N=0"] and s5["m²(1) ≤ m²(N)（N≥1）"] and s5["交换子范数（交换情形，应 = 0）"] < 1e-15)
+
+        s7 = c["S7_从空间流动构造场"]
+        check("YM-S7★★★: 从空间流动构造场（SFG1–SFG5）—— 规范场=流动场、"
+              "场强=流动变化率（常量流 ⟹ F_01=[cycle3,diag123]）、四力逐条对位"
+              "（电场 dm·C / 核力 m·dC / 磁场 −dm·v / 惯性 −m·dv）、"
+              "正/负电荷 = 流动散度源/汇、条数 ⟹ 离散间隙",
+              s7["SFG1 规范场=流动场（A:=C，定义恒等）"]
+              and s7["SFG2 场强=流动变化率（常量流 ⟹ F_01=[cycle3,diag123]）"]
+              and s7["SFG5 质量=条数 ⟹ 离散间隙"]
+              and all(v["四通道之和是否=dp"] for v in s7["四力逐条（电场/核/磁场/惯性）"].values())
+              and s7["正/负散度异号（电荷=流动散度的源/汇）"])
 
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")

@@ -1538,3 +1538,29 @@ leo：「把物理学杨米尔斯猜想的严格版完成，目前已经从汇�
 
 **产物**：Lean `Explorations/YangMillsContinuum.lean`（+CC8/CC9/CC10）、`Explorations/YangMillsLattice.lean`（+CA11、三条改名）；`scripts/verify_yang_mills_strict.py` + `artifacts/yangmillsstrict/`（report.json / summary.txt / fig_ym_strict.png）；`scripts/verify_all.py` 注册 5 条断言；论文 `paper3/projection-yangmills-gap{,-zh}.{tex,pdf}` 同步。
 
+## ★ 2026-10-08 session（续）：从空间流动构造场 —— SFG1–SFG5（YM 构造的最底层）
+
+leo 方向：「不是从四种力开始，而是从空间流动开始，从构造场开始。」+「逐条来证明，从已有框架出发解决杨米尔斯猜想」。
+
+**核心一步（方向翻转）**：规范场**不是**从格点逼近、也**不是**从四力推导——它**就是**流动空间本身：`A := C`（C = 矢量光速场）。四力是构造的**结果**不是输入。
+
+**Lean `Explorations/SpaceFlowGauge.lean`（SFG1–SFG5，零 sorry 零 warning，挂聚合根）**：
+- **SFG1 ★** `gaugeFromFlow C = C`（定义恒等 rfl）⟹ **规范场 = 流动介质自身的速度场**，无独立"待耦合的规范场"
+- **SFG2 ★★** `fieldStrengthOfFlow = fieldStrengthStrict C μ ν x` ⟹ **场强 = 流动的变化率** F_μν = ∂_μC_ν − ∂_νC_μ + [C_μ,C_ν]
+- **SFG2b ★★** 存在流动场强非零（复用 CC8c）⟹ 流动空间本身能给出非零场强，无须先有耦合
+- **SFG3 ★★** `constant_flow_field_strength`：常量流 ⟹ F_01 = [X,Y]（导数项消失但交换子还在——右手螺旋几何的代数核）
+- **SFG4 ★★** `linear_flow_gradient`：线性流 ⟹ 方向导数 = 系数（导数项是真微分算子，非占位）
+- **SFG5 ★★** `flow_mass_gap_from_count`：质量 = 物体周围以光速运动空间的**位移条数**（整数）⟹ m² ∈ {0} ∪ [M₀²,∞)（复用 CA11）；SFG5a 正条数 ⟹ 严格正质量平方
+
+**数值校验 S7（`scripts/verify_yang_mills_strict.py` 扩展；`verify_all.py` 注册 YM-S7★★★）**：
+- 四力逐条对照流动动量导数：电场 dm·C = 0.51 / 核力 m·dC / 磁场 −dm·v / 惯性 −m·dv，每通道"四通道之和 = dp"全 true
+- 正电荷散度 **+1.0** > 0（源，向外发散）、负电荷散度 **−1.0** < 0（汇，向内汇聚）——与 leo 电荷定义逐字对齐
+- 常量流 F_01 = [cycle3,diag123]；条数 ⟹ 离散间隙
+
+**论文**：中英 Sec VI 新增 subsection「从空间流动构造」（SFG1–SFG5 + 四力解读 + S7 引用），tectonic 各零 error。
+
+**诚实边界（写死）**：
+- SFG1 的 `A := C` 是**定义（rfl）**——「流动空间自带规范场」是**公设层**内容，不是从更基本的东西推出的（leo：「从流动开始，从构造场开始」本身就是起点的选择）
+- Δ>0 来自**计数律**（流动位移条数的离散性），不是 4 维动力学 ⟹ **本支仍可能被证伪**（leo 原话：「实际上，可能我们也会证伪这个猜想」）
+- 导数项仍是线限制方向导数（CC8 同款）；SU(3)^Λ Haar 有限积、格距 a→0 拓扑收敛、L2 矩阵值推广、重整化仍开放
+

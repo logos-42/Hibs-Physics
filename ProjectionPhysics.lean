@@ -144,3 +144,4 @@ import ProjectionPhysics.Explorations.YangMillsSeed
 import ProjectionPhysics.Explorations.YangMillsLattice
 import ProjectionPhysics.Explorations.YangMillsStrict
 import ProjectionPhysics.Explorations.YangMillsContinuum
+import ProjectionPhysics.Explorations.SpaceFlowGauge

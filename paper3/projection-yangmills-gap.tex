@@ -765,6 +765,72 @@ in the direction that a lattice-only formulation would require ---
 remains open, and the four-dimensional path integral in the full
 Haar measure remains a stated program, not a claim.
 
+\subsection{From the flowing space: constructing the field, not assuming it}
+\label{sec:flow-construction}
+
+The direction of this paper is not ``start from the four forces'' ---
+the four forces are an \emph{outcome} of the construction, not its
+input.  The input is the flowing space itself: the gauge field is the
+flowing medium's own velocity field, $A:=C$.  That is the statement
+of the module \texttt{SpaceFlowGauge.lean} (SFG1--SFG5).
+
+\begin{theorem}[SFG1: the gauge field is the flowing space's own field]
+\label{thm:sfg1}
+The gauge field is defined to be the space flow itself:
+$A_\mu(x):=C_\mu(x)$, where $C$ is the vector-light-speed field of the
+flowing-space axioms.  There is no separate ``gauge field to be
+coupled''; the field is the medium
+(\texttt{gaugeFromFlow}, \texttt{gauge\_is\_flow\_own\_field}).
+\end{theorem}
+
+\begin{theorem}[SFG2: the field strength is the rate of change of the flow]
+\label{thm:sfg2}
+Applying the strict field strength of
+Theorem~\ref{thm:cc8} to the flow itself gives
+\begin{equation}
+F_{\mu\nu}(C)=\partial_\mu C_\nu-\partial_\nu C_\mu+[C_\mu,C_\nu],
+\label{eq:flow-F}
+\end{equation}
+the rate of change of the flowing space
+(\texttt{fieldStrengthOfFlow}).
+\end{theorem}
+
+\begin{theorem}[SFG3/SFG4: constant flow gives a pure commutator; linear flow gives the gradient]
+\label{thm:sfg3}
+For a flow constant in the directions 0 and 1, $F_{01}=[X,Y]$ --- the
+commutator survives even when the derivative terms vanish
+(\texttt{constant\_flow\_field\_strength}, from Theorem~\ref{thm:cc2}).
+For a flow linear along $\mu$, $\partial_\mu C_\nu$ equals the
+coefficient exactly; the derivative term is a genuine differential
+operator, not a placeholder
+(\texttt{linear\_flow\_gradient}, CC8d).
+\end{theorem}
+
+\begin{theorem}[SFG5: mass as a count of flow-displacement strands]
+\label{thm:sfg5}
+In the framework, mass is the \emph{count of strands} of space moving
+at light speed around the object.  A count is an integer, so the mass
+squared is either $0$ (no strands: the photon) or at least the
+lightest excitation $M_0^2$:
+\begin{equation}
+m^2(N)\in\{0\}\sqcup[M_0^2,\infty),
+\label{eq:sfg-gap}
+\end{equation}
+the mass gap is the discreteness of the count of the flow itself
+(\texttt{flow\_mass\_gap\_from\_count}, CA11).
+\end{theorem}
+
+\paragraph{Reading.}  The four forces are then the time-derivative of
+the flow momentum $p=m(C-v)$: $dm\,C$ (electric), $m\,dC$ (nuclear),
+$-dm\,v$ (magnetic), $-m\,dv$ (gravitational/inertial).  Each channel
+is a Leibniz term of the single derivative --- the method of the
+framework is: flow first, fields from the flow, forces from the
+fields' change.  The numerical check \texttt{verify\_yang\_mills\_strict.py}
+(S7) confirms each channel against the flow-momentum derivative, and
+confirms that a positive charge is a source of the flow's divergence
+($\nabla\cdot C>0$) while a negative charge is a sink
+($\nabla\cdot C<0$), exactly as the framework's charge postulate states.
+
 \section{The continuum-limit mechanism: four forces as existence}
 \label{sec:continuum}
 

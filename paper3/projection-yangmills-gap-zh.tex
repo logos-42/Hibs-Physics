@@ -541,6 +541,56 @@ $|Z_\Lambda|\le 1$ \emph{无条件成立}
 ——即在仅格点表述的方向上——仍然开放，完整的 Haar 测度下的四维路径积分仍然是
 被陈述的纲领，而非声称。
 
+\subsection{从空间流动构造：先构造场，而非假设场}
+\label{sec:flow-construction}
+
+本文的方向不是``从四种力开始''——四种力是构造的\emph{结果}，不是输入。
+输入是流动空间本身：规范场就是流动介质自身的速度场，$A:=C$。
+这是 \texttt{SpaceFlowGauge.lean}（SFG1--SFG5）的陈述。
+
+\begin{theorem}[SFG1: 规范场是流动空间自带的场]
+\label{thm:sfg1}
+规范场被定义为空间流动本身：$A_\mu(x):=C_\mu(x)$，其中 $C$ 是流动空间
+公设的矢量光速场。不存在独立的``待耦合的规范场''；场就是介质
+（\texttt{gaugeFromFlow}、\texttt{gauge\_is\_flow\_own\_field}）。
+\end{theorem}
+
+\begin{theorem}[SFG2: 场强 = 流动的变化率]
+\label{thm:sfg2}
+把定理~\ref{thm:cc8} 的严格场强施加于流动本身：
+\begin{equation}
+F_{\mu\nu}(C)=\partial_\mu C_\nu-\partial_\nu C_\mu+[C_\mu,C_\nu],
+\label{eq:flow-F}
+\end{equation}
+即流动空间的变化率（\texttt{fieldStrengthOfFlow}）。
+\end{theorem}
+
+\begin{theorem}[SFG3/SFG4: 常量流 ⟹ 纯交换子；线性流 ⟹ 梯度]
+\label{thm:sfg3}
+对在方向 0、1 上为常量的流动，$F_{01}=[X,Y]$——即使导数项消失，交换子仍然
+存在（\texttt{constant\_flow\_field\_strength}，源自定理~\ref{thm:cc2}）。
+对沿 $\mu$ 线性增长的流动，$\partial_\mu C_\nu$ 精确等于其系数；导数项是真
+微分算子，不是占位符（\texttt{linear\_flow\_gradient}，CC8d）。
+\end{theorem}
+
+\begin{theorem}[SFG5: 质量 = 流动位移的条数]
+\label{thm:sfg5}
+在框架中，质量是物体周围以光速运动空间的\emph{位移条数}。条数是整数，所以质量
+平方要么是 $0$（无条数：光子），要么至少是最轻激发 $M_0^2$：
+\begin{equation}
+m^2(N)\in\{0\}\sqcup[M_0^2,\infty),
+\label{eq:sfg-gap}
+\end{equation}
+质量间隙就是流动本身计数的离散性（\texttt{flow\_mass\_gap\_from\_count}，CA11）。
+\end{theorem}
+
+\paragraph{解读。} 四种力于是是流动动量 $p=m(C-v)$ 的时间导数：$dm\,C$（电力）、
+$m\,dC$（核力）、$-dm\,v$（磁力）、$-m\,dv$（引力/惯性力）。每个通道都是
+这单一导数的莱布尼茨项——框架的方法论是：先有流动，场从流动来，力从场的
+变化来。数值校验 \texttt{verify\_yang\_mills\_strict.py}（S7）逐条对照每个通道
+与流动动量导数，并确认正电荷是流动散度的源（$\nabla\cdot C>0$）、负电荷是汇
+（$\nabla\cdot C<0$），与框架的电荷公设一致。
+
 \section{连续极限机制：作为存在性的四力}
 \label{sec:continuum}
 
