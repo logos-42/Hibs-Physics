@@ -120,7 +120,7 @@ implications: each node is a theorem (CR, MG, YM, CA, L), but the
 arrows between nodes are identifications stated in the framework's
 language, and their formalization (notably the lattice-to-continuum
 limit) is open.  The honest status of every claim is stated in
-Sec.~X.
+Sec.~XI.
 
 \paragraph{What this paper is and is not.}
 It is not a claim to have solved the Yang--Mills problem: the lattice
@@ -128,7 +128,7 @@ construction is an algebraic skeleton, the topological limit of the
 lattice spacing is not formalized, and the numerical inputs
 $\lambda$, $M_0$ are not derived.  These boundaries, and the
 conditions under which the program dies, are stated in
-Sec.~X.  What the paper does claim is narrower and verifiable: two
+Sec.~XI.  What the paper does claim is narrower and verifiable: two
 structural statements are machine-checked theorems, and their
 identification with the two facts named by the problem is a proposal
 made explicit in Sec.~\ref{sec:relation}, not a derivation.
@@ -137,11 +137,11 @@ made explicit in Sec.~\ref{sec:relation}, not a derivation.
 Sections~II--IV carry the central claim (postulates; mass gap from
 discreteness; self-interaction from noncommutativity) and suffice for
 the reader who wants it.  Sections~V--VII give the lattice mechanics
-and its strict estimates; Sec.~VIII assembles the full chain;
+and its strict estimates; Sec.~IX assembles the full chain;
 Secs.~X--XI assess honestly and list the open problems.  The
 motivation --- how the framework grew from the Riemann hypothesis ---
 is told in Sec.~II; the dialogue with existing physics is in
-Sec.~VIII.
+Sec.~IX.
 
 \section{Postulates of the flowing-space framework}
 \label{sec:postulates}
@@ -233,7 +233,7 @@ $-\dot m v$, the magnetic channel.  A change in the body velocity:
 $-m\dot v$, the inertial channel.  The postulate matters for this
 paper in one specific way: the four-force derivative is the
 framework's \emph{built-in continuum}, the existence mechanism for
-the continuum limit (Sec.~VI).
+the continuum limit (Sec.~VII).
 
 The four postulates are the entire physical input.  Everything
 below is derived from them in Lean~4.
@@ -365,7 +365,7 @@ states themselves.  The empirical anchor --- a lightest glueball at
 about $1.6$ GeV with a gap above the vacuum --- is the same shape
 \cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
 the framework's unit is not yet tied to GeV, and that calibration is
-an open problem (Sec.~XI).
+an open problem (Sec.~XII).
 
 \paragraph{Why this is not circular.}
 The mass gap of the Yang--Mills problem is an existence statement
@@ -623,7 +623,76 @@ field strength \cite{yang1954conservation,peskin1995introduction}.
 Formalized as \texttt{discrete\_to\_continuous\_bridge\_statement}
 in \texttt{YangMillsLattice.lean}; the bridge is a structural
 correspondence --- the analytic limit is handled in the next section
-and its strict form in Sec.~VII.
+and its strict form in Sec.~VIII.
+
+\section{The continuum is intrinsic: sampling, not limit}
+\label{sec:intrinsic}
+
+A referee of this series asked whether the continuum limit of the
+lattice spacing exists; the question presupposes that the continuum
+must be \emph{reached} from the lattice.  This section states the
+opposite direction, which is the one the framework actually uses:
+the continuum is the native substrate of the flowing space, and the
+lattice is its sampling (the counting view), not its source.  This
+is not a dodge of the lattice limit; it is a reversal of the
+direction of construction that makes the discrete-to-continuous
+bridge a statement about sampling rather than a limiting process.
+
+\begin{theorem}[CC1: the continuum is the substrate; the lattice samples it]
+\label{thm:cc1}
+A continuous field is a function $A: \mathbb{R}^4\to
+\mathrm{Mat}_3(\mathbb{C})$ --- the flowing medium's vector light
+speed field in its color-matrix realization.  The lattice field is
+its restriction to $\mathbb{Z}^4$: $A_\Lambda(n)=A(n)$.  The lattice
+field is a sampling of the continuous field, not its source.  This
+is formalized as \texttt{sample} and \texttt{sample\_is\_restriction}
+in \texttt{YangMillsContinuum.lean}.
+\end{theorem}
+
+\begin{theorem}[CC2/CC3: the four-dimensional continuous field strength]
+\label{thm:cc2}
+The non-abelian term of the continuous field strength,
+$F_{\mu\nu}\supset [A_\mu,A_\nu]$ with $\mu\neq\nu$ two independent
+spacetime directions, is the matrix commutator of the two direction
+components; and there exist continuous fields for which it is
+nonzero --- the explicit witness
+$[\mathrm{cycle}_3,\mathrm{diag}(1,2,3)]\neq0$ is formalized
+(\texttt{continuum\_field\_strength\_can\_be\_nonzero},
+\texttt{cycle3\_diag\_commutator\_ne\_zero}).  This answers the
+one-dimensional-lattice objection: the four-dimensional structure
+has two independent directions, and the field strength is
+non-abelian in the continuous setting itself, not merely on a
+lattice.
+\end{theorem}
+
+\begin{theorem}[CC4: sampling consistency --- the bridge has content]
+\label{thm:cc4}
+The forward difference of the sampled field is the algebraic seed of
+the continuous directional derivative: at a lattice site,
+$A_\Lambda(n+\delta_\mu)-A_\Lambda(n)$ is $A$'s adjacent values
+along $\mu$, the seed of $\partial_\mu A$.  The bridge statement of
+Sec.~\ref{sec:lattice} is upgraded from a placeholder to this
+identity (\texttt{sample\_difference\_is\_derivative\_seed}).
+\end{theorem}
+
+\begin{theorem}[CC5: the path-integral integrand is bounded]
+\label{thm:cc5}
+For every real action $S$, the path-integral integrand satisfies
+$\|e^{iS}\|=1$ --- the key step toward the finiteness of the
+partition function, $|Z_\Lambda|\le \mathrm{vol}(\Lambda)$
+(formalized as \texttt{exp\_iS\_has\_norm\_one}).  The complete
+Haar-measure instance of the bound is registered as the next step
+(Sec.~\ref{sec:honest}); the integrand bound itself is proved.
+\end{theorem}
+
+The honest status is stated once: ``the continuum is the native
+substrate'' is the framework's semantic layer (its postulate), not
+something derived from the lattice; what is proved here is the
+sampling relation and the non-abelian structure of the continuous
+field strength.  The topological limit of the lattice spacing ---
+in the direction that a lattice-only formulation would require ---
+remains open, and the four-dimensional path integral in the full
+Haar measure remains a stated program, not a claim.
 
 \section{The continuum-limit mechanism: four forces as existence}
 \label{sec:continuum}
@@ -754,7 +823,7 @@ $\dot p=\dot m(C-v)+m(\dot C-\dot v)$ is exactly the time derivative
 of the flow momentum.  The four channels are the terms of a real
 calculus identity.  This is the strict version of the continuum
 mechanism of CA8 --- in the scalar setting; the matrix-valued
-matrix-valued generalization is an open problem (Sec.~XI).  Formalized as
+generalization is an open problem (Sec.~XII).  Formalized as
 \texttt{flow\_momentum\_derivative} in \texttt{YangMillsStrict.lean}.
 
 \begin{theorem}[L3: nuclear channel norm-nonzero]
@@ -782,7 +851,7 @@ the continuum $[A_\mu,A_\nu]$ --- is the one layer not yet
 formalized.  It is stated, not blurred.  The strict estimates above
 are the norm prerequisites of that limit; the limit itself, and the
 matrix-valued generalization of the derivative theorem L2, are the
-open items named in Sec.~XI.
+open items named in Sec.~XII.
 
 \section{The assembled chain}
 \label{sec:chain}
@@ -958,7 +1027,7 @@ construction is an algebraic skeleton, not a continuum
 four-dimensional quantum field theory; there is no path integral,
 no renormalization, no continuum spacetime.  (ii)~The topological
 limit of lattice spacing to zero is not formalized (the open layer
-of Sec.~VII); in particular, the convergence of the discrete
+of Sec.~VIII); in particular, the convergence of the discrete
 commutator $[A(t),A(t{+}1)]$ to the continuum $[A_\mu,A_\nu]$ is
 not proved.  (iii)~The numerical values $\lambda$, $M_0$, and the
 flattening power are inputs, not derived; the framework therefore
