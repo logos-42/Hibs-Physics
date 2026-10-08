@@ -107,10 +107,11 @@ openly in Sec.~\ref{sec:selfinteraction}.
 $\mathbb{Z}$ lattice, a color-matrix-valued gauge field has
 $F(t)=[A(t),A(t{+}1)]$, and $F\neq0$ iff the neighbors do not commute
 (CA3--CA6).
-\item \emph{The continuum exists by the four-force derivative.}  The
-framework's own derivation of the forces is adopted as the existence
-mechanism for the continuum limit, with strict norm bounds
-(CA8--CA10, L1--L3).
+\item \emph{The continuum is carried by the four-force derivative.}  The
+framework's own derivation of the forces is proposed as the derivative
+structure that a continuum description would need, with strict norm
+bounds (CA8--CA10, L1--L3); the continuum limit itself is not
+constructed here.
 \end{itemize}
 The assembled sequence --- accelerated charge, self-flattening sink,
 noncommutative self-interaction, continuum mechanism, mass gap --- is
@@ -292,7 +293,8 @@ For $N\in\mathbb{N}$ and $M_0\in\mathbb{R}$ with $0<M_0$,
 \item $N\ge1$ implies $m^2(N)=N M_0^2>0$;
 \item $N=0$ implies $m^2(0)=0$.
 \end{itemize}
-Formalized as \texttt{mass\_gap\_basics} in \texttt{MassGap.lean}.
+Formalized as \texttt{strand\_mass\_sq\_pos\_of\_nontrivial} and
+\texttt{strand\_mass\_sq\_zero\_of\_empty} in \texttt{MassGap.lean}.
 \end{theorem}
 
 \emph{Reading.}  Any excited configuration --- however small its
@@ -972,10 +974,16 @@ gauge theory on this basis.
 The program dies if (a)~a physical self-interaction is found with no
 discrete counterpart in this framework, or (b)~the lattice field
 strength fails to converge to the continuum $[A_\mu,A_\nu]$ as the
-lattice spacing goes to zero, or (c)~a noncommutative
-self-interaction is exhibited with no mass lower bound.  These are
-falsifiable in principle, which is the point: a framework that
-cannot die cannot be tested.
+lattice spacing goes to zero.  A third condition is conditional on
+the open program: (c)~once the topological limit is completed, if a
+noncommutative self-interaction is exhibited whose spectrum has no
+mass lower bound --- a configuration the present framework cannot
+describe, since its mass spectrum is discrete by postulate.  Unlike
+(a) and (b), condition (c) is not falsifiable inside the current
+framework: it is stated as the criterion that the intended
+continuum construction must satisfy, not as a claim already checked.
+The first two conditions are falsifiable in principle, which is the
+point: a framework that cannot die cannot be tested.
 
 \section{Conclusion}
 \label{sec:conclusion}
