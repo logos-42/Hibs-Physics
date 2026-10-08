@@ -478,16 +478,15 @@ $A_\Lambda(n+\delta_\mu)-A_\Lambda(n)$ 是 $A$ 沿 $\mu$ 的相邻值，
 
 \begin{theorem}[CC5: 路径积分被积函数有界]
 \label{thm:cc5}
-对任意实数作用量 $S$，路径积分被积函数满足 $\|e^{iS}\|=1$——配分函数有限性
-$|Z_\Lambda|\le \mathrm{vol}(\Lambda)$ 的关键一步
-（形式化为 \texttt{exp\_iS\_has\_norm\_one}）。
+对任意实数作用量 $S$，路径积分被积函数满足 $\|e^{iS}\|=1$
+（形式化为 \texttt{exp\_iS\_has\_norm\_one}）。配分函数本身的界是另一条定理 CC9。
 \end{theorem}
 
 \begin{theorem}[CC6: 该界的测度论内核]
 \label{thm:cc6}
 该界的核心现在是定理，而非注释：在任意测度空间上，任意单位模被积函数都具有
-受总测度控制的 Bochner 扩展范数 $\bigl\|\int f\bigr\|_\mathrm{e}\le
-\mu(\Lambda)$（\texttt{enorm\_integral\_le\_measure\_univ\_of\_norm\_le\_one}）；
+受空间总测度控制的 Bochner 扩展范数 $\bigl\|\int f\bigr\|_\mathrm{e}\le
+\mu(\Omega)$（\texttt{enorm\_integral\_le\_measure\_univ\_of\_norm\_le\_one}）；
 在归一化（概率）Haar 测度下这是 $\le 1$
 （\texttt{norm\_integral\_le\_one\_of\_isProbabilityMeasure}）；而指数作用量
 直接满足它（\texttt{exp\_iS\_integral\_le\_measure\_univ}）。仍然开放并被陈述为
@@ -495,8 +494,50 @@ $|Z_\Lambda|\le \mathrm{vol}(\Lambda)$ 的关键一步
 测度的有限积——这是测度论的类型级构造，不是缺失的估计。
 \end{theorem}
 
+\begin{theorem}[CC9: 配分函数是真积分]
+\label{thm:cc9}
+配分函数是真正的 Bochner 积分
+$Z_\Omega(S)=\int_\Omega e^{iS(\omega)}\,d\mu(\omega)$
+（\texttt{partitionFunction}）——不是占位符号。它的扩展范数被空间总测度控制
+$\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$
+（\texttt{partitionFunction\_enorm\_le\_measure\_univ}），在归一化（概率）测度下
+$\le 1$（\texttt{partitionFunction\_enorm\_le\_one}）。数值校验
+\texttt{verify\_yang\_mills\_strict.py} 用归一化计数测度枚举配置，确认 $|Z|\le1$
+以及 $|\sum e^{iS}|\le N=\mathrm{vol}(\Lambda)$。仍然开放的是类型级实例——
+配置空间 $\mathrm{SU}(3)^{\Lambda}$ 上的归一化乘积 Haar 测度——这一点被如实陈述。
+\end{theorem}
+
+\begin{theorem}[CC8: 严格场强含真导数项]
+\label{thm:cc8}
+严格连续场强是 $F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu]$，
+其中 $\partial_\mu$ 是沿第 $\mu$ 条坐标线的方向导数（\texttt{dirDeriv}、
+\texttt{fieldStrengthStrict}）。因此交换子是一个\emph{加项}，不是定义本身：对
+关于 $x$ 为常量的场，导数项消失，严格场强退化为交换子
+（\texttt{fieldStrengthStrict\_gaugeFieldOf}）；对线性场，方向导数精确等于其系数，
+对三次场中心差分携带精确的 $O(h^2)$ 截断（\texttt{dirDeriv\_linear\_field}；
+数值误差比 $4.000$）。这回应了「非阿贝尔内容是被定义塞进去的」这一反对意见。
+\end{theorem}
+
+\begin{theorem}[CC10: 四维群实例 —— 存在性的可检查版]
+\label{thm:cc10}
+存在性那一半可以做成具体的：取\emph{四维紧致群}
+$T^4=S^1\times S^1\times S^1\times S^1$ 与有限格点 $\Lambda$；配置空间
+$\Lambda\to T^4$ 携带乘积 Haar 测度，其总测度 $=1$，因此格点配分函数
+$|Z_\Lambda|\le 1$ \emph{无条件成立}
+（\texttt{lattice\_partition\_bound\_torus4}、\texttt{torus4\_haar\_univ}、
+\texttt{lattice\_conf\_univ\_torus4}）——没有留下任何待填假设。这是存在性的
+测度层、在四维群上的实例化。它\emph{不是}四维量子场论
+（Wightman/Osterwalder--Schrader），也\emph{不是} $\Delta>0$；$T^4$ 是阿贝尔的，
+非阿贝尔的 $\mathrm{SU}(3)^{\Lambda}$ 实例仍是开放的类型级条目。必须写明\emph{证伪}
+路线：本框架的间隙来自\emph{整数条数}，不是四维动力学，所以本支\emph{可能被证伪}
+——若该计数认定失败，构造是被反驳而不是被确认。
+\end{theorem}
+
 诚实状态一句话说清：``连续是原生基底'' 是框架的语义层（它的公设），不是从格点
-推导出来的；这里证明的是采样关系与连续场强的非阿贝尔结构。格点间距的拓扑极限
+推导出来的；这里证明的是采样关系与连续场强的非阿贝尔结构（含真导数项，CC8）。
+另需写死：CA7/CA7b/CA10 那几条在 Lean 里已改名为 \texttt{\_manifest\_assembled}——
+它们的前提未被使用，是\emph{汇编}而非蕴含；真正使用假设的版本是
+\texttt{mass\_gap\_from\_count\_law}（计数律就是间隙所依赖的框架输入）。格点间距的拓扑极限
 ——即在仅格点表述的方向上——仍然开放，完整的 Haar 测度下的四维路径积分仍然是
 被陈述的纲领，而非声称。
 
@@ -732,7 +773,7 @@ $\mathbb{R}^4$。
 
 \paragraph{未被声称的。}
 (i)~杨--米尔斯存在性问题没有被解决：格点构造是代数骨架，不是连续的四维量子场论；
-没有路径积分，没有重整化，没有连续时空。(ii)~格点间距趋于零的拓扑极限没有被
+没有重整化，没有连续时空，也没有 $\mathrm{SU}(3)$ 配置空间上的路径积分\emph{实例}（其界在任意测度空间上已是定理，CC9）。(ii)~格点间距趋于零的拓扑极限没有被
 形式化（第~VI 节的开放层）；特别是，离散交换子 $[A(t),A(t{+}1)]$ 到连续
 $[A_\mu,A_\nu]$ 的收敛没有被证明。(iii)~数值 $\lambda$、$M_0$ 与抹平方次是输入，
 不是推导；因此框架不预言 QCD 间隙的标度（约 $1.6$ GeV）——它预言谱的形状，

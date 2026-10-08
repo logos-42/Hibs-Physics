@@ -114,27 +114,35 @@ theorem discrete_to_continuous_bridge_statement :
 --     ⟹ 质量平方 ∈ {0} ∪ [M₀²,∞)（MG2b）⟹ 质量间隙存在。
 -- ---------------------------------------------------------------------------
 
-/-- ★★★ CA7：质量间隙完整链的代数闭包。
-    非交换自相互作用（汇收缩非交换，YangMillsSeed.YM2）⟹
+/-- ★★★ CA7（改名，2026-10-08 对抗性审稿 R2）：**汇编式陈述，不是蕴含**。
     质量平方要么 0（光子）要么 ≥ M₀²（最轻激发）—— 间隙存在。
-    这是「杨-米尔斯自相互作用 ⟹ 质量间隙」在仓库代数里的条件形式。 -/
-theorem mass_gap_from_self_interaction
+
+    ★ 诚实边界（写死）：本定理**没有任何假设**，是对计数公设（MG2b）的
+    **重述**——自相互作用/非交换性**没有进入证明**。因此它的名字不再叫
+    `mass_gap_from_self_interaction`（对抗性审稿指出：名与实相反）。
+    「自相互作用 ⟹ 质量间隙」这条**箭头本身没有被证明**，它等于 Clay 问题
+    的核心，登记为开放（论文 Sec. XI/XII 自曝）。
+    真正有内容的版本见本文件末 `mass_gap_from_count_law`（假设被使用）。 -/
+theorem mass_gap_restated_from_counting_postulate
     {N : ℕ} {M₀ : ℝ} :
     -- 若质量由条数 N 决定：N=0 光子，N≥1 质量 ≥ M₀²
     strandMassSq N M₀ = 0 ∨ strandMassSq 1 M₀ ≤ strandMassSq N M₀ := by
   exact mass_gap_no_intermediate
 
-/-- ★★★ CA7b：完整链的总陈述（把各环节钉在一起）。
+/-- ★★★ CA7b（改名，2026-10-08 R2）：**汇编清单，不是推导**。
     加速电荷 ⟹ 场变（CR1）⟹ 核力通道（CR2）⟹ 汇收缩动态
     （CR9 平方衰减、YM1 迭代、YM2 非交换）= 自相互作用（[A,A]）
     ⟹ 质量平方 ∈ {0} ∪ [M₀²,∞)（MG2b）= 质量间隙。
-    注：链的每一步都有各自模块的定理；本定理把它们**并置**为
-    一份可引用的总账（不作为新推导，只作汇编+诚实边界）。 -/
-theorem mass_gap_chain_total
+
+    ★ 诚实边界（写死）：假设 `∃ p q : ℤ, p ≠ q` **在证明体里被弃用**
+    （`intro` 之后不再使用）⟹ 本定理**不构成**上述链的蕴含。它把各环节
+    **并置**为一份可引用的总账（汇编 + 诚实边界），名字已改为 `_manifest_`
+    以消除「这是推导」的误读。 -/
+theorem mass_gap_chain_manifest_assembled
     {N : ℕ} {M₀ : ℝ} :
     -- 汇编：非交换自相互作用（YM2 前提）下的质量间隙（MG2b）
     (∃ p q : ℤ, p ≠ q) → strandMassSq N M₀ = 0 ∨ strandMassSq 1 M₀ ≤ strandMassSq N M₀ := by
-  intro hexists
+  intro _hexists
   exact mass_gap_no_intermediate
 
 -- ---------------------------------------------------------------------------
@@ -175,20 +183,40 @@ theorem lattice_commutator_continuous_limit_nuclear
     m * dC ≠ 0 := by
   exact mul_ne_zero hm hdC
 
-/-- ★★★ CA10：连续极限机制闭合 —— 完整链。
+/-- ★★★ CA10（改名，2026-10-08 R2）：**汇编式闭环，非蕴含**。
     对流动空间求导得四力（CA8）⟹ 四力通道非平凡（CA9 核力分量）
     ⟹ 连续场强存在（连续极限机制）⟹ 质量间隙（CA7，MG2b）。
-    这是「存在性连续极限机制」的完整陈述：连续不是假设，
-    而是**由流动空间求导逻辑定义出来的**。 -/
-theorem continuous_limit_mass_gap_chain
-    (m : ℝ) (hm : m ≠ 0) (dC : ℝ) (hdC : dC ≠ 0)
+
+    ★ 诚实边界（写死）：`hm`/`hdC` 只被用来造 `hNuclear`，而 `hNuclear`
+    **没有进入结论**（结论仍来自 `mass_gap_no_intermediate`）⟹ 前提在
+    **空转**。名字已改为 `_manifest_`。真正使用假设的版本见
+    `mass_gap_from_count_law`。 -/
+theorem continuum_mass_gap_manifest_assembled
+    (m : ℝ) (_hm : m ≠ 0) (dC : ℝ) (_hdC : dC ≠ 0)
     {N : ℕ} {M₀ : ℝ} :
     -- 连续极限机制（四力通道非平凡）⟹ 质量间隙（条数离散）
     strandMassSq N M₀ = 0 ∨ strandMassSq 1 M₀ ≤ strandMassSq N M₀ := by
-  -- 连续极限机制: 核力通道非平凡 (CA9: m·dC ≠ 0)
-  have hNuclear : m * dC ≠ 0 := by
-    exact mul_ne_zero hm hdC
-  -- 连续极限闭合 ⟹ 质量间隙 (条数离散, MG2b)
   exact mass_gap_no_intermediate
+
+-- ---------------------------------------------------------------------------
+-- CA11 ★★★ 真正使用假设的版本（2026-10-08，回应 R2"前提空转"）
+--   把**计数律本身**写成显式假设：若质量平方由条数决定（hcount），
+--   则间隙存在。假设在证明中被真实使用（不是 intro 后弃用）。
+--   诚实边界：这仍**不是**「自相互作用 ⟹ 质量间隙」——它把链条的
+--   真正输入（计数律 = 质量由整数条数决定）钉在类型里，从而让
+--   「哪一步是输入」机器可检。 -/
+theorem mass_gap_from_count_law {M₀ : ℝ} (mSq : ℕ → ℝ)
+    (hcount : ∀ N : ℕ, mSq N = (N : ℝ) * M₀ ^ 2) (N : ℕ) :
+    mSq N = 0 ∨ mSq 1 ≤ mSq N := by
+  rcases Nat.eq_zero_or_pos N with hN | hN
+  · left
+    subst hN
+    simp [hcount]
+  · right
+    rw [hcount 1, hcount N]
+    have hN1 : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
+    have hprod : (1 : ℝ) * M₀ ^ 2 ≤ (N : ℝ) * M₀ ^ 2 :=
+      mul_le_mul_of_nonneg_right hN1 (sq_nonneg M₀)
+    simpa using hprod
 
 end ProjectionPhysics.YangMillsLattice

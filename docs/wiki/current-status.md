@@ -1492,3 +1492,49 @@ leo：「连续是流动空间自带的」——方向升维落地论文。回�
 
 **产物**：Lean `Explorations/YangMillsContinuum.lean`（CC1–CC7 + CC6 定理三件）；论文 `paper3/projection-yangmills-gap{,-zh}.{tex,pdf}`。提交 `a8dd5aa`/`d44b207`/`26e6f23` + 本轮。
 
+## ★ 2026-10-08 session（续）：杨–米尔斯严格版推进 + 后续校验（CC8/CC9/CA11 + YM-S1…S5）
+
+leo：「把物理学杨米尔斯猜想的严格版完成，目前已经从汇收敛流到连续模式的推导完成了，你需要后续的校验。」
+
+**对应关系**：对抗性审稿（同日）抓的三条结构性弱处，正好就是"严格版没走完"的三处 —— 逐条补，并配数值校验。
+
+### ① R1「定义即结论」→ CC8：场强含**真导数项**
+- `dirDeriv A μ x := deriv (fun t => A (Function.update x μ (x μ + t))) 0`（沿第 μ 条坐标线的方向导数；对可微场 = Fréchet 导数在坐标方向的值）。
+- `fieldStrengthStrict A μ ν x := dirDeriv (fun y => A y ν) μ x − dirDeriv (fun y => A y μ) ν x + commutatorTerm (A x μ) (A x ν)` —— 即 **F_μν = ∂_μA_ν − ∂_νA_μ + [A_μ,A_ν]**。
+- 定理：`dirDeriv_const_field`（常量场 ⟹ 0）、`fieldStrengthStrict_gaugeFieldOf`（常量场 ⟹ **严格场强 = 纯交换子** ⟹ 旧 `fieldStrength` 只是特殊情形）、`fieldStrengthStrict_can_be_nonzero`、`dirDeriv_linear_field`（线性场导数 = 系数）、`dirDeriv_linear_field_ne_zero`。
+- ⟹ **交换子现在是可分离加项**，不是全部定义。
+
+### ② R3「配分函数是符号」→ CC9：真积分 + 真界
+- `partitionFunction Ω μ S := ∫ ω, Complex.exp (Complex.I * S ω) ∂μ`（真 Bochner 积分）。
+- `partitionFunction_enorm_le_measure_univ : ‖Z‖ₑ ≤ μ Set.univ`；`partitionFunction_enorm_le_one : [IsProbabilityMeasure μ] ⟹ ‖Z‖ₑ ≤ 1`。
+- **删除**了原 `def latticePathIntegral ... := 0` 占位定义（审稿人指出它会被读成"把对象定义成 0 换零 sorry"）。
+- 仍开放：Ω 实例化为 SU(3)^Λ + 归一化 Haar 有限积（类型级构造）。
+
+### ③ R2「前提空转 + 名实相反」→ 改名 + 假设真被使用
+- `mass_gap_from_self_interaction` → **`mass_gap_restated_from_counting_postulate`**；`mass_gap_chain_total` → **`mass_gap_chain_manifest_assembled`**；`continuous_limit_mass_gap_chain` → **`continuum_mass_gap_manifest_assembled`**（docstring 写死"前提未使用 ⟹ 是汇编不是蕴含"）。
+- 新增 **`mass_gap_from_count_law`**：把**计数律**（m²(N) = N·M₀²）写成显式假设并**真在证明中使用** ⟹ 让"哪一步是输入"机器可检。
+- 「自相互作用 ⟹ 质量间隙」的**蕴含本身仍未被证明**（= Clay 核心），登记开放。
+
+### 数值校验（`scripts/verify_yang_mills_strict.py` → `artifacts/yangmillsstrict/`，已注册 verify_all）
+- **YM-S1★** 常量场方向导数恒 0（各 h 范数 0.0）
+- **YM-S2★★** `[cycle3,diag123](0,1) = 1`、最大模 2、`[Y,X] ≠ [X,Y]`
+- **YM-S3★★** 线性场中心差分 = 系数（8.9e−16 … 1.1e−13）；三次场误差 = h² 精确、步长减半误差比 **4.000**（O(h²)）⟹ 方向导数是**真微分算子**
+- **YM-S4★★★** `|e^{iS}| − 1 = 1.1e−16`；归一化 `|Z|` 最大 **0.098 ≤ 1**；未归一化 `|Σ e^{iS}|` 最大 **50.2 ≤ N = 512**（vol 的计数实现）
+- **YM-S5★★** `m²(N) = 0 ⟺ N = 0`、`m²(1) ≤ m²(N)`；**交换情形（交换子 = 0）同一间隙成立** ⟹ 非交换不是该间隙的来源（R2 的诚实登记）
+
+### 诚实边界（写死）
+- CC8 的 `dirDeriv` 是**线限制导数**：对可微场等于 Fréchet 方向导数；本模块的定理（常量/线性/三次）在两种语言下都精确。
+- CC9 的测度是**抽象测度**；SU(3)^Λ 的归一化 Haar 有限积**未实例化**。
+- 格距 **a→0 的拓扑收敛**仍未形式化（Clay 核心）；L2 矩阵值推广、重整化/β 函数仍缺。
+- M₀ = 977.0 MeV 仍是**标定输入**（第二输入缺口未变）。
+
+
+### ④ leo 追加：「构造四维群验证存在性」→ CC10（无条件 |Z| ≤ 1）
+- **四维紧致群 T⁴ = S¹×S¹×S¹×S¹**（S¹ = `AddCircle 1`，mathlib 的 `volume` 即 Haar）：`circle_haar_univ`（总测度 1）→ `torus4_haar_univ` → `lattice_conf_univ_torus4`（有限格点配置空间 Λ → T⁴ 的乘积 Haar，`volume_pi` + `Measure.pi_univ`）。
+- **`lattice_partition_bound_torus4 : ‖Z_Λ‖ₑ ≤ 1`** —— 在具体四维群上**无条件成立**（CC9 + CC10c），**没有 [IsProbabilityMeasure μ] 这类待填假设**。
+- 数值 `YM-S6★★★`：非常数作用量 |Z| = 0.0139 ≈ 0（傅里叶）、常数作用量 |Z| = 1.0000、两者均 ≤ 1。
+- **诚实边界（写死）**：T⁴ 是**阿贝尔**群（U(1)⁴）⟹ 这是存在性的**测度层**实例化；**不是** 4 维 QFT（Wightman/OS），**不是** Δ>0；非阿贝尔 SU(3)^Λ 实例仍开放。**证伪路线**：间隙来自整数条数而非四维动力学 ⟹ 本支可能被**证伪**（leo：「实际上，可能我们也会证伪这个猜想」）。
+- **顺带修门禁误报**：`verify_all.py` 零-sorry 正则原只剔 `/-!` 块注释，漏 `/--` 文档注释 ⟹ 把 `MassGap.lean` 注释里的 "sorry" 一词误报 FAIL；改为 `/-[!-]` 后真 sorry/admit = **0**。
+
+**产物**：Lean `Explorations/YangMillsContinuum.lean`（+CC8/CC9/CC10）、`Explorations/YangMillsLattice.lean`（+CA11、三条改名）；`scripts/verify_yang_mills_strict.py` + `artifacts/yangmillsstrict/`（report.json / summary.txt / fig_ym_strict.png）；`scripts/verify_all.py` 注册 5 条断言；论文 `paper3/projection-yangmills-gap{,-zh}.{tex,pdf}` 同步。
+

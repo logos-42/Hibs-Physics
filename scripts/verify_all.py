@@ -59,7 +59,9 @@ def main():
     bad = []
     for p in lean_files:
         src = open(p, encoding="utf-8").read()
-        src_nc = re.sub(r"/-!.*?-/", "", src, flags=re.S)  # 删块注释
+        # 删块注释：/-! 模块注释 与 /-- 文档注释（后者原先漏掉，会造成
+        # 「注释里出现 sorry 一词」的误报，2026-10-08 修）
+        src_nc = re.sub(r"/-[!-].*?-/", "", src, flags=re.S)
         for line in src_nc.splitlines():
             if line.lstrip().startswith("--"):
                 continue
@@ -137,6 +139,7 @@ def main():
                        "scripts/fig_ring_twist_understanding.py",
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
+                       "scripts/verify_yang_mills_strict.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", script], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -896,6 +899,36 @@ def main():
               any(row["d"] == 2 and row["统计两类?"] in ("否", "**否**") for row in d5["表"])
               and any(row["d"] == 4 and row["非平凡连接?"] in ("否", "**否**") for row in d5["表"]))
 
+    yms = load_report("artifacts/yangmillsstrict/report.json")
+    if yms:
+        c = yms["checks"]
+        s1 = c["S1_常量场方向导数为零"]
+        check("YM-S1★: 常量场方向导数恒为 0（CC8a dirDeriv_const_field）",
+              s1["最大值"] < 1e-15, s1["最大值"])
+        s2 = c["S2_显式交换子见证"]
+        check("YM-S2★★: [cycle3,diag123](0,1) = 1 且 [Y,X] ≠ [X,Y]（CC8c 显式非交换见证）",
+              s2["非零见证 (0,1) == 1"] and not s2["反交换子 [Y,X] 与 [X,Y] 是否相等"] and s2["[cycle3, diag123] 最大模"] > 1.0)
+        s3 = c["S3_方向导数是真的微分算子"]
+        ratios = s3["(b) 步长减半的误差比（≈ 4 = O(h²)）"]
+        check("YM-S3★★: 线性场中心差分 = 系数（机器精度）且三次场误差比 ≈ 4（O(h²)）"
+              " ⟹ 方向导数是真微分算子（CC8d；回应 R1「定义即结论」）",
+              max(s3["(a) 线性场 ‖中心差分 − 系数‖（应 ~机器精度）"]) < 1e-10
+              and all(abs(r - 4.0) < 0.01 for r in ratios))
+        s4 = c["S4_配分函数有界"]
+        check("YM-S4★★★: |e^{iS}|=1 精确、归一化 |Z| ≤ 1、未归一化 |Σ| ≤ N = vol(Λ)"
+              "（CC9 partitionFunction；回应 R3「配分函数是符号」）",
+              s4["|e^{iS}| − 1 最大偏差"] < 1e-15 and s4["200 组配置的归一化 |Z| 最大值（应 ≤ 1）"] <= 1.0
+              and s4["同组未归一化 |Σ e^{iS}| 最大值（应 ≤ N = vol(Λ)）"] <= s4["N（配置数 = vol(Λ) 的计数实现）"])
+        s6 = c["S6_四维群T4上的配分函数"]
+        check("YM-S6★★★: 四维紧致群 T⁴ 上的格点配分函数 |Z| ≤ 1 无条件成立"
+              "（CC10d；常数作用量 |Z| = 1，非常数 |Z| ≈ 0 ⟹ Haar 总测度 = 1）",
+              s6["两个 |Z| 是否都 ≤ 1（CC10d 无条件界）"] and s6["非常数作用量的 |Z|（傅里叶 ⟹ ≈ 0）"] < 0.05
+              and abs(s6["常数作用量的 |Z|（应 = 1）"] - 1.0) < 0.02)
+        s5 = c["S5_计数律给出间隙"]
+        check("YM-S5★★: 计数律 ⟹ 间隙（CA11 mass_gap_from_count_law）；且交换情形同一间隙成立"
+              " ⟹ 非交换不是该间隙来源（R2 诚实登记）",
+              s5["m²(N)=0 ⟺ N=0"] and s5["m²(1) ≤ m²(N)（N≥1）"] and s5["交换子范数（交换情形，应 = 0）"] < 1e-15)
+
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
     if pw:
@@ -1532,6 +1565,9 @@ def main():
         "artifacts/twoflowring_gravity/report.json": 4_000,
         "artifacts/twoflowring_gravity/summary.txt": 100,
         "artifacts/twoflowring_gravity/fig_gravity_field.png": 60_000,
+        "artifacts/yangmillsstrict/report.json": 1_500,
+        "artifacts/yangmillsstrict/summary.txt": 300,
+        "artifacts/yangmillsstrict/fig_ym_strict.png": 30_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():

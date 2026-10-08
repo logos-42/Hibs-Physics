@@ -678,17 +678,17 @@ identity (\texttt{sample\_difference\_is\_derivative\_seed}).
 \begin{theorem}[CC5: the path-integral integrand is bounded]
 \label{thm:cc5}
 For every real action $S$, the path-integral integrand satisfies
-$\|e^{iS}\|=1$ --- the key step toward the finiteness of the
-partition function, $|Z_\Lambda|\le \mathrm{vol}(\Lambda)$
-(formalized as \texttt{exp\_iS\_has\_norm\_one}).
+$\|e^{iS}\|=1$ (formalized as
+\texttt{exp\_iS\_has\_norm\_one}).  The bound on the partition
+function itself is a separate theorem, CC9.
 \end{theorem}
 
 \begin{theorem}[CC6: the bound's measure-theoretic kernel]
 \label{thm:cc6}
 The kernel of the bound is now a theorem, not a comment: on any
 measure space, any unit-modulus integrand has extended Bochner norm
-bounded by the total measure, $\bigl\|\int f\bigr\|_\mathrm{e}\le
-\mu(\Lambda)$ (\texttt{enorm\_integral\_le\_}\allowbreak
+bounded by the total measure of the space, $\bigl\|\int f\bigr\|_\mathrm{e}\le
+\mu(\Omega)$ (\texttt{enorm\_integral\_le\_}\allowbreak
 \texttt{measure\_univ\_of\_norm\_le\_one});
 under a normalized (probability) Haar measure this is $\le 1$
 (\texttt{norm\_integral\_le\_}\allowbreak
@@ -699,6 +699,61 @@ stated as a program is the full instance: the finite-product of
 normalized Haar measures on $\mathrm{SU}(3)$ over the finite lattice
 enlargement $\Lambda$ --- a type-level construction of measure
 theory, not a missing estimate.
+\end{theorem}
+
+\begin{theorem}[CC9: the partition function is a genuine integral]
+\label{thm:cc9}
+The partition function is an honest Bochner integral,
+$Z_\Omega(S)=\int_\Omega e^{iS(\omega)}\,d\mu(\omega)$
+(\texttt{partitionFunction}) --- not a placeholder symbol.  Its extended
+norm is bounded by the total measure,
+$\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$
+(\texttt{partitionFunction\_enorm\_le\_measure\_univ}), and by $1$
+under a normalized (probability) measure
+(\texttt{partitionFunction\_enorm\_le\_one}).  The numerical check
+\texttt{verify\_yang\_mills\_strict.py} enumerates configurations with
+the normalized counting measure and confirms $|Z|\le1$ together with
+$|\sum e^{iS}|\le N=\mathrm{vol}(\Lambda)$.  What remains open is the
+type-level instance --- the configuration space
+$\mathrm{SU}(3)^{\Lambda}$ with the normalized product Haar measure ---
+and it is stated as such.
+\end{theorem}
+
+\begin{theorem}[CC8: the strict field strength carries a genuine derivative term]
+\label{thm:cc8}
+The strict continuous field strength is
+$F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu]$, with
+$\partial_\mu$ the directional derivative along the $\mu$-th
+coordinate line (\texttt{dirDeriv}, \texttt{fieldStrengthStrict}).  The
+commutator is therefore \emph{one summand}, not the definition: for a
+field constant in $x$ the derivative terms vanish and the strict field
+strength reduces to the commutator
+(\texttt{fieldStrengthStrict\_gaugeFieldOf}), whereas for a linear field
+the directional derivative equals its coefficient exactly and for a
+cubic field the central difference carries the exact $O(h^2)$
+truncation (\texttt{dirDeriv\_linear\_field}; numerically verified,
+error ratios $4.000$).  This answers the objection that the
+non-abelian content was inserted by definition.
+\end{theorem}
+
+\begin{theorem}[CC10: a four-dimensional group instance --- existence, instantiated]
+\label{thm:cc10}
+The existence half can be made concrete.  Take the \emph{four-dimensional
+compact group} $T^4=S^1\times S^1\times S^1\times S^1$ and a finite lattice
+$\Lambda$; the configuration space $\Lambda\to T^4$ carries the product
+Haar measure, whose total mass is $1$, so the lattice partition function
+satisfies $|Z_\Lambda|\le 1$ \emph{unconditionally}
+(\texttt{lattice\_partition\_bound\_torus4}, \texttt{torus4\_haar\_univ},
+\texttt{lattice\_conf\_univ\_torus4}) --- no hypothesis is left to fill.
+This is the measure-theoretic layer of existence, instantiated for a
+four-dimensional group.  It is \emph{not} the four-dimensional quantum
+field theory (Wightman/Osterwalder--Schrader) and \emph{not} $\Delta>0$;
+$T^4$ is abelian, so the non-abelian $\mathrm{SU}(3)^{\Lambda}$ instance
+remains the open type-level item.  Note the falsification route, stated
+explicitly: the framework's gap comes from \emph{integer counting}, not
+from four-dimensional dynamics, so this branch can be \emph{falsified}
+--- if the counting identification fails, the construction is refuted
+rather than confirmed.
 \end{theorem}
 
 The honest status is stated once: ``the continuum is the native
@@ -1054,10 +1109,16 @@ $[A,A]$ is at the interpretation layer; the strict derivative
 theorem L2 is scalar, and its matrix-valued generalization is not
 formalized.  (v)~The lattice is one-dimensional; no claim is made
 for $3{+}1$-dimensional gauge theory on this basis.  (vi)~The
-four-dimensional partition function is only bounded through its
-integrand ($\|e^{iS}\|=1$, CC5) and the abstract measure kernel
-(CC6); the full instance on the Haar product over the finite lattice
-is a stated program, not a claim.
+four-dimensional partition function is bounded through its integrand
+($\|e^{iS}\|=1$, CC5), the abstract measure kernel (CC6) and its own
+integral form (CC9); the full instance on the Haar product over the
+finite lattice is a stated program, not a claim.  (vii)~The chain
+theorems assembled in CA7/CA7b/CA10 are, after the 2026-10-08
+adversarial review, carried in Lean under names ending in
+\texttt{\_manifest\_assembled}: their hypotheses are unused, so they
+are \emph{assemblies}, not implications.  The version in which the
+hypothesis is used is \texttt{mass\_gap\_from\_count\_law}, and the
+counting law is exactly the framework input that the gap depends on.
 
 \paragraph{Death conditions.}
 The program dies if (a)~a physical self-interaction is found with no

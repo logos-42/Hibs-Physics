@@ -36,12 +36,18 @@
 --     为格点场），或四维路径积分在有限格点上仍发散，相关陈述死。
 
 import Mathlib.Analysis.Calculus.FDeriv.Basic
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.Deriv.Add
+import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.MeasureTheory.Measure.MeasureSpace
+import Mathlib.MeasureTheory.Group.AddCircle
+import Mathlib.MeasureTheory.Constructions.Pi
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
@@ -55,6 +61,7 @@ open ColorOctet
 open MeasureTheory
 open scoped Matrix
 open scoped MeasureTheory
+open scoped Matrix.Norms.Elementwise
 
 /-- 色空间矩阵（仓库类型，mathlib 3×3 复矩阵）。 -/
 abbrev Mat3C := Matrix (Fin 3) (Fin 3) ℂ
@@ -186,19 +193,154 @@ theorem exp_iS_integral_le_measure_univ
   intro x
   rw [exp_iS_has_norm_one]
 
-/-- ★ CC7a：有限格点路径积分（正则化记号）。
-    Z_Λ = ∫ ∏_{n∈Λ} dU(n) e^{iS[U]}，Λ ⊂ ℤ⁴ 有限。
-    完整定义需要紧致 SU(3) 的 Haar 测度的有限积（mathlib 有，
-    后续形式化）；此处为结构记号登记。无穷格点与连续极限是
-    Clay 问题的核心（Sec. X 开放纲领），不在本模块声称内。 -/
-def latticePathIntegral (_Λ : Finset (Fin 4 → ℤ)) (_S : LatticeField → ℝ) : ℝ :=
-  0
+/-- ★★★ CC8：连续场强的严格形式（含导数项）。
+    F_μν = ∂_μ A_ν − ∂_ν A_μ + [A_μ, A_ν]。
+    这里 ∂_μ A_ν 是沿第 μ 坐标线的方向导数（对可微场 = Fréchet 导数在
+    坐标方向上的取值）。**此项是真实加项，不是被定义掉的**：常量场给出 0，
+    线性场给出其系数（CC8c/CC8d）。
 
--- ★★ CC6b：重整化 = 格距依赖的耦合（Wilson 重整化群思想）。
+    这条回应对抗性审稿的 R1（"场强被定义成交换子本身 ⟹ 非交换是假设进定义"）：
+    旧 CC2 的 `fieldStrength` 只是本定义的**特殊情形**（导数项为零时）。 -/
+noncomputable def dirDeriv (A : (Fin 4 → ℝ) → Mat3C) (μ : Fin 4)
+    (x : Fin 4 → ℝ) : Mat3C :=
+  deriv (fun t : ℝ => A (Function.update x μ (x μ + t))) 0
+
+/-- ★★★ CC8：严格连续场强（含导数项）。 -/
+noncomputable def fieldStrengthStrict (A : GaugeField) (μ ν : Fin 4)
+    (x : Fin 4 → ℝ) : Mat3C :=
+  dirDeriv (fun y => A y ν) μ x - dirDeriv (fun y => A y μ) ν x +
+    commutatorTerm (A x μ) (A x ν)
+
+/-- ★ CC8a：常量场的方向导数为零（导数项在常量场上消失）。 -/
+theorem dirDeriv_const_field (X : Mat3C) (μ : Fin 4) (x : Fin 4 → ℝ) :
+    dirDeriv (fun _ : Fin 4 → ℝ => X) μ x = 0 := by
+  simp [dirDeriv]
+
+/-- ★★ CC8b：常量场的严格场强 = 纯交换子。
+    ⟹ 旧 `fieldStrength`（只有交换子）是严格场强在导数项为零时的**特殊情形**；
+    非交换项现在是一个**可分离的加项**，不是全部定义。 -/
+theorem fieldStrengthStrict_gaugeFieldOf (X Y : Mat3C) (x : Fin 4 → ℝ) :
+    fieldStrengthStrict (gaugeFieldOf X Y) 0 1 x = commutatorTerm X Y := by
+  unfold fieldStrengthStrict gaugeFieldOf
+  simp [dirDeriv]
+
+/-- ★★ CC8c：严格场强可以非零（导数项为零的常量场见证）——
+    非交换项不是被导数项抵消掉的空项。 -/
+theorem fieldStrengthStrict_can_be_nonzero :
+    ∃ A : GaugeField, ∃ x : Fin 4 → ℝ, ∃ μ ν : Fin 4,
+      μ ≠ ν ∧ fieldStrengthStrict A μ ν x ≠ 0 := by
+  refine ⟨gaugeFieldOf cycle3 diag123, (fun _ => 0), 0, 1, by decide, ?_⟩
+  rw [fieldStrengthStrict_gaugeFieldOf]
+  exact cycle3_diag_commutator_ne_zero
+
+/-- ★★ CC8d：线性场的方向导数 = 其系数 —— 导数项**非平凡**
+    （∂_μ 不是恒零算子；这是"场强含真导数项"的内容见证）。 -/
+theorem dirDeriv_linear_field (c : Mat3C) (μ : Fin 4) (x : Fin 4 → ℝ) :
+    dirDeriv (fun y : Fin 4 → ℝ => (y μ) • c) μ x = c := by
+  rw [dirDeriv]
+  have hfun : (fun t : ℝ => (Function.update x μ (x μ + t)) μ • c)
+      = fun t => (x μ + t) • c := by
+    funext t
+    simp
+  rw [hfun]
+  have h0 : HasDerivAt (fun t : ℝ => t • c) c 0 := by
+    simpa [one_smul] using (HasDerivAt.smul_const (hasDerivAt_id (0 : ℝ)) c)
+  have h1 : HasDerivAt (fun t : ℝ => (x μ + t) • c) c 0 := by
+    simpa [add_smul, add_comm] using (h0.const_add ((x μ) • c))
+  exact h1.deriv
+
+/-- ★★ CC8e：非零系数的线性场 ⟹ 方向导数非零（导数项确实能不为零）。 -/
+theorem dirDeriv_linear_field_ne_zero (c : Mat3C) (hc : c ≠ 0) (μ : Fin 4)
+    (x : Fin 4 → ℝ) :
+    dirDeriv (fun y : Fin 4 → ℝ => (y μ) • c) μ x ≠ 0 := by
+  rw [dirDeriv_linear_field]
+  exact hc
+
+-- ---------------------------------------------------------------------------
+-- CC9 ★★★ 配分函数是**真积分**（不是占位符号）
+--   Z_Ω(S) = ∫_Ω e^{iS} dμ。CC6 的界直接给出：单位模被积函数 ⟹
+--   ‖Z‖ₑ ≤ μ(全空间)；归一化（概率/Haar）测度下 ⟹ ≤ 1。
+--   诚实边界：把 Ω 实例化为有限格点上的 SU(3)-值配置空间（归一化 Haar 有限积）
+--   仍是开放的类型级构造（mathlib 有 SU(3) 的群结构与紧致群的 Haar 理论，
+--   但有限积 + 归一化 + 与格点指标对接未做）；本模块**不留下返回 0 的假定义**。
+-- ---------------------------------------------------------------------------
+
+/-- ★★★ CC9：配分函数 = 指数作用量的 Bochner 积分（真积分，非占位）。 -/
+noncomputable def partitionFunction {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) (S : Ω → ℝ) : ℂ :=
+  ∫ ω, Complex.exp (Complex.I * S ω) ∂μ
+
+/-- ★★★ CC9a：任意测度空间上，配分函数被总测度控制。 -/
+theorem partitionFunction_enorm_le_measure_univ {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) (S : Ω → ℝ) :
+    ‖partitionFunction μ S‖ₑ ≤ μ Set.univ := by
+  unfold partitionFunction
+  exact exp_iS_integral_le_measure_univ μ S
+
+/-- ★★★ CC9b：归一化（概率/Haar）测度下 |Z| ≤ 1 —— 即论文里
+    |Z_Λ| ≤ vol(Λ) 的**测度论含义**（vol 归一化为 1）。 -/
+theorem partitionFunction_enorm_le_one {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) [IsProbabilityMeasure μ] (S : Ω → ℝ) :
+    ‖partitionFunction μ S‖ₑ ≤ 1 := by
+  simpa using enorm_integral_le_measure_univ_of_norm_le_one μ
+    (fun ω => Complex.exp (Complex.I * S ω))
+    (fun ω => by rw [exp_iS_has_norm_one])
+
+-- ★★★ CC6b：重整化 = 格距依赖的耦合（Wilson 重整化群思想）。
 --   g(a) 随格距 a 变化，使物理量在 a→0 时不变。这是格点 QCD 的
 --   标准思想；β 函数、渐近自由、连续极限的完整构造是 Clay 问题
 --   的开放核心，仓库以注释登记（不设定理，避免空转主张）。
 --   诚实边界：本模块不声称完成重整化；它定位"连续是基底"的
 --   方向与路径积分的有限格点记号。
+--   ★ 2026-10-08：原先此处有一个 `def latticePathIntegral ... := 0` 占位
+--   定义（对抗性审稿 R3 指出它会被读成"把对象定义成 0 换零 sorry"）——
+--   **已删除**；格点路径积分由 CC9 的 `partitionFunction` 承载（真积分）。
+
+-- ---------------------------------------------------------------------------
+-- CC10 ★★★ 四维群实例（"存在性"那一半的可检查版，2026-10-08）
+--   leo：「用流动空间本身完成前半部分；格点数是流动空间的描述部分；
+--   你可以构造四维群来实现验证存在性。」
+--   做法：取**四维紧致群** T⁴ = S¹ × S¹ × S¹ × S¹（S¹ = AddCircle 1，
+--   mathlib 的 volume 即 Haar），令有限格点 Λ 上的配置空间为 Λ → T⁴，
+--   其乘积 Haar（volume_pi）总测度 = 1 ⟹ 配分函数 |Z| ≤ 1 **无条件成立**
+--   （不再有 [IsProbabilityMeasure μ] 这种待填假设）。
+--   诚实边界（写死）：
+--     · T⁴ 是**阿贝尔**群（U(1)⁴）；Clay 问题要的非阿贝尔紧致单群（SU(3)^Λ）
+--       的类型级 Haar 实例仍未给出 —— 本定理验证的是**测度/体积层**（存在性
+--       一层的可检查部分），不是 4 维 QFT（Wightman/OS）也不是 Δ>0。
+--     · 本框架的质量间隙来自**整数条数**（CA11/MG），不是 4 维动力学的；
+--       因此它是"同一结论、两条机制"——若该认定失败，本支**可能被证伪**
+--       （leo 2026-10-08 明确："实际上，可能我们也会证伪这个猜想"）。
+-- ---------------------------------------------------------------------------
+
+/-- ★★ CC10a：一维紧致群 S¹ = AddCircle 1 的 Haar（volume）总测度 = 1。 -/
+theorem circle_haar_univ : volume (Set.univ : Set (AddCircle (1 : ℝ))) = 1 := by
+  rw [AddCircle.measure_univ]
+  norm_num
+
+/-- ★★★ CC10b：**四维紧致群** T⁴ = S¹×S¹×S¹×S¹ 的 Haar 总测度 = 1。 -/
+theorem torus4_haar_univ : volume (Set.univ : Set (Fin 4 → AddCircle (1 : ℝ))) = 1 := by
+  rw [volume_pi]
+  rw [Measure.pi_univ]
+  simp
+
+/-- ★★★ CC10c：有限格点 Λ 上配置空间（Λ → T⁴）的乘积 Haar 总测度 = 1
+    （"格点是流动空间的描述部分"的测度层陈述）。 -/
+theorem lattice_conf_univ_torus4 (Λ : Type*) [Fintype Λ] :
+    volume (Set.univ : Set (Λ → Fin 4 → AddCircle (1 : ℝ))) = 1 := by
+  rw [volume_pi]
+  rw [Measure.pi_univ]
+  simp [torus4_haar_univ]
+
+/-- ★★★ CC10d（本轮兑现的东西）：**四维群 + 有限格点的配分函数有界** ——
+    |Z_Λ| ≤ 1 = vol(Λ) 在具体四维紧致群 T⁴ 上**无条件成立**（CC9 + CC10c）。 -/
+theorem lattice_partition_bound_torus4 (Λ : Type*) [Fintype Λ]
+    (S : (Λ → Fin 4 → AddCircle (1 : ℝ)) → ℝ) :
+    ‖partitionFunction (volume : Measure (Λ → Fin 4 → AddCircle (1 : ℝ))) S‖ₑ ≤ 1 := by
+  calc
+    ‖partitionFunction (volume : Measure (Λ → Fin 4 → AddCircle (1 : ℝ))) S‖ₑ
+        ≤ volume (Set.univ : Set (Λ → Fin 4 → AddCircle (1 : ℝ))) :=
+      partitionFunction_enorm_le_measure_univ _ S
+    _ = 1 := lattice_conf_univ_torus4 Λ
 
 end ProjectionPhysics.YangMillsContinuum
