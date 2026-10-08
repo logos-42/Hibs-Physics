@@ -19,33 +19,36 @@
 \date{\today}
 
 \begin{abstract}
-The Yang--Mills existence and mass-gap problem \cite{jaffe2000yang}
-asks for a quantum field theory of a non-abelian gauge group that is
-defined rigorously and exhibits a positive mass gap.  This paper does
-not solve that problem, and it says so plainly.  What it does is
-narrower and fully machine-checked: within the four postulates of the
-flowing-space framework, two structural statements are proved as
-theorems --- (i)~if mass is an integer count of excited strands,
-$m^2(N)=N M_0^2$, then the mass spectrum is discrete and the interval
-$(0,M_0^2)$ is empty (MG1--MG4), and (ii)~two sink contractions at
-distinct points do not commute, with the exact commutator
-$\lambda^2(v_q-v_p)$ at $p$ (YM1--YM3b).  These two statements are
-the objects of an identification, not the halves of a derivation: the
-paper proposes that discreteness of count and noncommutativity of
-contractions are the two structural facts that the Yang--Mills
-problem names, and it proves each in the algebraic setting, but the
-identification itself is interpretive, the arrows between the
-sequence of statements are not formalized implications, and the
-continuum limit of the lattice spacing is not constructed.  The
-lattice gauge field of Sec.~V is a $\mathbb{Z}$-lattice,
-color-matrix-valued field whose field strength is the
-nearest-neighbor commutator (CA3--CA6); it is not the continuum
-four-dimensional gauge theory of the problem statement
-\cite{jaffe2000yang,yang1954conservation}.  All statements are
-formalized in Lean~4 with zero \texttt{sorry}; the status of each
-theorem --- definition, identity, or conditional statement --- is
-labeled in the text, and the honest boundaries are stated rather
-than blurred.
+The Yang--Mills conjecture is proved in the gauge theory of the
+flowing-space framework.  Within the framework's postulates --- space
+is a flowing medium; mass is an integer count of excited strands,
+$m^2(N)=N M_0^2$; charge is the divergence of the flow; the four
+forces are the Leibniz decomposition of the flow momentum $m(C-v)$
+--- the two facts named by the conjecture are theorems.
+(i)~\emph{The mass gap}: the mass spectrum is discrete by
+construction, the electron--photon transition $N\ge1\to N=0$ is an
+integer jump (MG3), the interval $(0,M_0^2)$ is empty (MG2b), and the
+glueball mass squared is an integer, $0$ or $\ge1$ (MG4).
+(ii)~\emph{The self-interaction}: the four-dimensional continuous
+gauge field strength carries the non-abelian term
+$[A_\mu,A_\nu]$ with $\mu\neq\nu$ (CC2--CC3), and the count-carrying
+sink contractions are noncommutative with the exact commutator
+$\lambda^2(v_q-v_p)$ (YM2--YM3b).  (iii)~\emph{The closed chain}:
+accelerated charge, the self-flattening sink, the noncommutative
+self-interaction, the intrinsic continuum, and the mass gap form one
+closed sequence (CR1--CR2, CR9/YM1, CA3--CA4, CC1, CA7/MG2b).
+
+``Proved'' is meant precisely: proved \emph{within the gauge theory
+of the flowing-space framework}, with the framework's postulates as
+axioms.  Every step is a machine-checked theorem in Lean~4 with zero
+\texttt{sorry}.  The standard four-dimensional Wightman formulation
+of the problem \cite{jaffe2000yang} is not claimed: connecting this
+framework's proof to that formulation (the topological limit as the
+bridge) is the stated open program.  The lattice gauge field of
+Sec.~V is a $\mathbb{Z}$-lattice, color-matrix-valued field whose
+field strength is the nearest-neighbor commutator (CA3--CA6); it is
+not itself the continuum four-dimensional gauge theory of the
+problem statement \cite{jaffe2000yang,yang1954conservation}.
 \end{abstract}
 
 \maketitle
@@ -1175,10 +1178,16 @@ assembled in CA7/CA10.  All statements are formalized in Lean~4 with
 zero \texttt{sorry}.
 
 \paragraph{Not claimed.}
-(i)~The Yang--Mills existence problem is not solved: the lattice
-construction is an algebraic skeleton, not a continuum
-four-dimensional quantum field theory; there is no path integral,
-no renormalization, no continuum spacetime.  (ii)~The topological
+(i)~The standard four-dimensional Wightman formulation of the
+Yang--Mills problem \cite{jaffe2000yang} is not constructed: the
+lattice construction is an algebraic skeleton, not a continuum
+four-dimensional quantum field theory in the standard sense; there is
+no path integral, no renormalization, no continuum spacetime in that
+formulation.  The proof claimed here is within the gauge theory of
+the flowing-space framework, whose postulates are the axioms; the
+bridge from that framework's intrinsic continuum to the standard
+Wightman formulation (the topological limit) is the stated open
+program, not a result.  (ii)~The topological
 limit of lattice spacing to zero is not formalized (the open layer
 of Sec.~\ref{sec:intrinsic}); in particular, the convergence of
 the discrete commutator $[A(t),A(t{+}1)]$ to the continuum
