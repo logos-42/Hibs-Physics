@@ -22,41 +22,30 @@
 The Yang--Mills existence and mass-gap problem \cite{jaffe2000yang}
 asks for a quantum field theory of a non-abelian gauge group that is
 defined rigorously and exhibits a positive mass gap.  This paper does
-not solve that problem.  It derives, in the algebraic setting of a
-flowing-space framework, the two structural ingredients that the
-problem names --- a discrete mass spectrum with a positive lower bound,
-and a non-abelian self-interaction --- and shows that in this framework
-they are the same mechanism viewed twice.  The argument has four
-steps.  (i)~\emph{Discreteness}: mass is the number of strands of
-excited flow; the square of the mass is an integer multiple of a unit
-$M_0^2$ (MG1).  A glueball witness makes the discreteness concrete:
-the repository's glueball mass squared is an integer, either $0$ or at
-least $1$ (MG4).  The transition from the electron ($N\ge1$ strands) to
-the photon ($N=0$) is an integer jump that cannot be crossed
-continuously (MG3); hence the interval $(0,M_0^2)$ is empty (MG2b).
-(ii)~\emph{Self-interaction}: the sink contraction of negative charge
-is a self-flattening dynamics --- iterating it reduces the fluctuation
-energy by $(1-\lambda)^{2n}$ (YM1) --- and two sink points act
-noncommutatively: $T_p T_q\neq T_q T_p$ (YM2), with the commutator
-exactly $\lambda^2(v_q-v_p)$ at $p$ (YM3) and magnitude
-$\lambda^2|v_q-v_p|$ (YM3b).  (iii)~\emph{Lattice
-gauge field}: on a $\mathbb{Z}$ lattice, a color-matrix-valued field
-$A$ has field strength $F(t)=[A(t),A(t{+}1)]$, the nearest-neighbor
-commutator (CA3); $F\neq0$ iff the neighbors do not commute (CA4),
-which is the lattice avatar of $F=\partial A-\partial A+[A,A]$
-\cite{yang1954conservation}.  (iv)~\emph{Continuum limit
-mechanism}: the framework's own derivation of the four forces ---
-differentiating the flow momentum $m(C-v)$ --- is adopted as the
-existence mechanism for the continuum limit (CA8--CA10), and the
-strict estimates $L_1$--$L_3$ bound the commutator norm by the
-explicit factor $6$ and prove the nuclear channel norm-nonzero.  The
-assembled chain closes
-conditionally: accelerated charge, the self-flattening sink, the
-noncommutative self-interaction, the continuum mechanism, and the
-mass gap are one conditional sequence (CA7, CA10).  All statements
-are formalized in Lean~4 with zero \texttt{sorry}; the honest
-boundaries --- the discrete-to-continuous topological limit remains
-open --- are stated rather than blurred.
+not solve that problem, and it says so plainly.  What it does is
+narrower and fully machine-checked: within the four postulates of the
+flowing-space framework, two structural statements are proved as
+theorems --- (i)~if mass is an integer count of excited strands,
+$m^2(N)=N M_0^2$, then the mass spectrum is discrete and the interval
+$(0,M_0^2)$ is empty (MG1--MG4), and (ii)~two sink contractions at
+distinct points do not commute, with the exact commutator
+$\lambda^2(v_q-v_p)$ at $p$ (YM1--YM3b).  These two statements are
+the objects of an identification, not the halves of a derivation: the
+paper proposes that discreteness of count and noncommutativity of
+contractions are the two structural facts that the Yang--Mills
+problem names, and it proves each in the algebraic setting, but the
+identification itself is interpretive, the arrows between the
+sequence of statements are not formalized implications, and the
+continuum limit of the lattice spacing is not constructed.  The
+lattice gauge field of Sec.~V is a $\mathbb{Z}$-lattice,
+color-matrix-valued field whose field strength is the
+nearest-neighbor commutator (CA3--CA6); it is not the continuum
+four-dimensional gauge theory of the problem statement
+\cite{jaffe2000yang,yang1954conservation}.  All statements are
+formalized in Lean~4 with zero \texttt{sorry}; the status of each
+theorem --- definition, identity, or conditional statement --- is
+labeled in the text, and the honest boundaries are stated rather
+than blurred.
 \end{abstract}
 
 \maketitle
@@ -89,8 +78,10 @@ is nonlinear, the field couples to itself through the commutator
 are unrelated and neither is derived: gauge invariance \emph{postulates}
 $[A,A]$, and the gap is not a theorem but a non-perturbative
 measurement \cite{jaffe2000yang,weinberg1995quantum}.  This paper's
-claim is that in the flowing-space framework they are one mechanism,
-and both are theorems.
+proposal is that in the flowing-space framework the two facts have
+discrete counterparts that are both theorems: the discreteness of a
+count for the gap, the noncommutativity of contractions for the
+self-interaction.  The identification is proposed, not derived.
 
 \paragraph{The claim.}
 Within the framework's four postulates --- space is a flowing medium;
@@ -107,8 +98,11 @@ The discreteness of a count, not an assumption about confinement,
 produces the gap.
 \item \emph{The self-interaction is sink noncommutativity.}  Two sink
 contractions at distinct points do not commute; their commutator is
-exactly $\lambda^2(v_q-v_p)$, the same shape as $[A,A]$ ---
-field-dependent and noncommutative (YM1--YM3b).
+exactly $\lambda^2(v_q-v_p)$ (YM1--YM3b).  The analogy with
+$[A,A]$ is structural (field-dependent and noncommutative), not
+identical: the sink commutator is linear in the field difference,
+whereas $[A,A]$ is quadratic in the field; the difference is stated
+openly in Sec.~\ref{sec:selfinteraction}.
 \item \emph{The field strength is a nearest-neighbor commutator.}  On a
 $\mathbb{Z}$ lattice, a color-matrix-valued gauge field has
 $F(t)=[A(t),A(t{+}1)]$, and $F\neq0$ iff the neighbors do not commute
@@ -118,9 +112,14 @@ framework's own derivation of the forces is adopted as the existence
 mechanism for the continuum limit, with strict norm bounds
 (CA8--CA10, L1--L3).
 \end{itemize}
-The assembled chain --- accelerated charge, self-flattening sink,
+The assembled sequence --- accelerated charge, self-flattening sink,
 noncommutative self-interaction, continuum mechanism, mass gap --- is
-a conditional sequence of theorems (CA7, CA10).
+a narrative chain in the framework, not a chain of formalized
+implications: each node is a theorem (CR, MG, YM, CA, L), but the
+arrows between nodes are identifications stated in the framework's
+language, and their formalization (notably the lattice-to-continuum
+limit) is open.  The honest status of every claim is stated in
+Sec.~X.
 
 \paragraph{What this paper is and is not.}
 It is not a claim to have solved the Yang--Mills problem: the lattice
@@ -128,9 +127,10 @@ construction is an algebraic skeleton, the topological limit of the
 lattice spacing is not formalized, and the numerical inputs
 $\lambda$, $M_0$ are not derived.  These boundaries, and the
 conditions under which the program dies, are stated in
-Sec.~X.  What the paper does claim is narrower and verifiable: the
-two names of the problem are one mechanism, and each step is a
-machine-checked theorem.
+Sec.~X.  What the paper does claim is narrower and verifiable: two
+structural statements are machine-checked theorems, and their
+identification with the two facts named by the problem is a proposal
+made explicit in Sec.~\ref{sec:relation}, not a derivation.
 
 \paragraph{How to read this paper.}
 Sections~II--IV carry the central claim (postulates; mass gap from
@@ -389,18 +389,23 @@ $\bar v$ by a fraction $\lambda\in(0,1)$,
 v_i\mapsto (1-\lambda)v_i+\lambda\bar v .
 \end{equation}
 The preceding paper proved that this reduces the fluctuation energy
-$Q_A$ by the square factor $(1-\lambda)^2$.  The new observation is
-that this operator is \emph{dynamical}: applying it repeatedly is a
-self-feedback loop --- the field changes, which changes the effective
-sink, which changes the field.  This is the discrete avatar of a
-self-interaction: a system that acts on itself, with no external
-agency in the loop.
+$Q_A$ by the square factor $(1-\lambda)^2$.  Iterating the operator
+compounds the square: the fixed contraction $T$ applied $n$ times
+flattens by $(1-\lambda)^{2n}$.  This is a fixed affine contraction,
+not a feedback loop --- the framework's own lemma
+\texttt{sinkContract\_mean\_eq} shows the region mean is preserved,
+so the effective sink does not change during the iteration; the
+``self-flattening'' is the compounding of one fixed operator, which
+is the discrete analogue of a self-interaction only in the weak sense
+that no external agency enters the loop.  The stronger reading (that
+the field's evolution changes the operator that acts on it) is not
+what the formalization shows, and this paper does not claim it.
 
-\paragraph{Intuition.}  A drain smooths the surface it swallows, and
-the smoother surface drains more smoothly: the contraction feeds on
-its own success.  Each application of the sink flattens the profile
-by a factor $(1-\lambda)$ in amplitude, hence $(1-\lambda)^2$ in
-energy; $n$ applications compound the square.
+\paragraph{Intuition.}  A drain smooths the surface it swallows.  Each
+application of the sink flattens the profile by a factor
+$(1-\lambda)$ in amplitude, hence $(1-\lambda)^2$ in energy; $n$
+applications compound the square.  The image is a fixed contraction,
+not a self-modifying loop.
 
 \begin{theorem}[YM1: iterated self-flattening]
 \label{thm:ym1}
@@ -418,10 +423,10 @@ each step multiplies the energy by $(1-\lambda)^2<1$.  The numbers
 make the mechanism concrete.  For a moderate sink, $\lambda=\tfrac12$,
 ten iterations reduce the fluctuation energy by a factor
 $(\tfrac12)^{20}\approx 10^{-6}$; for a strong sink, $\lambda=0.9$,
-ten iterations give $0.1^{20}=10^{-20}$.  This is the discrete avatar
-of a self-interacting field: the field's own dynamics flattens it,
-and the flattening accelerates because the effective sink sharpens as
-the profile flattens.  Formalized as
+ten iterations give $0.1^{20}=10^{-20}$.  This is the compounding of
+a fixed contraction --- no external agency, but also no changing
+operator; the ``self-'' in self-flattening refers to the absence of
+external agency, nothing more.  Formalized as
 \texttt{sinkContract\_iter\_square\_decay} in
 \texttt{YangMillsSeed.lean}.
 
@@ -466,14 +471,12 @@ For any field $v$ and any $p,q$,
 \bigl(T_p T_q v - T_q T_p v\bigr)(p) = \lambda^2\,(v_q-v_p).
 \end{equation}
 The strength of the noncommutative term is the square of the
-contraction strength times the field gradient.  This is the same
-shape as $[A,A]$ in the Yang--Mills field strength: field-dependent
-and noncommutative.
+contraction strength times the field difference between the two
+points.
 \end{theorem}
 
 \emph{Reading.}  The formula is exact --- not an estimate, not a
-first-order approximation, but an identity proved by algebra.  Its
-structure is the structure of the Yang--Mills nonlinearity: the
+first-order approximation, but an identity proved by algebra.  The
 commutator of the two operators is proportional to the \emph{field
 difference} between the two points, weighted by $\lambda^2$.  Two
 features deserve emphasis.  First, the quadratic weight: the
@@ -481,9 +484,11 @@ noncommutativity is second order in the contraction strength, so a
 weak sink ($\lambda=0.1$) produces a self-interaction of weight
 $0.01$ --- weak, but present and exact.  Second, the field
 dependence: where the field is uniform ($v_q=v_p$) the commutator
-vanishes; the self-interaction lives precisely where the field
-\emph{varies}, exactly as $[A,A]$ vanishes for a constant abelian
-field.  Formalized as \texttt{sinkToPoint\_commutator\_formula} in
+vanishes; the noncommutativity lives precisely where the field
+\emph{varies}.  (The analogy with $[A,A]$ is structural and partial:
+$[A,A]$ is quadratic in the field, this commutator is linear in the
+field difference, and the vanishing on a constant field is the shared
+feature.)  Formalized as \texttt{sinkToPoint\_commutator\_formula} in
 \texttt{YangMillsSeed.lean}.
 
 \begin{theorem}[YM3b: noncommutativity grows with the gradient]
@@ -493,25 +498,26 @@ For any field $v$ and any $p,q$,
 \bigl|T_p T_q v - T_q T_p v\bigr|(p) = \lambda^2\,|v_q-v_p|.
 \end{equation}
 The magnitude of the noncommutative term is the square of the
-contraction strength times the magnitude of the field gradient.
+contraction strength times the magnitude of the field difference.
 \end{theorem}
 
-\emph{Reading.}  The absolute version sharpens the physical reading:
-the strength of the self-interaction is controlled by two factors,
-the sink strength squared ($\lambda^2$) and the gradient between the
-two sink points ($|v_q-v_p|$).  A self-interaction without a field
-gradient is impossible --- the mechanism needs variation to act on,
-which is the discrete echo of the fact that $[A,A]$ is the
-non-abelian \emph{curvature} term.  Formalized as
-\texttt{commutator\_grows\_with\_gradient} in
+\emph{Reading.}  The absolute version sharpens the reading: the
+strength of the noncommutative term is controlled by two factors, the
+sink strength squared ($\lambda^2$) and the field difference between
+the two sink points ($|v_q-v_p|$).  Noncommutativity without a field
+difference is impossible --- the mechanism needs variation to act on.
+Formalized as \texttt{commutator\_grows\_with\_gradient} in
 \texttt{YangMillsSeed.lean}.
 
-\paragraph{What has been proved.}
-The self-interaction is not imported from gauge theory; it is a
-theorem about sinks.  The commutator formula YM3 is exact in the
-discrete setting.  The identification with $[A,A]$ is at the level of
-structure (the interpretation layer); the continuum limit of the
-commutator is part of the open strict program below.
+\paragraph{What has been proved, and what has merely been named.}
+The commutator identities YM2/YM3/YM3b are exact theorems about a
+family of affine contractions on a scalar field.  They hold for any
+two distinct contraction points; they do not use the color matrix
+structure, and they are not specific to gauge theory.  What is named
+--- ``self-interaction'', ``the Yang--Mills commutator'' --- is an
+identification at the interpretation layer, proposed and left open;
+the continuum limit of these commutators is part of the open strict
+program below.
 
 \section{Lattice Yang--Mills: the field strength is a commutator}
 \label{sec:lattice}
@@ -621,13 +627,15 @@ and its strict form in Sec.~VII.
 \label{sec:continuum}
 
 \paragraph{The mechanism.}
-The framework does not need to \emph{assume} a continuum limit: it
-already has one.  Postulate~\ref{post:forces} derives the four
-forces by differentiating the flow momentum --- that is, by taking
-the continuous change rates of the flowing medium.  This
-derivation is itself the existence mechanism for the continuum:
-the continuous field exists because the flow has change rates, and
-those change rates are the four channels.
+The framework does not construct a continuum limit in this paper; it
+names the derivative structure that a continuum construction would
+need.  Postulate~\ref{post:forces} derives the four forces by
+differentiating the flow momentum --- that is, it exhibits the change
+rates of the flowing medium.  This derivative structure is proposed
+as the natural carrier for a continuum description, and the strict
+estimates of Sec.~\ref{sec:strict} bound the pieces that such a
+continuum would require; but no lattice field sequence, no
+$a\to0$ limit, and no continuum field is defined here.
 
 \paragraph{Intuition.}  If the medium is real, it has change rates;
 if it has change rates, there is a continuous description; and the
@@ -791,14 +799,21 @@ The full conditional chain:
 \end{aligned}
 \end{equation}
 
-Every implication is a theorem in Lean~4; the chain is conditional
-only in the sense that its inputs --- the flattening power, the
-contraction rate $\lambda$, the strand mass $M_0$ --- are named and
-not derived.  The two names of the Yang--Mills problem,
-\emph{discreteness} and \emph{self-interaction}, are here one
-mechanism: the mass gap is the discreteness of the strand count, and
-the self-interaction is the noncommutativity of the count-carrying
-sink operators.  The chain reads as a single sentence: accelerated
+Each node of the chain is a theorem in Lean~4; the arrows between
+nodes are identifications in the framework's language, not formalized
+implications.  In particular, the arrow from self-interaction to the
+mass gap is not a proved implication: the theorem labeled CA7/CA10
+restates the discreteness consequence of Postulate~\ref{post:mass}
+without using the self-interaction hypotheses, and this paper does
+not claim otherwise.  The chain is a narrative assembly of separately
+verified statements whose connecting steps are named open problems
+(Sec.~\ref{sec:strict}, Sec.~\ref{sec:relation}).  The two names of
+the Yang--Mills problem, \emph{discreteness} and
+\emph{self-interaction}, are here proposed as one mechanism --- an
+identification at the interpretation layer, not a derivation: the
+mass gap is the discreteness of the strand count, and the
+self-interaction is the noncommutativity of the count-carrying sink
+operators.  The chain reads as a single sentence: accelerated
 charge makes the field vary; a varying field is a self-flattening
 sink; the sink does not commute with itself across positions; that
 noncommutativity is the field's self-interaction; and a
@@ -823,9 +838,11 @@ it goes further and contradicts the standard ontology directly.
 (i)~The mass gap: standard QFT takes it as a non-perturbative fact
 to be measured or simulated; here it is a theorem of the discreteness
 of mass.  (ii)~The self-interaction: standard QFT postulates
-$[A,A]$ by gauge invariance; here it is a theorem about the
-noncommutativity of sink contractions, and the two facts --- gap and
-self-interaction --- are identified as one mechanism.  What is new,
+$[A,A]$ by gauge invariance; here a discrete counterpart --- the
+noncommutativity of sink contractions --- is a theorem, and the
+identification of the two facts with the gap and the
+self-interaction is a proposal made explicitly in
+Sec.~\ref{sec:relation}, not a derived identity.  What is new,
 and flagged as such, is that identification itself.
 
 \section{Relation to the Yang--Mills problem as posed}
@@ -964,18 +981,18 @@ cannot die cannot be tested.
 \label{sec:conclusion}
 
 The Yang--Mills problem names two facts: a positive mass gap and a
-non-abelian self-interaction.  In the flowing-space framework these
-are not two facts but one.  Mass is an integer count; the mass gap
-is the discreteness of that count --- the interval $(0,M_0^2)$ is
-empty because there is no integer between $0$ and $1$.  The sink is
-a self-flattening operator; its noncommutativity is the
-self-interaction --- the exact commutator $\lambda^2(v_q-v_p)$ is
-the same shape as $[A,A]$, field-dependent and noncommutative.  The
-chain that the preceding paper built from accelerated charge to the
-photon is here extended from the photon to the mass gap, through the
-self-interaction, with the continuum mechanism supplied by the
-framework's own four-force derivation and bounded by strict
-estimates with the explicit factor $6$.
+non-abelian self-interaction.  This paper does not solve that problem,
+and it does not claim to.  It proves, in the algebraic setting of the
+flowing-space framework, two structural statements that it proposes
+as the discrete counterparts of those facts: if mass is an integer
+count, the mass spectrum has an empty interval below a minimal mass;
+and two sink contractions at distinct points do not commute, with an
+exact commutator formula.  Each is a machine-checked theorem.  The
+identification between the pair and the two names of the
+Yang--Mills problem is proposed at the interpretation layer, not
+derived; the arrows that would connect the statements into a chain,
+and the continuum limit that would connect the lattice to the
+four-dimensional theory, are named open problems, not results.
 
 The open items assemble into a short list of problems in the spirit
 of Hilbert's program \cite{hilbert1900mathematische}: (i)~derive the
