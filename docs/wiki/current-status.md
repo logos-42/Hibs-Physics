@@ -1465,3 +1465,30 @@ leo：「电子加速度成了反引力，因为四力已统一，所以应该�
 **死法**：若 3D 连续版证明收敛流**增加**起伏（Q_A 上升），或存在正散度场同样抹平（源汇无差别），则 CR7/CR9/CR10 死。
 
 **产物**：Lean `VibrationChargeRadiation.lean`（CR1–CR10，零 sorry 零 warning）；数值 `verify_sink_contract_3d.py` + `artifacts/sinkcontract3d/`；门禁注册 verify_all；提交 `4ab80ac`/`525049c`/`da749e3`/`3e03585`（均推送）。
+
+## ★ 2026-10-08 session：连续是内在的 —— 四维连续场强 + 采样关系（CC1–CC7，YangMillsContinuum.lean）
+
+leo：「连续是流动空间自带的」——方向升维落地论文。回应审稿人「格点间距的连续极限未形式化」。
+
+**方向翻转（本节的核心句子）**：不是「连续要从格点达到」，而是 **连续是流动空间的原生基底，格点是它的采样（计数视角）**。
+
+**Lean `Explorations/YangMillsContinuum.lean`（零 sorry 零 warning）**：
+- **CC1 ★** 连续场 `ContField := (Fin 4 → ℝ) → Mat3C` 是原生的；格点场 `LatticeField := (Fin 4 → ℤ) → Mat3C`；`sample A n = A (fun i ↦ (n i : ℝ))`，`sample_is_restriction : sample A n = A (fun i => (n i : ℝ))`（rfl）⟹ **格点场是连续场的 restriction，不是来源**。
+- **CC2 ★★** 四维连续规范场 `A x μ = A_μ(x)`（每个时空方向一个矩阵值分量）；场强非交换项 `fieldStrength A μ ν x = commutatorTerm (A x μ) (A x ν)`（**需要两个独立方向 μ≠ν**）。
+- **CC3 ★** 显式见证 `cycle3_diag_commutator_ne_zero : commutatorTerm cycle3 diag123 ≠ 0`（位置 (0,1) 处值 = 1）；`continuum_field_strength_can_be_nonzero : ∃ A x μ ν, μ≠ν ∧ fieldStrength A μ ν x ≠ 0`。
+- **CC4 ★★** `sample_difference_is_derivative_seed`：采样场的前向差分 = A 的相邻取值之差（∂_μ A 的代数种子）——桥梁从 `True` 升级为有内容的恒等式。
+- **CC5 ★★** `exp_iS_has_norm_one : ‖Complex.exp (Complex.I * S)‖ = 1`。
+- **CC6 ★★（本轮升级：注释 → 真定理）** `enorm_integral_le_measure_univ_of_norm_le_one`（任意测度空间、单位模被积函数 ⟹ `‖∫f‖ₑ ≤ μ Set.univ`）；`norm_integral_le_one_of_isProbabilityMeasure`（归一化概率/Haar ⟹ ≤1）；`exp_iS_integral_le_measure_univ`（指数作用量直接满足）。CC7 有限格点路径积分记号 + Wilson g(a) 重整化思想仍是**登记**。
+
+**诚实边界（写死）**：
+- 「连续场是流动空间的数学实现」是**框架的语义层（公设）**，不是从格点推出来的；
+- CC2 只形式化场强的**非交换项** [A_μ,A_ν]；导数项 ∂_μA_ν − ∂_νA_μ 需 Fréchet 完整理论（登记）；
+- CC4 是**结构对应**（差分=导数的代数种子），不是分析极限；
+- **完整 SU(3) 归一化 Haar 测度的有限积**（类型级构造）与**格距 a→0 拓扑极限**仍开放；CC6 证的是测度论**内核**（被积函数模 1 ⟹ 积分被总体积控制），不是 Clay 核心的完整构造。
+
+**死法（写死）**：若「连续是基底 + 采样一致性」与物理矛盾（连续场无法采样为格点场），或四维路径积分在有限格点上仍发散，相关陈述死。
+
+**论文**：`paper3/projection-yangmills-gap.tex` / `-zh.tex` 新增 Sec VI（中英双版），全部硬编码节号 **+1**（12 节结构），tectonic 编译中英各零 error。
+
+**产物**：Lean `Explorations/YangMillsContinuum.lean`（CC1–CC7 + CC6 定理三件）；论文 `paper3/projection-yangmills-gap{,-zh}.{tex,pdf}`。提交 `a8dd5aa`/`d44b207`/`26e6f23` + 本轮。
+

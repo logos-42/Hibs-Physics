@@ -136,7 +136,7 @@ made explicit in Sec.~\ref{sec:relation}, not a derivation.
 \paragraph{How to read this paper.}
 Sections~II--IV carry the central claim (postulates; mass gap from
 discreteness; self-interaction from noncommutativity) and suffice for
-the reader who wants it.  Sections~V--VII give the lattice mechanics
+the reader who wants it.  Sections~V--VIII give the lattice mechanics
 and its strict estimates; Sec.~IX assembles the full chain;
 Secs.~X--XI assess honestly and list the open problems.  The
 motivation --- how the framework grew from the Riemann hypothesis ---
@@ -680,9 +680,25 @@ identity (\texttt{sample\_difference\_is\_derivative\_seed}).
 For every real action $S$, the path-integral integrand satisfies
 $\|e^{iS}\|=1$ --- the key step toward the finiteness of the
 partition function, $|Z_\Lambda|\le \mathrm{vol}(\Lambda)$
-(formalized as \texttt{exp\_iS\_has\_norm\_one}).  The complete
-Haar-measure instance of the bound is registered as the next step
-(Sec.~\ref{sec:honest}); the integrand bound itself is proved.
+(formalized as \texttt{exp\_iS\_has\_norm\_one}).
+\end{theorem}
+
+\begin{theorem}[CC6: the bound's measure-theoretic kernel]
+\label{thm:cc6}
+The kernel of the bound is now a theorem, not a comment: on any
+measure space, any unit-modulus integrand has extended Bochner norm
+bounded by the total measure, $\bigl\|\int f\bigr\|_\mathrm{e}\le
+\mu(\Lambda)$ (\texttt{enorm\_integral\_le\_}\allowbreak
+\texttt{measure\_univ\_of\_norm\_le\_one});
+under a normalized (probability) Haar measure this is $\le 1$
+(\texttt{norm\_integral\_le\_}\allowbreak
+\texttt{one\_of\_isProbabilityMeasure}); and the
+exponential action satisfies it directly
+(\texttt{exp\_iS\_integral\_le\_measure\_univ}).  What remains open and
+stated as a program is the full instance: the finite-product of
+normalized Haar measures on $\mathrm{SU}(3)$ over the finite lattice
+enlargement $\Lambda$ --- a type-level construction of measure
+theory, not a missing estimate.
 \end{theorem}
 
 The honest status is stated once: ``the continuum is the native
@@ -1027,17 +1043,21 @@ construction is an algebraic skeleton, not a continuum
 four-dimensional quantum field theory; there is no path integral,
 no renormalization, no continuum spacetime.  (ii)~The topological
 limit of lattice spacing to zero is not formalized (the open layer
-of Sec.~VIII); in particular, the convergence of the discrete
-commutator $[A(t),A(t{+}1)]$ to the continuum $[A_\mu,A_\nu]$ is
-not proved.  (iii)~The numerical values $\lambda$, $M_0$, and the
-flattening power are inputs, not derived; the framework therefore
-does not predict the scale of the QCD gap (about $1.6$ GeV) --- it
-predicts the shape of the spectrum, not its calibration.
-(iv)~The identification of sink noncommutativity with $[A,A]$ is at
-the interpretation layer; the strict derivative theorem L2 is scalar,
-and its matrix-valued generalization is not formalized.  (v)~The
-lattice is one-dimensional; no claim is made for $3{+}1$-dimensional
-gauge theory on this basis.
+of Sec.~\ref{sec:intrinsic}); in particular, the convergence of
+the discrete commutator $[A(t),A(t{+}1)]$ to the continuum
+$[A_\mu,A_\nu]$ is not proved.  (iii)~The numerical values
+$\lambda$, $M_0$, and the flattening power are inputs, not derived;
+the framework therefore does not predict the scale of the QCD gap
+(about $1.6$ GeV) --- it predicts the shape of the spectrum, not its
+calibration.  (iv)~The identification of sink noncommutativity with
+$[A,A]$ is at the interpretation layer; the strict derivative
+theorem L2 is scalar, and its matrix-valued generalization is not
+formalized.  (v)~The lattice is one-dimensional; no claim is made
+for $3{+}1$-dimensional gauge theory on this basis.  (vi)~The
+four-dimensional partition function is only bounded through its
+integrand ($\|e^{iS}\|=1$, CC5) and the abstract measure kernel
+(CC6); the full instance on the Haar product over the finite lattice
+is a stated program, not a claim.
 
 \paragraph{Death conditions.}
 The program dies if (a)~a physical self-interaction is found with no

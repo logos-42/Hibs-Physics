@@ -149,14 +149,42 @@ theorem exp_iS_has_norm_one (S : ℝ) :
     ‖Complex.exp (Complex.I * S)‖ = 1 := by
   exact Complex.norm_exp_I_mul_ofReal S
 
--- ★★ CC6：配分函数有界性的测度论内核（结构登记）。
---   CC5 已证 |e^{iS}| = 1（被积函数模为 1）。配分函数
---   |Z_Λ| = |∫ ∏_n dU(n) e^{iS[U]}| ≤ vol(Λ) 由此 + 紧致 SU(3) 的
---   归一化 Haar 测度给出：被积函数模 1 ⟹ 积分被总体积控制
---   （norm_integral_le_lintegral_norm + |f|≤1 ⟹ |∫f| ≤ μ(全空间)）。
---   Haar 测度的完整 mathlib 实例化（补全 IsFiniteMeasure、
---   ENNReal↔ℝ 转换）留作后续；CC5 是这一步的已证内核。
---   注：完整证明需 Haar 测度实例 + 有限积测度；以注释登记，不设空定理。
+-- ★★ CC6：配分函数有界性的测度论内核。
+--   先不偷渡 SU(3) 的 Haar 实例：对任意测度空间，若被积函数模不超过 1，
+--   Bochner 积分的 extended norm 不超过总测度。这正是 Haar 完整实例化
+--   接入前已经可以严格证明的部分。
+theorem enorm_integral_le_measure_univ_of_norm_le_one
+    {α : Type*} [MeasurableSpace α] (μ : Measure α) (f : α → ℂ)
+    (hf : ∀ x, ‖f x‖ ≤ 1) :
+    ‖∫ x, f x ∂μ‖ₑ ≤ μ Set.univ := by
+  calc
+    ‖∫ x, f x ∂μ‖ₑ ≤ ∫⁻ x, ‖f x‖ₑ ∂μ :=
+      enorm_integral_le_lintegral_enorm f
+    _ ≤ ∫⁻ x : α, (1 : ENNReal) ∂μ := by
+      apply lintegral_mono
+      intro x
+      change ‖f x‖ₑ ≤ (1 : ENNReal)
+      rw [← ofReal_norm_eq_enorm]
+      exact le_trans (ENNReal.ofReal_le_ofReal (hf x)) (by simp)
+    _ = μ Set.univ := by simp [lintegral_const]
+
+/-- ★★ CC6b：归一化 Haar/概率测度下，单位模被积函数的配分函数有界。
+    这里只使用概率测度接口；将有限格点 SU(3) 配置空间实例化为
+    有限积归一化 Haar 测度，是剩余的类型级工作，不在此伪装成已完成。 -/
+theorem norm_integral_le_one_of_isProbabilityMeasure
+    {α : Type*} [MeasurableSpace α] (μ : Measure α)
+    [IsProbabilityMeasure μ] (f : α → ℂ)
+    (hf : ∀ x, ‖f x‖ ≤ 1) :
+    ‖∫ x, f x ∂μ‖ₑ ≤ 1 := by
+  simpa using enorm_integral_le_measure_univ_of_norm_le_one μ f hf
+
+/-- ★ CC6c：指数作用量直接满足 CC6 的抽象核。 -/
+theorem exp_iS_integral_le_measure_univ
+    {α : Type*} [MeasurableSpace α] (μ : Measure α) (S : α → ℝ) :
+    ‖∫ x, Complex.exp (Complex.I * S x) ∂μ‖ₑ ≤ μ Set.univ := by
+  apply enorm_integral_le_measure_univ_of_norm_le_one μ
+  intro x
+  rw [exp_iS_has_norm_one]
 
 /-- ★ CC7a：有限格点路径积分（正则化记号）。
     Z_Λ = ∫ ∏_{n∈Λ} dU(n) e^{iS[U]}，Λ ⊂ ℤ⁴ 有限。
