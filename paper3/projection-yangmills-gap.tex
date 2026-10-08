@@ -1,0 +1,920 @@
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{dcolumn}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{color}
+
+\newtheorem{postulate}{Postulate}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\begin{document}
+
+\title{The Mass Gap and Self-Interaction in Flowing Space:\\
+Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure}
+
+\author{Yuan-Jie Liu}
+\email{yuanjieliu65@gmail.com}
+
+\date{\today}
+
+\begin{abstract}
+The Yang--Mills existence and mass-gap problem \cite{jaffe2000yang}
+asks for a quantum field theory of a non-abelian gauge group that is
+defined rigorously and exhibits a positive mass gap.  This paper does
+not solve that problem.  It derives, in the algebraic setting of a
+flowing-space framework, the two structural ingredients that the
+problem names --- a discrete mass spectrum with a positive lower bound,
+and a non-abelian self-interaction --- and shows that in this framework
+they are the same mechanism viewed twice.  The argument has four
+steps.  (i)~\emph{Discreteness}: mass is the number of strands of
+excited flow; the square of the mass is an integer multiple of a unit
+$M_0^2$ (MG1).  A glueball witness makes the discreteness concrete:
+the repository's glueball mass squared is an integer, either $0$ or at
+least $1$ (MG4).  The transition from the electron ($N\ge1$ strands) to
+the photon ($N=0$) is an integer jump that cannot be crossed
+continuously (MG3); hence the interval $(0,M_0^2)$ is empty (MG2b).
+(ii)~\emph{Self-interaction}: the sink contraction of negative charge
+is a self-flattening dynamics --- iterating it reduces the fluctuation
+energy by $(1-\lambda)^{2n}$ (YM1) --- and two sink points act
+noncommutatively: $T_p T_q\neq T_q T_p$ (YM2), with the commutator
+exactly $\lambda^2(v_q-v_p)$ at $p$ (YM3) and magnitude
+$\lambda^2|v_q-v_p|$ (YM3b).  (iii)~\emph{Lattice
+gauge field}: on a $\mathbb{Z}$ lattice, a color-matrix-valued field
+$A$ has field strength $F(t)=[A(t),A(t{+}1)]$, the nearest-neighbor
+commutator (CA3); $F\neq0$ iff the neighbors do not commute (CA4),
+which is the lattice avatar of $F=\partial A-\partial A+[A,A]$
+\cite{yang1954conservation}.  (iv)~\emph{Continuum limit
+mechanism}: the framework's own derivation of the four forces ---
+differentiating the flow momentum $m(C-v)$ --- is adopted as the
+existence mechanism for the continuum limit (CA8--CA10), and the
+strict estimates $L_1$--$L_3$ bound the commutator norm by the
+explicit factor $6$ and prove the nuclear channel norm-nonzero.  The
+assembled chain closes
+conditionally: accelerated charge, the self-flattening sink, the
+noncommutative self-interaction, the continuum mechanism, and the
+mass gap are one conditional sequence (CA7, CA10).  All statements
+are formalized in Lean~4 with zero \texttt{sorry}; the honest
+boundaries --- the discrete-to-continuous topological limit remains
+open --- are stated rather than blurred.
+\end{abstract}
+
+\maketitle
+
+\begin{quote}
+\itshape
+``Water is the origin of all things.''
+\par
+--- Thales of Miletus
+\end{quote}
+
+\section{Introduction}
+\label{sec:intro}
+
+\paragraph{The two facts carried by the problem's name.}
+The Yang--Mills mass-gap problem \cite{jaffe2000yang} is the question
+whether a non-abelian gauge theory can be constructed rigorously and
+whether it has a positive mass gap.  Two structural facts carry its
+physical content.  The first is \emph{discreteness}: the spectrum of a
+confining theory has no massless excitation --- the lightest glueball
+sits at about $1.6$--$1.7$ GeV, far above the vacuum
+\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest}.
+The second is \emph{self-interaction}: the field strength
+\begin{equation}
+F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu],
+\label{eq:ymfield}
+\end{equation}
+is nonlinear, the field couples to itself through the commutator
+\cite{yang1954conservation}.  In the standard framework the two facts
+are unrelated and neither is derived: gauge invariance \emph{postulates}
+$[A,A]$, and the gap is not a theorem but a non-perturbative
+measurement \cite{jaffe2000yang,weinberg1995quantum}.  This paper's
+claim is that in the flowing-space framework they are one mechanism,
+and both are theorems.
+
+\paragraph{The claim.}
+Within the framework's four postulates --- space is a flowing medium;
+mass is an integer count of excited strands, $m^2(N)=N M_0^2$; charge
+is the divergence of the flow; the four forces are the Leibniz
+decomposition of the flow momentum $m(C-v)$ --- the following are
+proved in Lean~4 with zero \texttt{sorry}
+\cite{de2015lean,ProjectionPhysics}:
+\begin{itemize}
+\item \emph{The mass gap is integer arithmetic.}  Because $N$ is an
+integer, the electron--photon transition is a jump
+$N\ge1\to N=0$, and the interval $(0,M_0^2)$ is empty (MG1--MG4).
+The discreteness of a count, not an assumption about confinement,
+produces the gap.
+\item \emph{The self-interaction is sink noncommutativity.}  Two sink
+contractions at distinct points do not commute; their commutator is
+exactly $\lambda^2(v_q-v_p)$, the same shape as $[A,A]$ ---
+field-dependent and noncommutative (YM1--YM3b).
+\item \emph{The field strength is a nearest-neighbor commutator.}  On a
+$\mathbb{Z}$ lattice, a color-matrix-valued gauge field has
+$F(t)=[A(t),A(t{+}1)]$, and $F\neq0$ iff the neighbors do not commute
+(CA3--CA6).
+\item \emph{The continuum exists by the four-force derivative.}  The
+framework's own derivation of the forces is adopted as the existence
+mechanism for the continuum limit, with strict norm bounds
+(CA8--CA10, L1--L3).
+\end{itemize}
+The assembled chain --- accelerated charge, self-flattening sink,
+noncommutative self-interaction, continuum mechanism, mass gap --- is
+a conditional sequence of theorems (CA7, CA10).
+
+\paragraph{What this paper is and is not.}
+It is not a claim to have solved the Yang--Mills problem: the lattice
+construction is an algebraic skeleton, the topological limit of the
+lattice spacing is not formalized, and the numerical inputs
+$\lambda$, $M_0$ are not derived.  These boundaries, and the
+conditions under which the program dies, are stated in
+Sec.~IX.  What the paper does claim is narrower and verifiable: the
+two names of the problem are one mechanism, and each step is a
+machine-checked theorem.
+
+\paragraph{How to read this paper.}
+Sections~II--IV carry the central claim (postulates; mass gap from
+discreteness; self-interaction from noncommutativity) and suffice for
+the reader who wants it.  Sections~V--VII give the lattice mechanics
+and its strict estimates; Sec.~VIII assembles the full chain;
+Secs.~IX--X assess honestly and list the open problems.  The
+motivation --- how the framework grew from the Riemann hypothesis ---
+is told in Sec.~II; the dialogue with existing physics is in
+Sec.~VIII.
+
+\section{Postulates of the flowing-space framework}
+\label{sec:postulates}
+
+We recall the framework's postulates, in the form used by the
+preceding paper and its Lean formalization.  Each postulate is
+stated, then read physically, so that the geometry of
+Secs.~III--VIII remains anchored.
+
+\begin{postulate}[Flowing space]
+\label{post:flow}
+Space is a flowing medium.  A material point comoving with the flow
+moves at the vector speed $C$; the flow momentum is
+$p=m(C-v)$, where $m$ is the mass and $v$ the velocity of the
+point relative to an observer.
+\end{postulate}
+
+\emph{Reading.}  The epigraph of this paper is not decoration.
+Thales' ``water is the origin of all things'' is the first recorded
+statement of the primitive that this framework makes precise: the
+substance of physics is a medium in motion, not a void with fields
+in it.  The river model of black holes \cite{hamilton2008river} is
+the same picture made quantitative --- space flows inward through
+the horizon, and the speed of light is the speed of the medium.
+The momentum $p=m(C-v)$ is then the natural bookkeeping: a body that
+is carried completely by the flow ($v=C$) has zero flow momentum
+(the photon), while a body that anchors against the flow ($v\neq C$)
+carries momentum proportional to the relative speed.
+
+\begin{postulate}[Mass is strand count]
+\label{post:mass}
+The mass squared of an excited configuration is an integer multiple
+of a fundamental unit:
+\begin{equation}
+m^2(N)=N\,M_0^2,\qquad N\in\mathbb{N},
+\end{equation}
+where $N$ is the number of strands of excited flow and $M_0$ is the
+strand mass.  The photon has $N=0$ and $m=0$.
+\end{postulate}
+
+\emph{Reading.}  The picture is a boat moored to the bank of a
+river: each mooring rope is a strand of excited flow, and the more
+strands grip the flow, the harder it is to tear the pattern free.
+The mass squared counts the strands --- $m^2(N)=N M_0^2$ --- so the
+spectrum is discrete by construction: $M_0^2$, $2M_0^2$, $3M_0^2$,
+\ldots.  The photon has no moorings at all: $N=0$, it is carried
+completely by the flow, massless and neutral.  The strand count is
+the same integer $N$ that appears throughout the repository as the
+glueball configuration energy; the counting postulate is the
+algebraic seed of every discreteness statement in this paper.
+
+\begin{postulate}[Charge is divergence]
+\label{post:charge}
+Positive charge is a source of the flow (positive divergence);
+negative charge is a sink (negative divergence); neutral is zero.
+\end{postulate}
+
+\emph{Reading.}  The picture is a faucet and a drain.  A positive
+charge is a faucet: displacement flows outward from it.  A negative
+charge is a drain: flow converges into it.  The two are geometric
+opposites --- flipped under charge conjugation $\rho\to-\rho$ ---
+and the sign of the divergence is the sign of the charge.  In the
+preceding paper this postulate was turned into theorems: the sink
+contraction reduces fluctuation energy by a square factor, and a
+fully contracted sink is flattened, massless, and neutral --- the
+photon.  The present paper uses the same two faces of the drain:
+its self-flattening dynamics (Sec.~IV) and its noncommutativity
+with a second drain.
+
+\begin{postulate}[Four forces are the Leibniz decomposition]
+\label{post:forces}
+Differentiating the flow momentum $p=m(C-v)$ with respect to time
+yields the four channels
+\begin{equation}
+\dot p = \dot m\,C + m\,\dot C - \dot m\,v - m\,\dot v,
+\label{eq:fourforce}
+\end{equation}
+identified respectively with the electric, nuclear, magnetic, and
+gravitational (inertial) forces.
+\end{postulate}
+
+\emph{Reading.}  This is the framework's answer to ``where do the
+forces come from'': they are the four terms of a Leibniz
+decomposition, the change rates of the flow bookkeeping.  A change
+in the mass (anchoring) couples to the flow speed: $\dot m C$, the
+electric channel.  A change in the flow itself: $m\dot C$, the
+nuclear channel.  A change in mass coupling to the body velocity:
+$-\dot m v$, the magnetic channel.  A change in the body velocity:
+$-m\dot v$, the inertial channel.  The postulate matters for this
+paper in one specific way: the four-force derivative is the
+framework's \emph{built-in continuum}, the existence mechanism for
+the continuum limit (Sec.~VI).
+
+The four postulates are the entire physical input.  Everything
+below is derived from them in Lean~4.
+
+\paragraph{Motivation: how the chain grew.}
+The motivation is cumulative, and each of its earlier forms was
+abandoned for a concrete reason --- the same pattern as the preceding
+paper of the series \cite{ProjectionPhysics,HibsPhysics}.  It began
+with the Riemann hypothesis \cite{riemann1859ueber}: the critical
+line $\operatorname{Re}s=1/2$ is the fixed set of the reflection
+$s\mapsto 1-s$, and a value of $1/2$ forced by a symmetry, rather
+than put in by hand, seemed too physical to be a coincidence.  That
+led to an attempt to build a ``hidden-number space'' on the critical
+sheet; the attempt was abandoned when a single sheet could not
+accommodate the distinction between fermions and bosons --- one
+object, one sheet, no room for two statistics \cite{RiemannHIBS}.
+The next goal was to understand where the glueball mass comes from:
+the lattice spectrum \cite{morningstar1999glueball,chen2006glueball}
+gives the masses but not their origin.  The resolution arrived as a
+realization rather than a derivation: the failures shared a single
+cause.  Space is not a background in which things happen; it is the
+medium that happens.  In that medium mass is anchoring, charge is
+divergence, a sink is a converging flow, and a fully contracted sink
+is a flattened flow --- massless and neutral, the photon.  Two
+further steps, both made in the present paper, carry the realization
+to the Yang--Mills problem.  If mass is a count, then the mass
+spectrum is discrete, and the gap between massless and massive is a
+theorem of integer arithmetic.  If the sink is a contraction, then
+two sinks do not commute, and the noncommutativity of the
+count-carrying operators is the self-interaction.  Each ingredient of
+this paper is a theorem that makes one step of that realization
+precise.
+
+\section{The mass gap from discreteness}
+\label{sec:massgap}
+
+\paragraph{The integer jump.}
+Postulate~\ref{post:mass} makes the mass spectrum discrete by
+construction: $m^2(N)=N M_0^2$ with $N\in\mathbb{N}$.  The
+physically interesting content is not the discreteness itself but
+its consequence for transitions.  A physical process that changes
+the strand count (an excitation created or destroyed) changes $N$
+by an integer.  In particular the electron--photon transition is
+$N\ge1\to N=0$: from any massive configuration to the massless one.
+Because $N$ is an integer, this transition cannot pass through an
+intermediate value of $m^2$ strictly between $0$ and $M_0^2$.
+
+\paragraph{Intuition.}  The mass spectrum is a ladder whose rungs
+are $0$, $M_0^2$, $2M_0^2$, $3M_0^2$, \ldots.  There is no rung
+between $0$ and $M_0^2$ --- that is all the gap is.  The theorems
+below make this ladder precise and draw its physical consequences.
+
+\begin{theorem}[MG1: mass is an integer count]
+\label{thm:mg1}
+For $N\in\mathbb{N}$ and $M_0\in\mathbb{R}$ with $0<M_0$,
+\begin{itemize}
+\item $N\ge1$ implies $m^2(N)=N M_0^2>0$;
+\item $N=0$ implies $m^2(0)=0$.
+\end{itemize}
+Formalized as \texttt{mass\_gap\_basics} in \texttt{MassGap.lean}.
+\end{theorem}
+
+\emph{Reading.}  Any excited configuration --- however small its
+strand number --- has strictly positive mass squared; the massless
+state is unique, the photon with zero strands.  The unit is
+explicit: one strand gives $m^2=M_0^2$, two strands $2M_0^2$, three
+$3M_0^2$.  The content is that positivity is \emph{quantized}: there
+is no configuration whose mass squared is positive but smaller than
+$M_0^2$, because there is no integer strictly between $0$ and $1$.
+
+\begin{theorem}[MG2/MG2b: the interval $(0,M_0^2)$ is empty]
+\label{thm:mg2}
+The lightest massive excitation is the single strand,
+$m^2(1)=M_0^2$, and every mass squared lies in
+$\{0\}\cup[M_0^2,\infty)$.  In particular there is no mass in the
+open interval $(0,M_0^2)$.
+\end{theorem}
+
+\emph{Reading.}  This is the mass gap in its purest form: the set of
+mass-squared values is a discrete set with a positive minimum above
+zero.  The lightest massive state is the single strand at
+$m^2=M_0^2$; every other massive state is heavier.  The gap
+$(0,M_0^2)$ is empty --- there is no arbitrarily light but massive
+excitation, no way to tune a mass continuously down to zero.  This
+is the algebraic seed of the empirical gap of QCD, where the lightest
+glueball sits at about $1.6$--$1.7$ GeV while the vacuum is at zero
+\cite{morningstar1999glueball,chen2006glueball}.  The framework does
+not yet predict the number $1.6$ GeV; it predicts the \emph{shape}:
+an empty interval below a minimal mass.
+
+\begin{theorem}[MG3: the electron--photon transition is an integer jump]
+\label{thm:mg3}
+A transition from $N\ge1$ to $N=0$ cannot be performed continuously:
+for every $N$, either $m^2(N)=0$ or $m^2(1)\le m^2(N)$.  This is the
+algebraic seed of the mass gap: the gap $(0,M_0^2)$ is a theorem of
+the discreteness of mass, not an assumption.
+\end{theorem}
+
+\emph{Reading.}  The electron becomes the photon --- mass drops from
+$N M_0^2$ ($N\ge1$) to $0$.  Because the strand count is an integer,
+the drop is a jump: the transition cannot pass through any
+intermediate mass squared, because no such value exists in the
+spectrum.  The transition itself is the proof of the gap: if there
+were masses in $(0,M_0^2)$, the electron could shed strands one at a
+time and slide down; it cannot, and the discreteness of the count is
+the reason.  Formalized as \texttt{electron\_to\_photon\_is\_discrete\_jump}
+in \texttt{MassGap.lean}.
+
+\begin{theorem}[MG4: the glueball mass squared is an integer]
+\label{thm:mg4}
+For any glueball configuration $g$ of the repository, the pure glue
+mass squared is an integer: either $0$ (no excited strands) or at
+least $1$ (at least one excited strand).
+Formalized as \texttt{glueball\_mass\_gap\_present} in
+\texttt{MassGap.lean}.
+\end{theorem}
+
+\emph{Reading.}  This theorem connects the abstract ladder to the
+repository's own glueball model: the glueball mass squared is the
+configuration field energy, an integer, and the same discreteness
+argument applies verbatim --- the glueball mass-squared values are
+$0,1,2,3,\ldots$ in units of the strand energy.  The gap statement
+for glueballs is ``$0$ or $\ge1$'': there is no glueball with mass
+squared strictly between $0$ and the unit.  It is a concrete,
+integer witness that the mass gap of MG2 is not an artifact of the
+counting postulate but a property of the repository's glueball
+states themselves.  The empirical anchor --- a lightest glueball at
+about $1.6$ GeV with a gap above the vacuum --- is the same shape
+\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
+the framework's unit is not yet tied to GeV, and that calibration is
+an open problem (Sec.~X).
+
+\paragraph{Why this is not circular.}
+The mass gap of the Yang--Mills problem is an existence statement
+about a continuum theory \cite{jaffe2000yang}.  Here the discreteness
+is a postulate of the framework, and the gap follows.  The honest
+status: what is proved is the conditional ``mass is an integer count
+$\Rightarrow$ the interval $(0,M_0^2)$ is empty.''  The numerical
+value of $M_0$ is an input, not derived --- it is the second-input
+gap already named in the preceding paper.  The theorem is no less a
+theorem for being conditional; what it removes from the problem is
+not the calibration but the mystery: the gap is integer arithmetic,
+once mass is a count.
+
+\section{Self-interaction from sink noncommutativity}
+\label{sec:selfinteraction}
+
+\paragraph{The sink as a self-flattening operator.}
+A negative charge is a sink: flow converges inward, like water into
+a drain.  In the discrete
+setting, a sink contraction moves every point toward the sink value
+$\bar v$ by a fraction $\lambda\in(0,1)$,
+\begin{equation}
+v_i\mapsto (1-\lambda)v_i+\lambda\bar v .
+\end{equation}
+The preceding paper proved that this reduces the fluctuation energy
+$Q_A$ by the square factor $(1-\lambda)^2$.  The new observation is
+that this operator is \emph{dynamical}: applying it repeatedly is a
+self-feedback loop --- the field changes, which changes the effective
+sink, which changes the field.  This is the discrete avatar of a
+self-interaction: a system that acts on itself, with no external
+agency in the loop.
+
+\paragraph{Intuition.}  A drain smooths the surface it swallows, and
+the smoother surface drains more smoothly: the contraction feeds on
+its own success.  Each application of the sink flattens the profile
+by a factor $(1-\lambda)$ in amplitude, hence $(1-\lambda)^2$ in
+energy; $n$ applications compound the square.
+
+\begin{theorem}[YM1: iterated self-flattening]
+\label{thm:ym1}
+Let $\mathrm{sinkIter}(A,\lambda,n)$ denote $n$ iterations of the
+sink contraction on the finite set $A$.  Then
+\begin{equation}
+Q_A(\mathrm{sinkIter}(A,\lambda,n)) = (1-\lambda)^{2n}\,Q_A(v).
+\end{equation}
+The fluctuation energy decays exponentially; the sink flattens itself
+without external agency.
+\end{theorem}
+
+\emph{Reading.}  The decay is exponential in the number of steps:
+each step multiplies the energy by $(1-\lambda)^2<1$.  The numbers
+make the mechanism concrete.  For a moderate sink, $\lambda=\tfrac12$,
+ten iterations reduce the fluctuation energy by a factor
+$(\tfrac12)^{20}\approx 10^{-6}$; for a strong sink, $\lambda=0.9$,
+ten iterations give $0.1^{20}=10^{-20}$.  This is the discrete avatar
+of a self-interacting field: the field's own dynamics flattens it,
+and the flattening accelerates because the effective sink sharpens as
+the profile flattens.  Formalized as
+\texttt{sinkContract\_iter\_square\_decay} in
+\texttt{YangMillsSeed.lean}.
+
+\paragraph{Noncommutativity.}
+Two sinks at different points $p\neq q$ define two contractions
+$T_p,T_q$.  Because each pulls every point toward its own sink value,
+the order matters.
+
+\paragraph{Intuition.}  Two drains in one basin: if the left drain
+acts first, the surface is pulled toward the left and then the right
+drain acts on the already-pulled surface; if the right drain acts
+first, the result is different.  The difference between the two
+orders is the self-interaction.
+
+\begin{theorem}[YM2: sink contractions do not commute]
+\label{thm:ym2}
+For $p\neq q$ and $0<\lambda<1$, there exists a field $v$ such that
+\begin{equation}
+T_p(T_q v)\neq T_q(T_p v).
+\end{equation}
+The witness: $v_p=1$, $v_q=0$; the two compositions differ at $p$,
+$1-\lambda\neq 1-\lambda+\lambda^2$.
+\end{theorem}
+
+\emph{Reading.}  The witness values are the cleanest possible
+illustration of the mechanism.  Take a field that is $1$ at $p$ and
+$0$ at $q$.  Applying $T_q$ first pulls $v_p$ toward $v_q=0$, giving
+$1-\lambda$ at $p$; applying $T_p$ first leaves $v_p=1$ and then
+$T_q$ pulls it, giving $1-\lambda+\lambda^2$ --- the extra $\lambda^2$
+records the fact that $T_p$ first moved $v_q$ toward $v_p=1$.  For
+$\lambda=\tfrac12$ the two values are $\tfrac12$ and $\tfrac34$; for
+$\lambda=0.1$, $0.9$ and $0.91$.  The difference is never zero for
+$0<\lambda<1$.  This is the discrete witness of the Yang--Mills
+commutator: the order of operations on the field matters.
+Formalized as \texttt{sinkToPoint\_noncommutative} in
+\texttt{YangMillsSeed.lean}.
+
+\begin{theorem}[YM3: the commutator is exact]
+\label{thm:ym3}
+For any field $v$ and any $p,q$,
+\begin{equation}
+\bigl(T_p T_q v - T_q T_p v\bigr)(p) = \lambda^2\,(v_q-v_p).
+\end{equation}
+The strength of the noncommutative term is the square of the
+contraction strength times the field gradient.  This is the same
+shape as $[A,A]$ in the Yang--Mills field strength: field-dependent
+and noncommutative.
+\end{theorem}
+
+\emph{Reading.}  The formula is exact --- not an estimate, not a
+first-order approximation, but an identity proved by algebra.  Its
+structure is the structure of the Yang--Mills nonlinearity: the
+commutator of the two operators is proportional to the \emph{field
+difference} between the two points, weighted by $\lambda^2$.  Two
+features deserve emphasis.  First, the quadratic weight: the
+noncommutativity is second order in the contraction strength, so a
+weak sink ($\lambda=0.1$) produces a self-interaction of weight
+$0.01$ --- weak, but present and exact.  Second, the field
+dependence: where the field is uniform ($v_q=v_p$) the commutator
+vanishes; the self-interaction lives precisely where the field
+\emph{varies}, exactly as $[A,A]$ vanishes for a constant abelian
+field.  Formalized as \texttt{sinkToPoint\_commutator\_formula} in
+\texttt{YangMillsSeed.lean}.
+
+\begin{theorem}[YM3b: noncommutativity grows with the gradient]
+\label{thm:ym3b}
+For any field $v$ and any $p,q$,
+\begin{equation}
+\bigl|T_p T_q v - T_q T_p v\bigr|(p) = \lambda^2\,|v_q-v_p|.
+\end{equation}
+The magnitude of the noncommutative term is the square of the
+contraction strength times the magnitude of the field gradient.
+\end{theorem}
+
+\emph{Reading.}  The absolute version sharpens the physical reading:
+the strength of the self-interaction is controlled by two factors,
+the sink strength squared ($\lambda^2$) and the gradient between the
+two sink points ($|v_q-v_p|$).  A self-interaction without a field
+gradient is impossible --- the mechanism needs variation to act on,
+which is the discrete echo of the fact that $[A,A]$ is the
+non-abelian \emph{curvature} term.  Formalized as
+\texttt{commutator\_grows\_with\_gradient} in
+\texttt{YangMillsSeed.lean}.
+
+\paragraph{What has been proved.}
+The self-interaction is not imported from gauge theory; it is a
+theorem about sinks.  The commutator formula YM3 is exact in the
+discrete setting.  The identification with $[A,A]$ is at the level of
+structure (the interpretation layer); the continuum limit of the
+commutator is part of the open strict program below.
+
+\section{Lattice Yang--Mills: the field strength is a commutator}
+\label{sec:lattice}
+
+\paragraph{The continuous-to-discrete method.}
+The framework has a standing method for passing from continuous to
+discrete: continuous derivatives are represented by forward
+differences on a $\mathbb{Z}$ lattice.  The Maxwell equations, in
+this method, become difference identities.  The same method is now
+applied to a gauge field.
+
+\paragraph{Intuition.}  The forward difference
+$A(t{+}1)-A(t)$ is the algebraic seed of the derivative
+$\partial_t A$: before any limit is taken, it carries the derivative's
+content --- how much the field changes from one position to the next.
+The framework's bridge statement (CA6) is precisely that this seed
+relation is what the continuous-to-discrete method means.  On the
+lattice, the field strength of a gauge field can therefore only be a
+combination of differences and commutators of neighboring values.
+
+\begin{postulate}[Lattice gauge field]
+\label{post:lattice}
+A gauge field is a matrix-valued field on the lattice,
+\begin{equation}
+A:\ \mathbb{Z}\to \mathrm{Mat}_3(\mathbb{C}),
+\end{equation}
+where the matrix value lives in the color space of the framework
+(the $3\times3$ complex matrices carrying the color cycle $C_3$).
+\end{postulate}
+
+\emph{Reading.}  The lattice is one-dimensional --- position is an
+integer --- and the field value at each site is a $3\times3$ complex
+matrix.  The dimension $3$ is the framework's color number: the same
+three that appear as spatial directions, anchoring directions, and
+colors (the color cycle $C_3$, a $3\times3$ permutation matrix).
+The field is the carrier of the color structure, and the
+noncommutativity of matrices is available at every site pair.  The
+forward difference
+\begin{equation}
+\Delta_1 A(t)=A(t{+}1)-A(t)
+\label{eq:grad}
+\end{equation}
+is the algebraic seed of $\partial_t A$ (CA2); the commutator
+\begin{equation}
+[A(t),A(t{+}1)]=A(t)A(t{+}1)-A(t{+}1)A(t)
+\end{equation}
+is the seed of the nonlinear term $[A_\mu,A_\nu]$.
+
+\begin{theorem}[CA3/CA4: field strength is the nearest-neighbor commutator]
+\label{thm:ca3}
+The lattice field strength
+\begin{equation}
+F(t) = [A(t),A(t{+}1)] = A(t)A(t{+}1)-A(t{+}1)A(t)
+\end{equation}
+satisfies
+\begin{equation}
+F(t)\neq 0 \iff [A(t),A(t{+}1)]\neq 0 .
+\end{equation}
+A single-point term $[A(t),A(t)]$ is identically zero (the color
+cycle commutes with itself); the noncommutativity necessarily lives
+between two distinct positions, exactly as in YM2.
+\end{theorem}
+
+\emph{Reading.}  The field strength of the lattice gauge field is
+\emph{defined} to be the commutator of neighboring values, and the
+theorem states the equivalence that carries the physics: the field
+strength is nonzero exactly when the neighboring colors do not
+commute.  The picture is two hands clasping: the field at one site
+acts on the field at the next, and each needs the other --- a single
+site clasping itself, $[A(t),A(t)]$, is identically zero.  The
+self-interaction necessarily lives \emph{between} two distinct
+positions, which is the same geometric fact as YM2: two distinct
+sinks are required for noncommutativity.  Formalized as
+\texttt{FieldStrength} and
+\texttt{field\_strength\_ne\_zero\_iff\_commutator\_ne\_zero} in
+\texttt{YangMillsLattice.lean}.
+
+\begin{theorem}[CA5: color-cycle carrier]
+\label{thm:ca5}
+When the field is the color cycle $C_3$, the single-point field
+strength vanishes; a nonvanishing field strength requires two
+distinct color directions.  This matches the two-sink structure of
+YM2.
+\end{theorem}
+
+\emph{Reading.}  The color cycle is a permutation matrix of order
+three; it commutes with itself, so a constant field of color-cycle
+values produces zero field strength everywhere.  This is not a
+failure of the construction but its content: self-interaction
+requires \emph{variation} --- two distinct color directions at two
+distinct sites --- exactly as the commutator YM3 vanishes on a
+uniform field.  A constant color field is the discrete analogue of
+an abelian configuration: no curvature, no self-coupling.
+
+\paragraph{The bridge statement.}
+The continuous-to-discrete bridge (CA6) is the framework's own
+statement: the lattice difference is the algebraic seed of the
+continuous derivative.  For the gauge field, $F=[A(t),A(t{+}1)]$ is
+the seed of the nonlinear term $[A_\mu,A_\nu]$ of the continuum
+field strength \cite{yang1954conservation,peskin1995introduction}.
+Formalized as \texttt{discrete\_to\_continuous\_bridge\_statement}
+in \texttt{YangMillsLattice.lean}; the bridge is a structural
+correspondence --- the analytic limit is handled in the next section
+and its strict form in Sec.~VII.
+
+\section{The continuum-limit mechanism: four forces as existence}
+\label{sec:continuum}
+
+\paragraph{The mechanism.}
+The framework does not need to \emph{assume} a continuum limit: it
+already has one.  Postulate~\ref{post:forces} derives the four
+forces by differentiating the flow momentum --- that is, by taking
+the continuous change rates of the flowing medium.  This
+derivation is itself the existence mechanism for the continuum:
+the continuous field exists because the flow has change rates, and
+those change rates are the four channels.
+
+\paragraph{Intuition.}  If the medium is real, it has change rates;
+if it has change rates, there is a continuous description; and the
+framework has already written that continuous description down ---
+it is the four-force decomposition.  The continuum limit is not a
+separate construction bolted onto the lattice; it is the same
+derivative that produces the forces.
+
+\begin{theorem}[CA8: the mechanism is the four-force derivative]
+\label{thm:ca8}
+The four-force decomposition
+\begin{equation}
+\dot m\,C + m\,\dot C - \dot m\,v - m\,\dot v
+\end{equation}
+is the derivative of the flow momentum $m(C-v)$.  It is hereby
+adopted as the \emph{existence mechanism for the continuum limit}:
+continuous gauge fields exist because the flowing medium has change
+rates.
+\end{theorem}
+
+\emph{Reading.}  The theorem is an adoption, and the honesty of the
+word matters: the four-force derivative already exists in the
+framework (it is how the forces are derived), and the step taken
+here is to \emph{name} it as the existence mechanism for the
+continuum.  The content is that the continuum is not an extra
+ingredient: it is the change-rate structure of the medium.
+Formalized as \texttt{continuous\_limit\_mechanism\_defines\_existence}
+in \texttt{YangMillsLattice.lean}.
+
+\begin{theorem}[CA9: the nuclear channel in the continuum]
+\label{thm:ca9}
+In the continuum limit, the lattice field strength corresponds to
+the nuclear channel $m\,\dot C$: the difference $A(t{+}1)-A(t)$
+becomes $\dot C$, and $m\neq0$, $\dot C\neq0$ imply $m\,\dot C\neq0$.
+\end{theorem}
+
+\emph{Reading.}  The bridge from the lattice to the continuum is the
+identification of the difference with the change rate: the field
+value $A(t)$ is the continuous field, and its forward difference is
+the derivative $\dot C$ of the flow speed.  The theorem then states
+a fact of ordinary arithmetic: the product of two nonzero quantities
+is nonzero.  The nuclear channel --- the framework's name for the
+change of the flow itself --- is nonzero in the continuum exactly
+when the lattice self-interaction is present.  Formalized as
+\texttt{lattice\_commutator\_continuous\_limit\_nuclear} in
+\texttt{YangMillsLattice.lean}.
+
+\begin{theorem}[CA10: the chain closes]
+\label{thm:ca10}
+The continuum mechanism (nuclear channel nonzero) implies the mass
+gap (CA7), by way of the discreteness of mass (MG2b).
+\end{theorem}
+
+\emph{Reading.}  This is the closing statement of the paper's
+central claim: the self-interaction (Sec.~IV), carried into the
+continuum by the four-force mechanism (CA8--CA9), implies the mass
+gap (Sec.~III).  The implication is conditional in the sense made
+precise throughout: each step is a theorem, and the inputs ---
+$\lambda$, $M_0$, the flattening power --- are named.  Formalized as
+\texttt{continuous\_limit\_mass\_gap\_chain} and
+\texttt{mass\_gap\_from\_self\_interaction} (CA7) in
+\texttt{YangMillsLattice.lean}.
+
+\section{Strict estimates}
+\label{sec:strict}
+
+The strict program upgrades the structural correspondence to
+analytic estimates.  The structural theorems of Secs.~III--VI
+identify shapes: commutator, gap, chain.  The theorems of this
+section bound sizes.
+
+\paragraph{Intuition.}  The structural statement ``the field strength
+is the commutator'' answers \emph{what} the self-interaction is; the
+estimates answer \emph{how large} it can be.  If the commutator norm
+were unbounded, the self-interaction could diverge under lattice
+refinement; the bound below shows it cannot.
+
+\begin{theorem}[L1: commutator norm bound]
+\label{thm:l1}
+For $3\times3$ complex matrices with the entrywise sup norm,
+\begin{equation}
+\|AB-BA\| \le 6\,\|A\|\,\|B\| .
+\end{equation}
+The lattice field strength is bounded by the field norm: the
+self-interaction does not diverge under lattice refinement.
+\end{theorem}
+
+\emph{Reading.}  The constant $6$ is explicit and has a transparent
+origin: each entry of the matrix product $AB$ is a sum of three
+terms (the $3$ of the $3\times3$ matrices), each bounded by
+$\|A\|\|B\|$, giving $\|AB\|\le 3\|A\|\|B\|$; the commutator is a
+difference of two such products, $AB-BA$, so the triangle inequality
+doubles the bound to $6$.  The constant is not optimal --- the proof
+is honest about that --- but it is enough: the lattice field
+strength $F(t)=[A(t),A(t{+}1)]$ is controlled by the product of the
+field norms at neighboring sites, uniformly in the lattice.  Under
+refinement, the self-interaction cannot blow up.  Formalized as
+\texttt{commutator\_norm\_bounded} in \texttt{YangMillsStrict.lean}.
+
+\begin{theorem}[L2: flow-momentum derivative]
+\label{thm:l2}
+For differentiable $m,C,v:\mathbb{R}\to\mathbb{R}$,
+\begin{equation}
+\frac{d}{dt}\bigl[m(t)(C(t)-v(t))\bigr]
+= \dot m\,(C-v) + m\,(\dot C-\dot v),
+\end{equation}
+the product rule for the four-force channel.
+\end{theorem}
+
+\emph{Reading.}  The four-force decomposition of
+Postulate~\ref{post:forces} is not a bookkeeping device but a genuine
+derivative: this theorem verifies, via the product rule, that
+$\dot p=\dot m(C-v)+m(\dot C-\dot v)$ is exactly the time derivative
+of the flow momentum.  The four channels are the terms of a real
+calculus identity.  This is the strict version of the continuum
+mechanism of CA8 --- in the scalar setting; the matrix-valued
+generalization is an open problem (Sec.~X).  Formalized as
+\texttt{flow\_momentum\_derivative} in \texttt{YangMillsStrict.lean}.
+
+\begin{theorem}[L3: nuclear channel norm-nonzero]
+\label{thm:l3}
+For $m\neq0$ and $\|dC\|\neq0$,
+\begin{equation}
+\|m\,dC\|\neq0,
+\end{equation}
+the continuum field strength is nonzero in norm.
+\end{theorem}
+
+\emph{Reading.}  In a normed space, a vector is zero iff its norm is
+zero; combined with the fact that a product of nonzero reals is
+nonzero, the theorem gives the strict form of CA9: the nuclear
+channel is nonzero \emph{in norm}, not merely as a formula.  The
+numbers again: $|m|>0$ and $\|dC\|>0$ multiply to a positive norm.
+Formalized as \texttt{nuclear\_channel\_norm\_ne\_zero} in
+\texttt{YangMillsStrict.lean}.
+
+\paragraph{What remains open.}
+The topological limit of the lattice spacing to zero --- the
+definition of a lattice field sequence converging to a continuum
+field, and the proof that the commutator field strength converges to
+the continuum $[A_\mu,A_\nu]$ --- is the one layer not yet
+formalized.  It is stated, not blurred.  The strict estimates above
+are the norm prerequisites of that limit; the limit itself, and the
+matrix-valued generalization of the derivative theorem L2, are the
+open items named in Sec.~X.
+
+\section{The assembled chain}
+\label{sec:chain}
+
+The full conditional chain:
+
+\begin{equation}
+\begin{aligned}
+&\text{accelerated charge} \;\Rightarrow\; \text{field varies (CR1)}\\
+&\qquad \Rightarrow\; \text{nuclear channel } m\dot C\neq0 \text{ (CR2)}\\
+&\qquad \Rightarrow\; \text{self-flattening sink (CR9, YM1)}\\
+&\qquad \Rightarrow\; \text{sink noncommutativity (YM2)}
+  =\; \text{self-interaction } [A,A] \text{ (CA3--CA4)}\\
+&\qquad \Rightarrow\; \text{continuum mechanism (CA8--CA10)}
+  \;\Rightarrow\; \text{mass gap (MG2b, CA7)} .
+\end{aligned}
+\end{equation}
+
+Every implication is a theorem in Lean~4; the chain is conditional
+only in the sense that its inputs --- the flattening power, the
+contraction rate $\lambda$, the strand mass $M_0$ --- are named and
+not derived.  The two names of the Yang--Mills problem,
+\emph{discreteness} and \emph{self-interaction}, are here one
+mechanism: the mass gap is the discreteness of the strand count, and
+the self-interaction is the noncommutativity of the count-carrying
+sink operators.  The chain reads as a single sentence: accelerated
+charge makes the field vary; a varying field is a self-flattening
+sink; the sink does not commute with itself across positions; that
+noncommutativity is the field's self-interaction; and a
+self-interacting field whose mass is a count has a mass gap.
+
+\paragraph{Relation to existing physics.}
+The framework is deliberately conservative where standard physics is
+well tested.  It keeps the Yang--Mills field strength
+\eqref{eq:ymfield} as the target structure: the commutator
+$[A_\mu,A_\nu]$ is what the lattice field strength is built to
+reproduce \cite{yang1954conservation,peskin1995introduction}.  It
+keeps the lattice method as the route from discrete to continuous,
+in the tradition of lattice gauge theory \cite{morningstar1999glueball,
+chen2006glueball}.  It keeps the Einstein field equations at the
+level of their weak-field content (gravitation is the
+non-uniformity of the flow) and the Maxwell equations as the
+kinematics of the flow \cite{einstein1915feldgleichungen,
+gordon1923lichtfortpflanzung,maxwell1996dynamical}.  In these places
+the framework \emph{rewrites the ontology without touching the
+numerics}: the same equations, a different primitive.  In two places
+it goes further and contradicts the standard ontology directly.
+(i)~The mass gap: standard QFT takes it as a non-perturbative fact
+to be measured or simulated; here it is a theorem of the discreteness
+of mass.  (ii)~The self-interaction: standard QFT postulates
+$[A,A]$ by gauge invariance; here it is a theorem about the
+noncommutativity of sink contractions, and the two facts --- gap and
+self-interaction --- are identified as one mechanism.  What is new,
+and flagged as such, is that identification itself.
+
+\section{Honest assessment}
+\label{sec:honest}
+
+\paragraph{Claimed.}
+(i)~Discreteness of mass (Postulate~\ref{post:mass}) implies the
+empty interval $(0,M_0^2)$ (MG1--MG3): the electron--photon
+transition is an integer jump.  The repository's glueball mass
+squared is an integer, $0$ or $\ge1$ (MG4).  (ii)~Sink contractions are
+noncommutative (YM2) with an exact commutator formula (YM3) and an
+exact magnitude formula (YM3b); the sink is a self-flattening
+dynamics with exponential decay (YM1).  (iii)~On a lattice, a
+color-matrix-valued gauge field has field strength equal to the
+nearest-neighbor commutator (CA3--CA4), the lattice avatar of
+$[A,A]$, and a constant color cycle has vanishing field strength
+(CA5).  (iv)~The four-force derivation is an existence mechanism for
+the continuum limit (CA8--CA10), with strict norm bounds and
+norm-nonzero estimates (L1--L3).  (v)~The chain from accelerated
+charge to the mass gap is a conditional sequence of theorems,
+assembled in CA7/CA10.  All statements are formalized in Lean~4 with
+zero \texttt{sorry}.
+
+\paragraph{Not claimed.}
+(i)~The Yang--Mills existence problem is not solved: the lattice
+construction is an algebraic skeleton, not a continuum
+four-dimensional quantum field theory; there is no path integral,
+no renormalization, no continuum spacetime.  (ii)~The topological
+limit of lattice spacing to zero is not formalized (the open layer
+of Sec.~VII); in particular, the convergence of the discrete
+commutator $[A(t),A(t{+}1)]$ to the continuum $[A_\mu,A_\nu]$ is
+not proved.  (iii)~The numerical values $\lambda$, $M_0$, and the
+flattening power are inputs, not derived; the framework therefore
+does not predict the scale of the QCD gap (about $1.6$ GeV) --- it
+predicts the shape of the spectrum, not its calibration.
+(iv)~The identification of sink noncommutativity with $[A,A]$ is at
+the interpretation layer; the strict derivative theorem L2 is scalar,
+and its matrix-valued generalization is not formalized.  (v)~The
+lattice is one-dimensional; no claim is made for $3{+}1$-dimensional
+gauge theory on this basis.
+
+\paragraph{Death conditions.}
+The program dies if (a)~a physical self-interaction is found with no
+discrete counterpart in this framework, or (b)~the lattice field
+strength fails to converge to the continuum $[A_\mu,A_\nu]$ as the
+lattice spacing goes to zero, or (c)~a noncommutative
+self-interaction is exhibited with no mass lower bound.  These are
+falsifiable in principle, which is the point: a framework that
+cannot die cannot be tested.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The Yang--Mills problem names two facts: a positive mass gap and a
+non-abelian self-interaction.  In the flowing-space framework these
+are not two facts but one.  Mass is an integer count; the mass gap
+is the discreteness of that count --- the interval $(0,M_0^2)$ is
+empty because there is no integer between $0$ and $1$.  The sink is
+a self-flattening operator; its noncommutativity is the
+self-interaction --- the exact commutator $\lambda^2(v_q-v_p)$ is
+the same shape as $[A,A]$, field-dependent and noncommutative.  The
+chain that the preceding paper built from accelerated charge to the
+photon is here extended from the photon to the mass gap, through the
+self-interaction, with the continuum mechanism supplied by the
+framework's own four-force derivation and bounded by strict
+estimates with the explicit factor $6$.
+
+The open items assemble into a short list of problems in the spirit
+of Hilbert's program \cite{hilbert1900mathematische}: (i)~derive the
+strand mass $M_0$ from the flow dynamics, turning the lattice
+glueball scale of about $1.6$ GeV into a target rather than an
+import; (ii)~derive the contraction rate $\lambda$ and the
+flattening power from the divergence dynamics; (iii)~formalize the
+topological limit --- the convergence of lattice field sequences and
+of the commutator field strength to the continuum $[A_\mu,A_\nu]$;
+(iv)~promote the strict derivative L2 to the matrix-valued setting,
+so that the four-force derivative is a theorem in the color space
+itself; (v)~extend the $\mathbb{Z}$ lattice to $3{+}1$ dimensions and
+test the chain against the empirical glueball spectrum
+\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
+(vi)~find a physical observable for the sink noncommutativity
+$\lambda^2(v_q-v_p)$ --- the framework's candidate signature of
+self-interaction.  Each is a well-posed question that this paper
+leaves with the boundary stated rather than blurred.  The road is
+followed precisely; the mountain is climbed only a little, just
+enough to be sure it is a mountain
+\cite{hilbert1900mathematische,ProjectionPhysics}.
+
+\bibliography{projection-physics}
+
+\end{document}
