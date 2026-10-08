@@ -41,6 +41,8 @@ import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Finset.Basic
+import Mathlib.MeasureTheory.Measure.MeasureSpace
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
 import ProjectionPhysics.Explorations.ColorOctetMathlib
@@ -50,7 +52,9 @@ namespace ProjectionPhysics.YangMillsContinuum
 
 open ProjectionPhysics
 open ColorOctet
+open MeasureTheory
 open scoped Matrix
+open scoped MeasureTheory
 
 /-- 色空间矩阵（仓库类型，mathlib 3×3 复矩阵）。 -/
 abbrev Mat3C := Matrix (Fin 3) (Fin 3) ℂ
@@ -140,14 +144,21 @@ theorem sample_difference_is_derivative_seed
   rfl
 
 /-- ★★ CC5：路径积分被积函数模为 1。
-    对任意实数作用量 S，|e^{iS}| = 1 —— 配分函数有限性的关键一步
-    （|Z| ≤ vol(Λ) 由被积函数模 1 + 紧致 SU(3) 群体积有限给出；
-    Haar 测度的完整理论留待后续，此处证明核心不等式）。 -/
+    对任意实数作用量 S，|e^{iS}| = 1（欧拉公式的直接推论）。 -/
 theorem exp_iS_has_norm_one (S : ℝ) :
     ‖Complex.exp (Complex.I * S)‖ = 1 := by
   exact Complex.norm_exp_I_mul_ofReal S
 
-/-- ★ CC6a：有限格点路径积分（正则化记号）。
+-- ★★ CC6：配分函数有界性的测度论内核（结构登记）。
+--   CC5 已证 |e^{iS}| = 1（被积函数模为 1）。配分函数
+--   |Z_Λ| = |∫ ∏_n dU(n) e^{iS[U]}| ≤ vol(Λ) 由此 + 紧致 SU(3) 的
+--   归一化 Haar 测度给出：被积函数模 1 ⟹ 积分被总体积控制
+--   （norm_integral_le_lintegral_norm + |f|≤1 ⟹ |∫f| ≤ μ(全空间)）。
+--   Haar 测度的完整 mathlib 实例化（补全 IsFiniteMeasure、
+--   ENNReal↔ℝ 转换）留作后续；CC5 是这一步的已证内核。
+--   注：完整证明需 Haar 测度实例 + 有限积测度；以注释登记，不设空定理。
+
+/-- ★ CC7a：有限格点路径积分（正则化记号）。
     Z_Λ = ∫ ∏_{n∈Λ} dU(n) e^{iS[U]}，Λ ⊂ ℤ⁴ 有限。
     完整定义需要紧致 SU(3) 的 Haar 测度的有限积（mathlib 有，
     后续形式化）；此处为结构记号登记。无穷格点与连续极限是
