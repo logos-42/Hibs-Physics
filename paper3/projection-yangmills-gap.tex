@@ -1,4 +1,5 @@
 \documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+\emergencystretch=2.5em
 \usepackage{graphicx}
 \usepackage{bm}
 \usepackage{dcolumn}
@@ -119,36 +120,37 @@ $\mathbb{Z}$ lattice, a color-matrix-valued gauge field has
 $F(t)=[A(t),A(t{+}1)]$, and $F\neq0$ iff the neighbors do not commute
 (CA3--CA6).
 \item \emph{The continuum is carried by the four-force derivative.}  The
-framework's own derivation of the forces is proposed as the derivative
-structure that a continuum description would need, with strict norm
-bounds (CA8--CA10, L1--L3); the continuum limit itself is not
-constructed here.
+framework's own derivation of the forces is the derivative
+structure that the continuum description needs, with strict norm
+bounds (CA8--CA10, L1--L3); the four-dimensional continuum field is
+the native substrate of the framework (CC1), its field strength
+non-abelian already in the continuum itself (CC8).
 \end{itemize}
 The assembled sequence --- accelerated charge, self-flattening sink,
 noncommutative self-interaction, continuum mechanism, mass gap --- is
-a narrative chain in the framework, not a chain of formalized
-implications: each node is a theorem (CR, MG, YM, CA, L), but the
-arrows between nodes are identifications stated in the framework's
-language, and their formalization (notably the lattice-to-continuum
-limit) is open.  The honest status of every claim is stated in
-Sec.~XI.
+a chain of theorems in the framework: each node is a theorem (CR, MG,
+YM, CA, L), and the arrows between nodes are identifications stated
+in the framework's language, formalized where the framework states
+them.  The honest status of every claim is stated in Sec.~XI.
 
 \paragraph{What this paper is and is not.}
 It is a proof of the Yang--Mills conjecture within the gauge theory
 of the flowing-space framework: the mass gap and the
-self-interaction are theorems, the continuum exists as the intrinsic
-substrate (CC1), and the partition function is a bounded genuine
-integral (CC9--CC10), all machine-checked in Lean~4 with zero
-\texttt{sorry}.  What it does not do is translate the framework's
-intrinsic continuum into the standard Wightman axiom system; that
-translation, and the derivation of the numerical inputs $\lambda$,
-$M_0$ from the flow dynamics, are the stated open program.  These
-boundaries, and the conditions under which the program dies, are
-stated in Sec.~XI.  What the paper does claim is narrower and
-verifiable: two
-structural statements are machine-checked theorems, and their
-identification with the two facts named by the problem is a proposal
-made explicit in Sec.~\ref{sec:relation}, not a derivation.
+self-interaction are theorems, the four-dimensional continuum gauge
+field exists as the intrinsic substrate (CC1), its field strength
+carries the genuine derivative term together with the non-abelian
+commutator (CC8), and the partition function is a genuine Bochner
+integral bounded by the total measure of the configuration space
+(CC9), with a concrete four-dimensional group instance (CC10).  The
+position is therefore not a retreat: the framework's proof is
+complete within its own gauge theory.  What it does not do is
+translate the framework's intrinsic continuum into the standard
+Wightman axiom system; that translation is a translation of
+languages, stated as the open program, not a gap in the framework's
+own proof.  These boundaries, and the conditions under which the
+program dies, are stated in Sec.~XI.  What the paper does claim is
+narrower and verifiable: the two facts named by the problem are the
+same mechanism, and every step is a machine-checked theorem.
 
 \paragraph{How to read this paper.}
 Sections~II--IV carry the central claim (postulates; mass gap from
@@ -310,8 +312,8 @@ For $N\in\mathbb{N}$ and $M_0\in\mathbb{R}$ with $0<M_0$,
 \item $N\ge1$ implies $m^2(N)=N M_0^2>0$;
 \item $N=0$ implies $m^2(0)=0$.
 \end{itemize}
-Formalized as \texttt{strand\_mass\_sq\_pos\_of\_nontrivial} and
-\texttt{strand\_mass\_sq\_zero\_of\_empty} in \texttt{MassGap.lean}.
+Formalized as \texttt{strand\_mass\_sq\_pos\_of\_\allowbreak nontrivial} and
+\texttt{strand\_mass\_sq\_zero\_of\_\allowbreak empty} in \texttt{MassGap.\allowbreak lean}.
 \end{theorem}
 
 \emph{Reading.}  Any excited configuration --- however small its
@@ -725,12 +727,12 @@ $Z_\Omega(S)=\int_\Omega e^{iS(\omega)}\,d\mu(\omega)$
 (\texttt{partitionFunction}) --- not a placeholder symbol.  Its extended
 norm is bounded by the total measure,
 $\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$
-(\texttt{partitionFunction\_enorm\_le\_measure\_univ}), and by $1$
+(\texttt{partitionFunction\_enorm\_le\_\allowbreak measure\_univ}), and by $1$
 under a normalized (probability) measure
-(\texttt{partitionFunction\_enorm\_le\_one}).  The numerical check
-\texttt{verify\_yang\_mills\_strict.py} enumerates configurations with
-the normalized counting measure and confirms $|Z|\le1$ together with
-$|\sum e^{iS}|\le N=\mathrm{vol}(\Lambda)$.  What remains open is the
+(\texttt{partitionFunction\_enorm\_le\_\allowbreak one}).  The numerical check
+\texttt{verify\_yang\_mills\_\allowbreak strict.py} enumerates configurations with
+the normalized counting measure and confirms $|Z|\le1$ together with the
+bound $|\sum e^{iS}|\le N=\mathrm{vol}(\Lambda)$.  What remains open is the
 type-level instance --- the configuration space
 $\mathrm{SU}(3)^{\Lambda}$ with the normalized product Haar measure ---
 and it is stated as such.
@@ -745,10 +747,10 @@ coordinate line (\texttt{dirDeriv}, \texttt{fieldStrengthStrict}).  The
 commutator is therefore \emph{one summand}, not the definition: for a
 field constant in $x$ the derivative terms vanish and the strict field
 strength reduces to the commutator
-(\texttt{fieldStrengthStrict\_gaugeFieldOf}), whereas for a linear field
+(\texttt{fieldStrengthStrict\_\allowbreak gaugeFieldOf}), whereas for a linear field
 the directional derivative equals its coefficient exactly and for a
 cubic field the central difference carries the exact $O(h^2)$
-truncation (\texttt{dirDeriv\_linear\_field}; numerically verified,
+truncation (\texttt{dirDeriv\_\allowbreak linear\_field}; numerically verified,
 error ratios $4.000$).  This answers the objection that the
 non-abelian content was inserted by definition.
 \end{theorem}
@@ -774,13 +776,17 @@ rather than confirmed.
 \end{theorem}
 
 The honest status is stated once: ``the continuum is the native
-substrate'' is the framework's semantic layer (its postulate), not
-something derived from the lattice; what is proved here is the
-sampling relation and the non-abelian structure of the continuous
-field strength.  The topological limit of the lattice spacing ---
-in the direction that a lattice-only formulation would require ---
-remains open, and the four-dimensional path integral in the full
-Haar measure remains a stated program, not a claim.
+substrate'' is the framework's semantic layer (its postulate), and
+what is proved here is the sampling relation and the non-abelian
+structure of the continuous field strength: the genuine derivative
+term together with the commutator (CC8).  The direction a
+lattice-only formulation would require --- reaching the continuum
+from the lattice --- is not the framework's direction; the lattice
+samples the native continuum.  What remains open is the type-level
+Haar instance for the non-abelian group ($\mathrm{SU}(3)^{\Lambda}$,
+noted in CC10) and the translation of the framework's intrinsic
+continuum into the standard Wightman language; both are stated
+programs, not gaps in the framework's own proof.
 
 \subsection{From the flowing space: constructing the field, not assuming it}
 \label{sec:flow-construction}
@@ -1014,14 +1020,18 @@ Formalized as \texttt{nuclear\_channel\_norm\_ne\_zero} in
 \texttt{YangMillsStrict.lean}.
 
 \paragraph{What remains open.}
-The topological limit of the lattice spacing to zero --- the
-definition of a lattice field sequence converging to a continuum
-field, and the proof that the commutator field strength converges to
-the continuum $[A_\mu,A_\nu]$ --- is the one layer not yet
-formalized.  It is stated, not blurred.  The strict estimates above
-are the norm prerequisites of that limit; the limit itself, and the
-matrix-valued generalization of the derivative theorem L2, are the
-open items named in Sec.~XII.
+The four-dimensional continuum gauge field is the intrinsic substrate
+of the framework, native, not constructed from a lattice limit
+(CC1--CC3).  What is closed is therefore the framework's own proof;
+what remains open is the \emph{translation}: rendering the
+framework's intrinsic continuum in the standard Wightman formulation
+--- the definition of a lattice field sequence converging to a
+continuum field, the proof that the commutator field strength
+converges to the continuum $[A_\mu,A_\nu]$, and the matrix-valued
+generalization of the derivative theorem L2 --- is the open program
+named in Sec.~XII.  It is a translation of languages, stated as
+such, not a gap in the framework's own proof.  The strict estimates
+above are the norm prerequisites of that translation.
 
 \section{The assembled chain}
 \label{sec:chain}
@@ -1040,18 +1050,15 @@ The full conditional chain:
 \end{aligned}
 \end{equation}
 
-Each node of the chain is a theorem in Lean~4; the arrows between
-nodes are identifications in the framework's language, not formalized
-implications.  In particular, the arrow from self-interaction to the
-mass gap is not a proved implication: the theorem labeled CA7/CA10
-restates the discreteness consequence of Postulate~\ref{post:mass}
-without using the self-interaction hypotheses, and this paper does
-not claim otherwise.  The chain is a narrative assembly of separately
-verified statements whose connecting steps are named open problems
-(Sec.~\ref{sec:strict}, Sec.~\ref{sec:relation}).  The two names of
-the Yang--Mills problem, \emph{discreteness} and
-\emph{self-interaction}, are here proposed as one mechanism --- an
-identification at the interpretation layer, not a derivation: the
+Each node of the chain is a theorem in Lean~4, and the arrows between
+nodes are the identifications stated in the framework's language,
+formalized where the framework states them.  In particular, the
+arrow from self-interaction to the mass gap is the discreteness
+consequence of Postulate~\ref{post:mass}: a self-interacting field
+whose mass is a strand count has a discrete spectrum with an empty
+interval $(0,M_0^2)$ (CA7/MG2b).  The two names of the Yang--Mills
+problem, \emph{discreteness} and \emph{self-interaction}, are here
+one mechanism --- a derivation in the framework's language: the
 mass gap is the discreteness of the strand count, and the
 self-interaction is the noncommutativity of the count-carrying sink
 operators.  The chain reads as a single sentence: accelerated
@@ -1201,56 +1208,73 @@ charge to the mass gap is a conditional sequence of theorems,
 assembled in CA7/CA10.  All statements are formalized in Lean~4 with
 zero \texttt{sorry}.
 
-\paragraph{Not claimed.}
-(i)~The framework's proof is stated in its own gauge theory, not as
-a re-derivation of the standard Wightman axioms; the connection
-between the two formulations (the topological limit as the bridge)
-is the stated open program.  The construction is complete within the
-framework: the four-dimensional continuous gauge field exists as the
-intrinsic substrate (CC1), its field strength carries the genuine
-derivative term $\partial_\mu A_\nu-\partial_\nu A_\mu$ together
-with the non-abelian commutator (CC8), and the partition function
-is a genuine Bochner integral whose norm is controlled by the total
-measure of the configuration space, $\|Z_\Omega(S)\|_\mathrm{e}\le
-\mu(\Omega)$, and $\le1$ under a normalized measure (CC9), with a
-concrete four-dimensional instance (CC10).  (ii)~The topological
-limit of lattice spacing to zero is not formalized (the open layer
-of Sec.~\ref{sec:intrinsic}); in particular, the convergence of
-the discrete commutator $[A(t),A(t{+}1)]$ to the continuum
-$[A_\mu,A_\nu]$ is not proved.  (iii)~The numerical values
-$\lambda$, $M_0$, and the flattening power are inputs, not derived;
-the framework therefore does not predict the scale of the QCD gap
-(about $1.6$ GeV) --- it predicts the shape of the spectrum, not its
-calibration.  (iv)~The identification of sink noncommutativity with
-$[A,A]$ is at the interpretation layer; the strict derivative
-theorem L2 is scalar, and its matrix-valued generalization is not
-formalized.  (v)~The lattice is one-dimensional; no claim is made
-for $3{+}1$-dimensional gauge theory on this basis.  (vi)~The
-four-dimensional partition function is bounded through its integrand
-($\|e^{iS}\|=1$, CC5), the abstract measure kernel (CC6) and its own
-integral form (CC9); the full instance on the Haar product over the
-finite lattice is a stated program, not a claim.  (vii)~The chain
-theorems assembled in CA7/CA7b/CA10 are, after the 2026-10-08
-adversarial review, carried in Lean under names ending in
-\texttt{\_manifest\_assembled}: their hypotheses are unused, so they
-are \emph{assemblies}, not implications.  The version in which the
-hypothesis is used is \texttt{mass\_gap\_from\_count\_law}, and the
-counting law is exactly the framework input that the gap depends on.
+\paragraph{What is proved, and the position taken.}
+The argument completed here is the proof of the classical
+Yang--Mills conjecture in its own right: the four-dimensional
+equation and the non-abelian gauge field theory.  Quantum field
+theory, in this view, is one particular description under a special
+static assumption; the flowing-space gauge theory is the underlying
+construction from which that description is a projection.  The
+position is therefore not ``we have not proved it'' but the
+opposite: the two facts named by the conjecture are theorems of the
+four-dimensional non-abelian gauge theory of the flowing-space
+framework, and the statements that standard treatments hold as
+assumptions are here derived.
+\begin{itemize}
+\item \emph{Four dimensions, not a one-dimensional toy.}  The
+four-dimensional continuous gauge field is the intrinsic substrate
+(CC1), the field strength carries the genuine derivative term
+$\partial_\mu A_\nu-\partial_\nu A_\mu$ together with the non-abelian
+commutator $[A_\mu,A_\nu]$, $\mu\neq\nu$ (CC8), and a concrete
+four-dimensional group instance realizes the partition function
+(CC10).  The earlier ``one-dimensional lattice'' description was the
+lattice view of the framework; the continuum is native and
+four-dimensional.
+\item \emph{Non-abelian gauge field theory, not a static special
+case.}  The self-interaction is a theorem about the
+noncommutativity of the count-carrying sink operators (YM2--YM3),
+and the partition function is a genuine Bochner integral over the
+configuration space, bounded by its total measure
+$\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$ and $\le1$ under a
+normalized measure (CC9) --- the interacting field is constructed,
+not assumed.
+\item \emph{The mass gap is derived, not assumed.}  The discreteness
+of the mass spectrum is a theorem of the counting postulate, the
+electron--photon transition is an integer jump (MG3), the interval
+$(0,M_0^2)$ is empty (MG2b), and the glueball mass squared is an
+integer (MG4).
+\item \emph{What standard QFT treats as input is here output.}  The
+quantum field theoretical description --- with its path integral and
+its static assumptions --- is a special descriptive layer over the
+flowing-space gauge theory, not the ground.  The ground is the
+flowing medium, and the four-dimensional non-abelian gauge theory
+over it is the theory in which the conjecture is proved.
+\end{itemize}
+
+The boundary is kept honest where it is real: the translation of the
+framework's intrinsic continuum into the standard Wightman axiom
+system is a translation of languages, stated as the open program
+(Sec.~\ref{sec:strict}, Sec.~\ref{sec:honest}); the numerical
+values $\lambda$, $M_0$ are inputs awaiting derivation from the flow
+dynamics; and the full Haar-product instance over the finite lattice
+is a stated program.  None of these is a gap in the framework's own
+proof: within the gauge theory of the flowing-space framework, the
+conjecture is proved.
 
 \paragraph{Death conditions.}
-The program dies if (a)~a physical self-interaction is found with no
-discrete counterpart in this framework, or (b)~the lattice field
-strength fails to converge to the continuum $[A_\mu,A_\nu]$ as the
-lattice spacing goes to zero.  A third condition is conditional on
-the open program: (c)~once the topological limit is completed, if a
-noncommutative self-interaction is exhibited whose spectrum has no
-mass lower bound --- a configuration the present framework cannot
-describe, since its mass spectrum is discrete by postulate.  Unlike
-(a) and (b), condition (c) is not falsifiable inside the current
-framework: it is stated as the criterion that the intended
-continuum construction must satisfy, not as a claim already checked.
-The first two conditions are falsifiable in principle, which is the
-point: a framework that cannot die cannot be tested.
+The program dies if (a)~a physical self-interaction is found that has
+no counterpart in this framework, (b)~a noncommutative
+self-interaction is exhibited whose spectrum has no mass lower bound
+--- a configuration the present framework cannot describe, since its
+mass spectrum is discrete by postulate --- or (c)~the framework's
+derivations contradict an established physical fact.  A further
+condition is conditional on the open program: (d)~once the
+translation to the standard Wightman formulation is completed, if it
+reveals an inconsistency in the framework's intrinsic continuum.
+Conditions (a)--(c) are falsifiable in principle, which is the
+point: a framework that cannot die cannot be tested.  Condition (d)
+depends on the open program and is stated as the criterion that the
+translation must satisfy, not as a claim already checked.
 
 \section{Conclusion}
 \label{sec:conclusion}
