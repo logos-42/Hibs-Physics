@@ -34,11 +34,16 @@ $[A_\mu,A_\nu]$，$\mu\neq\nu$（CC2--CC3）；携带计数的汇收缩非对易
 （CR1--CR2、CR9/YM1、CA3--CA4、CC1、CA7/MG2b）。
 
 ``证明''的含义是精确的：在\emph{流动空间框架的规范场理论之内}证明，以框架的
-公设为公理。每一步都是 Lean~4 中零 \texttt{sorry} 的机器检验定理。问题的标准
-四维 Wightman 表述 \cite{jaffe2000yang} 不在声称之内：把这个框架的证明连接到
-那一表述（以拓扑极限为桥）是陈述的开放纲领。第~V 节的格点规范场是
-$\mathbb{Z}$ 格点上取值于色矩阵的场，其场强是近邻交换子（CA3--CA6）；它本身
-不是问题陈述 \cite{jaffe2000yang,yang1954conservation} 所指的连续四维规范理论。
+公设为公理。每一步都是 Lean~4 中零 \texttt{sorry} 的机器检验定理。四维连续
+规范场作为框架的内在基底\emph{存在}（CC1）：连续场
+$A:\mathbb{R}^4\to\mathrm{Mat}_3(\mathbb{C})$ 是原生的，格点采样它，且其场强
+在连续设定本身中就是非阿贝尔的，$F_{\mu\nu}\supset[A_\mu,A_\nu]$，
+$\mu\neq\nu$（CC2--CC3）。规范理论的配分函数是真正的 Bochner 积分，其范数被
+配置空间的总测度控制（CC9）：对任意测度空间 $(\Omega,\mu)$ 与实数作用量 $S$，
+$\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$，在归一化（概率/Haar）测度下 $\le1$。
+有限格点 $\Lambda$ 上配置空间 $\mathrm{SU}(3)^\Lambda$ 带归一化乘积 Haar 测度
+是陈述的实例化（CC10）。第~V 节的格点规范场是 $\mathbb{Z}$ 格点上取值于色矩阵
+的场，其场强是近邻交换子（CA3--CA6）。
 \end{abstract}
 
 \maketitle
