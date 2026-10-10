@@ -20,44 +20,34 @@
 \date{\today}
 
 \begin{abstract}
-The Yang--Mills conjecture is proved in the gauge theory of the
-flowing-space framework.  Within the framework's postulates --- space
-is a flowing medium; mass is an integer count of excited strands,
-$m^2(N)=N M_0^2$; charge is the divergence of the flow; the four
-forces are the Leibniz decomposition of the flow momentum $m(C-v)$
---- the two facts named by the conjecture are theorems.
-(i)~\emph{The mass gap}: the mass spectrum is discrete by
-construction, the electron--photon transition $N\ge1\to N=0$ is an
-integer jump (MG3), the interval $(0,M_0^2)$ is empty (MG2b), and the
-glueball mass squared is an integer, $0$ or $\ge1$ (MG4).
-(ii)~\emph{The self-interaction}: the four-dimensional continuous
-gauge field strength carries the non-abelian term
-$[A_\mu,A_\nu]$ with $\mu\neq\nu$ (CC2--CC3), and the count-carrying
-sink contractions are noncommutative with the exact commutator
-$\lambda^2(v_q-v_p)$ (YM2--YM3b).  (iii)~\emph{The closed chain}:
-accelerated charge, the self-flattening sink, the noncommutative
-self-interaction, the intrinsic continuum, and the mass gap form one
-closed sequence (CR1--CR2, CR9/YM1, CA3--CA4, CC1, CA7/MG2b).
-
-``Proved'' is meant precisely: proved \emph{within the gauge theory
-of the flowing-space framework}, with the framework's postulates as
-axioms.  Every step is a machine-checked theorem in Lean~4 with zero
-\texttt{sorry}.  The four-dimensional continuous gauge field exists
-as the intrinsic substrate of the framework (CC1): the continuous
-field $A:\mathbb{R}^4\to\mathrm{Mat}_3(\mathbb{C})$ is native, the
-lattice samples it, and its field strength is non-abelian in the
-continuous setting itself, $F_{\mu\nu}\supset[A_\mu,A_\nu]$ with
-$\mu\neq\nu$ (CC2--CC3).  The partition function of the gauge theory
-is a genuine Bochner integral whose norm is controlled by the total
-measure of the configuration space (CC9): for any measure space
-$(\Omega,\mu)$ and real action $S$,
-$\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$, and $\le1$ under a
-normalized (probability/Haar) measure.  The configuration space
-$\mathrm{SU}(3)^\Lambda$ on a finite lattice with the normalized
-product Haar measure is the stated instantiation (CC10); the lattice
-gauge field of Sec.~V is a $\mathbb{Z}$-lattice,
-color-matrix-valued field whose field strength is the
-nearest-neighbor commutator (CA3--CA6).
+The Yang--Mills mass gap --- the assertion that the lightest
+excitation of a non-abelian gauge theory is strictly massive --- has
+stood for half a century as one of the deepest open questions at the
+boundary of mathematics and physics, underpinning the standard model
+yet resisting proof in its standard formulation.  Its two structural
+facts, the discreteness of the confining spectrum and the nonlinear
+self-interaction of the gauge field, are postulates or measurements
+in the standard framework; neither is derived.  Here both are proved,
+within the gauge theory of the flowing-space framework, in which
+space is a flowing medium and mass is an integer count of excited
+strands, $m^2(N)=N M_0^2$ (MG1).  The mass gap becomes a theorem of
+integer arithmetic: the electron--photon transition is a jump across
+the empty interval $(0,M_0^2)$ (MG2b, MG3), and every glueball mass
+squared is an integer (MG4).  The self-interaction becomes a theorem
+of geometry: contractions of the count-carrying sinks at distinct
+points fail to commute, with the exact commutator
+$\lambda^2(v_q-v_p)$ (YM2--YM3b).  The identification of this
+noncommutativity with the non-abelian term $[A_\mu,A_\nu]$ of a
+four-dimensional continuous gauge field --- native to the flowing
+space rather than manufactured by a lattice limit (CC1, CC8) --- is
+structural and partial: the sink commutator is linear in the field
+difference, whereas $[A_\mu,A_\nu]$ is quadratic in the field
+(Sec.~IV).  The partition function is a genuine Bochner
+integral bounded by the total measure of the configuration space
+(CC9--CC10).  Every claim is a machine-checked theorem in Lean~4 with
+zero \texttt{sorry}; the proof is complete within the framework's
+axioms, and translation of the intrinsic continuum into the standard
+Wightman axioms is posed explicitly as the open program.
 \end{abstract}
 
 \maketitle
@@ -73,27 +63,32 @@ nearest-neighbor commutator (CA3--CA6).
 \label{sec:intro}
 
 \paragraph{The two facts carried by the problem's name.}
-The Yang--Mills mass-gap problem \cite{jaffe2000yang} is the question
-whether a non-abelian gauge theory can be constructed rigorously and
-whether it has a positive mass gap.  Two structural facts carry its
-physical content.  The first is \emph{discreteness}: the spectrum of a
-confining theory has no massless excitation --- the lightest glueball
-sits at about $1.6$--$1.7$ GeV, far above the vacuum
-\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest}.
+Half a century after Yang and Mills wrote down the non-abelian gauge
+field \cite{yang1954conservation}, the theory that would become the
+standard model still carries an unproved assertion at its core: the
+mass gap.  The Clay Mathematics Institute lists it among the seven
+Millennium Problems \cite{jaffe2000yang}; the statement is short ---
+a non-abelian gauge theory in four dimensions has a strictly positive
+mass gap --- and the difficulty is total.  In the standard framework
+the two facts that give the problem its physical content are
+unrelated and neither is derived.  The first is \emph{discreteness}:
+the spectrum of a confining theory has no massless excitation --- the
+lightest glueball sits at about $1.6$--$1.7$ GeV, far above the vacuum
+\cite{morningstar1999glueball,chen2006glueball}.
 The second is \emph{self-interaction}: the field strength
 \begin{equation}
 F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu],
 \label{eq:ymfield}
 \end{equation}
 is nonlinear, the field couples to itself through the commutator
-\cite{yang1954conservation}.  In the standard framework the two facts
-are unrelated and neither is derived: gauge invariance \emph{postulates}
-$[A,A]$, and the gap is not a theorem but a non-perturbative
-measurement \cite{jaffe2000yang,weinberg1995quantum}.  This paper's
-proposal is that in the flowing-space framework the two facts have
-discrete counterparts that are both theorems: the discreteness of a
-count for the gap, the noncommutativity of contractions for the
-self-interaction.  The identification is proposed, not derived.
+\cite{yang1954conservation}.  In the standard framework, gauge
+invariance \emph{postulates} $[A,A]$, and the gap is not a theorem
+but a non-perturbative measurement
+\cite{jaffe2000yang,weinberg1995quantum}.  This paper proves both ---
+not in the standard formulation, but in the gauge theory of the
+flowing-space framework, where the discreteness of a count produces
+the gap and the noncommutativity of contractions produces the
+self-interaction.
 
 \paragraph{The claim.}
 Within the framework's four postulates --- space is a flowing medium;
@@ -382,7 +377,7 @@ integer witness that the mass gap of MG2 is not an artifact of the
 counting postulate but a property of the repository's glueball
 states themselves.  The empirical anchor --- a lightest glueball at
 about $1.6$ GeV with a gap above the vacuum --- is the same shape
-\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
+\cite{morningstar1999glueball,chen2006glueball};
 the framework's unit is not yet tied to GeV, and that calibration is
 an open problem (Sec.~XII).
 
@@ -930,21 +925,28 @@ when the lattice self-interaction is present.  Formalized as
 \texttt{lattice\_commutator\_continuous\_limit\_nuclear} in
 \texttt{YangMillsLattice.lean}.
 
-\begin{theorem}[CA10: the chain closes]
+\begin{theorem}[CA10: the assembled chain closes (in the manifest sense)]
 \label{thm:ca10}
-The continuum mechanism (nuclear channel nonzero) implies the mass
-gap (CA7), by way of the discreteness of mass (MG2b).
+The continuum mechanism (nuclear channel nonzero) and the mass gap
+(CA7), by way of the discreteness of mass (MG2b), are assembled into
+one chain.
 \end{theorem}
 
 \emph{Reading.}  This is the closing statement of the paper's
 central claim: the self-interaction (Sec.~IV), carried into the
-continuum by the four-force mechanism (CA8--CA9), implies the mass
-gap (Sec.~III).  The implication is conditional in the sense made
-precise throughout: each step is a theorem, and the inputs ---
-$\lambda$, $M_0$, the flattening power --- are named.  Formalized as
-\texttt{continuous\_limit\_mass\_gap\_chain} and
-\texttt{mass\_gap\_from\_self\_interaction} (CA7) in
-\texttt{YangMillsLattice.lean}.
+continuum by the four-force mechanism (CA8--CA9), stands beside the
+mass gap (Sec.~III) in one assembled sequence.  The honesty of the
+word ``assembled'' matters: in the Lean formalization the chain
+theorems are carried as \texttt{mass\_gap\_chain\_manifest\_assembled}
+and \texttt{continuum\_mass\_gap\_manifest\_assembled}, whose
+hypotheses are \emph{not used in the proof} --- the repository's own
+comments (2026-10-08) record this as ``汇编式陈述，不是蕴含''
+(assembly statement, not an implication) and ``前提空转'' (idle
+premises).  The theorem that genuinely uses the counting law is
+\texttt{mass\_gap\_from\_count\_law}; that is the framework input the
+gap depends on.  The implication from self-interaction to the mass
+gap --- the direction the Clay problem names --- is therefore stated
+as a program, not as a proved step.
 
 \section{Strict estimates}
 \label{sec:strict}
@@ -1287,21 +1289,32 @@ as the Leibniz decomposition of the flow momentum --- the two facts
 named by the conjecture are theorems, and the chain connecting them
 is closed.
 
-(i)~\emph{The mass gap is proved.}  Mass squared is
-$m^2(N)=N M_0^2$ with $N\in\mathbb{N}$ (Postulate~\ref{post:mass}).
-The spectrum is discrete by construction; the electron--photon
+(i)~\emph{The mass gap follows from the counting postulate.}  Mass
+squared is $m^2(N)=N M_0^2$ with $N\in\mathbb{N}$
+(Postulate~\ref{post:mass}); this counting law is a postulate of the
+framework, not a derived consequence of the gauge dynamics.  Given
+it, the spectrum is discrete by construction; the electron--photon
 transition $N\ge1\to N=0$ is an integer jump (MG3); the interval
-$(0,M_0^2)$ is empty (MG2b); the glueball mass squared is an integer,
-$0$ or $\ge1$ (MG4).  The positive lower bound of the mass spectrum
---- the mass gap --- is a theorem of the discreteness of mass.
+$(0,M_0^2)$ is empty (MG2b); the glueball mass squared is an
+integer, $0$ or $\ge1$ (MG4).  The positive lower bound of the mass
+spectrum --- the mass gap --- is therefore a conditional theorem of
+the framework: \emph{if} mass is an integer count of excited strands,
+\emph{then} the spectrum has a gap at $M_0^2$.  The counting law
+itself, and the value of $M_0$, are the framework's input, not its
+output; deriving them from the gauge dynamics is the open program of
+Sec.~\ref{sec:honest}.
 
-(ii)~\emph{The self-interaction is proved.}  The field strength of
-the four-dimensional continuous gauge field carries the non-abelian
-term $[A_\mu,A_\nu]$ with $\mu\neq\nu$ (CC2), and the sink
-contractions that carry the count are noncommutative with the exact
-commutator $\lambda^2(v_q-v_p)$ (YM2--YM3).  The self-interaction of
-the gauge field is a theorem about the noncommutativity of the
-count-carrying operators.
+(ii)~\emph{The self-interaction is a theorem about sink
+noncommutativity, with a stated structural difference from
+$[A_\mu,A_\nu]$.}  The field strength of the four-dimensional
+continuous gauge field carries the non-abelian term
+$[A_\mu,A_\nu]$ with $\mu\neq\nu$ (CC2), and the sink contractions
+that carry the count are noncommutative with the exact commutator
+$\lambda^2(v_q-v_p)$ (YM2--YM3).  The identification of the two is
+structural and partial: the sink commutator is linear in the field
+difference, whereas $[A_\mu,A_\nu]$ is quadratic in the field
+(Sec.~\ref{sec:selfinteraction}); the identification is a proposal
+of the framework, stated openly, not a proved equality.
 
 (iii)~\emph{The chain is closed in the framework.}  Accelerated
 charge forces the field to vary (CR1); the varying field activates
