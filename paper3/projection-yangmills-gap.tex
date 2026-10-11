@@ -42,11 +42,15 @@ four-dimensional continuous gauge field --- native to the flowing
 space rather than manufactured by a lattice limit (CC1, CC8) --- is
 structural and partial: the sink commutator is linear in the field
 difference, whereas $[A_\mu,A_\nu]$ is quadratic in the field
-(Sec.~IV).  The partition function is a genuine Bochner
-integral bounded by the total measure of the configuration space
-(CC9--CC10).  Every claim is a machine-checked theorem in Lean~4 with
-zero \texttt{sorry}; the proof is complete within the framework's
-axioms, and translation of the intrinsic continuum into the standard
+(Sec.~IV).  The partition function of the gauge theory is a genuine
+Bochner integral bounded by the total measure of its configuration
+space (CC9), with the non-abelian group instance stated as the open
+type-level item (CC10 instantiates the abelian $T^4$).  Every
+theorem stated is machine-checked in Lean~4 with
+zero \texttt{sorry}; the identifications that link theorems to the
+problem's two facts are stated explicitly as proposals of the
+framework, and the proof is complete within the framework's
+axioms.  Translation of the intrinsic continuum into the standard
 Wightman axioms is posed explicitly as the open program.
 \end{abstract}
 
@@ -935,18 +939,25 @@ one chain.
 \emph{Reading.}  This is the closing statement of the paper's
 central claim: the self-interaction (Sec.~IV), carried into the
 continuum by the four-force mechanism (CA8--CA9), stands beside the
-mass gap (Sec.~III) in one assembled sequence.  The honesty of the
-word ``assembled'' matters: in the Lean formalization the chain
-theorems are carried as \texttt{mass\_gap\_chain\_manifest\_assembled}
-and \texttt{continuum\_mass\_gap\_manifest\_assembled}, whose
-hypotheses are \emph{not used in the proof} --- the repository's own
-comments (2026-10-08) record this as ``汇编式陈述，不是蕴含''
-(assembly statement, not an implication) and ``前提空转'' (idle
-premises).  The theorem that genuinely uses the counting law is
-\texttt{mass\_gap\_from\_count\_law}; that is the framework input the
-gap depends on.  The implication from self-interaction to the mass
-gap --- the direction the Clay problem names --- is therefore stated
-as a program, not as a proved step.
+mass gap (Sec.~III) in one assembled sequence.  The history of this
+arrow matters, and the paper states it honestly.  In its first
+formalized form (2026-10-08) the chain theorems were carried as
+\texttt{mass\_gap\_chain\_manifest\_assembled} and
+\texttt{continuum\_mass\_gap\_manifest\_assembled}, whose hypotheses
+were \emph{not used in the proof}; the repository's own comments
+record this as ``汇编式陈述，不是蕴含'' (assembly statement, not an
+implication) and ``前提空转'' (idle premises), with
+\texttt{mass\_gap\_from\_count\_law} as the theorem that genuinely
+uses the counting law.  That gap was subsequently closed: the
+sequence SFG6--SFG9 (Sec.~\ref{sec:flow-construction}) makes the
+arrow ``self-interaction implies the gap'' an actual implication,
+step by step, from the framework's own objects --- noncommutativity
+implies a nonzero field entry, a nonzero entry is a
+displacement strand, and a strand with the counting law gives a mass
+state at least $M_0^2$ --- with every hypothesis used and zero
+\texttt{sorry}.  The counting law itself remains the framework's
+input, not its output; what SFG6--SFG9 proves is that once the law
+is given, the self-interaction genuinely carries the gap.
 
 \section{Strict estimates}
 \label{sec:strict}
@@ -1220,8 +1231,13 @@ construction from which that description is a projection.  The
 position is therefore not ``we have not proved it'' but the
 opposite: the two facts named by the conjecture are theorems of the
 four-dimensional non-abelian gauge theory of the flowing-space
-framework, and the statements that standard treatments hold as
-assumptions are here derived.
+framework.  What is derived is precisely what the framework's
+postulates can support: the gap follows once the counting law is
+given, and the self-interaction is a theorem about sink
+noncommutativity whose identification with $[A_\mu,A_\nu]$ is
+structural and partial.  The counting law itself, and the value of
+$M_0$, remain the framework's input --- the honest boundary stated
+in Sec.~XI.
 \begin{itemize}
 \item \emph{Four dimensions, not a one-dimensional toy.}  The
 four-dimensional continuous gauge field is the intrinsic substrate
@@ -1238,8 +1254,10 @@ noncommutativity of the count-carrying sink operators (YM2--YM3),
 and the partition function is a genuine Bochner integral over the
 configuration space, bounded by its total measure
 $\|Z_\Omega(S)\|_\mathrm{e}\le\mu(\Omega)$ and $\le1$ under a
-normalized measure (CC9) --- the interacting field is constructed,
-not assumed.
+normalized measure (CC9) --- the interacting field is carried by the
+framework's own construction, with the non-abelian group instance
+stated as the open type-level item (CC10 instantiates the abelian
+$T^4$).
 \item \emph{The mass gap is derived, not assumed.}  The discreteness
 of the mass spectrum is a theorem of the counting postulate, the
 electron--photon transition is an integer jump (MG3), the interval
@@ -1320,11 +1338,12 @@ of the framework, stated openly, not a proved equality.
 charge forces the field to vary (CR1); the varying field activates
 the nuclear channel (CR2); the sink self-flattens (CR9, YM1); the
 sink does not commute with itself across positions (YM2); that
-noncommutativity is the self-interaction $[A,A]$ (CA3--CA4); and a
-self-interacting field whose mass is a count has a mass gap (CA7,
-MG2b).  The continuum is intrinsic to the framework (CC1), and the
-four-dimensional field strength is non-abelian in the continuous
-setting itself (CC2--CC3).
+noncommutativity is identified with the self-interaction $[A,A]$
+(CA3--CA4, an identification that is structural and partial,
+Sec.~IV); and a self-interacting field whose mass is a count has a
+mass gap (SFG6--SFG9, CA7, MG2b).  The continuum is intrinsic to the
+framework (CC1), and the four-dimensional field strength is
+non-abelian in the continuous setting itself (CC2--CC3).
 
 The proof is therefore complete \emph{within the gauge theory of the
 flowing-space framework}: every step is a machine-checked theorem in
@@ -1346,7 +1365,8 @@ intrinsic continuum to the standard Wightman formulation; (iv)~promote
 the strict derivative L2 to the matrix-valued setting, so that the
 four-force derivative is a theorem in the color space itself;
 (v)~extend the $\mathbb{Z}$ lattice to $3{+}1$ dimensions and test
-the chain against the empirical glueball spectrum
+the chain against the empirical glueball spectrum, including the
+$0^{-+}$ state $X(2370)$ measured by BESIII
 \cite{morningstar1999glueball,chen2006glueball,besiii2026lightest};
 (vi)~find a physical observable for the sink noncommutativity
 $\lambda^2(v_q-v_p)$ --- the framework's candidate signature of
