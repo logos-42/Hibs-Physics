@@ -33,8 +33,8 @@
 --   质量取消的推论（AMC1+TF2），无新物理预言（4 层判定：数学恒等 +
 --   概念重构）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FieldSimp
@@ -62,7 +62,7 @@ theorem q_weight_antitone_in_mass (Z m₁ m₂ : ℝ) (hZ : Z ≠ 0) (hm₁ : 0 
   have hdiv : 1 / Real.sqrt m₂ < 1 / Real.sqrt m₁ :=
     one_div_lt_one_div_of_lt (Real.sqrt_pos.2 hm₁) hsqrt
   -- Z² 乘正数保持序
-  simpa [one_div] using mul_lt_mul_of_pos_left hdiv (sq_pos_of_ne_zero hZ)
+  simpa [div_eq_mul_inv] using mul_lt_mul_of_pos_left hdiv (sq_pos_of_ne_zero hZ)
 
 /-! ### ② 双流形结构（两股等离子体流的空间场叠加） -/
 

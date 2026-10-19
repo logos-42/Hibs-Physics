@@ -25,7 +25,7 @@
 -- 诚实：本模块全是代数恒等式与有界枚举（真但平凡）；"扭转 → N"是**模型选择**，
 -- 这里只**否掉**对角模型并给出最小集体实现，**没有**导出选择规则。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Tactic.FinCases

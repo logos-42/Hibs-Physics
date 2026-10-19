@@ -29,8 +29,8 @@
 --     角色、而不是环境的函数），不是本定理的证明前提——这一点更正了上一轮把它列为
 --     「三块碎料之一」的说法：真正的第三块是**三方向（P3）**，不是 GQC2。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum

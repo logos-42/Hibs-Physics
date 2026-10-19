@@ -17,8 +17,8 @@
 --   SLS6 假设（空间流动普适）→ 惯性系定义 → 快度参数化 → boost 矩阵
 --   → 度规保持（洛伦兹群）→ 复合律 → 速度加法 → 光速不变
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Matrix.Mul
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic

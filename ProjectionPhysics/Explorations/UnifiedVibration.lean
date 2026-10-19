@@ -5,7 +5,7 @@
 -- 不把 κ、质量单位或包络动力学偷换成定理。
 
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import ProjectionPhysics.Explorations.VibrationKappa

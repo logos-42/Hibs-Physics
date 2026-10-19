@@ -27,7 +27,7 @@
 -- 对应脚本：scripts/verify_entanglement_helix.py（数值 + 蒙特卡洛）
 -- 对应 wiki：docs/wiki/theory-entanglement-helix.md
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Defs
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset

@@ -38,8 +38,8 @@
 --   未建模；"冻结=信息转移到边界"是全息层注释；无新物理预言
 --   （4 层判定：数学恒等 + 概念重构）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FieldSimp

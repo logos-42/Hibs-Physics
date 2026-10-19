@@ -27,8 +27,8 @@
 --   载流（安匝）与制冷（mW vs kW）两门是数值层量级账，未在此形式化；
 --   无新物理预言（4 层判定：数学恒等 + 工程映射）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FieldSimp

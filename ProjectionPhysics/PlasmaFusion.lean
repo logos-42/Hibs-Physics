@@ -33,8 +33,8 @@
 --   几何系数）是数值层输入；μ(t) 的主动产生机制=第二输入缺口（未变）；
 --   无新物理预言（4 层判定：数学恒等 + 工程应用映射）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FieldSimp

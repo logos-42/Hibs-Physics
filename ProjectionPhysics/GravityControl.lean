@@ -49,7 +49,7 @@
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Data.Finset.Card
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
@@ -106,11 +106,11 @@ def commutes (P Q : (ι → ℝ) → (ι → ℝ)) : Prop :=
 
 /-- 单点展开（属于 A）。 -/
 lemma flatten_apply_mem {A : Finset ι} {v : ι → ℝ} {i : ι} (h : i ∈ A) :
-    flatten A v i = regionMean A v := if_pos h
+    flatten A v i = regionMean A v := ite_eq_left h
 
 /-- 单点展开（不属于 A）。 -/
 lemma flatten_apply_not_mem {A : Finset ι} {v : ι → ℝ} {i : ι} (h : i ∉ A) :
-    flatten A v i = v i := if_neg h
+    flatten A v i = v i := ite_eq_right h
 
 /-- 区域非空 ⟹ 基数（作为实数）非零。 -/
 lemma card_cast_ne_zero {A : Finset ι} (hA : A.Nonempty) : (A.card : ℝ) ≠ 0 := by

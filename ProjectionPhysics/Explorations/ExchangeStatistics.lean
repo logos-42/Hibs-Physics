@@ -68,8 +68,8 @@
 --     仓库没有场算符语言。
 --   · 2D 的「任意子」在本模块只到「角色族有自由参数 α」；α ⊄ πℤ 的具体见证在数值层。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum

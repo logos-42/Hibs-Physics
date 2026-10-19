@@ -50,7 +50,7 @@
 -- （ω₀ = 涡旋频率 = |B|/2，非自由输入）；m_k 的调制激励机制仍是
 -- 第二输入缺口。无新物理预言（消息字母表 / 信道容量仍结构层）。
 
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -256,7 +256,7 @@ lemma fm3_decode_roundtrip (ω₀ : ℝ) (m : ℕ → Fin 2) (k : ℕ) :
         rw [← hstep1] at h
         exact hc h
       unfold fmDecodeBit
-      rw [fm1_step_phase, h1, if_neg hc']
+      rw [fm1_step_phase, h1, ite_eq_right hc']
 
 /-! ### FM4–FM5. 调制 ⟹ 统一场（四力）响应 -/
 

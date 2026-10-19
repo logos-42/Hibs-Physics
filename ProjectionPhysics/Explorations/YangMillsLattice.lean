@@ -30,12 +30,12 @@
 --
 -- 产物：本文件 + 聚合根；零 sorry 零 warning。
 
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.FinCases
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import ProjectionPhysics.Explorations.ColorOctetMathlib
 import ProjectionPhysics.Explorations.MassGap
 import ProjectionPhysics.Explorations.UnifiedVibration

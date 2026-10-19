@@ -46,7 +46,7 @@
 --     **公设**（P3「三方向」）换成**两条可分别判死的要求的交**。收窄了输入的性质，没有消掉输入。
 --   · 零新可检验预言。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic

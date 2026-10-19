@@ -36,7 +36,7 @@
 --   (b) CR1 的 3D 连续版失效，或 (c) 找到与 CR5 矛盾的反例，
 --   则本链死（断点位置按反例形状移动）。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import ProjectionPhysics.Explorations.MaxwellSpace

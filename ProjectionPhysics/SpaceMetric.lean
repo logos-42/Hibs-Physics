@@ -20,7 +20,7 @@
 --   SM6. 时间膨胀：γ = cosh θ，dτ = dt/γ（偏离越大时间越慢）
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith

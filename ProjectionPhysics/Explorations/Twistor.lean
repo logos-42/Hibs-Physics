@@ -25,7 +25,7 @@
 -- 代数对应（σ₃ 本征翻转），不是电性数值的来源（第二输入缺口）。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum

@@ -36,7 +36,7 @@
 -- 全域纠缠"与距离无关"需数值验证（E(Δ) 无距离衰减）。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Data.Nat.Dist
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
@@ -291,12 +291,13 @@ def tripleOuterSum (a b c : TriTwistor) : Matrix (Fin 3) (Fin 3) ℂ :=
   Matrix.vecMulVec a (star a) + Matrix.vecMulVec b (star b) +
     Matrix.vecMulVec c (star c)
 
-/-- 扭量矩阵（行 = 三个扭量）：A i j = 第 i 个扭量的第 j 分量。 -/
+/-- 扭量矩阵（行 = 三个扭量）：A i j = 第 i 个扭量的第 j 分量。
+    v4.35 迁移：由 `if/match` 函数形式改为矩阵字面量形式——v4.35 的
+    `norm_num` 不再化简 `Fin` 上的 `match`（与 YangMillsContinuum.diag123
+    同一迁移），字面量入口可被 `Matrix.cons_val_*` 系列引理直接求值。
+    函数内容不变。 -/
 def triMatrix (a b c : TriTwistor) : Matrix (Fin 3) (Fin 3) ℂ :=
-  fun i j => (match i with
-    | ⟨0, _⟩ => a j
-    | ⟨1, _⟩ => b j
-    | _ => c j)
+  !![a 0, a 1, a 2; b 0, b 1, b 2; c 0, c 1, c 2]
 
 /-! ### GQ1. 三扭量外积和 = Aᵀ(Aᵀ)ᴴ -/
 
@@ -623,7 +624,7 @@ theorem triple_outer_2d_excited_iff (a₁ b₁ a₂ b₂ a₃ b₃ : ℂ) :
   constructor
   · intro h
     by_contra hnone
-    push_neg at hnone
+    push Not at hnone
     have hz : (a₁ * b₂ - a₂ * b₁) * star (a₁ * b₂ - a₂ * b₁) +
         (a₁ * b₃ - a₃ * b₁) * star (a₁ * b₃ - a₃ * b₁) +
         (a₂ * b₃ - a₃ * b₂) * star (a₂ * b₃ - a₃ * b₂) = 0 := by
@@ -938,7 +939,9 @@ theorem detRowAlt_eq_star {n m : ℕ} (A : Fin n → Fin m → ℂ) (r : Fin n �
     Matrix.detRowAlternating (fun k l => star (A l (r k))) =
       star (Matrix.det (fun l k => A l (r k))) := by
   change Matrix.det (fun k l => star (A l (r k))) = star (Matrix.det (fun l k => A l (r k)))
-  simpa [Matrix.conjTranspose] using
+  -- v4.35 迁移：`using!`（默认透明度）——`Mᵀ.map star` 与目标函数型式
+  -- 需默认透明度才能 defeq 匹配（simpa 的 `using` 只用 reducible）。
+  simpa [Matrix.conjTranspose] using!
     (Matrix.det_conjTranspose (M := fun l k => A l (r k)))
 
 /-- ★ GQS3：一般 n 的组合引理——det(AA†) =
@@ -1055,7 +1058,9 @@ theorem sum_enum_minor {n m : ℕ} (A : Fin n → Fin m → ℂ)
               Matrix.submatrix (fun l k => A l (e₀ k)) id π := by
             ext l k
             simp [Matrix.submatrix]
-          rw [hm, Matrix.det_permute']
+          -- v4.35 迁移：显式给出 σ 与矩阵——`Matrix` 在 v4.35 变成
+          -- semireducible def，rw 的隐式透明度类型检查会失败。
+          rw [hm, Matrix.det_permute' π (fun l k => A l (e₀ k))]
           -- sign π • det = (sign π : ℂ) * det（ℤ-smul 展开）
           exact (zsmul_eq_mul (Matrix.det (fun l k => A l (e₀ k))) (Equiv.Perm.sign π)).symm
     _ = (∑ π : Equiv.Perm (Fin n), Equiv.Perm.sign π •
@@ -1075,8 +1080,11 @@ theorem sum_enum_minor {n m : ℕ} (A : Fin n → Fin m → ℂ)
                   have hs : star (Equiv.Perm.sign π • Matrix.det (fun l k => A l (e₀ k))) =
                       Equiv.Perm.sign π • star (Matrix.det (fun l k => A l (e₀ k))) := by
                     -- 环同态保持 ℤ-smul：star(sign π • det) = sign π • star(det)
+                    -- v4.35 迁移：`AddMonoidHom.map_zsmul` 参数序为
+                    -- (f) (n : ℤ) (g)——原先把 det 放在 n 位置会报
+                    -- 「expected ℤ」。
                     exact AddMonoidHom.map_zsmul ((starRingEnd ℂ) : ℂ →+ ℂ)
-                      (Matrix.det (fun l k => A l (e₀ k))) (Equiv.Perm.sign π)
+                      (Equiv.Perm.sign π) (Matrix.det (fun l k => A l (e₀ k)))
                   rw [hs]
                   -- 展开 ℤ-smul 为 intCast 乘法，ℂ 自 smul 为乘法，ring 合并
                   have h1 : Equiv.Perm.sign π • star (Matrix.det (fun l k => A l (e₀ k))) =
@@ -1100,7 +1108,8 @@ theorem sum_enum_minor {n m : ℕ} (A : Fin n → Fin m → ℂ)
               Matrix.det (fun i k => A i (e₀ k)) := by
             -- det M₀ = det M₀ᵀ（det_transpose），M₀ᵀ r c = A c (e₀ r)
             -- det(M₀ᵀ) = Σ_σ sign σ • ∏ i, A i (e₀ (σ i))（det_apply）
-            rw [← Matrix.det_transpose]
+            -- v4.35 迁移：显式给出 M（Matrix semireducible 同因）。
+            rw [← Matrix.det_transpose (M := fun i k => A i (e₀ k))]
             rw [Matrix.det_apply]
             -- 两边是同一个 Leibniz 和（变量重命名）
             rfl

@@ -30,7 +30,7 @@
 --   离散 → 连续的极限不成立（交换差随格点细化不趋于 [A,A]），
 --   本种子死。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith

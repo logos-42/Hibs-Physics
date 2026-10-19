@@ -28,7 +28,7 @@
 --   - 托马斯进动的流动版（进动 = 空间流动非均匀 ∇×C 的转动）在数值层。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum

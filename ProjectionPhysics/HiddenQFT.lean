@@ -33,8 +33,8 @@
 --   是解释层映射（RiemannHIBS 临界叶概念重述）；能量净产出的
 --   机制 = 第二输入缺口（未变）；无新物理预言。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Analysis.Complex.Trigonometric

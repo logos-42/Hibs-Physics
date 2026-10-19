@@ -36,8 +36,8 @@
 --   （v_th ∝ 1/√m_eff ⟹ 反应率可能变）**未建模**，是新增的开放缺口；
 --   无新物理预言（4 层判定：数学恒等 + FRC 工程映射）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FieldSimp

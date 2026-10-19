@@ -24,8 +24,8 @@
 --     与量子力学互补性等价；区别在"空间谐波"是物理结构还是叙事。
 --   - 连续波传播/衍射积分（Huygens）未形式化（数值层见 Python）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Tactic.Ring

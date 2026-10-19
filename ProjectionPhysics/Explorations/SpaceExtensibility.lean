@@ -25,7 +25,7 @@
 --
 -- 优先级：v1（本模块）→ v2（Φ 势 + 格点数值）。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity

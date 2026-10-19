@@ -33,7 +33,7 @@
 --     本模块证明的是代数内核：麦克斯韦 ⟺ C 波动 + 定义。
 --   - 源项（电荷）只有形式化位置（MS5），电荷量子化/数值无来源。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
 

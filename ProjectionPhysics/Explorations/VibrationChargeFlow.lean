@@ -5,7 +5,7 @@
 --   负电荷 = 位移流散度为负（汇）
 -- 这里只形式化符号层，不声称已得到 e 的数值、连续矢量场或 Maxwell 全部动力学。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 
 namespace ProjectionPhysics.VibrationChargeFlow

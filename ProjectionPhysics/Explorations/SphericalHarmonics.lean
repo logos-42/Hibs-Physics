@@ -20,7 +20,7 @@
 --   "整体来看的球谐函数"的代数形式就是 (σ₁+σ₂+σ₃)² = 3I。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
@@ -68,6 +68,8 @@ theorem triplet_operator_sq_is_three :
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [σ₁, σ₂, σ₃, Matrix.mul_apply]
+  -- (0,1)/(1,0) 两个非对角情形已被上面的 simp 自动关闭（v4.35 simp 集），
+  -- 只剩 (0,0) 与 (1,1) 两个对角情形需显式计算。
   · -- (0,0): 1 + (1-I)(1+I) = 3
     have h2 : (1 + -Complex.I) * (1 + Complex.I) = 2 := by
       ring_nf
@@ -75,10 +77,6 @@ theorem triplet_operator_sq_is_three :
       norm_num
     rw [h2]
     norm_num
-  · -- (0,1): 1 - I + (I + -1) = 0
-    ring_nf
-  · -- (1,0): 1 + I + (-I + -1) = 0
-    ring_nf
   · -- (1,1): (1+I)(1-I) + 1 = 3（乘法顺序反了）
     have h2' : (1 + Complex.I) * (1 + -Complex.I) = 2 := by
       ring_nf

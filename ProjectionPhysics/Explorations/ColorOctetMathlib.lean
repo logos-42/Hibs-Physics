@@ -14,7 +14,7 @@
 -- 共同构成胶球构造学的 Lean 层：纯胶球是玻色子（SS）、
 -- 色八重态维度 8 的代数载体（CM）、Cℓ(6) 旋量 8 维表示（CS）。
 
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace

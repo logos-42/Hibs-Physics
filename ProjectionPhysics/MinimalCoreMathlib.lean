@@ -12,7 +12,7 @@
 -- |·|² 用 Complex.sq_norm 直接化简，无需手写 ℂ 的 re/im 展开。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
@@ -112,7 +112,7 @@ theorem nonzero_spinor_has_component (ψ : Spinor) (h : ψ ≠ 0) :
   by_contra hcon
   apply h
   -- 两个分量都 = 0 ⟹ 旋量 = 0
-  push_neg at hcon
+  push Not at hcon
   funext i
   fin_cases i
   · exact hcon.1

@@ -20,8 +20,8 @@
 -- 动力学（束缚态/质量谱）在数值层；格点 QCD 对比是数量级校验（模型
 -- 无第一性预言 M₀——第二输入缺口）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.Ring
 
 namespace ProjectionPhysics.GlueballCoupling

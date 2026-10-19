@@ -21,7 +21,7 @@
 --   RD4  photon_gamma_diverges: u=0 ⟹ 1−(c−u)²/c² = 0（γ=∞, dτ=0）
 --   RD5  rest_gamma_one: u=c ⟹ 1−(c−u)²/c² = 1（γ=1, 正常时间）
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith

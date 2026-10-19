@@ -24,8 +24,8 @@
 -- 死法：若在 ln 坐标下找到第二个非平凡的反射不动结构（ln ≠ ½），
 --   或包络反射对称不再唯一，本解读死。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Analysis.SpecialFunctions.Log.Basic

@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-10-01
+last_confirmed: 2026-10-19
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,21 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-10-19 session：工具链迁移 v4.28 → v4.35（全绿 + 弃用清零）
+
+`lean-toolchain` 与 `lakefile.toml`（mathlib 路径依赖）升级到 **Lean 4.35.0 / mathlib v4.35**，全仓重编译通过：`lake build` → **Build completed successfully (5694 jobs)**；`scripts/verify_all.py --fast` → **RESULT: ALL PASS**（零 sorry/admit 门禁在内）。
+
+**迁移根因四类**（每处修补在代码内留有 `v4.35 迁移` 注释，详见 log.md 2026-10-19 行）：
+
+1. **simp 集收缩**：`deriv_const'` 退出默认 simp 集；`deriv_const 0 X` 的点参数类型二义需 `show deriv (fun _ : ℝ => X) 0 = 0 from deriv_const 0 X` 固定 ℝ。
+2. **simpa 透明度**：`simpa … using`（reducible）失配处统一改 `using!`（默认透明度）。
+3. **norm_num 不再化简 `Fin` 上的 `match`**：`diag123`、`triMatrix` 等函数定义改写为矩阵字面量 `!![…]`（函数内容不变）。
+4. **`Matrix` 变 semireducible `def`**：rw 失配处显式给出引理参数；`HasDerivAt.const_add` 与 `AddMonoidHom.map_zsmul` 参数序变更按新序调用。
+
+**弃用项清零**（51 文件）：四个 mathlib 导入路径更名 + `if_pos/if_neg`→`ite_eq_left/ite_eq_right`、`ofReal_norm_eq_enorm`→`ofReal_norm`、`push_neg`→`push Not`。
+
+**「零 warning」口径变化（重要，影响 58 个理论页的历史表述）**：v4.35 新增 module-system 咨询 linter，每条 mathlib import 报「consider adding `module`」，全仓 **272 条**，无法在不引入 module 系统语义变更的前提下消除。⟹ 各理论页的「零 warning」自此应读作 **v4.28 时代口径**；证明质量（零 sorry/admit、门禁 ALL PASS）未变。是否全仓采用 `module` 头是独立设计决策，**登记为后续工作，本次未做**。
 
 ## ★ 2026-10-11 session：三轮对抗审稿闭环 + aixiv v1.3 发布（CNS 标准打磨）
 

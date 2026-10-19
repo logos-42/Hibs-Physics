@@ -10,7 +10,7 @@
 -- 诚实边界：这是候选映射的形式化否定/分叉证明，不是质量定理；
 -- 没有新增公设，没有证明哪一个候选才是物理 κ。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 

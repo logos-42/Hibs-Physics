@@ -35,7 +35,7 @@
 --   不是数值预言。属判决类（档 3），不属推导类（档 1/2）。
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
@@ -119,10 +119,10 @@ def spinDown : Spinor := fun i => if i = i0 then 0 else 1
     也是实验要检验的**零假设**（标准 MHD 也预言无劈裂）。 -/
 theorem up_down_degenerate : anchorMassSq spinUp = anchorMassSq spinDown := by
   rw [anchor_massSq_eq_sum, anchor_massSq_eq_sum]
-  have hu0 : spinUp i0 = 1 := by unfold spinUp; rw [if_pos rfl]
-  have hu1 : spinUp i1 = 0 := by unfold spinUp; rw [if_neg (by decide)]
-  have hd0 : spinDown i0 = 0 := by unfold spinDown; rw [if_pos rfl]
-  have hd1 : spinDown i1 = 1 := by unfold spinDown; rw [if_neg (by decide)]
+  have hu0 : spinUp i0 = 1 := by unfold spinUp; rw [ite_eq_left rfl]
+  have hu1 : spinUp i1 = 0 := by unfold spinUp; rw [ite_eq_right (by decide)]
+  have hd0 : spinDown i0 = 0 := by unfold spinDown; rw [ite_eq_left rfl]
+  have hd1 : spinDown i1 = 1 := by unfold spinDown; rw [ite_eq_right (by decide)]
   rw [hu0, hu1, hd0, hd1, Complex.normSq_zero, Complex.normSq_one]
   norm_num
 

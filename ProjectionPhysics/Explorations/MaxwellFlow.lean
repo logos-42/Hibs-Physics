@@ -39,8 +39,8 @@
 --     半径 = 流场参数 r_h，仓库无独立输入（诚实：与"第二输入未找到"
 --     同源的开放性缺口）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Basic.Real.Basic
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith

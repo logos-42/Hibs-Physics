@@ -163,6 +163,6 @@ theorem hiddenReProj_kernel_iff (z : ℂ) : hiddenReProj z = 0 ↔ z.re = 0 := b
     投影后方向 = 实轴分量(复述 L7 正交分解,用 imProj 命名)。 -/
 theorem direction_emerges_from_projection (z : ℂ) :
     z = cSmul (reProj z) 1 + cSmul (imProj z) cI := by
-  simpa [imProj] using cOrthogonalDecomp z
+  simpa [imProj, reProj] using cOrthogonalDecomp z
 
 end ProjectionPhysics

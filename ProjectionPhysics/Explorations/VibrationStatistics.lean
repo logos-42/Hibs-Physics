@@ -29,8 +29,8 @@
 --   · 耗散：闭包缺陷 ε := f(θ+2π) − σ f(θ)；ε ≡ 0 ⟺ 守恒（GQC1 的信息守恒）；
 --     ε ≠ 0 的**来源**= 仓库的「第二输入缺口」（未变）。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
@@ -113,17 +113,17 @@ theorem closure_factor_mul (f g : ℝ → ℂ) (σ τ : ℂ)
 theorem bosonic_mul_bosonic (f g : ℝ → ℂ) (hf : IsBosonicF f) (hg : IsBosonicF g) :
     IsBosonicF (fun θ => f θ * g θ) := by
   have h := closure_factor_mul f g 1 1 hf hg
-  simpa using h
+  simpa [IsBosonicF] using h
 
 theorem bosonic_mul_fermionic (f g : ℝ → ℂ) (hf : IsBosonicF f) (hg : IsFermionicF g) :
     IsFermionicF (fun θ => f θ * g θ) := by
   have h := closure_factor_mul f g 1 (-1) hf hg
-  simpa using h
+  simpa [IsFermionicF] using h
 
 theorem fermionic_mul_fermionic (f g : ℝ → ℂ) (hf : IsFermionicF f) (hg : IsFermionicF g) :
     IsBosonicF (fun θ => f θ * g θ) := by
   have h := closure_factor_mul f g (-1) (-1) hf hg
-  simpa using h
+  simpa [IsBosonicF] using h
 
 -- ---------------------------------------------------------------------------
 -- VBS6 ★ n 股相因子 σⁿ ⟹ 奇偶律（奇数股费米仍是费米，偶数股费米是玻色）
@@ -145,7 +145,7 @@ theorem even_fermion_strands_bosonic (f : ℝ → ℂ) (h : IsFermionicF f) (k :
   have hh := closure_factor_pow f (-1) h (2 * k)
   have hσ : (-1 : ℂ) ^ (2 * k) = 1 := Even.neg_one_pow ⟨k, by ring⟩
   rw [hσ] at hh
-  simpa using hh
+  simpa [IsBosonicF] using hh
 
 /-- ★ 奇数股费米型仍是费米型。 -/
 theorem odd_fermion_strands_fermionic (f : ℝ → ℂ) (h : IsFermionicF f) (k : ℕ) :
@@ -153,7 +153,7 @@ theorem odd_fermion_strands_fermionic (f : ℝ → ℂ) (h : IsFermionicF f) (k 
   have hh := closure_factor_pow f (-1) h (2 * k + 1)
   have hσ : (-1 : ℂ) ^ (2 * k + 1) = -1 := Odd.neg_one_pow ⟨k, by ring⟩
   rw [hσ] at hh
-  simpa using hh
+  simpa [IsFermionicF] using hh
 
 -- ---------------------------------------------------------------------------
 -- VBS7 ★★ 显式振动见证：半角螺旋 = 费米型；全角螺旋 = 玻色型
@@ -200,7 +200,7 @@ theorem closureDefect_zero_iff (f : ℝ → ℂ) :
   · intro h θ
     have hθ := h θ
     simp only [ClosureDefect, one_mul, sub_eq_zero] at hθ
-    simpa using hθ
+    simpa using! hθ
   · intro h θ
     have hθ : f (θ + 2 * Real.pi) = 1 * f θ := h θ
     simp only [ClosureDefect]
@@ -218,7 +218,7 @@ theorem closure_arbitrary_steps (f : ℝ → ℂ) (h : IsBosonicF f) :
       have hstep : f (θ + (k : ℝ) * (2 * Real.pi) + 2 * Real.pi)
           = f (θ + (k : ℝ) * (2 * Real.pi)) := by
         have hk := h (θ + (k : ℝ) * (2 * Real.pi))
-        simpa using hk
+        simpa using! hk
       have harith : θ + ((Nat.succ k : ℕ) : ℝ) * (2 * Real.pi)
           = θ + (k : ℝ) * (2 * Real.pi) + 2 * Real.pi := by
         push_cast; ring

@@ -24,7 +24,7 @@
 --   它把第二输入缺口从"η 是哪来的"重述为"抹平功率是哪来的"（TD18）——
 --   缺口位置移动了，缺口本身还在。无新物理预言。
 
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith

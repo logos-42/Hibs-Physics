@@ -40,12 +40,12 @@ import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Analysis.Calculus.Deriv.Add
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.Analysis.Matrix.Normed
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Finset.Basic
-import Mathlib.MeasureTheory.Measure.MeasureSpace
+import Mathlib.MeasureTheory.Measure.Basic
 import Mathlib.MeasureTheory.Group.AddCircle
 import Mathlib.MeasureTheory.Constructions.Pi
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -106,9 +106,12 @@ def gaugeFieldOf (X Y : Mat3C) : GaugeField :=
 def fieldStrength (A : GaugeField) (μ ν : Fin 4) (x : Fin 4 → ℝ) : Mat3C :=
   commutatorTerm (A x μ) (A x ν)
 
-/-- 对角矩阵 diag(1,2,3) 的显式函数形式（避免 vec 记号的展开问题）。 -/
-def diag123 : Mat3C :=
-  fun i j => if i = j then (match i with | ⟨0, _⟩ => 1 | ⟨1, _⟩ => 2 | _ => 3) else 0
+/-- 对角矩阵 diag(1,2,3) 的显式形式。
+    v4.35 迁移：由原来的 `if/match` 函数形式改为矩阵字面量形式——
+    v4.35 的矩阵乘法实例改为 `dotProduct`，字面量入口可被
+    `Matrix.cons_val_*` 系列引理直接求值（v4.28 的 `norm_num`
+    能化掉 `Fin` 上的 `match`，v4.35 不能）。函数内容不变。 -/
+def diag123 : Mat3C := !![1, 0, 0; 0, 2, 0; 0, 0, 3]
 
 /-- ★★ CC3：两个独立方向交换子非零的显式见证。
     取 X = cycle3（C₃ 色循环），Y = diag(1,2,3)。
@@ -120,8 +123,7 @@ theorem cycle3_diag_commutator_ne_zero :
   have h01 := congrArg
     (fun M : Mat3C => M ⟨0, by decide⟩ ⟨1, by decide⟩) h
   unfold commutatorTerm cycle3 diag123 at h01
-  simp [Matrix.mul_apply, Matrix.vecMul,
-    Matrix.cons_val_zero,
+  simp [Matrix.cons_val_zero,
     Matrix.vecHead, Matrix.vecTail, Matrix.of_apply] at h01
   norm_num at h01
 
@@ -171,7 +173,7 @@ theorem enorm_integral_le_measure_univ_of_norm_le_one
       apply lintegral_mono
       intro x
       change ‖f x‖ₑ ≤ (1 : ENNReal)
-      rw [← ofReal_norm_eq_enorm]
+      rw [← ofReal_norm]
       exact le_trans (ENNReal.ofReal_le_ofReal (hf x)) (by simp)
     _ = μ Set.univ := by simp [lintegral_const]
 
@@ -214,15 +216,26 @@ noncomputable def fieldStrengthStrict (A : GaugeField) (μ ν : Fin 4)
 /-- ★ CC8a：常量场的方向导数为零（导数项在常量场上消失）。 -/
 theorem dirDeriv_const_field (X : Mat3C) (μ : Fin 4) (x : Fin 4 → ℝ) :
     dirDeriv (fun _ : Fin 4 → ℝ => X) μ x = 0 := by
-  simp [dirDeriv]
+  -- v4.35 迁移：`deriv_const'` 虽仍是 @[simp]，但在矩阵值目标上下文里
+  -- 实例（NormedSpace ℝ Mat3C）合成失败被 simp 静默跳过；`deriv_const`
+  -- 作为 simp 引理也匹配不上（高阶模式 + 实例问题）。改为显式项
+  -- （`deriv_const` 参数序为 (x) (c)）。
+  simp only [dirDeriv]
+  exact deriv_const 0 X
 
 /-- ★★ CC8b：常量场的严格场强 = 纯交换子。
     ⟹ 旧 `fieldStrength`（只有交换子）是严格场强在导数项为零时的**特殊情形**；
     非交换项现在是一个**可分离的加项**，不是全部定义。 -/
 theorem fieldStrengthStrict_gaugeFieldOf (X Y : Mat3C) (x : Fin 4 → ℝ) :
     fieldStrengthStrict (gaugeFieldOf X Y) 0 1 x = commutatorTerm X Y := by
+  -- v4.35 迁移：同 dirDeriv_const_field，simp 关不掉常量场的导数项，
+  -- 显式改写（`deriv_const` 参数序 (x) (c)；直接用 `deriv_const 0 Y`
+  -- 会因点参数 0 的类型二义把 𝕜 推成 ℕ，需用 show 固定 ℝ）。
   unfold fieldStrengthStrict gaugeFieldOf
   simp [dirDeriv]
+  rw [show deriv (fun _ : ℝ => Y) 0 = 0 from deriv_const 0 Y,
+      show deriv (fun _ : ℝ => X) 0 = 0 from deriv_const 0 X]
+  simp
 
 /-- ★★ CC8c：严格场强可以非零（导数项为零的常量场见证）——
     非交换项不是被导数项抵消掉的空项。 -/
@@ -244,9 +257,17 @@ theorem dirDeriv_linear_field (c : Mat3C) (μ : Fin 4) (x : Fin 4 → ℝ) :
     simp
   rw [hfun]
   have h0 : HasDerivAt (fun t : ℝ => t • c) c 0 := by
-    simpa [one_smul] using (HasDerivAt.smul_const (hasDerivAt_id (0 : ℝ)) c)
+    simpa [one_smul] using! (HasDerivAt.smul_const (hasDerivAt_id (0 : ℝ)) c)
   have h1 : HasDerivAt (fun t : ℝ => (x μ + t) • c) c 0 := by
-    simpa [add_smul, add_comm] using (h0.const_add ((x μ) • c))
+    -- v4.35 迁移：`HasDerivAt.const_add` 参数序由 (hf) (c) 变为 (c) (hf)，
+    -- 结论由 `f + c` 变为 `c + f`；且本文件导入 FDeriv.Basic 后
+    -- `hasDerivAt_const_add_iff`（@[simp]）对目标侧不再触发，
+    -- simpa 路线失效，改为显式 funext 改写 + 精确项。
+    have heq : (fun t : ℝ => (x μ + t) • c) = (fun t : ℝ => (x μ) • c + t • c) := by
+      funext t
+      rw [add_smul]
+    rw [heq]
+    exact HasDerivAt.const_add ((x μ) • c) h0
   exact h1.deriv
 
 /-- ★★ CC8e：非零系数的线性场 ⟹ 方向导数非零（导数项确实能不为零）。 -/
@@ -282,7 +303,7 @@ theorem partitionFunction_enorm_le_measure_univ {Ω : Type*} [MeasurableSpace Ω
 theorem partitionFunction_enorm_le_one {Ω : Type*} [MeasurableSpace Ω]
     (μ : Measure Ω) [IsProbabilityMeasure μ] (S : Ω → ℝ) :
     ‖partitionFunction μ S‖ₑ ≤ 1 := by
-  simpa using enorm_integral_le_measure_univ_of_norm_le_one μ
+  simpa using! enorm_integral_le_measure_univ_of_norm_le_one μ
     (fun ω => Complex.exp (Complex.I * S ω))
     (fun ω => by rw [exp_iS_has_norm_one])
 

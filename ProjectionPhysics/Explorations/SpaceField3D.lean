@@ -23,7 +23,7 @@
 --   - SF5 是定义级连接（B = curl C ⟹ B ≠ 0 ⟺ curl C ≠ 0），物理内容
 --     （自旋 = 涡旋）在解释层（4 层判定：概念重构）。
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Ring
 
 namespace ProjectionPhysics.SpaceField3D

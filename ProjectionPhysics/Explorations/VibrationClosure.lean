@@ -30,8 +30,8 @@
 --     **n 是整数**，得不到**量子单位是 ħ**。ħ 的身份仍是输入（详见 wiki §诚实边界）。
 --   · 本模块**不**引入任何新公设、**不**引入新标度；全仓库无 `axiom`。
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import Mathlib.Tactic.Ring
