@@ -18,9 +18,18 @@
   · ξ 是**参量化**的破坏项，不是新物理：DR4/AMC7 主张 ξ=0，本作业量的是「ξ 能容忍多大」
   · 不涉及 μ 的主动产生（仍是档 3）
 
+场有两条实现（--field，默认 auto；低成本路线，leo 2026-10-19）：
+  sum     分段 Biot–Savart 直接求和 O(N*nseg)（GPU 友好，原实现）
+  closed  圆环场**椭圆积分闭式** O(N)（scipy，CPU/float64 求值后回填设备；
+          nseg 离散化参数整个消失；轴上即解析式、机器精度）
+  auto    有 scipy 用 closed，否则回落 sum（远端容器缺 scipy 时自动降级，report 如实登记）
+配套：捕获率也有解析闭式（径向方程恒等 rdot = xi ⟹ r(t) = r0 + xi*t 精确），G2c 把两者对挂；
+判决量全闭式版见 scripts/calc_fusion_gravity_lowcost.py（15 断言，零 GPU）。
+
 用法：
-  python3 twoflowring_gpu.py            # 正式（需 CUDA）
-  python3 twoflowring_gpu.py --smoke    # 冒烟（CPU 也能跑，尺寸极小，只验逻辑与断言链）
+  python3 twoflowring_gpu.py                 # 正式（需 CUDA；auto 场模式）
+  python3 twoflowring_gpu.py --smoke         # 冒烟（CPU 也能跑，尺寸极小，只验逻辑与断言链）
+  python3 twoflowring_gpu.py --field closed  # 强制闭式场（mps/full 档重活从 96.63 s 到秒级）
 """
 import argparse
 import json
@@ -30,15 +39,58 @@ import time
 
 import torch
 
+try:                                    # 闭式场需要 scipy；远端容器可能没有（同 matplotlib 缺失）
+    import numpy as np
+    from scipy.special import ellipe, ellipk
+    _HAVE_SCIPY = True
+except Exception:                       # pragma: no cover - 环境相关
+    _HAVE_SCIPY = False
+
+FIELD_MODE = "sum"                      # 由 main() 按 --field {auto,closed,sum} 设定
+
 MU0 = 4e-7 * math.pi
 R_CU, R_H = 0.60, 0.35          # 外/内环半径 [m]
 I_CU = 1.0e6                    # 外环电流 [A]
 LAM_CRIT = R_H / R_CU           # 场反位形判据（解析）
 
 
-def loop_field(points, radius, current, nseg, chunk=None):
+def loop_field_closed_np(pts_np, radius, current):
+    """圆环场**椭圆积分闭式**（标准电磁学；numpy/scipy，CPU/float64，O(N)）。
+
+    m = k^2 = 4a*rho/((a+rho)^2+z^2) <= 1（AM-GM，等号仅在丝上，奇异性正确保留）：
+      B_z = mu0*I/(2*pi*sqrt((a+rho)^2+z^2)) * [K(m) + (a^2-rho^2-z^2)/((a-rho)^2+z^2)*E(m)]
+      B_rho = mu0*I*z/(2*pi*rho*sqrt((a+rho)^2+z^2)) * [-K(m) + (a^2+rho^2+z^2)/((a-rho)^2+z^2)*E(m)]
+    自检：轴上 ⟹ mu0*I*a^2/(2*(a^2+z^2)^1.5)；z=0 ⟹ B_rho=0（对称性）。
+    """
+    x, y, z = pts_np[:, 0], pts_np[:, 1], pts_np[:, 2]
+    rho = np.hypot(x, y)
+    den = (radius + rho) ** 2 + z ** 2
+    sq = np.sqrt(den)
+    m = np.clip(4.0 * radius * rho / den, 0.0, 1.0 - 1e-16)
+    K, E = ellipk(m), ellipe(m)
+    d2 = (radius - rho) ** 2 + z ** 2
+    Bz = (MU0 * current / (2.0 * math.pi * sq)
+          * (K + (radius * radius - rho * rho - z * z) / d2 * E))
+    Brho = np.zeros_like(rho)
+    nz = z != 0.0
+    rho_safe = np.where(rho > 0.0, rho, 1.0)          # 轴上 B_rho 恒 0，避开 1/rho
+    Brho[nz] = (MU0 * current * z[nz] / (2.0 * math.pi * rho_safe[nz] * sq[nz])
+                * (-K[nz] + (radius * radius + rho[nz] ** 2 + z[nz] ** 2) / d2[nz] * E[nz]))
+    dirx = np.where(rho > 0.0, x / rho_safe, 0.0)
+    diry = np.where(rho > 0.0, y / rho_safe, 0.0)
+    return np.stack([Brho * dirx, Brho * diry, Bz], axis=1)
+
+
+def loop_field(points, radius, current, nseg, chunk=None, field_mode=None):
     """共面/三维点上的环电流 Biot–Savart 场（分块累加，显存安全）。
-    points: (N,3) float32/float64 on device。返回 (N,3)。"""
+    points: (N,3) float32/float64 on device。返回 (N,3)。
+    field_mode=None 用全局 FIELD_MODE；"closed" 走椭圆积分闭式（O(N)、无 nseg）。"""
+    if (field_mode or FIELD_MODE) == "closed":
+        if not _HAVE_SCIPY:
+            raise RuntimeError("--field closed 需要 scipy（当前环境没有）")
+        out_np = loop_field_closed_np(points.detach().cpu().numpy().astype(np.float64),
+                                      radius, current)
+        return torch.tensor(out_np, device=points.device, dtype=points.dtype)
     dev, dt = points.device, points.dtype
     if chunk is None:                      # 自适应：每块临时张量 ~4e7 元素（float32 ≈ 160 MB/个）
         chunk = max(1024, min(200_000, 40_000_000 // max(nseg, 1)))
@@ -141,6 +193,19 @@ def push_rk4(n_part, n_steps, dt, omega, xi, seed=0, dev=None, fdt=None):
     }
 
 
+def capture_analytic(xi_v, t_total, r_lo=R_H, r_hi=R_CU, frac=0.05):
+    """捕获率解析闭式：径向方程 rdot = xi 对任意积分器精确 ⟹ r(t) = r0 + xi*t；
+    r0 ~ U[r_lo, r_hi] ⟹ 捕获率 = P(r0 >= |xi|*t/frac)，一行算术（无流元、无步进）。"""
+    bound = abs(xi_v) * t_total / frac
+    return float(min(max((r_hi - max(r_lo, bound)) / (r_hi - r_lo), 0.0), 1.0))
+
+
+def xi_for_capture(target, t_total, r_lo=R_H, r_hi=R_CU, frac=0.05):
+    """把「target 捕获率」反解成 xi 容差（GPU 扫描网格做不到的连续值）。"""
+    bound = r_hi - target * (r_hi - r_lo)          # = max(r_lo, |xi|*t/frac)
+    return 0.0 if bound < r_lo else bound * frac / t_total
+
+
 def draw_structure(nseg, lam_hi, lam_lo, st_hi, st_lo, scan, outdir, fname="fig_gpu_structure.png"):
     """中平面场结构（零点按是否落在导体附近分类）+ 捕获率 vs ξ。"""
     import matplotlib
@@ -211,8 +276,14 @@ def main():
     ap.add_argument("--device", default="auto", choices=["auto", "cuda", "mps", "cpu"])
     ap.add_argument("--scale", default="smoke", choices=["auto", "smoke", "mps", "full"],
                     help="裸跑默认 smoke（快，可进门禁）；正式跑显式给 mps/full")
+    ap.add_argument("--field", default="auto", choices=["auto", "closed", "sum"],
+                    help="场实现：closed=椭圆积分闭式(O(N)，无 nseg) / sum=直接求和(O(N*nseg))"
+                         " / auto=有 scipy 用 closed 否则 sum")
     a = ap.parse_args()
-    global DEV, FDT
+    global DEV, FDT, FIELD_MODE
+    FIELD_MODE = "closed" if (a.field == "auto" and _HAVE_SCIPY) or a.field == "closed" else "sum"
+    if a.field == "closed" and not _HAVE_SCIPY:
+        raise SystemExit("--field closed 需要 scipy，当前环境没有；用 --field sum 或 auto")
     scale0 = "smoke" if a.smoke else a.scale
     dev = a.device
     if dev == "auto":
@@ -232,7 +303,8 @@ def main():
           "mps":   dict(nseg=512, ngrid=48, npart=200_000, nsteps=1200),
           "full":  dict(nseg=2048, ngrid=96, npart=1_000_000, nsteps=4000)}[scale]
     nseg, ngrid, npart, nsteps = SC["nseg"], SC["ngrid"], SC["npart"], SC["nsteps"]
-    cfg = {"规模档": scale, "nseg": nseg, "ngrid": ngrid, "npart": npart, "nsteps": nsteps}
+    cfg = {"规模档": scale, "nseg": nseg, "ngrid": ngrid, "npart": npart, "nsteps": nsteps,
+           "场模式": FIELD_MODE}
     # 产物目录：在仓库里跑（脚本在 scripts/）→ artifacts/twoflowring_gpu/；在远端作业目录里跑 → 就地
     here = os.path.dirname(os.path.abspath(__file__))
     in_repo = os.path.basename(here) == "scripts"
@@ -340,16 +412,42 @@ def main():
         scan[0.0] >= 0.99 and scan[0.1] < scan[0.0],
         f"ξ=0 捕获率 {scan[0.0]:.4f}；ξ=0.1 掉到 {scan[0.1]:.4f}；"
         f"99% 捕获可容忍 ξ ≤ {out['容差_xi_max_99pct']}")
+    # 解析闭式对挂（ṙ=ξ 精确 ⟹ r(t)=r₀+ξt）：RK4 实测 vs 一行算术
+    t_total = 0.01 * (max(nsteps // 20, 50) if a.smoke else nsteps // 4)
+    n_scan = max(npart // 20, 1000) if a.smoke else npart // 4
+    scan_closed = {xi_v: capture_analytic(xi_v, t_total) for xi_v in scan}
+    out["捕获率_vs_xi_解析"] = scan_closed
+    out["容差_xi_99pct_解析"] = xi_for_capture(0.99, t_total)
+    tol_s = 3.0 / math.sqrt(n_scan)
+    xi99 = xi_for_capture(0.99, t_total)
+    chk("G2c 捕获率解析闭式与 RK4 实测一致（ṙ=ξ 精确 ⟹ r(t)=r₀+ξt；差 ≤ 3/√n 采样误差）",
+        all(abs(scan[xi_v] - scan_closed[xi_v]) <= max(tol_s, 5e-3) for xi_v in scan),
+        "；".join(f"ξ={xi_v:g}→RK4 {scan[xi_v]:.4f}/闭式 {scan_closed[xi_v]:.4f}" for xi_v in scan)
+        + f"（n={n_scan}，容差 {tol_s:.4f}）；★99% 捕获的**连续**容差 ξ_99 = {xi99:.6f}"
+        f"（扫描网格只报到 {out['容差_xi_max_99pct']}，闭式细 "
+        f"{xi99 / max(out['容差_xi_max_99pct'] or 1e-300, 1e-300):.1f}×）")
 
-    # ---------- G3 与笔记本实现交叉核对 + 计时 ----------
-    # 笔记本版用的是同一公式（共面 Biot–Savart 求和）⟹ 这里在 CPU 上小规模重算对位
+    # ---------- G3 交叉核对 + 计时 ----------
+    # sum 模式：同一公式的两条实现（CPU 路径 vs GPU 路径）逐点对位（原口径）
+    # closed 模式：两条**独立**实现对挂 —— 椭圆积分闭式 vs 分段直接求和
+    #   （与 calc_fusion_gravity_lowcost.py 的 D6d/D7 同口径；nseg 参考值取大以排除离散化）
     pts_cpu = torch.tensor([[0.0, 0.0, 0.0], [0.30, 0.0, 0.0], [0.80, 0.0, 0.0]], dtype=torch.float32)
-    b_cpu = (loop_field(pts_cpu, R_CU, I_CU, nseg) + loop_field(pts_cpu, R_H, -lam * I_CU, nseg))
-    b_gpu = (loop_field(pts_cpu.to(DEV), R_CU, I_CU, nseg)
-             + loop_field(pts_cpu.to(DEV), R_H, -lam * I_CU, nseg)).cpu()
+    if FIELD_MODE == "closed":
+        nseg_ref = max(nseg, 512)
+        b_cpu = (loop_field(pts_cpu, R_CU, I_CU, nseg_ref, field_mode="sum")
+                 + loop_field(pts_cpu, R_H, -lam * I_CU, nseg_ref, field_mode="sum"))
+        b_gpu = (loop_field(pts_cpu.to(DEV), R_CU, I_CU, nseg, field_mode="closed")
+                 + loop_field(pts_cpu.to(DEV), R_H, -lam * I_CU, nseg, field_mode="closed")).cpu()
+        g3_name = f"G3 闭式 vs 直接求和（nseg={nseg_ref}）逐点一致 —— 两条独立实现对挂"
+        g3_tol = 1e-4
+    else:
+        b_cpu = (loop_field(pts_cpu, R_CU, I_CU, nseg) + loop_field(pts_cpu, R_H, -lam * I_CU, nseg))
+        b_gpu = (loop_field(pts_cpu.to(DEV), R_CU, I_CU, nseg)
+                 + loop_field(pts_cpu.to(DEV), R_H, -lam * I_CU, nseg)).cpu()
+        g3_name = "G3 同一公式的两条实现（CPU 路径 vs GPU 路径）逐点一致"
+        g3_tol = 1e-6
     cross = float((b_cpu - b_gpu).abs().max())
-    chk("G3 同一公式的两条实现（CPU 路径 vs GPU 路径）逐点一致", cross < 1e-6,
-        f"max|差| = {cross:.2e}")
+    chk(g3_name, cross < g3_tol, f"max|差| = {cross:.2e}（阈值 {g3_tol:g}）")
 
     try:
         fname = f"fig_gpu_structure{TAG}.png"
@@ -367,9 +465,11 @@ def main():
     n_ok = sum(1 for c in out["断言"] if c["通过"])
     with open(os.path.join(outdir, f"summary{TAG}.txt"), "w", encoding="utf-8") as fh:
         fh.write(f"双流环 GPU：{n_ok}/{len(out['断言'])} 通过；设备 {out['设备']}；"
+                 f"场模式 {FIELD_MODE}；"
                  f"r*={out.get('中性点半径_r*_m')}；ξ 容差={out.get('容差_xi_max_99pct')}；"
                  f"墙钟 {out['墙钟_秒']}s\n")
-    print(f"双流环 GPU：{n_ok}/{len(out['断言'])} 通过 | 设备 {out['设备']} | 墙钟 {out['墙钟_秒']}s")
+    print(f"双流环 GPU：{n_ok}/{len(out['断言'])} 通过 | 设备 {out['设备']} | "
+          f"场模式 {FIELD_MODE} | 墙钟 {out['墙钟_秒']}s")
     for c in out["断言"]:
         print(("  PASS  " if c["通过"] else "  FAIL  ") + c["检查"])
         if c["细节"]:
