@@ -21,6 +21,7 @@
 - [theory-glueball-bridge.md](./theory-glueball-bridge.md) — 胶球/纯胶子复合态与隐核质量的兼容性评估
 - [theory-minimal-core.md](./theory-minimal-core.md) — ★ 最小核心命题：质量=内部运动状态对空间运动的锚定（非场激发能量）；胶球 m_G²=|a|²+|b|²+|c|²
 - [theory-space-light-speed.md](./theory-space-light-speed.md) — 矢量光速：光速=空间本身的等效速度（新概念，非空间内物质速度）
+- [theory-aether-band.md](./theory-aether-band.md) — 以太的层级（AB1–AB18）：相位速度 v_ph=ω/k **随 k→0 无界**（「越广越快」）；但 k=0 ⟹ ω=0 ⟹ **瞬时相关没有信道容量**（零带宽⟹零容量）；真正「更快」只能是**独立层** c₂=ratio·c（生死线 ratio=1 ⟹ 无新速度，分辨通道=各向异性）。★ 结论：**越广越快 ✅ / 瞬时传信 ❌ / 更快需新无量纲比 ratio**
 - [theory-dirac-bridge.md](./theory-dirac-bridge.md) — 狄拉克方程桥：质量项=手征耦合（DB4: γ⁰ψ=ψ⟺ψ_L=ψ_R；DB5: m=0⟹Weyl）
 - [theory-relativity-rebuild.md](./theory-relativity-rebuild.md) — 相对论重构：公式形式不变、解释层全变（c=空间流动/惯性系=随空间/引力=流动非均匀）
 - [theory-lorentz-rebuild.md](./theory-lorentz-rebuild.md) — 洛伦兹重构（mathlib）：boost 保持度规 η=diag(-1,1)、γ²-γ²β²=1、快度/速度加法、β<1

@@ -144,6 +144,7 @@ def main():
                        "scripts/fig_twisted_ring_math.py",
                        "scripts/fig_braid_ring_spacetime.py",
                        "scripts/verify_yang_mills_strict.py",
+                       "scripts/verify_aether_band.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -953,6 +954,27 @@ def main():
               and s8["SFG8 非交换 ⟹ 有条数（组合）"]
               and s8["SFG9 有条数 + 计数律 ⟹ 存在 ≥ M₀² 的质量态"])
 
+    # AetherBand 轮（2026-10-29）：以太层级 —— 集体频率带 / 瞬时相关 / 两种超光速
+    ab = load_report("artifacts/aetherband/report.json")
+    if ab:
+        a = ab["锚点"]
+        check("AB-N1★★: 相位速度 v_ph = ω/k 随 k→0 严格增且无界（AB1/AB2）",
+              a["v_ph_在 k=1e-6（ω=1）"] >= 1e6 - 1e-6, a["v_ph_在 k=1e-6（ω=1）"])
+        check("AB-N3★★★: 范围×更新率封顶 L·ω_max = c·ε（AB18）——「更快」的价格表",
+              abs(a["L·ω_max 常数（= c·ε）"] - 1e-3) <= 1e-18, a["L·ω_max 常数（= c·ε）"])
+        check("AB-N4★★: 零带宽 ⟹ 零容量；容量对维度线性、单模速率不变（AB9/AB10）",
+              a["容量 C(B=0)"] == 0.0 and abs(a["容量 C(d=3)/C(d=1)"] - 3.0) < 1e-12,
+              (a["容量 C(B=0)"], a["容量 C(d=3)/C(d=1)"]))
+        check("AB-N5★★★: 两锥生死线 —— ratio=1 ⟹ Δ=0（无新速度），ratio≠1 ⟹ Δ>0（AB12–AB14）",
+              a["两锥 Δ（ratio=1,1.5,3）"][0] == 0.0
+              and all(d > 0 for d in a["两锥 Δ（ratio=1,1.5,3）"][1:]),
+              a["两锥 Δ（ratio=1,1.5,3）"])
+        check("AB-N6★★: 单点等效速度两机制不可区分，各向异性是唯一分辨通道（AB15）",
+              abs(a["各向异性 垂直差 |拖曳−层级|"] - 0.5) < 1e-12,
+              a["各向异性 垂直差 |拖曳−层级|"])
+        check("AB-N7★★: 瞬时 ⟹ 静态 —— v_ph·ω 恒为常数（AB17）",
+              abs(a["v_ph·ω 常数（AB17）"] - 1.0) <= 1e-15, a["v_ph·ω 常数（AB17）"])
+
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
     if pw:
@@ -1600,6 +1622,12 @@ def main():
         "artifacts/yangmillsstrict/report.json": 1_500,
         "artifacts/yangmillsstrict/summary.txt": 300,
         "artifacts/yangmillsstrict/fig_ym_strict.png": 30_000,
+        "artifacts/aetherband/report.json": 3_000,
+        "artifacts/aetherband/summary.txt": 300,
+        "artifacts/aetherband/fig_speed_unbounded.png": 30_000,
+        "artifacts/aetherband/fig_reach_rate.png": 20_000,
+        "artifacts/aetherband/fig_capacity_dim.png": 20_000,
+        "artifacts/aetherband/fig_two_cones_directional.png": 20_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
