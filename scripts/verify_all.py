@@ -145,6 +145,7 @@ def main():
                        "scripts/fig_braid_ring_spacetime.py",
                        "scripts/verify_yang_mills_strict.py",
                        "scripts/verify_aether_band.py",
+                       "scripts/verify_aether_time.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -975,6 +976,25 @@ def main():
         check("AB-N7★★: 瞬时 ⟹ 静态 —— v_ph·ω 恒为常数（AB17）",
               abs(a["v_ph·ω 常数（AB17）"] - 1.0) <= 1e-15, a["v_ph·ω 常数（AB17）"])
 
+    # AetherTime 轮（2026-10-29 续）：接 YM 接口 —— 顺序（时间的代数影子）⟺ 非对易
+    at = load_report("artifacts/aethertime/report.json")
+    if at:
+        b = at["锚点"]
+        check("AT-N1★★: 平坦场（Q_A=0）⟹ 交换差精确 0（顺序盲）（AT3/AT4）",
+              b["平坦场 max|交换差|（N1）"] == 0.0, b["平坦场 max|交换差|（N1）"])
+        check("AT-N2★★★: 交换差 = λ²|v_q−v_p|（顺序可观测；复用 YM3）（AT5/AT10）",
+              b["交换差 vs λ²g 最大相对差（N2）"] < 1e-13, b["交换差 vs λ²g 最大相对差（N2）"])
+        check("AT-N3★★: 顺序可观测度 ∝ 起伏幅度，ε=0 精确 0（AT5）",
+              b["ε=0 时交换差（N3）"] == 0.0 and abs(b["N3 斜率 vs λ²"] - 0.16) < 1e-12,
+              (b["ε=0 时交换差（N3）"], b["N3 斜率 vs λ²"]))
+        check("AT-N4★★: β=1（无质量）⟹ dτ²=0 精确（AT7）",
+              b["β=1 时 dτ²（N4）"] == 0.0, b["β=1 时 dτ²（N4）"])
+        check("AT-N5★★★: 全区间间隔为 0 ⟹ 无严格先后；有质量侧存在（AT8/AT9）",
+              b["无质量层严格序处数（N5）"] == 0 and b["有质量层严格序处数（N5）"] == 1,
+              (b["无质量层严格序处数（N5）"], b["有质量层严格序处数（N5）"]))
+        check("AT-N6★★★: 顺序可观测度 = λ²·√(Q_A·N/(N−1))（∝√起伏；AT5×GCA）",
+              b["N6 最大相对差"] < 1e-12, b["N6 最大相对差"])
+
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
     if pw:
@@ -1628,6 +1648,11 @@ def main():
         "artifacts/aetherband/fig_reach_rate.png": 20_000,
         "artifacts/aetherband/fig_capacity_dim.png": 20_000,
         "artifacts/aetherband/fig_two_cones_directional.png": 20_000,
+        "artifacts/aethertime/report.json": 3_000,
+        "artifacts/aethertime/summary.txt": 300,
+        "artifacts/aethertime/fig_order_vs_fluctuation.png": 20_000,
+        "artifacts/aethertime/fig_proper_time.png": 20_000,
+        "artifacts/aethertime/fig_comm_vs_sqrtQ.png": 20_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
