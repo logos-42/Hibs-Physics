@@ -168,6 +168,26 @@ for n in (3, 4, 6, 10):
 check("N6 ★★★ 时间序可观测度 = λ²·√(Q_A·N/(N−1))（∝ √起伏能量）（AT5 + GCA）",
       rel_n6 < 1e-13, f"12 组 (N,g) 最大相对差 = {rel_n6:.2e}")
 
+# ── N7 ★★★ 更正见证：无质量 ≠ 平坦（涡旋：无散但非平坦）（AT11–AT14）─────────
+def div_v(v):
+    """4 点回路离散散度：(v₁−v₀) + (v₃−v₂)。"""
+    return (v[1] - v[0]) + (v[3] - v[2])
+
+
+def curl_v(v):
+    """同一回路离散旋度：(v₂−v₀) − (v₃−v₁)。"""
+    return (v[2] - v[0]) - (v[3] - v[1])
+
+
+vortex = np.array([0.0, 1.0, 1.0, 0.0])
+flat = np.full(4, 7.0)
+check("N7 ★★★ 无质量 ≠ 平坦：涡旋无散（div=0）但非平坦（有旋），且顺序仍可观测（AT11–AT14）",
+      div_v(flat) == 0.0 and div_v(vortex) == 0.0 and curl_v(vortex) != 0.0
+      and len(set(vortex.tolist())) > 1
+      and float(np.max(np.abs(commutator(vortex, 0, 1, LAM)))) > 0.0,
+      f"常值场 div={div_v(flat):.1f}；涡旋 div={div_v(vortex):.1f}、curl={curl_v(vortex):.1f}；"
+      f"涡旋场上 max|交换差|={float(np.max(np.abs(commutator(vortex, 0, 1, LAM)))):.3f} > 0")
+
 # ═════════════════════ 图 ═════════════════════
 # 图 1：顺序可观测度 vs 起伏幅度
 fig, ax = plt.subplots(figsize=(7.0, 4.4))
@@ -233,6 +253,9 @@ report = {
         "无质量层严格序处数（N5）": int(has_strict_order(massless_tau)),
         "有质量层严格序处数（N5）": int(has_strict_order(massive_tau)),
         "N6 最大相对差": rel_n6,
+        "涡旋 div（N7）": div_v(vortex),
+        "涡旋 curl（N7）": curl_v(vortex),
+        "涡旋场 max|交换差|（N7）": float(np.max(np.abs(commutator(vortex, 0, 1, LAM)))),
     },
     "结果": {
         "N2 表": rows_n2,

@@ -146,6 +146,7 @@ def main():
                        "scripts/verify_yang_mills_strict.py",
                        "scripts/verify_aether_band.py",
                        "scripts/verify_aether_time.py",
+                       "scripts/verify_vibration_frame.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -994,6 +995,31 @@ def main():
               (b["无质量层严格序处数（N5）"], b["有质量层严格序处数（N5）"]))
         check("AT-N6★★★: 顺序可观测度 = λ²·√(Q_A·N/(N−1))（∝√起伏；AT5×GCA）",
               b["N6 最大相对差"] < 1e-12, b["N6 最大相对差"])
+        check("AT-N7★★★: 更正见证 —— 无质量 ≠ 平坦（涡旋：无散但非平坦，顺序仍可观测；AT11–AT14）",
+              b["涡旋 div（N7）"] == 0.0 and b["涡旋 curl（N7）"] == 2.0
+              and b["涡旋场 max|交换差|（N7）"] > 0,
+              (b["涡旋 div（N7）"], b["涡旋 curl（N7）"], b["涡旋场 max|交换差|（N7）"]))
+
+    # VibrationFrame 轮（2026-10-29 三续）：超广意场在振动坐标系里的模型
+    vf = load_report("artifacts/vibrationframe/report.json")
+    if vf:
+        v = vf["锚点"]
+        check("VF-N1★★: 方差闭式 var = w₁w₂/(w₁+w₂)²·(k₁−k₂)²（VF5）",
+              v["N1 方差闭式最大相对差"] < 1e-12, v["N1 方差闭式最大相对差"])
+        check("VF-N3★★★: 单模相位沿射线精确不变（VF1 单模只有一维信息）",
+              v["单模射线残差（N3）"] < 1e-12, v["单模射线残差（N3）"])
+        check("VF-N4★★★: 两带 Jacobian = k₁k₂(c₁−c₂)；同相速度 ⟹ 精确 0（VF2–VF4）",
+              v["Jacobian 闭式最大相对差（N4）"] < 1e-15 and v["同相速度 det（N4）"] == 0.0,
+              (v["Jacobian 闭式最大相对差（N4）"], v["同相速度 det（N4）"]))
+        check("VF-N5★★★: 「广」只有一个刻度：var·λ² 恒定（VF8）",
+              abs(v["var·λ² 常数（N5）"] - 8.772982) < 1e-4, v["var·λ² 常数（N5）"])
+        check("VF-N7★★: 坐标系几何 —— c₁≠c₂ 相位线交叉（非退化）、c₁=c₂ 平行重合（退化）（VF3/VF4）",
+              v["N7 交叉（c₁≠c₂）"] and v["N7 平行（c₁=c₂）"],
+              (v["N7 交叉（c₁≠c₂）"], v["N7 平行（c₁=c₂）"]))
+        check("VF-N6★★: 全局模 k=0：相位处处 0、var=0、det=0（VF9/VF10 超广意极限）",
+              v["全局模 max|θ|（N6）"] == 0.0 and v["全局模 var（N6）"] == 0.0
+              and v["全局模 det（N6）"] == 0.0,
+              (v["全局模 max|θ|（N6）"], v["全局模 var（N6）"], v["全局模 det（N6）"]))
 
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
@@ -1653,6 +1679,11 @@ def main():
         "artifacts/aethertime/fig_order_vs_fluctuation.png": 20_000,
         "artifacts/aethertime/fig_proper_time.png": 20_000,
         "artifacts/aethertime/fig_comm_vs_sqrtQ.png": 20_000,
+        "artifacts/vibrationframe/report.json": 3_000,
+        "artifacts/vibrationframe/summary.txt": 300,
+        "artifacts/vibrationframe/fig_var_vs_wavelength.png": 25_000,
+        "artifacts/vibrationframe/fig_jacobian_vs_dc.png": 20_000,
+        "artifacts/vibrationframe/fig_phase_grid.png": 30_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():
