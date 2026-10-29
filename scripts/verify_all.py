@@ -147,6 +147,7 @@ def main():
                        "scripts/verify_aether_band.py",
                        "scripts/verify_aether_time.py",
                        "scripts/verify_vibration_frame.py",
+                       "scripts/verify_band_structure.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -1021,6 +1022,33 @@ def main():
               and v["全局模 det（N6）"] == 0.0,
               (v["全局模 max|θ|（N6）"], v["全局模 var（N6）"], v["全局模 det（N6）"]))
 
+    # BandStructure 轮（2026-10-29 四续）：时间计数接口 / 一般色散 / 带维度
+    bs = load_report("artifacts/bandstructure/report.json")
+    if bs:
+        z = bs["锚点"]
+        check("TC-N1★★: 时间计数 n = kL/2π = 密度 × 跨度（TC1）",
+              z["N1 计数=密度×跨度"] < 1e-14, z["N1 计数=密度×跨度"])
+        check("TC-N3★★★: 一个波长恰好一次闭合（TC3）", z["N3 一波长=1 次闭合"] < 1e-14,
+              z["N3 一波长=1 次闭合"])
+        check("TC-N4★★★: 计数依赖所选的带（TC4）", z["N4 计数依赖带"] > 0.1, z["N4 计数依赖带"])
+        check("TC-N6★★★: 计数差密度 = 1/λ_beat —— 「广」与时间计数同一刻度（TC6）",
+              z["N6 计数差密度=1/λ"] < 1e-14, z["N6 计数差密度=1/λ"])
+        check("GD-N7★★★: 一般色散 det₂ = k₁ω₂ − k₂ω₁（GD1）", z["N7 det 一般形式"] < 1e-13,
+              z["N7 det 一般形式"])
+        check("GD-N8★★★: det₂ = 0 ⟺ 两带相速度相同（一般色散版；GD2）",
+              z["N8 det=0⟺同相速度"], z["N8 det=0⟺同相速度"])
+        check("GD-N10★★★: 群速度 = dω/dk（二次精确 + 三次 O(h²)；GD5 数值替身）",
+              all(abs(r - 4.0) < 0.05 for r in z["N10 群速度导数误差比"]), z["N10 群速度导数误差比"])
+        check("GD-N11★★★: 线性色散 v_g = v_ph；非线性 v_g ≠ v_ph（GD7/GD8）",
+              z["N11 β≠0⟹vg≠vph"], z["N11 β≠0⟹vg≠vph"])
+        check("GD-N12★★★: |Δv_g|·λ_beat = 4π|β| —— 广 ⟹ 涟漪更慢（GD9）",
+              z["N12 |Δvg|·λ=4π|β|"] < 1e-14, z["N12 |Δvg|·λ=4π|β|"])
+        check("ND-N13★★★: 三条带线性相关 θ₃ = aθ₁ + bθ₂（ND1/ND2）",
+              z["N13 三带相关残差"] < 1e-13, z["N13 三带相关残差"])
+        check("ND-N14★★★: 计数也冗余 + 3×2 相位矩阵秩 = 2 ⟹ 第三条带不增维（ND3/ND4）",
+              z["N14 计数冗余残差"] < 1e-13 and z["N14 秩"] == 2,
+              (z["N14 计数冗余残差"], z["N14 秩"]))
+
     # KV 轮：相位场形状谱 / KdV 估值配置测试
     pw = load_report("artifacts/phasewave/report.json")
     if pw:
@@ -1684,6 +1712,11 @@ def main():
         "artifacts/vibrationframe/fig_var_vs_wavelength.png": 25_000,
         "artifacts/vibrationframe/fig_jacobian_vs_dc.png": 20_000,
         "artifacts/vibrationframe/fig_phase_grid.png": 30_000,
+        "artifacts/bandstructure/report.json": 3_000,
+        "artifacts/bandstructure/summary.txt": 400,
+        "artifacts/bandstructure/fig_time_count.png": 25_000,
+        "artifacts/bandstructure/fig_phase_group_speed.png": 25_000,
+        "artifacts/bandstructure/fig_band_rank.png": 20_000,
         "artifacts/world_feed/summary.txt": 1_000,
     }
     for rel, mb in artifacts.items():

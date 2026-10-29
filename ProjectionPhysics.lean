@@ -149,3 +149,6 @@ import ProjectionPhysics.Explorations.SpaceFlowGauge
 import ProjectionPhysics.Explorations.AetherBand
 import ProjectionPhysics.Explorations.AetherTime
 import ProjectionPhysics.Explorations.VibrationFrame
+import ProjectionPhysics.Explorations.TimeCount
+import ProjectionPhysics.Explorations.DispersionGeneral
+import ProjectionPhysics.Explorations.BandDimension
