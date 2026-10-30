@@ -58,6 +58,13 @@ index 加条目并给旧条目打撤回标记。
 ① **超广意场动力学方程**未给（六轮只纠正「哪些结论不适用」）；② 「无质量但非平坦」的见证仍缺（需 N=0 探针）；
 ③ 维度可达性 `rank_attained` 未做；④ 分支Ⅱ 的 ratio 仍是未闭合输入。
 
+### 发布
+
+paper4 首发 aiXiv（**只发 EN**）：**`aixiv.261030.000001` v1.0 `Under Review`**（`is_public=1`，已用
+`GET /api/submissions/aixiv_id/aixiv.261030.000001` 复核；s3_url 为公开 PDF 直链）。
+论文含「Note added (2026-10-30)」+ `§Six-round adversarial audit`，把 2 撤回 / 4 降级写进正文与摘要；
+ZH 版只留仓库（leo 规则）。
+
 
 ## ★ 2026-10-29 session（四续）：带结构三件 —— 时间计数 / 一般色散 / 带维度（TC1–ND5）
 

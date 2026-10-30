@@ -16,6 +16,15 @@
 
 格式与 `paper/projection-unified*.tex`、`paper2/projection-sink-photon*.tex`、`paper3/projection-yangmills-gap*.tex` 完全一致（同一 documentclass / 包 / postulate+theorem 环境 / 署名 / 中英双版 / tectonic 编译）。
 
+## 发布
+
+- **aiXiv（EN 单版）**：`aixiv.261030.000001` v1.0（2026-10-30 提交，`Under Review`，`is_public=1`）。
+  详情页 `https://aixiv.science/papers/aixiv.261030.000001`。
+- 中文版按 leo 规则**只留仓库**，不推送 aiXiv。
+- 本版含「Note added (2026-10-30)」与 `§Six-round adversarial audit`：六轮攻防判定
+  **2 条撤回（瞬时⟹不可传信、以太=P1 换名）+ 4 条降级（时间=非交换、带数不是维数、
+  群速度更正相速度、无质量=无散度）**，正文保留原推导链以显示来源，以更正注为准。
+
 ## 编译
 
 ```bash
