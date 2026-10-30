@@ -148,6 +148,7 @@ def main():
                        "scripts/verify_aether_time.py",
                        "scripts/verify_vibration_frame.py",
                        "scripts/verify_band_structure.py",
+                       "scripts/verify_aether_medium.py",
                        "scripts/world_feed.py"]:
             r = run(["python3", *shlex.split(script)], timeout=420)
             check(f"{os.path.basename(script)} exit 0", r.returncode == 0, r.returncode)
@@ -1021,6 +1022,31 @@ def main():
               v["全局模 max|θ|（N6）"] == 0.0 and v["全局模 var（N6）"] == 0.0
               and v["全局模 det（N6）"] == 0.0,
               (v["全局模 max|θ|（N6）"], v["全局模 var（N6）"], v["全局模 det（N6）"]))
+
+    # AetherMedium 轮（2026-10-30 六轮攻防落地）：介质层 AL1–AL6
+    am = load_report("artifacts/aethermedium/report.json")
+    if am:
+        v = am["数值"]
+        check("AL-N1★★★: 场不能反推介质 —— 两条介质同一场（AL1）",
+              v["N1 同一场的值"] == 2.0 and v["N1 场相等"] and v["N1 标签不同"],
+              (v["N1 同一场的值"], v["N1 场相等"], v["N1 标签不同"]))
+        check("AL-N2★★: 同步 ⟹ 介质层无可观测差异（AL2）", v["N2 max|Δ|"] == 0.0,
+              v["N2 max|Δ|"])
+        check("AL-N3★★★: 无带 ⟹ 不存在正周期（min|T·0−2π| = 2π）（AL3）",
+              abs(v["N3 min|T·0−2π|"] - 6.283185) < 1e-5, v["N3 min|T·0−2π|"])
+        check("AL-N3b★★★: k≠0 时 T·k = 2π 闭合到机器精度（AL3）",
+              v["N3 闭合误差"] < 1e-14, v["N3 闭合误差"])
+        check("AL-N5★★★: 上界属于帧 —— 三轴 rank=3 / 共享二帧 rank=2（AL4）",
+              v["N5 rank（三轴/二帧）"] == [3, 2], v["N5 rank（三轴/二帧）"])
+        check("AL-N6★★★: 无锚定但非平坦；同场换锚定即不再无质量（AL5）",
+              v["N6 非平坦度量"] > 0.0, v["N6 非平坦度量"])
+        check("AL-N7★★: 相速度随带变、介质速度不变 ⟹ 无「那条就是光速」的带（AL6）",
+              v["N7 v_ph"] == [1.0, 2.0] and v["N7 c"] == [1.0, 1.0],
+              (v["N7 v_ph"], v["N7 c"]))
+        check("AL-N8★★★: 观测映射非单射 —— 同一场承载不同速度标度（AL7a）",
+              v["N8 同一场"] and v["N8 标度不同"], (v["N8 同一场"], v["N8 标度不同"]))
+        # AL-N9 不设门：对「同场异标度」构型它恒定成立（完备性由 Lean AL7b 承担，
+        # 数值层无法构造反例），故只留在 report.json 作诊断。
 
     # BandStructure 轮（2026-10-29 四续）：时间计数接口 / 一般色散 / 带维度
     bs = load_report("artifacts/bandstructure/report.json")

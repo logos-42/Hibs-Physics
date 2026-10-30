@@ -23,7 +23,9 @@
 --
 -- 诚实边界（写死）：
 --   · 二次色散族是**模型选择**（选它是因为 v_g 有闭式；一般 ω(k) 下群速度仍是 dω/dk，只是无闭式）。
---   · 群速度用导数定义（`HasDerivAt`），不是手填公式——GD5 给的就是「dω/dk = c + 2βk」的机器检验。
+--   · GD5「群速度 = dω/dk 的导数身份」未在 Lean 中形式化（mathlib v4.35 的 HasDerivAt
+--     实例源不一致），以数值 N10 中心差分收敛阶 ≈ 2 作替身；GD7/GD8 的等式/不等式
+--     本身是机器检验的（线性/非线性色散的 v_g−v_ph 关系）。
 --   · 零新可检验预言。
 --
 -- 死法（写死）：
@@ -85,12 +87,16 @@ theorem det2_eq_zero_iff {m₁ m₂ : ModeG} (h₁ : m₁.k ≠ 0) (h₂ : m₂.
     rw [h]
     ring
 
-/-- 二次色散族：ω(k) = c·k + β·k²。 -/
-def quadMode (c β k : ℝ) : ModeG := ⟨k, c * k + β * k ^ 2⟩
+-- ⚠ 符号纪律（六轮攻防 R4，2026-10-30）：本族的线性项系数记作 c₀，**不是** SLS1 的
+--   介质等效速度 c（AetherMedium.MediumFlow.c，无 k 参数）。两者同名曾是误读源头：
+--   c₀ 是**某条带**的色散参数（波层），c 是**介质**的常量（介质层）。
+
+/-- 二次色散族：ω(k) = c₀·k + β·k²（c₀ 属波层）。 -/
+def quadMode (c0 β k : ℝ) : ModeG := ⟨k, c0 * k + β * k ^ 2⟩
 
 /-- GD3 ★★ 二次族的相速度：v_ph = c + βk。 -/
-theorem quad_phaseSpeed (c β k : ℝ) (hk : k ≠ 0) :
-    phaseSpeedG (quadMode c β k) = c + β * k := by
+theorem quad_phaseSpeed (c0 β k : ℝ) (hk : k ≠ 0) :
+    phaseSpeedG (quadMode c0 β k) = c0 + β * k := by
   simp only [quadMode, phaseSpeedG]
   field_simp
 

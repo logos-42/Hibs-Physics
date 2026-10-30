@@ -1,0 +1,108 @@
+{
+  "round": "R1",
+  "claim_under_attack": "「瞬时 ⟹ 不可传信（零容量）」：AB7/AB8 把「瞬时影响」读成「同一位置的时间序列为常数」，从而断言零带宽 ⟹ 无可分辨符号 ⟹ AB9 容量为 0，并据此在 theory-aether-band.md §1/§5 判决 leo 的「瞬时影响彼此 ⟹ 远比光速快」不成立、属零新物理。",
+  "hidden_premises": [
+    "P1（坐标轴）：「瞬时影响彼此」里的「彼此」是两个位置（x≠y），「瞬时」是同一时刻 t；要陈述它必须用含位置与时刻两个自变量的对象 Φ : X × T → α。AB7/AB8 用的是 s : ℤ → α —— 只有时刻、位置被抹掉（AetherBand.lean:143）。该模型在语法上就无法表达 leo 的前提 3。",
+    "P2（全局线性时间）：AB7/AB8 的「两个时刻可区分」要求存在一个全局、全序、可比较的时刻索引 ℤ。这正是 leo 前提 7 明说「时间在人类世界上线性的，在无质量空间不存在当前的线性时间观」所指的层；把它当作普适索引，等于把被攻对象的前提 7 直接否定掉，而不是从它推出结论。",
+    "P3（信道先于结论）：「传信」被默认为存在发送者—接收者—可分辨符号集—噪声—时间分槽这五件套。这在 leo 的前提 1–9 中一次都没出现，也不由任何 AB 定理导出；它是被引入的模型，不是被检验的命题。而 leo 的「彼此」是对称、无方向、无收发角色的。",
+    "P4（时间编码唯一）：「可分辨」被默认为「两个时刻的值不同」。这排除了空间编码（同一时刻、多个位置构成的图案即符号）——而 leo 的「瞬时影响彼此」恰恰是空间图案。AB8 因此只否证了时间编码，未触及空间编码。",
+    "P5（瞬时 = k=0 = 静态）：把「瞬时」等同于集体模 k=0，再用线性色散 ω=c·k 得 ω=0，于是「瞬时=静态」。但 AB3（AetherBand.lean:100）已证 k>0 时任意距离的相位差可 < ε ——即非零 k 也能「近乎同时」。所以「瞬时 ⟹ k=0」是额外选择，不是定理。",
+    "P6（用被攻层的光锥封顶该层）：AB17/AB18（:250/:261）以 ω = c·k 为前提，把 c 用作上界；而 §5 分支Ⅱ 自己承认「换一层色散关系就换一个光锥」，且前提 9 说以太正是超越 c 的那层。用 ω=ck 去封顶以太层是循环论证。",
+    "P7（Shannon 公式可直接移植）：AB9 直接引用 C = d·B·log₂(1+SNR) 并把 B 代入 0。该公式的推导前提（带限、加性噪声、B>0 的采样自由度计数）一条都没在本模块中建立；合同 §3 亦明令禁止把 Shannon 容量当判据。"
+  ],
+  "term_substitution": "他把「瞬时影响彼此」说成 A（同一时刻 t 下，两个位置 x≠y 的振动/相位状态被同一标定对齐——一个 (x, y, t) 对象，x 变化、t 固定，且是「影响/建立」的过程）；我形式化成 B（s : ℤ → α，同一位置的时间序列在两个时刻 m≠n 上取值相同——一个 (x 固定, m, n) 对象，模型里根本没有位置参数；只断言「状态恒定」，不含任何「影响」的映射）。差别有三层：(i) 坐标轴整体交换——他的问题是「同 t、异 x」，我的定理是「同 x、异 t」，两者在任何一个含双自变量的场里是**互相独立**的条件，谁都不蕴含谁；(ii) 「彼此」从空间对退化为时间对，方向也随之从对称双向变成隐含的「发送者→接收者」单向信道；(iii) 「瞬时」的语义从「跨空间跨度不需时间」被读成「时间上没有变化」，于是「更快」被要求用「符号/秒」度量——一个 leo 从未使用的量纲。结果是 AB7/AB8 对他的命题**空转**（vacuous）：它们说的「非常数 ⟹ 非常数」是函数值层面的恒真式，与超光速、与介质、与以太均无关；真正被证明的是「同一位置的时间序列若为常数，则它在两个时刻上相同」。附带：本模块的空间关系 `Synced θ x y := θ x = θ y`（:113）同样没有时间参数，只在 prose 里写「同一时刻」（:112）；所以「瞬时影响彼此」这个需要 x、y、t 同时出现的对象，在 AB4/AB5 与 AB7/AB8 两侧**都不存在**——模块有空间轴、有时间轴，却没有二者的乘积。",
+  "correct_reading": "在前提 1–9 之内，「瞬时影响彼此」应读作：存在一个全局标定 L（或相位场 θ），使得同一时刻位于不同位置的点落在同一纤维里——即「同纤维即同时」是一个**空间上的等价关系**，与「某点的时间序列是否恒定」无关，也与信道容量无关；可形式化为 `def MediumFiber {X : Type*} (L : X → ℝ) : X → X → Prop := fun x y => L x = L y`（配 `mediumFiber_equivalence : Equivalence (MediumFiber L)`），以及带时刻的版本 `def CoPhase {X T : Type*} (θ : X → T → ℝ) (t : T) (x y : X) : Prop := θ x t = θ y t`；核心定理应是 `coPhase_iff_spatial_const : (∀ x y, CoPhase θ t x y) ↔ ∃ c, ∀ x, θ x t = c` 及其独立性引理——`∃ θ : ℝ → ℤ → ℝ, (∀ t x y, θ x t = θ y t) ∧ ¬ (∀ x n, θ x n = θ x 0)`（空间处处同相不蕴含时间恒定），即 AB7/AB8 对该对象无判定力；leo 的「有更快的方式」在此读法下是「同纤维的建立/维持不经过沿空间的逐点传播」，这是一个关于**介质的标定结构**的命题，其判据必须是「建立时间」可测，而不是「带宽」。",
+  "verdict": "撤回",
+  "evidence": [
+    "ProjectionPhysics/Explorations/AetherBand.lean:143 `def BandZero {α : Type*} (s : ℤ → α) : Prop := ∀ n, s n = s 0` —— 类型签名只有时刻索引 ℤ，无任何位置参数；leo 的「彼此」在此不可表达。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:147-153 `bandZero_iff_const : BandZero s ↔ ∀ m n, s m = s n` —— 陈述为「时间序列恒定 ⟺ 任意两时刻取值相同」，是函数值恒等式，不含传播、介质、速度任一概念。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:155-162 AB8 `message_needs_bandwidth (h : ∃ m n, s m ≠ s n) : ¬ BandZero s` —— 准入条件(self-declared) 是「存在两个**时刻**可区分」，证明是 `exact hmn ((bandZero_iff_const s).mp hz m n)`，即把一个恒真式反向套用；「传比特」三个字只出现在 docstring，未进陈述。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:165-170 `capacity dim B snr := dim * B * (Real.log (1+snr)/Real.log 2)`；AB9 `capacity_zero_band (dim snr : ℝ) : capacity dim 0 snr = 0` —— 只是把 dim*0*x 算成 0（`simp`），既未断言 B=0 时存在信道，也未证明 B 是介质同步的正确自变量。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:261 `theorem global_mode_is_static (c : ℝ) : c * 0 = 0` —— 陈述里**没有 k**，证明是 `ring`；wiki 把它记成「k=0 ⟹ ω = c·k = 0 ⟹ 瞬时⟹静态」的那一步推论完全活在 prose 里，属自证。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:100-106 AB3 `phaseLag_arbitrarily_small` —— 固定距离 d>0，存在 **k>0** 使相位差 < ε。这直接说明「非零空间波矢」与「跨距离近乎同时」不矛盾，故「要传信 ⟹ 要 k≠0 ⟹ 不能瞬时」这一步已被本文件自己的定理否掉。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:112-113 `def Synced {X} (θ : X → ℝ) (x y : X) : Prop := θ x = θ y` —— docstring 写「同一时刻」，类型里没有时刻；与 BandZero 恰好互补地各缺一轴，故「瞬时影响彼此」在两侧都不可陈述。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:39-40 模块头「『瞬时影响』在本模块里被严格化成『共相位』——不含传信……AB7/AB8 正是这一条的形式化」 —— 声称为真的形式化关系不成立：AB7/AB8 的 s : ℤ → α 不是 `Synced` 的 θ : X → ℝ 的同类对象，二者不是同一命题的两个表述。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:246-256 AB18 `reach_rate_bound` —— 证明链只用到 `k*L < ε` 与乘 c 的单调性，ω = c·k 作为前提（:247 注释）被隐式使用；对「以太层」用它等于用被攻层的光锥封顶该层。",
+    "docs/wiki/theory-aether-band.md:31 §1「同一条路把频率带到零 ⟹ 瞬时相关没有信道容量」 —— 把「频率带到零」与「瞬时相关」并置，偷换即在此句：在 k→0 时相位差→0 的是**空间**波矢（AB3），而 AB7/AB8 的零带宽是**时间**上的常数，两个「零」不是同一个量。",
+    "docs/wiki/theory-aether-band.md:44 §2 表第 ④ 行「因此『远比光速快』= 能传得更快 ❌ 不成立（AB7/AB8/AB9）」 —— 判死依据的三个定理无一含位置参数，属空转否定。",
+    "docs/wiki/theory-aether-band.md:88 §5 分支Ⅰ「✅ 瞬时（AB2/AB3/AB5） ❌ 传信（AB7/AB8/AB9）⟹ 零新物理」 —— 「零新物理」这一判决由前两项推出，而两项分属不同坐标轴，不构成二难；且合同 §3 禁止以 Shannon 容量作判据，此项判决本身违约束。",
+    "docs/wiki/theory-aether-band.md:117-118 §7.2「若把同步写成传比特，即撞 paper3 死法 (c)」 —— 以「写成传比特会撞既有物理」替代对 leo 命题的判定，是外部判据（合同 §3 禁止）而非内部推导。"
+  ],
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 143,
+      "action": "改写",
+      "text": "把 `BandZero` 改名为 `TimeConst`，docstring 改为：「`TimeConst s` 意为**同一位置**的时间序列在各时刻取值相同。注意：本定义的类型 `ℤ → α` 不含位置参数，故它不能陈述『同一时刻不同位置是否同相』，也不能陈述任何传播/传信性质。原『零带宽』命名作废（频域带限未在此定义）。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 155,
+      "action": "删除",
+      "text": "删除 AB8 docstring 第 155-157 行整段（「若存在两个时刻可区分……带宽为零的瞬时模恰好传不了比特」），并把定理改名为 `not_timeConst_of_two_distinct_times`，陈述保留、物理读法删除。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 164,
+      "action": "删除",
+      "text": "删除 `capacity`（:164-166）、AB9 `capacity_zero_band`（:168-170）、AB10 `capacity_add_dim`（:172-176）、AB10b `capacity_mono_band`（:178-189），以及 :20-23 的 ③ 段导言。理由：Shannon 型容量被合同 §3 列为禁止判据，且本模块未建立任何信道（无收发者、无符号集、无噪声模型）。若必须保留，只能整体移入带 `-- 描述性引用，非判据` 标记的附录，且不得作为任何判决的依据。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 39,
+      "action": "改写",
+      "text": "「·『瞬时影响』在本模块里被严格化成『共相位』——不含传信。若把同步写成传比特，即撞 paper3 的死法 (c)……AB7/AB8 正是这一条的形式化。」→「·『瞬时影响』的形式化是 `Synced`（跨位置、同一时刻），见 ②。AB7/AB8 形式化的是**另一件事**：同一位置的时间序列是否为常数；它不含位置参数，故对『瞬时影响彼此』无语义。『共相位不是传比特』这句话须另找形式化对象（需要先定义 发送者/接收者/符号集），本模块未做。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 258,
+      "action": "改写",
+      "text": "`theorem global_mode_is_static (c : ℝ) : c * 0 = 0` → 删除；若保留须改写为 `theorem static_of_zero_k (c k : ℝ) (hk : k = 0) : c * k = 0`，docstring 明写「此结论**仅**在线性色散 ω = c·k 下把 ω 与 k 绑定；分支Ⅱ 的独立层有自己的色散关系（§5 自认『换一层色散关系就换一个光锥』），本定理对它不适用」。同时删除 :258-260 中「与 AB7/AB8 合起来即为『瞬时 ⟹ 不可传信』」这句归并。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 246,
+      "action": "改写",
+      "text": "AB18 增加显式前提 `(hdisp : ω = c * k)` 或把陈述改为 `static_of_zero_k` 式的条件形式，并把结论限制为「在线性色散层内，范围与更新率之积 ≤ c·ε」；docstring 末尾加一句：「本条不构成对『以太层』的上界——对以太层用 ω = c·k 即用被攻层的光锥封顶该层。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 262,
+      "action": "新增",
+      "text": "在 `end ProjectionPhysics.AetherBand` 之前新增 ⑥ 段：\n`def MediumFiber {X : Type*} (L : X → ℝ) : X → X → Prop := fun x y => L x = L y`\n`theorem mediumFiber_equivalence {X : Type*} (L : X → ℝ) : Equivalence (MediumFiber L) := ⟨fun _ => rfl, fun h => h.symm, fun h₁ h₂ => h₁.trans h₂⟩`\n`def CoPhase {X T : Type*} (θ : X → T → ℝ) (t : T) (x y : X) : Prop := θ x t = θ y t`\n`theorem coPhase_iff_spatial_const {X T : Type*} (θ : X → T → ℝ) (t : T) : (∀ x y, CoPhase θ t x y) ↔ ∃ c, ∀ x, θ x t = c`\n`theorem spatial_sync_indep_of_time_const : ∃ θ : ℝ → ℤ → ℝ, (∀ t x y, θ x t = θ y t) ∧ ¬ (∀ x n, θ x n = θ x 0)`（见证：`fun x _ => 0` 不满足独立性，须用 `fun x n => (n:ℝ)` 反向；两侧都要给，双向反例写死）。此段是「瞬时影响彼此」的**唯一**合法形式化，AB7/AB8 与它无蕴含关系。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 31,
+      "action": "改写",
+      "text": "§1 结论句 →「『越广越快』在相位速度层是真的、且无界。**但『瞬时相关』与『信道容量』不是同一坐标轴上的对象**：前者是同一时刻跨位置的关系（AB3/AB5 的对象），后者是同一位置跨时刻的序列（AB7/AB8 的对象）。本页此前把两者并置成『因此零容量』，是把 leo 的『彼此』换成『时刻』，该推论已撤回。真正『更快』只能来自独立的一层（c₂ = ratio·c），代价是一个新的无量纲比 ratio。」"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 44,
+      "action": "改写",
+      "text": "§2 表 ④ 行判定 →「⚠ **未判定**：AB7/AB8 的模型 `s : ℤ → α` 无位置参数，对 ③ 的对象（跨位置、同一时刻）是空转；AB9 依赖 Shannon 容量（合同 §3 禁止作判据）。要判它，需先给出「影响」的映射族定义与「建立时间」的度量——本页未做。」"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 88,
+      "action": "改写",
+      "text": "§5 分支Ⅰ →「✅ 瞬时（AB2/AB3/AB5）　⚠ 传信问题**在本页未建立**（缺发送者/接收者/符号集/噪声的定义）。**删除「⟹ 零新物理」的判决**：它由『传信 ❌』推出，而该 ❌ 已降为未判定。价格行（范围×更新率）保留，但须注明只在线性色散层内有效。」"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 61,
+      "action": "改写",
+      "text": "§3 定理表 AB9 行 →「~~AB9~~（已移出判据）：`capacity_zero_band` 只是 `dim*0*x = 0` 的代数恒等式；Shannon 型公式在本页仅作描述性引用，不作判据。」AB7/AB8 行分别改为「同一位置时间序列恒定 ⟺ 任意两时刻取值相同」「非常数 ⟹ 非恒定（恒真式，无物理内容）」。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 117,
+      "action": "改写",
+      "text": "§7.2 →「『瞬时』一律读作**同纤维/同时面等价关系**（`MediumFiber` / `CoPhase`），不读作传比特；此前的『把同步写成传比特就撞 paper3 死法 (c)』是以外部判据替代内部推导（合同 §3 禁止），作废。本页不含对『能否传信』的任何判定。」"
+    }
+  ],
+  "death_condition": "这条新读法（「瞬时」= 同纤维/同时面等价关系，与信道容量无关）的死法有两条，第二条更锋利：①若证明任何跨位置的相位对齐都必须由沿空间的逐点传播**建立**，且该建立时间可测并受 c 约束，则「瞬时」只能读作「已对齐的稳态」，我的读法须降级为「稳态同步」而非「影响」。②（致命）若证明「同一时刻跨位置同相」必然蕴含该时刻的场在位置上为常数（即对齐不能携带任何空间结构），那么在「影响 = 携带结构」的读法下，同纤维层就是无信息层——此时被杀的不是「瞬时」而是「影响的传递性」，而 AB7/AB8 若要复活必须先补出 AB 文件中缺少的那件东西：一条从 x 到 y 的映射族（「影响」的定义）与它的建立时间度量。二者缺一，本读法保持；任一成立，本读法当场死。注意：AB3 已排除「非零 k 与近乎同时不共存」，故 ① 若要成立，必须额外说明「建立时间」与相位差不是同一量——这是当前框架的输入缺口，不能靠 AB 定理免费得到。",
+  "rebuts": "驳 R4 建议（contract §7 R4 / theory-aether-band.md:154-162 §11 的「更正」）：R4 主张用 GD8「β≠0 ⟹ v_g≠v_ph」来修 AB2 的读法，判为「相速度无界不可读成信号更快」。这条**修错了框架**：它把 v_ph/v_g 二分当**基础区分**，合同 §3 明确列为禁止判据（除非先证与前提 1–9 不冲突，R4 未做）；更关键的是 R1 已表明「信号更快」这个待判命题所依赖的坐标轴（跨位置 vs 跨时刻）根本没建立——在一个还没定义「发送者→接收者」的模型里比较 v_g 与 v_ph，是在给一台不存在的机器调齿轮。R4 的「本页 AB1–AB18 的其余结论不受影响」（:162）也不成立：§11 保留的 AB2→「不能读成信号更快」这一步，仍以「信号走包络」为前提，而包络是波包概念的产物，前提 1–9 只有「振动频率与维度的集体」，没有波包。建议 R4 改为：全体 v_g/v_ph 陈述降为描述性脚注，且 AB2 的读法问题交给 R1 处理（不判，只登记缺件：影响映射族 + 建立时间）。",
+  "confidence": "高"
+}

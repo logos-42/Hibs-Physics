@@ -152,7 +152,7 @@ check("N5 ★★★ 全区间间隔为 0 ⟹ 不存在严格先后；有质量�
 
 # ── N6 ★★★ 定量桥：交换差 = λ²·√(Q_A·N/(N−1))（AT5 + GCA 起伏）─────────────
 rows_n6, rel_n6 = [], 0.0
-for n in (3, 4, 6, 10):
+for n in (2, 3, 4, 6, 10):
     for g in (0.05, 0.5, 2.0):
         v = np.zeros(n)
         v[0] = 0.0
@@ -165,8 +165,8 @@ for n in (3, 4, 6, 10):
         rel_n6 = max(rel_n6, rel)
         rows_n6.append({"N": n, "梯度 g": g, "Q_A": qa, "√(Q_A·N/(N−1))": g_pred,
                         "λ²√(Q·N/(N−1))": pred, "数值交换差": comm, "相对差": rel})
-check("N6 ★★★ 时间序可观测度 = λ²·√(Q_A·N/(N−1))（∝ √起伏能量）（AT5 + GCA）",
-      rel_n6 < 1e-13, f"12 组 (N,g) 最大相对差 = {rel_n6:.2e}")
+check("N6 ★★★ 时间序可观测度 = λ²·√(Q_A·N/(N−1))（∝ √起伏能量）（AT5 + GCA；含 N=2，5 N × 3 g = 15 组）",
+      rel_n6 < 1e-13, f"15 组 (N,g) 最大相对差 = {rel_n6:.2e}")
 
 # ── N7 ★★★ 更正见证：无质量 ≠ 平坦（涡旋：无散但非平坦）（AT11–AT14）─────────
 def div_v(v):
@@ -187,6 +187,23 @@ check("N7 ★★★ 无质量 ≠ 平坦：涡旋无散（div=0）但非平坦�
       and float(np.max(np.abs(commutator(vortex, 0, 1, LAM)))) > 0.0,
       f"常值场 div={div_v(flat):.1f}；涡旋 div={div_v(vortex):.1f}、curl={curl_v(vortex):.1f}；"
       f"涡旋场上 max|交换差|={float(np.max(np.abs(commutator(vortex, 0, 1, LAM)))):.3f} > 0")
+
+# ── N8 ★★★ 反例验算：桥在一般构型失效的方向与幅度（论文 §IV 的 15.5%/13.4%）──
+#   斜坡 v=(0,1,2)（p,q=(0,2)）：桥低估实测（M/B=1.155，按桥值计 +15.5%、按实测计 −13.4%）
+#   涡旋 v=(0,1,1,0)（p,q=(0,1)）：桥高估实测（B/M=1.155，按实测计 +15.5%、按桥值计 −13.4%）
+#   两例比值结构互为倒数（√3/2 与 √(4/3)），故幅度镜像。
+ramp = np.array([0.0, 1.0, 2.0])
+B_ramp = LAM ** 2 * math.sqrt(fluctuation(ramp) * len(ramp) / (len(ramp) - 1))
+M_ramp = float(np.max(np.abs(commutator(ramp, 0, 2, LAM))))
+B_vort = LAM ** 2 * math.sqrt(fluctuation(vortex) * len(vortex) / (len(vortex) - 1))
+M_vort = float(np.max(np.abs(commutator(vortex, 0, 1, LAM))))
+rel_ramp_bridge = (M_ramp - B_ramp) / B_ramp   # +15.47%：桥低估
+rel_vort_measured = (B_vort - M_vort) / M_vort  # +15.47%：桥高估
+check("N8 ★★★ 反例方向：斜坡桥低估实测（+15.5% 按桥值计）、涡旋桥高估实测（+15.5% 按实测计）（论文 §IV）",
+      abs(rel_ramp_bridge - 0.1547) < 1e-3 and abs(rel_vort_measured - 0.1547) < 1e-3
+      and (M_ramp > B_ramp) and (B_vort > M_vort),
+      f"斜坡 M/B={M_ramp/B_ramp:.4f}（桥低估 {rel_ramp_bridge*100:.2f}% 按桥值计）；"
+      f"涡旋 B/M={B_vort/M_vort:.4f}（桥高估 {rel_vort_measured*100:.2f}% 按实测计）")
 
 # ═════════════════════ 图 ═════════════════════
 # 图 1：顺序可观测度 vs 起伏幅度
@@ -225,13 +242,13 @@ plt.close(fig)
 qs = [r["√(Q_A·N/(N−1))"] for r in rows_n6]
 cs = [r["数值交换差"] / LAM ** 2 for r in rows_n6]
 fig, ax = plt.subplots(figsize=(6.6, 4.6))
-ax.plot(qs, cs, "o", color="C4", label="12 组 (N, g)")
+ax.plot(qs, cs, "o", color="C4", label="15 组 (N, g)")
 lim = [0, max(qs) * 1.15]
 ax.plot(lim, lim, "--", color="0.5", lw=1.0, label="y = x（精确关系）")
 ax.set_xlabel("√(Q_A·N/(N−1))　起伏的平方根")
 ax.set_ylabel("交换差 / λ²")
 ax.set_title("时间序可观测度 = λ²·√起伏（AT5 × GCA）")
-ax.annotate("12 组（3 档 g × 4 档 N）\n同组重合显示", (0.62, 0.12), xycoords="axes fraction",
+ax.annotate("15 组（3 档 g × 5 档 N）\n同组重合显示", (0.62, 0.12), xycoords="axes fraction",
             fontsize=8, color="0.35")
 ax.legend(fontsize=9)
 ax.grid(alpha=0.3)

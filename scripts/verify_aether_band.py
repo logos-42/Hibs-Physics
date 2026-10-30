@@ -23,7 +23,7 @@
   N3 ★★★ 范围×更新率上界：L·ω_max = c·ε 为常数（AB18）——「更快」的价格表
   N4 ★★ 零带宽⟹零容量 + 维度只增容量（AB9/AB10）
   N5 ★★★ 两锥生死线：ratio=1 ⟹ 差 0（无新速度）；ratio≠1 ⟹ 差>0（AB12–AB14）
-  N6 ★★ 两机制不可区分（沿流），各向异性才是唯一分辨通道（AB15）
+  N6-AB ★★ 两机制不可区分（沿流），各向异性才是唯一分辨通道（AB15）
   N7 ★★ 瞬时⟹静态：v_ph 发散而 ω→0，乘积恒为常数（AB17）
 
 ═════ 诚实边界（写死）═════
@@ -118,14 +118,14 @@ check("N5 ★★★ ratio=1 ⟹ 两锥重合（差 0，无新速度）；ratio�
       delta[0] == 0.0 and all(d > 0 for d in delta[1:]),
       "ratio=" + ", ".join(f"{r}→c2={x:.2f}（Δ={d:+.2f}）" for r, x, d in zip(ratios, c2, delta)))
 
-# ── N6 ★★ 两机制不可区分（沿流）；各向异性是唯一分辨通道（AB15）────────────
+# ── N6-AB ★★ 两机制不可区分（沿流）；各向异性是唯一分辨通道（AB15）───────────────
 v_drag = 0.5
 along_drag = 1.0 + v_drag     # 拖曳：沿流
 perp_drag = 1.0               # 拖曳：垂直
 ratio_coarse = 1.5
 along_coarse = ratio_coarse * C_MED
 perp_coarse = ratio_coarse * C_MED
-check("N6 ★★ 单点等效速度两机制不可区分；各向异性才分辨（AB15）",
+check("N6-AB ★★ 单点等效速度两机制不可区分；各向异性才分辨（AB15）",
       abs(along_drag - along_coarse) == 0.0 and abs(perp_drag - perp_coarse) == 0.5,
       f"沿流 拖曳={along_drag:.2f} vs 层级={along_coarse:.2f}（差 0）；"
       f"垂直 拖曳={perp_drag:.2f} vs 层级={perp_coarse:.2f}（差 {abs(perp_drag-perp_coarse):.2f}）")
@@ -257,7 +257,7 @@ report = {
         "全部数字 = 初等代数/傅里叶关系代入；不证明宇宙是振动的，也不证明存在快于 c 的影响",
         "「瞬时」一律读作共相位/同时面，不读作传比特（paper3 死法 (c)）",
         "分支Ⅱ的 ratio 是新的无量纲输入（与 M₀/λ 同款），未闭合",
-        "无新可检验预言：N3/N6 是判据形状，不是新数值预言",
+        "无新可检验预言：N3/N6-AB 是判据形状，不是新数值预言",
     ],
     "conclusion": "「越广越快」在相位速度层成立且无界（AB2），但同一条路把频率带到 0（AB17）⟹ "
                   "瞬时相关没有信道容量（AB9）；真正「更快」只能是独立的一层（c2=ratio·c，AB13/AB14），"

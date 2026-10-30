@@ -1,0 +1,168 @@
+{
+  "round": "R6",
+  "claim_under_attack": "「以太就是 P1 换名（SFG1 `A := C`），不是新增假设；方向也不是 YM ⟹ 以太」（会话结论 + docs/wiki/theory-aether-band.md §5 注 + SpaceFlowGauge.lean 的 `A := C`）",
+  "verdict": "撤回",
+  "verdict_detail": {
+    "primary": "撤回「以太 = P1 换名 / 不是新增假设」——它是用定义裁决事实，把 leo 的存在性主张换成了一句由我自己的定义决定真假的话。",
+    "direction_subclaim": "同一条主张的后半「方向也不是 YM ⟹ 以太」也要降级（不是保留）：在类型分离的读法下，正确形式是「YM 场层既不蕴含也不排除以太层，只欠定它」（AM1/AM2）。原来那句之所以看起来成立，靠的正是「以太=场」这个已被撤回的同一性。",
+    "landed_patch": "docs/adversarial/aether-6rounds.md:148-164 已把 R6 落成 AetherMedium.lean AL1，但只做了一半：类型分开了，载体却没有自己的速度标度，「超越光速」在 AL1–AL6 里仍然不可陈述；且 AL1 的非单射性来自 (tag,amp)↦tag·amp 这个 2→1 构造，是定义性欠定，不构成「场层不足」的物理证据。需按 fix 1–9 重做。"
+  },
+  "hidden_premises": [
+    "HP1「介质与场是同一个对象」，且这一同一不只发生在符号层，而发生在**类型**层：`abbrev SpaceFlow := YangMillsContinuum.GaugeField`（SpaceFlowGauge.lean:59）使 `SpaceFlow` 与 `GaugeField` 在定义上相等（已机器验证 `example : SpaceFlow = GaugeField := rfl`）；`def gaugeFromFlow (C : SpaceFlow) : GaugeField := C`（:62）因此是恒等函数，SFG1a 用 `rfl` 证（:65）。所以「介质层」不是被误认成场，而是**在类型系统里根本没有第二个类型**。",
+    "HP2「换名是无害的（保义）」。这条只在被换名的词在目标语言里仍有指称时成立。在这里，「基础/更底层/可超出 c/可同步」在 GaugeField 里一处也写不出来：GaugeField = (Fin 4 → ℝ) → (Fin 4 → Mat3C)（YangMillsContinuum.lean:99），类型里没有第二个速度参数，没有「载体」位置。⟹ 换名不是保义，是**删义**：它把一句可被证伪的话变成一句不可陈述的话。",
+    "HP3「场的全体足以承载『更底层』」——即默认了 `载体 ⊆ 可观测量`，也就是默认介质层没有纤维（observe 单射）。这与 leo 第 9 条的「**基础**介质」直接冲突：基础性恰恰是「场是它的像，不是它本身」。",
+    "HP4「能定义 = 已蕴含」——把 definitional entailment（`A := C`）当作物理蕴含。定义不增加假设，这句话反过来说更致命：**定义也不增加对象**。所以「不是新增假设」与「没有以太」是同一句话；用它来支持「YM ⟹ 以太」是自相矛盾的。",
+    "HP5「单一 c 就是唯一的同步速度标度」——因为类型里只有一个流动场，没有第二标度，「超越 c」无处安放。这条前提是 HP1 的算术后果，但它是 leo 命题被**消解**（而非被解释）的直接机制。",
+    "HP6「不可判定 = 命题还在，只是没有判据」。实际更强：在 `A := C` 下，`以太比场快` 不是 open problem，而是 ill-typed。我把「不可判定」当成一种温和的保留（「不是新假设，所以无害」），这一步把「不可陈述」误记成「未判定」。"
+  ],
+  "term_substitution": "他把「以太」说成：一个**更底层的载体**，它 (a) 承载场（场是它的可观测量）、(b) 有自己的同步速度、可以**超出** c、(c) 因此能在「局域频率低且不一致」处提供比光更快的同步。我形式化成：`GaugeField`（一个 Mat3C 值函数）的**第二个名字**。差别在四处，逐条对照：(1) 载体 ↦ 可观测量——`observe : Medium → GaugeField` 的位置被 `abbrev` 抹掉（SpaceFlowGauge.lean:59）；(2) 「可超出 c」↦ 无处可写——类型里没有 speedScale 位置，故「A 超越 C」型命题在类型上不可表达；(3) 「基础（更底层）」↦ 「同一个」（方向反了：更底层要求 observe 有纤维，同一要求 observe = id）；(4) 「同步」↦ 共相位关系 `Synced θ x y := θ x = θ y`（AetherBand.lean:113）／`MediumFiber L`（AetherBand.lean:277）——两个定义逐字同义，都是**场的相位水平集**，不是介质的机制。结论：我把一个关于「层」的主张，替换成了一个关于「名字」的主张，而「层」的全部内容正好就是名字之下被抹掉的那个自由坐标。",
+  "correct_reading": "在前提 1–9 之内应读作：**以太是场层的纤维，不是场的别名**——介质是载体 M（自带同步速度标度），场是它在一个观测映射下的像 `observe : Medium → GaugeField`，`observe` 非单射；因此「场层的定理（含 AB7–AB9 这类信道命题）不足以判定介质层」是可证的事实，而不是修辞。一句话形式化：`structure Medium where flow : GaugeField; speedScale : ℝ; hpos : 0 < speedScale`；`def observe (m) := m.flow`；`def ofFlow (C) := ⟨C, 1, _⟩`；核心定理 `AM2 : ¬ ∃ P : GaugeField → ℝ, ∀ m, P (observe m) = m.speedScale`（没有只由场算出的泛函能读出介质的同步速度标度）+ `AM5 : ofFlow (observe m) = m ↔ m.speedScale = 1`（介质层可由场层还原 ⟺ 平凡介质）。在此读法下，leo 的第 9 条是**结构性存在主张**：「存在与任意给定场相容、且速度标度 ≠ 1 的载体」，它既不被 YM 场层推出，也不被排除；被证成的只有欠定性，方向箭头必须写成 `YM ⟹ observe 的纤维非空`（可证，且正是 AM1），**不能**写成 `YM ⟹ 以太`（要额外给出把 speedScale 钉死到 >1 的定理，本文没有）。",
+  "evidence": [
+    "ProjectionPhysics/Explorations/SpaceFlowGauge.lean:59 —— `abbrev SpaceFlow := YangMillsContinuum.GaugeField`：**类型**同义（已机器验证 `SpaceFlow = GaugeField` 由 rfl 成立），不是项的缩写。这是「介质层不存在」的根，不是一句注释。",
+    "ProjectionPhysics/Explorations/SpaceFlowGauge.lean:62 + :65 —— `def gaugeFromFlow (C : SpaceFlow) : GaugeField := C`；`theorem gauge_is_flow_own_field ... := rfl`：SFG1 是恒等函数的自证，不是「流动空间自带规范场」的构造。",
+    "ProjectionPhysics/Explorations/SpaceFlowGauge.lean:7 —— 文件头把方向写成 `A_μ(x) = C_μ(x)`（一条**等式**），这是「换名」主张的书面载体。",
+    "ProjectionPhysics/Explorations/SpaceFlowGauge.lean:18-19 —— 诚实边界自认「A := C 是定义（rfl），物理宣称是公设层内容，不是从更基本的东西推出的」：模块自己已经承认这不是推导，却仍在 R6 里被当作「不是新增假设」的证据——同一句话被用在两个相反的方向。",
+    "ProjectionPhysics/Explorations/YangMillsContinuum.lean:99 —— `abbrev GaugeField : Type := (Fin 4 → ℝ) → (Fin 4 → Mat3C)`：类型里没有速度标度位置 ⟹ 「超越 c」不可表达（HP5）。",
+    "ProjectionPhysics/Explorations/AetherBand.lean:113 —— `def Synced (θ) (x y) := θ x = θ y`；:277 —— `def MediumFiber (L) : X → X → Prop := fun x y => L x = L y`：两者逐字同义（eta 等价），「介质」第二次被定义成**相位水平集**。",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:56-61 —— 落地的 AL1：`structure Medium where tag amp : ℝ`；`def fieldOf (m) : ℝ → ℝ := fun _ => m.tag * m.amp`（**常值场**）；AL1 `fieldOf_not_injective` 用 ⟨1,2⟩ 与 ⟨2,1⟩ 见证。这是 2 参数 → 1 值的构造性欠定，与 GaugeField/交换子/场强无任何连接。",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:193 —— `structure MediumFlow where c : ℝ`：第三次，「介质」= 一个裸实数。「介质」目前在仓库里指三个互不相同的类型（`X→X→Prop` / `{tag,amp}` / `{c}`），没有一个是载体。",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:33 —— 死法①「若能构造只依赖场的量反推介质标签，则 AL1 死」：在 toy 里几乎无法被杀死，因为 tag/amp 没有任何可观测量；这条死法不构成判据（honest-verification-gates 口径：门的红绿要只取决于它声称验的那件事）。",
+    "ProjectionPhysics/Explorations/SpaceFlowGauge.lean:177-182 —— SFG9 `has_strand_imp_mass_ge_count`：`#check` 显示签名是 `∀ {C : SpaceFlow} {x : Fin 4 → ℝ} ... hasFlowStrand C x → ∃ N, 1 ≤ N ∧ mSq 1 ≤ mSq N`，其中 `C x` 由 autoImplicit 隐式绑定，`_hstrand` 下划线名且证明完全未用；结论由 hcount 取 N=1 平凡得到（`mSq 1 ≤ mSq 1`）。注释里「hstrand 被显式使用…不再是空转前提」是假陈述。",
+    "docs/wiki/theory-aether-band.md:97-100 —— §5「与杨–米尔斯的关系」注：「以太(P1) ⟹ 离散计数 + 汇非对易 ⟹ 间隙」。在场层/介质层分离后，这个正向箭头本身也要改：离散与间隙是**场层（商层）**性质，不来自介质层。",
+    "paper4/projection-instant-cnot-speed-zh.tex:148 —— 「框架证明的是『以太 ⟹ 离散 + 非对易 ⟹ 质量间隙』，不是反向」。这是「换名」的出版形态：它靠「以太 = P1」把方向问题消掉。",
+    "paper4/projection-instant-cnot-speed-zh.tex:91 —— 「本文不使用任何新公设」。介质层若被读作独立载体，其速度标度就是与 ratio 同款的输入；这句话必须限定在**场层**。",
+    "paper4/projection-instant-cnot-speed-zh.tex:354 —— 防火墙条目把「以太」（P1）与同时面直接等同，无一处提到介质层的载体标度。",
+    "docs/adversarial/aether-6rounds.md:148-164 —— R6 已写成「撤回」，但 158-160 行把「正确读法」直接指到 `AetherMedium.lean` 的 AL1，等于用上述 toy 结算了这一轮。"
+  ],
+  "verified_checks": [
+    "以 `lean` 直接编译 `ProjectionPhysics/Explorations/SpaceFlowGauge.lean`（olean 输出到 scratch，未写仓库）：**0 error**，证明现有模块本身可过。",
+    "对 SpaceFlowGauge 的 `#check`：`@has_strand_imp_mass_ge_count : ∀ {C : SpaceFlow} {x : Fin 4 → ℝ} {M₀} (mSq : ℕ → ℝ), (∀ N, mSq N = ↑N * M₀^2) → hasFlowStrand C x → ∃ N, 1 ≤ N ∧ mSq 1 ≤ mSq N` ⟹ `C x` 为 autoImplicit 隐式洞，`_hstrand` 未被使用（证实证据第 10 条）。",
+    "`#print axioms gauge_is_flow_own_field` → [propext, Classical.choice, Quot.sound]（标准公理，无 sorryAx）。",
+    "新建 scratch 校验文件并通过编译（3 条）：`SpaceFlow = GaugeField`（rfl）；`leibniz_indistinguishable : ∀ (C) (P : GaugeField → Prop), P (gaugeFromFlow C) ↔ P C`（Iff.rfl）；`cannot_be_distinct : ¬ (gaugeFromFlow C ≠ C)`。⟹ 「介质 ≠ 场」在类型上被**反驳**，任何谓词不可区分，「介质比场快」无处可写。",
+    "scratch 原型 `AetherMedium_proto.lean`（AM0–AM5，`projectionPhysics` 依赖 `SpaceFlowGauge`）**0 error、0 sorry**，五个定理 `#print axioms` 均为 [propext, Classical.choice, Quot.sound]。"
+  ],
+  "prototype": {
+    "path": "/Users/apple/.hermes/cache/scratch/aether/AetherMedium_proto.lean",
+    "code": "structure Medium where flow : GaugeField; speedScale : ℝ; hpos : 0 < speedScale\ndef observe (m : Medium) : GaugeField := m.flow\ndef ofFlow (C : GaugeField) : Medium := ⟨C, 1, one_pos⟩\ntheorem observe_ofFlow (C) : observe (ofFlow C) = C := rfl\ntheorem ofFlow_observe_ne_id : ∃ m, ofFlow (observe m) ≠ m\ntheorem observe_not_injective : ¬ Function.Injective observe\ntheorem no_field_functional_reads_speedScale : ¬ ∃ P : GaugeField → ℝ, ∀ m, P (observe m) = m.speedScale\ntheorem medium_recoverable_iff_unit_scaling (m) : ofFlow (observe m) = m ↔ m.speedScale = 1",
+    "note": "AM4 保住 SFG1 的 rfl 恒等（截面），AM5 说明它不是换名（不可逆投影），AM2 是「场不足以判定介质层」的严格形式，AM1 是 leo 第 9 条可写的存在形式（同一场，两个介质）。"
+  },
+  "review_of_landed_patch": {
+    "summary": "AetherMedium.lean（AL1–AL6，已 import 进 ProjectionPhysics.lean:156）方向对，但对 R6 只做到类型分离，没做到「承载 + 可超出」。",
+    "defects": [
+      "AetherMedium.lean:61 `fieldOf m := fun _ => m.tag * m.amp`：场是**常值**函数 ⟹ AL1 的见证场在 AL5 自己的 `Flat`(:173) 意义下是平坦的；场强 F = dC + [C,C]、交换子、色结构全部不可见。用它宣称「场层定理不足以判定介质层」，等于用零动力学说话。",
+      "AetherMedium.lean:56-58 `Medium := {tag, amp}`：没有速度标度、没有载体关系 ⟹ leo 的「可以超越光速来实现同步」在落地版里**仍不可陈述**。R6 的核心要求（③）未被满足。",
+      "AetherMedium.lean:65 `fieldOf_not_injective`：非单射由 2 参数→1 值构造保证（tag·amp），不是关于「场」的事实。判据应是「额外自由度与场层动力学无关地活着且各有死法」，而不是「我把介质写成两参数、场写成一参数」。",
+      "AetherMedium.lean:84 `Synced p q := p.tag = q.tag`：与 AetherBand.lean:113 `Synced θ x y := θ x = θ y`／:277 `MediumFiber` 结构同型——「同步」第三次被写成水平集恒等，仍不含任何速度/机制。",
+      "AetherMedium.lean:193 `MediumFlow {c}` 与 Medium.tag 是同一自由度的两处命名（第 4 / 5 次名字漂移），DispersionGeneral.lean:91 已把这个裸实数当成「介质等效速度」引用。",
+      "AetherMedium.lean:33 死法①不可杀死（toy 里 tag 无观测量），不满足「门只对它声称验的那件事敏感」。"
+    ]
+  },
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 56,
+      "action": "改写",
+      "text": "把 toy 的 `structure Medium where tag amp : ℝ` 换成载体：`structure Medium where flow : ProjectionPhysics.YangMillsContinuum.GaugeField; speedScale : ℝ; hpos : 0 < speedScale`（speedScale 以 c=1 为单位；这是「可超出 c」唯一能落地的地方）。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 61,
+      "action": "删除并新增",
+      "text": "删 `def fieldOf (m) : ℝ → ℝ := fun _ => m.tag * m.amp`（常值场）；改为 `def observe (m : Medium) : GaugeField := m.flow` 与 `def ofFlow (C : GaugeField) : Medium := ⟨C, 1, one_pos⟩`。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 65,
+      "action": "新增",
+      "text": "AL1 改证为 GaugeField 上的非单射：`theorem observe_not_injective : ¬ Function.Injective observe`（见证 ⟨0,1,_⟩ 与 ⟨0,2,_⟩，场同为 0）；并新增 `theorem observe_ofFlow (C) : observe (ofFlow C) = C := rfl`（= SFG1 的正确形态：截面）、`theorem ofFlow_observe_ne_id : ∃ m, ofFlow (observe m) ≠ m`（⟹ 不是换名）、`theorem medium_recoverable_iff_unit_scaling (m) : ofFlow (observe m) = m ↔ m.speedScale = 1`。全部已在 scratch 编译通过，可直接搬。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 68,
+      "action": "新增",
+      "text": "AL1b ★★★（本轮的严格内容，替掉「欠定性靠构造」）：`theorem no_field_functional_reads_speedScale : ¬ ∃ P : GaugeField → ℝ, ∀ m : Medium, P (observe m) = m.speedScale` —— 不存在只由场算出的泛函能读出介质的同步速度标度。这才是「场层定理不足以判定介质层」的机器可检形式。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 33,
+      "action": "改写",
+      "text": "死法① 换成可杀掉的形式：「若 ∃ P : GaugeField → ℝ, ∀ m, P (observe m) = m.speedScale（场能读出速度标度），则 AM2 死 ⟹ 介质层被场层钉死，『换名』复辟」；并补一条：「若 speedScale 被写成 flow 的函数（例如 = |C|）⟹ 载体塌回可观测量，本模块整段作废」。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 84,
+      "action": "改写",
+      "text": "`Synced` 改名 `sameStrand` 并改用载体的纤维：`def sameFiber (m₁ m₂ : Medium) : Prop := observe m₁ = observe m₂`；「同步」= 同纤维两点 + 显式标注「本层不提供速度；速度标度是 speedScale，不在该等价关系里」。同时在 AL2 注释里删掉「该层上没有两个端点」这种把纤维当恒等的说法。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 193,
+      "action": "删除",
+      "text": "`structure MediumFlow where c : ℝ` 与 `Medium.speedScale` 合并（同一个自由度不许两处命名）；`DispersionGeneral.lean:91` 的引用随之改成 `AetherMedium.Medium.speedScale`，并写死「无 k 参数」。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/SpaceFlowGauge.lean",
+      "line": 61,
+      "action": "改写",
+      "text": "SFG1 的注释与定理名改口：「规范场就是流动场」→「流动场 = 介质层的一个**截面**（`ofFlow`）」。`def gaugeFromFlow` 保留但注释删去 `A := C` 的等式表述，新增一行引用 `AetherMedium.observe`/`no_field_functional_reads_speedScale`，并明写「本定理说的是截面，不是两层同一」。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/SpaceFlowGauge.lean",
+      "line": 7,
+      "action": "改写",
+      "text": "文件头 `A_μ(x) = C_μ(x)` → `A_μ(x) = (observe M)_μ(x)`，M 为载体；紧跟一句「observe 非单射（AM1），故场不足以判定介质层」。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/SpaceFlowGauge.lean",
+      "line": 177,
+      "action": "改写",
+      "text": "SFG9：`_hstrand` 未使用且 `C x` 由 autoImplicit 隐式绑定 ⟹ 定理只是 hcount 取 N=1 的平凡推论。改法二选一：① 把结论与条数挂钩（如 `hstrand → ∃ N, 1 ≤ N ∧ mSq N = M₀^2 ∧ N ≤ strandCount C x`，需先定义 strandCount）；② 保持结论但把注释改成「本定理不使用 hstrand，条数→质量这一环仍缺」，删掉「hstrand 被显式使用…不再是空转前提」。②是诚实下限，不许再留着现在这句。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 276,
+      "action": "改写",
+      "text": "`MediumFiber` 与 :113 `Synced` 定义逐字同义，且「介质」在这里只指相位水平集（R1 引入）⟹ 改名 `CoPhaseFiber`（或直接复用 `Synced`），并在 ⑥ 段头写死：「本段的 fiber 是**相位**纤维，不是介质层纤维；介质层纤维见 AetherMedium.obsFiber（= observe 的核）」。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 97,
+      "action": "改写",
+      "text": "§5「与杨–米尔斯的关系」注整段换掉：删「以太(P1) ⟹ 离散计数 + 汇非对易 ⟹ 间隙」的正向箭头；改为「以太是场层的纤维（AM1/AM2），离散与间隙是场层（商层）性质；两者之间没有方向可写：YM 不蕴含以太、也不排除以太，只欠定它。原句『方向也不是 YM ⟹ 以太』同样撤回」。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 162,
+      "action": "新增",
+      "text": "文件末尾新增 `## 12. 更正（R6，撤回「以太 = P1 换名」）`：三段——(a) 为什么撤回：`A := C` 是 rfl 级类型同义，Leibniz 下任何谓词不可区分，leo 的命题不是不可判定而是不可陈述，用定义裁决事实；(b) 正确读法：类型分离 + 观察映射 + 非单射（引 AetherMedium 的 observe/AM2）；(c) 代价必须写明：介质层的速度标度是与 §5 分支Ⅱ 的 ratio 同款的**未闭合输入**，「不是新增假设」这句话只在场层成立。"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed-zh.tex",
+      "line": 148,
+      "action": "改写",
+      "text": "「框架证明的是『以太 ⟹ 离散 + 非对易 ⟹ 质量间隙』，不是反向」→「框架的全部证据在**场层**（介质层在观察映射下的像）：离散、非对易、间隙都是场层（商层）的性质。以太是场层的纤维，故两条箭头都不可写——既不能写『以太 ⟹ 间隙』（纤维不产生商层性质），也不能写『YM ⟹ 以太』（场层欠定纤维，AL1/AM2）。可写的只有一条：场层的定理对介质层不下判据。」"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed-zh.tex",
+      "line": 91,
+      "action": "改写",
+      "text": "「本文不使用任何新公设」→「本文的**场层**不使用新公设（AB1–AB18 全是场层的初等陈述）。介质层若被读作独立载体（以太），其同步速度标度是与分支 II 的 ratio 同款的未闭合输入，本文不声称它由 P1–P4 导出——这正是场→介质的非单射性（AL1/AM2）所指的欠定。」"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed-zh.tex",
+      "line": 354,
+      "action": "改写",
+      "text": "防火墙条目补一句：「并且『以太』不是 P1 的别名：P1 是场层公设，以太是 P1 的场在观察映射下的纤维（AL1/AM2）；把两者等同会把『基础介质可超出 c』变成不可陈述句，本文不作此等同。」"
+    },
+    {
+      "file": "docs/adversarial/aether-6rounds.md",
+      "line": 158,
+      "action": "改写",
+      "text": "R6 段把「正确读法…即 AetherMedium.lean 的 AL1 fieldOf_not_injective」改为：「AL1 需重做：现版以常值场（:61）与 2→1 构造（tag·amp）给出欠定，属定义性欠定，非物理证据；正确对象是 `observe : Medium → GaugeField` 的非单射与 `no_field_functional_reads_speedScale`（见 R6 独立件 fix 1–5）。」并把「死法」换成 AM2 的否证形式。"
+    }
+  ],
+  "death_condition": "这条新读法（以太 = 场层的纤维）怎么被杀死，三条，每条都可机器检验、都不借历史结论：① **纤维塌陷**：若能在不引入新输入的前提下证出 `Function.Injective observe`（场层唯一决定介质层），或更弱地证出 `∃ P : GaugeField → ℝ, ∀ m, P (observe m) = m.speedScale`（例如 speedScale 被证明等于 |C| 或 max_x |C| 的某泛函），则 AM2 死、纤维为空，「换名」复辟，「以太先于场」整段降级为记账。② **平凡化**：若所有物理可接受的介质都满足 speedScale = 1（即 AM5 的右端恒真），则介质层在场层上不可分辨且不带来任何东西，R6 的新读法退化为「同一对象 + 一个无用的标签」，应撤回为纯记号声明。③ **方向被证成**：若给出 `YM 场层公设 ⟹ speedScale > 1` 的定理（即把第 9 条的箭头真正证出来），则本文的「欠定/不判定」判决死，改判 leo 的蕴含成立；反之若给出 `YM ⟹ speedScale = 1`，则以太被框架**排除**（这是一个真正的否定结果，也应写出来）。三条都只看 Lean 是否给出对应定理，与 MM 实验、无信号定理、QFT 公理无关。",
+  "rebuts": "驳 R1（其修正已落在 AetherBand.lean:276-284 与 docs/adversarial/aether-6rounds.md:43-44）：R1 把「跨位置同步」的正对象定为 `def MediumFiber {X} (L : X → ℝ) : X → X → Prop := fun x y => L x = L y`，并称这是「介质纤维」。这条与我本轮撤回的「换名」是**同一个错误的镜像**：我用 `A := C` 把介质定义成场（坍缩），R1 用 L 的水平集把介质定义成场的相位标签（标签化）——两条都没有载体、没有速度标度、没有自己的状态，因此「介质可以比场更快」在 R1 的对象上同样不可陈述；R1 于是只能证明「AB7/AB8 说的是别的对象」，不能证明「介质层上存在更快的方式」，而后者才是 leo 第 3/5 条要的东西。更硬的一条：`MediumFiber`（:277）与同文件 :113 `Synced` 定义逐字同义（η 等价），R1 的新对象在 Leibniz 下不引入任何东西——这与 R6 被指控的「换名」是同一病症，只是换了方向。建议 R1 把 ⑥ 段的 `MediumFiber L` 换成 `AetherMedium.observe` 的核：`def obsFiber (m₁ m₂ : Medium) : Prop := observe m₁ = observe m₂`，把「同步」写成同纤维上的两点，并把待判量显式取为 `speedScale`；否则 R1 的正面产出（`spatial_const_not_time_const`）仍然只是「AB7 的模型缺位置参数」，而不是「瞬时同步在介质层成立」。",
+  "confidence": "高",
+  "scope_note": "未改仓库任何文件、未 git；只读源码 + 在 /Users/apple/.hermes/cache/scratch/aether/ 下写校验件（check_sfg2.lean、AetherMedium_proto.lean）与 olean。判据全部取自前提 1–9 与仓库内类型，未使用「以太已被 Michelson–Morley 否定」或任何无信号/信道容量/QFT 公理作为判据。"
+}

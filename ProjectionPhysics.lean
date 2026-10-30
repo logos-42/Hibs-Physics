@@ -150,5 +150,8 @@ import ProjectionPhysics.Explorations.AetherBand
 import ProjectionPhysics.Explorations.AetherTime
 import ProjectionPhysics.Explorations.VibrationFrame
 import ProjectionPhysics.Explorations.TimeCount
+import ProjectionPhysics.Explorations.AetherSync
 import ProjectionPhysics.Explorations.DispersionGeneral
 import ProjectionPhysics.Explorations.BandDimension
+import ProjectionPhysics.Explorations.AetherMedium
+import ProjectionPhysics.Explorations.Seam

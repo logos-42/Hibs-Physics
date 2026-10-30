@@ -1,0 +1,124 @@
+{
+  "round": "R5",
+  "claim_under_attack": "把 leo 的『无质量 = 没有对周围空间产生扭曲』形式化成 divV = 0（无散度），并用涡旋 v=(0,1,1,0)（div=0、curl=2）当『无质量但非平坦』的见证（AT11/AT12/AT14）。",
+  "hidden_premises": [
+    "① 质量是一种『源/荷』：无质量 ⟺ 没有源 ⟺ 净流出为零。这把质量放进了 Gauss 定律的位置——而仓库自己的 P3 把那个位置给了电荷（paper3/projection-yangmills-gap.tex:214-218 post:charge：positive charge = source of the flow, neutral = zero）。",
+    "①' 更进一步：把『质量』当成可以用『场构型 v』来判定的属性。但 P2/MC1 里质量是物体侧的条数/锚定（paper3:206 m²(N)=N M₀²；ProjectionPhysics/Archive/MinimalCore.lean:40-43 spinFlowAnchorMass；paper3:205 'the strands grip the flow'），是探针与流动之间的耦合，不是场本身的形状。",
+    "② 扭曲是可加的、带符号的标量，且只有『净和』算数：divV 是回路上的净流出 (v₁−v₀)+(v₃−v₂)，正负可以抵消为零；于是『一个正源 + 一个负源』被判成『不产生扭曲』——这是把『抵消』当成『不存在』。",
+    "③ 扭曲只沿两条边取样（4 点回路）且只测『源性』（div），不测剪切/旋转。为此必须假定旋转（curl）不是扭曲——但 AT12 自己报告的 curlV = 2 恰恰说明这个场在转，即空间被拧着；判据把自己举的证据当成反证。",
+    "④ 隐含『无质量』与『中性』是同一个谓词的两个名字（二者总是同真同假），所以任选一个来形式化都行。仓库正是这样把它们焊在一起的：paper3:227-228『a fully contracted sink is flattened, massless, and neutral』。",
+    "⑤ 隐含『平坦』是『无扭曲』的充分条件，因此 AT11（平坦 ⟹ div=0）就足以把平坦说成『无质量的特例』；但 AT11 只证明了『平坦 ⟹ 无源』，这一步只在④成立时才成立。"
+  ],
+  "term_substitution": "leo 的词：『没有对周围空间产生扭曲』——扭曲是**逐点、非负、任何形式的形变**（压缩 + 剪切 + 旋转），是对称张量层面的量，不会被抵消；他说的是一个**物体不去拧周围空间**。我的形式化：divV v = 0——4 点回路上的**净流出和**，是一个**带符号的全局标量**，可以被正负抵消，且完全不测旋转。差别有三层：(a) 逐点 vs 回路净和（抵消即视为零）；(b) 非负强度 vs 带符号量；(c) 全部形变 vs 只测『源性』。更致命的是层级：div 在仓库里已经是**电荷**的位置（P3，paper3:214-218），质量在仓库里是**条数/锚定**（P2/MC1，paper3:206、MinimalCore.lean:42）。所以这一步等于用 P3 的判据去判定 P2 的属性——不是『近似』，是**换了一层**；而在同一套符号里，v=(0,1,1,0) 满足 div=0 却有梯度（v₁≠v₀），按 MC1『空间褶皱（流动梯度/密度梯度）⟹ 锚定 ⟹ 质量』（MassCancellation.lean:5）它反而**是有质量的**。即 AT12 的『无质量见证』在自己的公理下是个有质量的构型。",
+  "correct_reading": "在前提 1–9 内应读作：无质量是**探针与流动之间没有锚定/没有条数抓住流动**（N=0 / 耦合 Γ=0）——它是关于**耦合**的陈述，与场的形状（是否平坦、是否有源、是否有旋）无关；因此『无质量与平坦无关』成立，而『平坦』只是 Γ=0 的一个**恰好也平坦**的局部实例。可形式化的对象是两个已存在的量：条数 N（mass² = N·M₀²，paper3:206）与锚定 anchorMassSq (effectiveAnchor s μ)（MassCancellation.lean:51/55），判据定理是仓库早已有的 amc1c_zero_mass_iff_zero_anchor（MassCancellation.lean:73）：无质量 ⟺ 锚定 = 0。div 则只能读作『无源/电中性』（P3）。",
+  "verdict": "降级",
+  "evidence": [
+    "ProjectionPhysics/Explorations/AetherTime.lean:240 AT11 flat_implies_divFree —— 只证了『常值场 ⟹ 净流出 0』，即 平坦 ⟹ 无源；把它读成『平坦是无质量的特例』需要额外的层级等同。",
+    "ProjectionPhysics/Explorations/AetherTime.lean:247-248 AT12 vortex_massless_not_flat：divV vortex = 0 ∧ ¬Flat vortex ∧ curlV vortex ≠ 0 —— 数学为真（纯算术），但结论标签『massless』不成立：该场 v₁=1 ≠ v₀=0 有梯度，按 MC1 是**有锚定/有质量**的构型（MassCancellation.lean:5『空间褶皱（流动梯度/密度梯度）⟹ 锚定 ⟹ 质量』）。",
+    "ProjectionPhysics/MassCancellation.lean:73 amc1c_zero_mass_iff_zero_anchor：『质量为零 ⟺ 锚定为零』——仓库里已有的正确判据；AT11–AT14 完全没有引用它。",
+    "ProjectionPhysics/MassCancellation.lean:51/55 anchorMassSq / effectiveAnchor（质量 = 锚定强度 s，s=0 ⟹ 完全随流）；ProjectionPhysics/Archive/MinimalCore.lean:40-43 spinFlowAnchorMass（锚定 = 旋量流的分量范数，不是场的散度）。",
+    "paper3/projection-yangmills-gap.tex:206-209 mass²(N)=N M₀²，photon N=0 —— 质量的判据是条数，不是 div。",
+    "paper3/projection-yangmills-gap.tex:214-218 post:charge：『Positive charge is a source of the flow (positive divergence); negative charge a sink; neutral is zero』——div 在仓库里明确属于**电荷层**。",
+    "paper3/projection-yangmills-gap.tex:227-228 / 276-277『a fully contracted sink is flattened, massless, and neutral』『mass is anchoring, charge is divergence』——同一句里把 massless 与 neutral 焊在一起，是 div=massless 这个偷换的出生地（276 行本身是对的，227 行的三连用是错的）。",
+    "paper4/projection-instant-cnot-speed.tex:60『the vortex v=(0,1,1,0) is divergence-free, hence massless, yet not flat』——hence massless 是从 div=0 直接推的，正是本轮要攻的那一步。",
+    "paper4/projection-instant-cnot-speed.tex:157-158『mass is an integer count of excited strands; charge is the divergence』——同一段自己写清了两个层，却在 60 行和 479 行用电荷层的判据去判质量层。",
+    "paper4/projection-instant-cnot-speed.tex:467-484『The correction: masslessness is not flatness ... masslessness is a property of the source --- it produces no distortion of the surrounding space (no divergence)』——『source』一词即暴露：质量被当成了源，与 P2 的锚定/条数冲突。",
+    "docs/wiki/theory-aether-time.md:151『「无质量」= … = 源的属性（无散度：无源无汇）』；:160『div = 0（无质量）』；:173『无质量（无散度、不产生扭曲）⇏ 平坦』——三处需按层级改写。",
+    "docs/wiki/theory-aether-time.md:22 与 ProjectionPhysics/Explorations/AetherTime.lean:195：把 AT12 当『无质量但非平坦』的见证来修补 AT9 —— 修补引用了错误见证，所以 AT9 的『撤回』目前是**结论对、依据错**。"
+  ],
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 228,
+      "action": "改写",
+      "text": "/-- 4 点回路上的离散散度 = 源/汇的**净流出**。⚠ 层级别称：divV 是**电荷**层的量（P3，paper3:214-218 post:charge），读作『无源 / 电中性』；它**不是**质量层的量（P2/MC1 质量 = 条数/锚定，paper3:206、MassCancellation.lean:51）。不得再用 divV = 0 表示『无质量』。 -/"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 238,
+      "action": "改写",
+      "text": "AT11 重命名为 flat_implies_sourceless，docstring 改为：『平坦（常值场）不发生净流出 ⟹ 无源（中性）。注意：这只说平坦场不带电荷源，**不能**推出它是无质量的特例；质量判据见 massless_iff_zero_anchor。』"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 244,
+      "action": "改写",
+      "text": "AT12 重命名为 vortex_sourceless_not_flat，删除词『massless / 无质量』：『涡旋 v=(0,1,1,0) 净流出为 0（无源、中性）但非平坦（curlV=2）。⟹ **无源 ⇏ 平坦**，即『没有电荷源』与『场是常值』是两件事。⚠ 该场 v₁≠v₀ 有梯度，按 MC1（MassCancellation.lean:5 梯度⟹锚定⟹质量）它**有质量**，故它**不能**充当『无质量但非平坦』的见证。』"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 267,
+      "action": "改写",
+      "text": "AT14 重命名为 flat_strict_subset_sourceless（平坦 ⊊ 无源），并在其 docstring 里删掉全部『无质量』字样与『平坦是无质量的局部特殊情形』这一读法。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 216,
+      "action": "新增",
+      "text": "在更正块里新增两条，把『无质量 ≠ 平坦』落到正确层：(1) def strandCount (N : ℕ) 与 def massSq (N : ℕ) := N * M0^2（对齐 paper3:206 m²=N M₀²）；(2) theorem massless_iff_zero_anchor : massSq Γ = 0 ↔ Γ = 0（或直接 import 并引用 MassCancellation.amc1c_zero_mass_iff_zero_anchor, MassCancellation.lean:73）。读法：无质量 = 锚定/条数为零（耦合陈述），与场形无关。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 219,
+      "action": "改写",
+      "text": "注释行『无质量 = 没有对周围空间产生扭曲 = **源**的属性（无散度：无源无汇）』→『无质量 = 探针与流动之间没有锚定（N=0, Γ=0）= **耦合**的属性；div = 0 是**电荷**层的『无源/中性』，两者不可互换。』"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 195,
+      "action": "改写",
+      "text": "AT9 docstring 中『（无质量的场不必平坦：AT12 给涡旋见证）』→『（AT12 只给『无源但非平坦』的见证；『无质量但非平坦』的见证须由 N=0 的探针放入非平坦场给出，尚缺——登记为缺口，不要用 div 代打）』。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 9,
+      "action": "改写",
+      "text": "文件头注释『「无质量」= 无散度（不对周围空间产生扭曲）= 源的属性』→『「无质量」= 锚定/条数为零（耦合属性，P2/MC1）；「无源（div=0）」= 电中性（P3）。本轮把这两层分开，AT11–AT14 只谈后者。』"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 151,
+      "action": "改写",
+      "text": "表格拆两行：「无质量」= 探针与流动的锚定/条数为零（N=0，Γ=0）= **耦合**的属性（P2/MC1，MassCancellation.lean:73）；「无源/中性」= divV = 0 = **电荷**的属性（P3，paper3:214-218）；「平坦」= 场为常值（Q_A=0）= **场形**的属性。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 160,
+      "action": "改写",
+      "text": "AT12 行：『涡旋 v=(0,1,1,0) —— div = 0（**无源/电中性**）∧ 非平坦 ∧ curl = 2 ⟹ 无源 ⇏ 平坦；该场有梯度 ⟹ 按 MC1 有质量，故不充任无质量见证』。删去『无质量』二字。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 173,
+      "action": "改写",
+      "text": "『无质量（无散度、不产生扭曲）⇏ 平坦』→『无源（div=0，电中性）⇏ 平坦 ← 涡旋见证（AT12）；无质量（Γ=0）⇏ 平坦 ← 需 N=0 探针 + 非平坦场的见证（当前缺口）』。"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed.tex",
+      "line": 60,
+      "action": "改写",
+      "text": "『the vortex $v=(0,1,1,0)$ is divergence-free, hence massless, yet not flat』→『the vortex $v=(0,1,1,0)$ is divergence-free --- sourceless, hence neutral in the charge layer (P3) --- yet not flat』（删掉 hence massless）。"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed.tex",
+      "line": 467,
+      "action": "改写",
+      "text": "整段更正改写为三层读法：masslessness (P2) = zero strand count / zero anchoring $\\Gamma=0$, a property of the coupling between probe and flow, not of the field's shape；neutrality (P3) = zero divergence, a property of charge；flatness = constant field. 并明确：$div=0$ 判的是中性，不是无质量；'masslessness is not flatness' 的正确见证是零条数探针置于非平坦场，涡旋只证 'neutrality is not flatness'。"
+    },
+    {
+      "file": "paper4/projection-instant-cnot-speed.tex",
+      "line": 479,
+      "action": "改写",
+      "text": "『zero divergence (\\texttt{AT12}: massless)』→『zero divergence (\\texttt{AT12}: neutral, i.e. sourceless)』；482-483 的『flatness is a strict subset of masslessness』拆成两句：flat ⊊ sourceless（已证，AT14）与 flat ⊆ massless（由 GCA2+AMC1：平坦⟹μ=1⟹m_eff=0，AetherTime.lean:39），后者目前只有包含、无反例见证。"
+    },
+    {
+      "file": "paper3/projection-yangmills-gap.tex",
+      "line": 227,
+      "action": "改写",
+      "text": "『a fully contracted sink is flattened, massless, and neutral』→『a fully contracted sink is flattened, hence sourceless (neutral, div=0); a photon is in addition massless (zero strand count, N=0, line 206)』——把 neutral 与 massless 拆开，堵住偷换的出生地（:276 的『mass is anchoring, charge is divergence』本身正确，保留）。"
+    }
+  ],
+  "death_condition": "三把刀，都只用仓库自己的公理，不用标准物理：(1) 只要给出一个 divV = 0 而按 MC1 有锚定的场，『div=0 = 无质量』就当场死——AT12 自己就是这个反例（v₁=1≠v₀=0 ⟹ 有梯度 ⟹ 褶皱 ⟹ 锚定，MassCancellation.lean:5），属**自证死**，不需要外部证据；(2) 只要承认 curlV=2 ≠ 0 是一种扭曲（AT12 自己把它印在结论里），则『无扭曲 ⟺ div=0』死——因为它把一个明显在旋转的场判成『不产生扭曲』；(3) 新读法（无质量 ⟺ N=0/Γ=0）的死法：若能造出 N=0 的探针在平坦场上给出可观测的时间序（违反 AT4 平坦⟹顺序盲），或 N>0 的探针在 μ≠1 的非平坦场上 dτ=0（违反 AMC2），则新读法死；另一种死法是证明『锚定只能来自梯度』（即 Γ=0 ⟹ 无梯度 ⟹ 平坦），那会把 leo 的『无质量与平坦无关』证否——这恰好是当前 P2/MC1 的**真实缺口**，必须在把 anchor 判据写进 AT11–AT14 之前先解决，否则新判据会推出 leo 反对的结论。",
+  "rebuts": "驳 R2：R2 的修补方案（保留 AT9 的撤回，只把『平坦』与『无质量』改成两条独立支）依赖 AT12 充当『无质量但非平坦』的见证（ProjectionPhysics/Explorations/AetherTime.lean:195『无质量的场不必平坦：AT12 给涡旋见证』；docs/wiki/theory-aether-time.md:22『由 AT11–AT14 替代（见 §11，含见证与数值）』）。但 AT12 的见证在自己的 P2/MC1 下是**有质量**的构型（梯度 ⟹ 锚定 ⟹ 质量，MassCancellation.lean:5），所以 R2 若照抄 AT12 就继承一个假见证：AT9 的『撤回』会变成**用电荷层的反例去撤销一个质量层的读法**，结论对而依据无效，下一轮会被同一把刀再砍。R2 应改为：顺序只看**梯度**（AT5/AT10），不看任何『质量标签』——梯度存在则顺序可观测，梯度为零则顺序盲；『无质量』在这一支里根本不出现。",
+  "confidence": "高"
+}

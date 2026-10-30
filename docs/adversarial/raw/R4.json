@@ -1,0 +1,104 @@
+{
+  "round": "R4",
+  "claim_under_attack": "我发布的「更正」：GD8（β≠0 ∧ k≠0 ⟹ v_g≠v_ph）证明一般色散下 AB2「相位速度无界」不能读成「信号更快」，信号（包络）走 v_g。",
+  "hidden_premises": [
+    "P-1 「更快」这个比较必须在**波的语言**（(k,ω) 的模、ω(k)、色散关系）里完成——即被比较的对象是某个模的传播速度，而不是介质本身的速度。",
+    "P-2 若要谈「信号」，信号速度 = 群速度 v_g = dω/dk（把这当判据而非描述，直接撞合同 §3 第 3 条「波包/群速度-相速度二分作为基础区分」）。",
+    "P-3 「广」指的是两个模的拍频波长 λ_beat = 2π/Δk（GD9 的实际自变量），而非 AB1/AB2 里单模的 k→0⁺。",
+    "P-4 GD8 里的 c（DispersionGeneral.lean:91 quadMode 的线性项系数）与 SLS1 里的 c（AetherMedium.lean:194 MediumFlow.c，空间流动的等效速度）是**同一个 c**。",
+    "P-5 既然 v_ph 与 v_g 不等，那么「介质更快」这个主张就**没有**可判定的内容（把「不可用波速证明」偷换成「不可为真」）。",
+    "P-6 AB2 已经主张了「信号更快」——因此需要一个「信号」判据来否证它。"
+  ],
+  "term_substitution": "三层偷换，逐层可查。①**层**：leo 的第 4 条说 c 是「空间流动速度的等效」——那是 MediumFlow 里的一个标量常量（AetherMedium.lean:193-195 `structure MediumFlow where c : ℝ`，**不含 k**）；我的更正把它换成 `phaseSpeedG m := m.ω / m.k`（DispersionGeneral.lean:64）与 `vgroup c β k := c + 2βk`（:100）这两个**带的属性**，然后用后者去判前者——介质层的常量被要求服从波层的色散关系。②**符号**：DispersionGeneral.lean:91 `quadMode (c β k)` 把「某条带色散关系的线性项系数」也叫 c，与 MediumFlow.c（:194）同名不同义；同名的巧合正是「c 是相速度在 β=0 时的取值，所以 c 是相速度」这个推断的口子（同一个错的源头也写在 AetherBand.lean:41-42「两者重合只在 ω=c·k 的线性色散上」）。③**被攻对象**：AB2 的原文（AetherBand.lean:79-81）说的是「相位速度无上界 =『超广意场可以瞬时影响彼此』的精确代数形式」，**没有一个字**主张「信号更快」；我的更正先把它改写成「信号更快」这一**信道层**命题，再用 v_g 打掉——这是先造靶再射击。同理 GD9 的「广」也换了：AB1/AB2 的「广」是单模 k 小，GD9 的自变量是拍频 Δk，两者不是同一个量，「越广越慢」并不构成对 AB2 的更正，只构成对**另一个**量的陈述。",
+  "correct_reading": "在前提 1–9 内应读作：c 是介质层的量（一条与带指标、与 k 都无关的常量，AetherMedium.lean:193-195），v_ph、v_g 是同一介质上不同模式的**描述**，其随带变化只说明「描述依模而异」，不能用它否定介质层的「更快」；真正能判定更快/更慢的只有介质层的可测对比——两个介质（或同一介质的两处/两向）之间的 c 之差，形式上必须是 `MediumFlow → MediumFlow → Prop` 的比较（各向异性、拖曳 1+v、或分支Ⅱ 的 ratio），而不是 `ModeG → ModeG → Prop`（即 GD8/GD9 所在的层）。一句话：**GD8 是波层内部的一句真话，AB2 是介质层的一句主张，两者不构成互相判定**。",
+  "verdict": "降级",
+  "verdict_split": {
+    "撤回": "「⟹ 不能读成更快」这一半，连同「信号走 v_g」被当作判据的用法（DispersionGeneral.lean:19-20、121-123；theory-aether-band.md:158；theory-band-structure.md:77-79；current-status.md:32）。理由：它把一个介质层命题（光速=介质等效）当成了波层命题去修。",
+    "保留": "GD8 的**定理本体** `nonlinear_speeds_differ`（:124-129）为真（v_g−v_ph=βk≠0），保留，但改标签：它是「同一色散族内两种波描述的差」，不是「对 AB2 的否证」。GD7 同理保留。",
+    "再降一级": "GD9 `quad_group_speed_gap`（:134-137）定理真，但其「这是 AB2『越广越快』的正确版本」的注释（:131-133）撤回——λ_beat≠AB2 的 λ；GD9 只降为「二次色散族上拍频包络的描述」，且限定为**模型选择**（:25 已自认）。"
+  },
+  "evidence": [
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:19-20 —「『相位速度无界』（AB2）**不能**读成『信号更快』，信号走 v_g」（被撤回的那半）",
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:121-123 — GD8 的 docstring 同句；:124-129 定理本体（保留）",
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:131-133 — GD9 注释「这是 AB2『越广越快』在一般色散下的正确版本」（换量：单模 k → 拍频 Δk）",
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:91 — `quadMode (c β k)`：c = 带色散线性项系数（与 :100 `vgroup c β k` 同一 c）",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:193-195 — `structure MediumFlow where c : ℝ`：介质速度**无 k 参数**（SLS1/前提 4 的形式化）",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:196-198 — `vphase b := b.w / b.k`：相速度是**带**的属性（与 :194 的 c 分属两层，签名不同）",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:20-21 — 本模块头部已写「用相速度/群速度之差去『更正』介质等效速度是范畴错位」（与 §11 更正直接冲突，且写于其后）",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:205-210 — AL6b `no_single_band_carries_medium_speed`：正确的形式化已存在（没有哪条带代表介质速度）",
+    "ProjectionPhysics/Explorations/AetherMedium.lean:38 — 死法⑥「若介质速度能被证明等于某条带的相速度，则 AL6 死」= 唯一合法判据所在处",
+    "ProjectionPhysics/Explorations/AetherBand.lean:79-81 — AB2 原句只主张「相位速度无上界 = 瞬时影响的代数形式」，未提「信号」",
+    "ProjectionPhysics/Explorations/AetherBand.lean:41-42 —「两者重合只在 ω = c·k 的线性色散上」：符号 c 的口子（同一错源）",
+    "docs/wiki/theory-aether-band.md:154-162 — §11「更正」全文（:156-158 为被撤回的那半，:160-161 GD9 部分再降级）",
+    "docs/wiki/theory-band-structure.md:77-79 —「相位速度无界不能读成信号更快——信号（包络）走 v_g」",
+    "docs/wiki/current-status.md:30-32 —「AB 更正：…不能读成信号更快——已同步写进 AB 页 §11」",
+    "docs/adversarial/aether-6rounds-contract.md:22 — 前提 4「光速是空间流动速度的等效」（介质层）",
+    "docs/adversarial/aether-6rounds-contract.md:27 — 前置「基础介质可以超越光速实现同步」（同步，不是传信）",
+    "docs/adversarial/aether-6rounds-contract.md:50 — §3 禁止把「波包/群速度-相速度二分作为**基础**区分」当判据（我的更正正是这么用的，违反冻结合同）"
+  ],
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/DispersionGeneral.lean",
+      "line": 19,
+      "action": "改写",
+      "text": "--   GD8 ★★★ β ≠ 0 ∧ k ≠ 0 ⟹ v_g ≠ v_ph：一般色散下**同一族内两种波描述的差**为 βk。\n--            适用范围写死：本句只在**波的语言**（ModeG/ω(k)）里成立；它不构成对 AB2 的判据——\n--            AB2 的 c 是介质层的常量（MediumFlow.c，无 k 参数，见 AetherMedium.lean:193），\n--            介质层的「更快」只能由介质层的可测对比判定（AL6 死法⑥）。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/DispersionGeneral.lean",
+      "line": 121,
+      "action": "改写",
+      "text": "/-- GD8 ★★★ 非线性色散（β ≠ 0）且 k ≠ 0 ⟹ v_g ≠ v_ph（同一带的两种波描述不同）。\n    注意层：本定理的自变量是 (c₀, β, k)，其中 c₀ 是**该带色散关系的线性项系数**（见 :91），\n    **不是** SLS1 的介质等效速度（AetherMedium.lean:194）；两者同名纯属笔误源，须在符号上分开。 -/"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/DispersionGeneral.lean",
+      "line": 91,
+      "action": "改写",
+      "text": "def quadMode (c₀ β k : ℝ) : ModeG := ⟨k, c₀ * k + β * k ^ 2⟩   -- 符号改名：c₀ ≠ MediumFlow.c"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/DispersionGeneral.lean",
+      "line": 131,
+      "action": "改写",
+      "text": "/-- GD9 ★★ 「二次族里的拍频包络」：两带群速度差 = 2βΔk，|Δv_g| = 4π|β|/λ_beat。\n    范围写死：λ_beat = 2π/Δk 是**两模之差**的波长，与 AB1/AB2 的单模 k 不是同一个「广」；\n    故本句**不是** AB2 的『正确版本』，只是另一个量的陈述，且二次族是模型选择（见文件头 :25）。 -/"
+    },
+    {
+      "file": "docs/wiki/theory-aether-band.md",
+      "line": 154,
+      "action": "改写",
+      "text": "## 11. 附注（原「更正」已降级，R4 攻防 2026-10-30）\n\nAB2「相位速度无界」是**波的语言**里对某个模的描述。`theory-band-structure.md` 的 GD8 证明\nβ ≠ 0 ∧ k ≠ 0 ⟹ v_g ≠ v_ph，这**只说明同一色散族内两种波描述不同**，\n**不构成对 AB2 的否证**：AB2 的对象是介质层的 c（= 空间流动速度的等效，SLS1，与 k 无关），\n不是任何带的相速度。判据位置见 `AetherMedium.lean` AL6 死法⑥（若 c 能被证明等于某条带的相速度，AL6 才死）。\n原 §11 里「不能读成信号更快、信号走 v_g」一句**已撤回**：它把『更快的介质过程』换成『更快的信号』，\n再拿群速度去判一个从未主张过传信的前提（leo 前提 3 说的是『瞬时影响』，前提 9 说的是『实现同步』）。"
+    },
+    {
+      "file": "docs/wiki/theory-band-structure.md",
+      "line": 77,
+      "action": "改写",
+      "text": "1. **波形层附注（非 AB 更正）**：GD8（β≠0 ⟹ v_g≠v_ph）只在 (k,ω) 语言内成立，说明同一色散族内\n   两种描述不同；AB2 谈的 c 是介质层常量（MediumFlow.c，无 k），两者不可互判。原「不能读成信号更快」已撤回。"
+    },
+    {
+      "file": "docs/wiki/current-status.md",
+      "line": 32,
+      "action": "改写",
+      "text": "⟹ **波形层附注**：GD8 只说明同族两种波描述不同，**不是**对 AB2 的更正（AB2 的 c 属介质层，与 k 无关；判据见 AL6 死法⑥）。原「不能读成信号更快」已撤回。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherBand.lean",
+      "line": 41,
+      "action": "改写",
+      "text": "--   · 与 SLS1（c = 空间本身的等效速度）不冲突：c 是**介质层**的常量（AetherMedium.MediumFlow.c，\n--     无 k 参数）；本模块的 v_ph = ω/k 是**带**的属性。线性色散 ω = c·k 只是『某带的 v_ph 数值上等于 c』\n--     的特例（AB17），不使 c 成为相速度，也不使相速度成为 c。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherMedium.lean",
+      "line": 210,
+      "action": "新增",
+      "text": "/-- AL6c ★★ 介质速度不能由带层反推：不存在一个实数 c，使所有带的相速度都等于它。\n    ⟹ 「c 是某个波速」在带层上不可满足；介质层的『更快』必须在两个 MediumFlow 之间比较。\n    （提议稿，未编译；证明由 AL6a `phase_speed_varies` 直接反证。） -/\ntheorem no_universal_phase_speed : ¬ ∃ c : ℝ, ∀ b : Band, vphase b = c := by\n  rintro ⟨c, hc⟩\n  obtain ⟨b₁, b₂, hne⟩ := phase_speed_varies\n  exact hne ((hc b₁).trans (hc b₂).symm)"
+    },
+    {
+      "file": "docs/wiki/current-status.md",
+      "line": 51,
+      "action": "新增",
+      "text": "④ 若能证明介质速度 c 等于某条带的相速度或群速度（c = c(k)），则 AL6/AL6c 死，介质层与波层合并，AB2 的介质读法随之失效。"
+    }
+  ],
+  "death_condition": "这条新读法（层分离：c 在介质层、v_ph/v_g 在波层，互不判定）死在下列任一：① 能从前提 1–9 导出 c = c(k)——即介质等效速度被写成某条色散关系的函数，则两层合并，原「更正」反而成立；② 观测上一切「更快」都只能用两带的 v_g 差表达（任何介质层对比都退化为拍频包络），则层分离是空的，AL6/AL6c 降为记账项；③ 分支Ⅱ 的 ratio 永不闭合，且各向异性/拖曳这些介质层通道被实测证明与 GD9 的 |Δv_g| 不可分辨（AB 页死法④同款），则「介质层更快」不可判，须整条降为记账；④ 若在 k=0 处找到能携带可分辨符号的模，AB7/AB8 死，『瞬时≠传信』整条被推翻——但注意这**不利**于我的更正，反而说明被撤回的那半本来就多余。",
+  "rebuts": "驳 R1（「AB9 带宽 0 ⟹ 容量 0」被当作『瞬时⟹不可传信』的判据，AetherBand.lean:147/158/169）：R1 与我被撤的那半犯的是**同一个层错**——容量/带宽是信道层（波层）的量，而 leo 前提 3 说的是介质层的瞬时影响、前提 9 说的是同步。AL1 `fieldOf_not_injective`（AetherMedium.lean:65-72）已证场层定理不能反推介质标签；AB9 至多能写成『波层无符号』，**不能**作为否定前提 3 的判据。R1 正确的位置是把它降为『波层内部陈述』，而不是保留为『瞬时⟹不可传信』的判决；否则 R1 保留下来，本轮的四问 ③ 就被它自己拆了。",
+  "confidence": "高"
+}

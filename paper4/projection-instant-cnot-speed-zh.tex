@@ -1,0 +1,415 @@
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+\emergencystretch=2.5em
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{dcolumn}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage[fontset=fandol]{ctex}
+
+\newtheorem{postulate}{公设}[section]
+\newtheorem{theorem}{定理}[section]
+
+\begin{document}
+
+\title{振动坐标系下的宇宙本体}
+
+\author{Yuan-Jie Liu}
+\email{yuanjieliu65@gmail.com}
+
+\date{\today}
+
+\begin{abstract}
+本文提出一个新的宇宙本体论：宇宙基底是振动频率与维度的超广阔集体，物理学就是该场在振动坐标系中的描述过程。在这个本体论里，时间、顺序、带数、维度、广与「瞬时」都不是从外部引入的背景结构 --- 把它们组织进同一个振动坐标框架，在该框架自身前几层并不存在、此前未作为单一系统组装过；个别元件（初等实分析、线性代数、群速度分裂、零带宽信道）是教科书内容，被组织而非仅被重述。把声称说准：新颖性在组装层、机制层（格点汇收缩交换子，区别于非对易几何的 Tomita--Takesaki 模自同构流）与判据结构层（时间计数、广、维数上限、两分支及其死线 --- 框架从公设推出的判据结构本身，区别于这些判据取的值）被主张 --- 不是新的输出数字（第 IX 节如实陈述：无条件新数字为零）；「时间可从非对易读出」这一抽象口号在非对易几何中有先例（见第 IX 节），而已实现的判据 --- 顺序盲等价于可交换、定量交换子 $\lambda^2(v_q-v_p)$ --- 在定量格点实现的层面是新的、而非定义等价本身。四块结构逐一建立：每条定理均带 Lean~4 机器检验、零 \texttt{sorry}（三块机器检验；第四块的可观分辨器标为解释层、非机器检验）。这四块主张重新组织并延伸第 I 节四件事实。第一，\emph{时间序是非对易性的代数影子}：顺序盲 $\iff$ 汇算子可交换（AT1--AT2）、平坦场顺序盲（AT4）、梯度使顺序可观测、交换差为 $\lambda^2(v_q-v_p)$（AT5）--- 故时间序被梯度生成（AT10）。时间序在无质量场上依然存活：涡旋 $v=(0,1,1,0)$ 无散度故无质量、却非平坦，其梯度使顺序保持可观测（AT11--AT14）。在两支撑点族（起伏只集中在两点之间，含 $N=2$）上，时间可观测度取闭式 $\lambda^2\sqrt{Q_A\,N/(N-1)}$（N6），正比于起伏能量的平方根；该等式是族特异的，不是一般定理（见第 IV 节）。第二，\emph{真振动坐标存在当且仅当两带相速度不一致}，$\det J=k_1k_2(c_1-c_2)$（VF2--VF4）；场的广是拍频波数的平方 $(2\pi/\lambda)^2$（VF8），故「广」与「起伏」是同一参数；$k\to0$ 处坐标系自身退化（VF10）--- 「瞬时」是同时面，不是速度。第三，\emph{带数不是维数}：$1+1$ 维中任意三条带线性相关，振动坐标的维数是 $\min(\#\text{带数},\,d+1)$ --- 框架的读法、仅在 $1+1$ 维形式化（ND1--ND4）。第四，\emph{瞬时信道零容量}（AB7--AB9）、范围 $\times$ 更新率 $\le c\varepsilon$（AB18）；真正更快的层需要独立光锥 $c_2=\mathrm{ratio}\cdot c$，其唯一经验分辨通道是各向异性（AB12--AB15）。要谈速度，先有时间序；时间序由梯度生成、在平坦处消失，与无质量与否无关（AT10、AT11--AT14）。公设大胆 --- 空间是流动介质、质量是条数的整数计数 --- 上述组织是坐标系自身的输出 --- 作为提议、其边界与死线在第 IX 节陈述 --- 不是已知结果的重述。
+\end{abstract}
+
+\maketitle
+
+% 格言出处：作者提供的逐字对白，出自《银翼杀手》（1982）Roy Batty
+% （Rutger Hauer 饰）的 "Tears in Rain" 独白；省略号按原文保留。
+\begin{quote}
+\itshape
+我曾见过你们人类绝对无法置信的事物。\\
+我目睹太空战舰在猎户星座的肩旁熊熊燃烧。\\
+我注视着C射线在唐怀瑟之门附近的黑暗中闪耀。\\
+所有这些时刻，终将随时间消逝，一如眼泪消失在雨中。\\
+死亡的时刻，到了。
+\par
+\vspace{0.4em}
+--- 罗伊·巴蒂，《银翼杀手》（1982）
+\end{quote}
+
+\noindent\textbf{更正注（2026-10-30）。}\emph{本版正文保留了第三至第六节的原始推导链（以便看出结论的来源），
+但下列六条读法已在六轮对抗审计（第~\ref{sec:audit-zh}~节）中判为作废或降级，正文中相应语句以本节为准：
+①「瞬时 $\Rightarrow$ 不可传信／零容量」（AB7--AB9）；②「时间 $=$ 非对易性的记录」；
+③「带数不是维数／$\dim=\min(\#\text{带},d+1)$」；④「相位速度无界 $\Rightarrow$ 不能更快」；
+⑤「无质量 $=$ 无散度」；⑥「以太 $=$ $P1$ 换名」。}
+
+\section{引言}
+\label{sec:intro}
+
+\paragraph{直觉携带的四件事。}
+流动空间框架里，论文 3 \cite{ProjectionPhysics,liu2026yangmills} 从离散性证明了杨--米尔斯结构：质量是激发条数的整数计数 $m^2(N)=N M_0^2$，故间隙 $(0,M_0^2)$ 为空；自相互作用是汇收缩的非对易，$(T_pT_q-T_qT_p)v=\lambda^2(v_q-v_p)$（YM3）。若图景正确，一个自然问题随之而来 --- 本文回答它：\emph{在一层涨落慢到趋于常值的场里，时间扮演什么角色？} 问题的动机是直觉：一个「超广」场 --- 更高的集体频率带 --- 应该比光更快地作用于远点，因为光速是空间自身的等效速度。这直觉携带四件互不相同的事，本文把它们分开、证明真的、拒绝假的：
+
+\begin{itemize}
+\item \emph{相位速度无界。} 在带 $\omega=\omega(k)$ 上，相位速度 $v_{\mathrm{ph}}=\omega/k$ 随 $k\to0$ 无界（AB1--AB2），固定两点相位差可任意小（AB3）。「越广越快」在相位层面为真。
+\item \emph{但瞬时零容量。} 零带宽模是常值序列（AB7）；传信需要带宽（AB8）；瞬时信道容量恰为 0（AB9）。容量对维度线性、对带宽严格增（AB10）。「瞬时」是共相位 --- 同时面 --- 不是通信。
+\item \emph{任何真正更快的层必须是独立光锥。} 速度是 $c_2=\mathrm{ratio}\cdot c$，一个新无量纲输入，ratio $=1$ 是生死线（AB12--AB14）；拖曳机制（$1+v$）与层级机制（ratio）的唯一经验分辨通道是各向异性（AB15）。价格是界：范围 $\times$ 更新率 $\le c\varepsilon$（AB18）。
+\item \emph{时间是同一个非对易性的代数影子。} 顺序盲 $=$ 可交换（AT1--AT2）；平坦场顺序盲（AT4）；梯度使顺序可观测、交换差 $\lambda^2(v_q-v_p)$（AT5），故时间序被梯度生出来（AT10）；无质量场上时间序保留（AT11--AT14）。两支撑点族上时间可观测度取闭式 $\lambda^2\sqrt{Q_A\,N/(N-1)}$（族特异，N6）。
+\end{itemize}
+
+\paragraph{主张。}
+在框架的四条公设之内 --- 空间是流动介质；质量是激发条数的整数计数；电荷是流的散度；四力是流动动量 $m(C-v)$ 的莱布尼茨分解 --- 以下皆为 Lean~4 零 \texttt{sorry} 定理 \cite{de2015lean,ProjectionPhysics}：相位速度无界（AB2）；瞬时信道零容量（AB9）；范围 $\times$ 更新率有界（AB18）；顺序盲 $\iff$ 可交换（AT2）；平坦 $\implies$ 顺序盲（AT4）；梯度使顺序可观测、交换差 $\lambda^2(v_q-v_p)$（AT5）；平坦层顺序盲（AT4）、平坦无质量层无严格先后（AT9）；振动坐标系中真坐标存在当且仅当两带相速度不一致，$\det J=k_1k_2(c_1-c_2)$（VF4），「广」是拍频波数的平方 $(2\pi/\lambda)^2$（VF8），$k\to0$ 极限退化（VF10）；带数不是维数 --- $1+1$ 维中任意三条带线性相关（ND1--ND4）。
+
+\paragraph{本文是什么、不是什么。}
+它是新本体论的提议：宇宙是振动频率与维度的超广阔集体，物理学是该场在振动坐标中的描述过程。公设大胆 --- 空间是流动介质、等效速度 $c$；质量是激发条数的整数计数；电荷是散度；四力是流动量分解 --- 而声称是框架自身的输出：从非对易组织出时间序、带数作维数、广作起伏、时间计数作带指标乘跨度、瞬时作同时面，这些组织进同一个振动坐标框架，在纲领自身前几篇论文中并不存在、未被标准数学物理作为单一系统组装过（其个别元件 --- 初等实分析、线性代数、群速度分裂、零带宽信道 --- 是教科书内容，框架组织而非重述）。它不是超光速传信的声称、不是「标准框架错误」的声称 --- 它提出不同的基底 --- 也不是「宇宙在振动」的证明、不是物理「以太」的构造；层级层是与框架相容的读法，不是从框架推出的结论（AB12 是生死线）。每条连接定理与物理的认同都被写为框架的提议，不伪装成定理。
+
+\paragraph{如何读本文。}
+第 II--IV 节承载核心主张：公设（II）；以太的层级模型、两分支与死线（III）；顺序作为时间的代数影子、新定量桥、以及「无质量 $\ne$ 平坦」的更正（IV）。第 V 节引入振动坐标系；第 VI 节带结构：时间计数、色散与群速度、带数与维数。第 VII 节组装全链并对照物理问题；第 VIII 节把链对准所提问题；第 IX 节诚实评估、陈述死线。
+
+\section{流动空间框架的公设}
+\label{sec:postulates}
+
+框架即论文 1 \cite{ProjectionPhysics}；公设重述如下。
+
+\begin{postulate}[流动空间]
+\label{post:flowing}
+空间是流动介质，有矢量等效速度 $C$，模是普适常数 $c$：每点 $|C|=c$。
+\end{postulate}
+
+\begin{postulate}[光子随空间运动]
+\label{post:photon}
+光子完全被流携带：世界线满足 $dx=C\,dt$，固有时间消失 $d\tau^2=0$。
+\end{postulate}
+
+\begin{postulate}[三方向]
+\label{post:three}
+空间携带三个独立方向；它们的 Clifford 代数生成自旋。
+\end{postulate}
+
+\begin{postulate}[质量是锚定的计数]
+\label{post:mass}
+质量是激发条数的整数计数：$m^2(N)=N\,M_0^2$，$N$ 非负整数。光子 $N=0$；质量是内部运动对空间运动的锚定阻抗。
+\end{postulate}
+
+\paragraph{读法。}
+本文不使用任何新公设。第 III 节的带图景是描述结构 --- 相位带族 $\{(k,\omega)\}$ --- 不是新动力学公设；分支 II 的「层级层」被写为与框架相容的唯一升级，其价格（无量纲比）自成死线、公开列为输入（AB12--AB14）。
+
+\section{以太的层级模型：两分支、两死线}
+\label{sec:aether}
+
+\paragraph{问题。}
+若杨--米尔斯图景为真，则应当存在一种能超越光速的同步基础介质 --- 「以太」。直觉是：宇宙是振动频率与维度的超广阔集体；局域频率低且不一致处有波动（光速、空间涟漪），而超广场范围更大，可瞬时影响彼此、远比光速快，因为光速只是空间流动速度的等效。
+
+\paragraph{拆解。}
+直觉混同四件事。形式与判定见表 \ref{tab:claims}。
+
+\begin{table}[ht]
+\caption{「更快」直觉携带的四件事、形式与判定。第 2--3 件事与第 4 件事的边界就是第 III 节的全部内容：相位速度不是信号速度，共相位不是传比特。}
+\label{tab:claims}
+\begin{ruledtabular}
+\begin{tabular}{p{0.08\linewidth}p{0.42\linewidth}p{0.32\linewidth}p{0.08\linewidth}}
+\# & 陈述 & 形式 & 判定 \\
+\hline
+1 & 局域频率低且不一致 $\Rightarrow$ 有波 & $k>0$ 且逐点不同 $\Rightarrow$ 有相位梯度（AB6） & $\checkmark$（$=$ 波的定义）\\
+2 & 「更广」$\Rightarrow$ 相位速度更大、无界 & $v_{\mathrm{ph}}=\omega/k$，$k\to0^{+}$ $\Rightarrow$ $v_{\mathrm{ph}}\to\infty$（AB1、AB2） & $\checkmark$（初等实分析）\\
+3 & 超广场「瞬时影响彼此」 & 固定 $d$：相位差任意小（AB3）；$k=0$ 模处处共相（AB5） & $\checkmark$ 但共相位、非传信\\
+4 & 故「远比光速快」$=$ 传得更快 & 需要带宽、需要 $k\ne0$、需要 $\omega\ne0$ & $\times$\\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\paragraph{定义。}
+带是 $(k,\omega)$ 对，色散 $\omega=\omega(k)$；相位 $\theta(x,t)=kx-\omega t$；相位速度 $v_{\mathrm{ph}}(k)=\omega(k)/k$。两点 \emph{同步} 当相位相等 $\theta_1=\theta_2$。\emph{消息} 是随时间变化的符号序列；\emph{信道} 带宽 $B$ 是所载序列的频带宽度。
+
+\begin{theorem}[相位速度反单调且无界]
+\label{thm:ab1}
+对固定正 $\omega$，$v_{\mathrm{ph}}(k)=\omega/k$ 在 $k>0$ 严格递减；且对任意 $M$ 存在 $k>0$ 使 $M<\omega/k$。即 \texttt{AB1}：$k_1<k_2 \Rightarrow v_{\mathrm{ph}}(k_2)<v_{\mathrm{ph}}(k_1)$；\texttt{AB2}：$\forall M\,\exists k>0,\ M<\omega/k$。两者 Lean 零 \texttt{sorry} 已证。
+\end{theorem}
+
+\begin{theorem}[共相位是良定义等价关系]
+\label{thm:ab4}
+「同一 $t$ 下 $\theta_1=\theta_2$」是等价关系（\texttt{AB4}）；常数相位 $k=0$ 使处处共相（\texttt{AB5}）；正梯度使不同点相位不同（\texttt{AB6}）。
+\end{theorem}
+
+\begin{theorem}[瞬时信道零容量]
+\label{thm:ab9}
+零带宽序列是常值（\texttt{AB7}），故消息要求非零带宽（\texttt{AB8}），$B=0$ 信道容量恰为 0（\texttt{AB9}）。容量对维度可加、对带宽严格增，但维度只买容量、不买单模速度（\texttt{AB10}）。
+\end{theorem}
+
+\begin{theorem}[范围乘更新率有界]
+\label{thm:ab18}
+相位分辨 $\varepsilon>0$ 下，若 $k\cdot L<\varepsilon$ 则 $c\cdot k<c\cdot\varepsilon/L$（\texttt{AB18}）。瞬时层的范围与更新率被锁死：\emph{模能作用得越远，能承载的变化越慢。}
+\end{theorem}
+
+\paragraph{两分支。}
+定理 \ref{thm:ab9} 不排除更快的层；它迫使更快的层是\emph{另一个}层。
+
+\begin{theorem}[「更快」的两分支]
+\label{thm:branches}
+分支 I：超广场是同一空间场的 $k\to0$ 部分。它瞬时（定理 \ref{thm:ab1}--\ref{thm:ab18}）但不能传信（AB7--AB9）；零新物理，价格是范围--率界（定理 \ref{thm:ab18}）。分支 II：超广场是独立一层，有自己的光锥 $c_2=\mathrm{ratio}\cdot c$。$\mathrm{ratio}>1$ 时真正更快（\texttt{AB13}）；退化 $\mathrm{ratio}=1$ 使两锥重合、无新速度（\texttt{AB12}），即死线；两机制 --- 坐标拖曳 $1+v$ 与层级比 --- 在单一方向不可区分，由单点 $v=\tfrac12$ 处 $\mathrm{dragSpeed}(1/2)=\mathrm{coarseSpeed}(3/2)$ 见证（\texttt{AB15}）；各向异性是唯一分辨通道属数值的解释层（N6-AB，仓库带验证脚本的数值见证），作为提议陈述、不是机器检验定理。
+\end{theorem}
+
+逻辑方向必须明说：框架证明的是「以太 $\Rightarrow$ 离散 + 非对易 $\Rightarrow$ 质量间隙」，不是反向。层级层是与框架相容的读法，不是从框架推出的结论。
+
+\section{顺序：时间的代数影子}
+\label{sec:order}
+
+\paragraph{读法。}
+「先/后」是时间的代数影子。它可观测恰当两操作不交换；框架已有一对非对易操作：异点汇收缩，交换差为
+\begin{equation}
+(T_pT_q-T_qT_p)v \text{ 在 } p \;=\; \lambda^2(v_q-v_p),
+\qquad \text{(\texttt{YM3})}.
+\end{equation}
+本文把 YM3 读成时间：非零交换差是报告「谁先谁后」的刻度，故\emph{顺序可观测}；零交换差处没有时间序。
+
+\begin{theorem}[顺序盲 $=$ 可交换]
+\label{thm:orderblind}
+区域 \emph{顺序盲} 当任意场在两次收缩的两种顺序下结果相同；则 \texttt{AT1}：顺序盲按定义等价于两收缩在任意场上可交换；\texttt{AT2}（机器可检形式）：区域非顺序盲当且仅当存在一场使两顺序给出不同场。
+\end{theorem}
+
+\begin{theorem}[平坦场顺序盲]
+\label{thm:flat}
+常值场经任意单点收缩不变（\texttt{AT3}），故平坦区域任意两收缩可交换、区域顺序盲（\texttt{AT4}）。驱动者是平坦、不是无质量：无质量不蕴涵平坦（定理 \ref{thm:contra}）。
+\end{theorem}
+
+\begin{theorem}[梯度使顺序可观测]
+\label{thm:gradient}
+若 $v_q\ne v_p$ 且 $\lambda\ne0$，$p$ 处交换差非零（\texttt{AT5}，复用 YM3）；非平坦保证这样的两点存在（\texttt{AT6}）。故 \texttt{AT10}：\emph{梯度使「谁先」可判 --- 时间序被梯度生出来。}
+\end{theorem}
+
+\begin{theorem}[平坦无质量层无严格先后]
+\label{thm:massless}
+随流固有间隔消失：$dx=c\,dt \Rightarrow d\tau^2=0$（\texttt{AT7}，重述 SM1）。层内一切间隔消失时，任意两事件无严格先后（\texttt{AT8}）；结合定理 \ref{thm:flat}：平坦无质量层顺序盲且无严格时间序（\texttt{AT9}；此处「无质量」读作「层内一切间隔为零」--- 框架的读法，Lean 陈述的前提就是间隔全零本身）。仅无质量并不给出这一点 --- 定理 \ref{thm:contra} 的涡旋无质量、非平坦、且顺序保持可观测（AT13）。
+\end{theorem}
+
+\begin{theorem}[定量桥]
+\label{thm:bridge}
+任意配置的交换差场是常值场、值为 $\lambda^2(v_q-v_p)$ --- 直接来自汇收缩算术（Lean 陈述 YM3 只锁定 $p$ 处的值；常值性由同一定点算术给出，不是单独形式化的 Lean 定理）--- 故按区域内交换差均方根定义的时间可观测度是 $|\lambda^2(v_q-v_p)|$。在两支撑点族上 --- 唯一非零起伏落在两点之间的构型（含 $N=2$）--- 这一量等于
+\begin{equation}
+\text{时间可观测度}
+\;=\; \lambda^2\,\sqrt{\frac{Q_A\,N}{N-1}},
+\label{eq:timeobs}
+\end{equation}
+其中 $Q_A$ 是区域起伏能量（框架的引力基元：$Q_A=0$ 当且仅当区域平坦），$N$ 是格点数。该恒等式族特异、不是一般定理。两例的参照幅度（相对桥值 $B$ 与相对实测 $M$ 的偏差）不同：在线性斜坡 $v=(0,1,2)$ 上桥值\emph{低估}实测（$M/B=1.155$，按 $B$ 计超出 $15.5\%$、按 $M$ 计 $13.4\%$）；在涡旋（取不等分量作 $p,q$）上桥值\emph{高估}实测（$B/M=1.155$，按 $M$ 计超出 $15.5\%$、按 $B$ 计 $13.4\%$）。两例偏差互为镜像，因两者比值结构 $\sqrt{Q_A N/(N-1)}/|v_q-v_p|$ 分别为 $\sqrt3/2$ 与 $\sqrt{4/3}$、互为倒数。普遍成立的是定性内容：起伏为零时 $Q_A=0$、场平坦、时间序精确消失（\texttt{N1}）；$\sqrt{Q_A}$ 的定量正比只在两支撑点族内精确（15 组确定性配置，含 $N=2$，最大相对差 $2.17\times10^{-16}$，\texttt{N6}）。
+\end{theorem}
+
+\paragraph{更正：无质量 $\ne$ 平坦。}
+本节初读混同了两个属性。用户的更正是类型层区分：\emph{无质量}是\emph{源}的属性 --- 不对周围空间产生扭曲（无散度）--- 而\emph{平坦}是\emph{场}的属性（常值，$Q_A=0$）。两者不等价，无质量层不必平坦：
+
+\begin{theorem}[无质量不是平坦]
+\label{thm:contra}
+常值场在任意四点回路上的离散散度为 0（\texttt{AT11}：平坦 $\implies$ 无扭曲）。涡旋场 $v=(0,1,1,0)$ 散度为 0（\texttt{AT12}：无质量）却非平坦，curl $=2$；其上时间序仍可观测，因 $v_0\ne v_1$ 给非零交换差（\texttt{AT13}）。故平坦是无质量的严格子集（\texttt{AT14}）：平坦是局部特殊情形，读法「无质量 $\Rightarrow$ 无时间序」撤回。
+\end{theorem}
+
+仍然站住的东西：瞬时不是「比光速更快」--- 但理由换成平坦/无梯度那一支（定理 \ref{thm:flat}--\ref{thm:gradient}），不是无质量。与第 III 节的接口不变：零带宽是零容量。
+
+\section{振动坐标系}
+\label{sec:vibration}
+
+零容量线关上了「瞬时」的信道读法；我们转而构造描述场本身所用的坐标系。\paragraph{模型。}
+场由带族 $\{(k,\omega,w)\}$ 描述，每条带相位 $\theta(x,t)=kx-\omega t$、正权 $w$、线性色散 $\omega=c\cdot k$。描述过程三步：(i) 场 $\to$ 振动坐标，(ii) 「广」= 波矢分布的方差，(iii) 超广极限 $k\to0$。
+
+\begin{theorem}[单模只携带一维]
+\label{thm:vf1}
+线性色散的单模只依赖组合 $\xi=x-ct$：$\theta(x+cs,t+s)=\theta(x,t)$（\texttt{VF1}）。单模无坐标结构；「广」在单模内不可定义。
+\end{theorem}
+
+\begin{theorem}[真坐标需要两个不等速]
+\label{thm:vf2}
+两带映射 $(x,t)\mapsto(\theta_1,\theta_2)$ 的 Jacobian 有闭式
+\begin{equation}
+\det J \;=\; k_1k_2\,(c_1-c_2),
+\label{eq:jac}
+\end{equation}
+（\texttt{VF2}）。同速两带 $\det J=0$（\texttt{VF3}）；异速且波数非零两带 $\det J\ne0$（\texttt{VF4}）。\emph{真振动坐标存在当且仅当相速度不一致。}
+\end{theorem}
+
+\begin{theorem}[广是拍频波数的平方]
+\label{thm:vf8}
+场的宽度 --- 波矢分布方差 --- 有闭式
+\begin{equation}
+\mathrm{var}
+\;=\;\frac{w_1w_2}{(w_1+w_2)^2}\,(k_1-k_2)^2
+\;=\;C\,\left(\frac{2\pi}{\lambda}\right)^2,
+\label{eq:var}
+\end{equation}
+其中 $\lambda=2\pi/|k_1-k_2|$ 是拍频波长、$C=w_1w_2/(w_1+w_2)^2$（\texttt{VF5}、\texttt{VF7}、\texttt{VF8}）。宽度为零当且仅当波数相等（\texttt{VF6}）。\emph{「广」与「起伏」是一个参数的两个名字。}
+\end{theorem}
+
+\begin{theorem}[超广极限杀死坐标]
+\label{thm:vf10}
+$k_1=k_2=0$ 处一切相位消失 $\theta\equiv0$（\texttt{VF9}、\texttt{VF10}）；方差为零、Jacobian 为零。振动坐标系自身退化：超广极限没有坐标，故无「快/慢」可比，故无「瞬时」可言。
+\end{theorem}
+
+\paragraph{诠释。}
+「广」是 $\Delta k$ 的一根轴；「快」是 $\Delta c$ 的另一根轴；超光速错觉来自把两者合成一根轴。超广极限（$\Delta k\to0$）处两轴一起塌掉 --- 坐标失效，瞬时不是速度，是没有速度可言。
+
+\section{带结构：时间计数、色散与维数}
+\label{sec:bands}
+
+\paragraph{时间计数接口。}
+框架的闭包计数（VBC：时间单位 = 相位一次闭合）与带图景（波数测一个波长）是同一个数的两种写法：相位一次闭合 = 位移一个波长，故
+
+\begin{theorem}[时间计数 $=$ 带指标 $\times$ 跨度 $/\,2\pi$]
+\label{thm:tc}
+跨度 $L$ 上的闭包次数
+\begin{equation}
+n(k,L)=\frac{kL}{2\pi},
+\qquad
+n=\rho\,L\quad\text{其中}\quad \rho=\frac{k}{2\pi}=\frac1\lambda,
+\label{eq:ntc}
+\end{equation}
+（\texttt{TC1}）。计数对跨度可加（\texttt{TC2}）；一个波长恰一次闭合 $n(k,2\pi/k)=1$（\texttt{TC3}）。计数依赖所选带：$k_1\ne k_2$ 存在跨度使计数不同（\texttt{TC4}）--- \emph{没有绝对时间计数，只有某条带上的计数。} 全局模 $k=0$ 计数为 0（\texttt{TC5}）；计数差密度是拍频波长倒数 $|\Delta k|/2\pi=1/\lambda_{\mathrm{beat}}$（\texttt{TC6}）：时间计数与第 V 节的「广」是同一刻度。
+\end{theorem}
+
+\paragraph{一般色散：判据不变，速度分裂。}
+第 V 节的振动坐标判据是 $\det J=k_1k_2(c_1-c_2)$，线性色散专用。一般色散下判据是
+
+\begin{theorem}[退化 $\iff$ 同相速度]
+\label{thm:gd}
+广义 Jacobian 行列式
+\begin{equation}
+\det\nolimits_2(m_1,m_2)
+\;=\; k_1\omega_2-k_2\omega_1
+\;=\; k_1k_2\,(v_{{\mathrm{ph}},2}-v_{{\mathrm{ph}},1}),
+\label{eq:det2}
+\end{equation}
+（\texttt{GD1}）；对非零波数，为零当且仅当两带相速度相等（\texttt{GD2}；$k=0$ 退化由 VF10 覆盖）。二次族 $\omega=ck+\beta k^2$ 下行列式是 $k_1k_2\beta(k_2-k_1)$（GD1 的直接推论，数值 N9 验证），$v_{\mathrm{ph}}=c+\beta k$、群速度 $v_g=d\omega/dk=c+2\beta k$。线性色散 $v_g=v_{\mathrm{ph}}$（\texttt{GD7}）；非线性 $v_g\ne v_{\mathrm{ph}}$（\texttt{GD8}）；群速度隙
+\begin{equation}
+|\Delta v_g|\,\lambda_{\mathrm{beat}}=4\pi|\beta|
+\label{eq:gvgap}
+\end{equation}
+（\texttt{GD9}，绝对值形式 GD9b）：\emph{越广，涟漪（包络）走得越慢；$\lambda\to\infty$ 时包络冻结。如第 IX 节所述，$k$-形式 $|\Delta v_g|=2|\beta||\Delta k|$ 是机器检验的陈述（Lean 中的 GD9/GD9b）；此处展示的 $\lambda$-形式是同一式以 $\lambda_{\mathrm{beat}}=2\pi/|\Delta k|$ 的等价改写、数值 N12 验证。} 与定理 \ref{thm:vf10} 同一句话的群速度语言。
+\end{theorem}
+
+\paragraph{带数不是维数。}
+$1+1$ 维里 $(k,\omega)\in\mathbb{R}^2$，任意三条带线性相关。
+
+\begin{theorem}[1+1 维三条带冗余]
+\label{thm:nd}
+若前两条带非退化 $\det\nolimits_2(m_1,m_2)\ne0$，则存在系数 $(a,b)$ 使第三条带满足 $k_3=ak_1+bk_2$ 且 $\omega_3=a\omega_1+b\omega_2$（\texttt{ND1}，Cramer 法则）；第三相位对一切 $(x,t)$ 是同一组合 $\theta_3=a\theta_1+b\theta_2$（\texttt{ND2}）；连其时间计数也冗余 $n_3(L)=an_1(L)+bn_2(L)$（\texttt{ND4}），三带秩为 2（\texttt{ND3}）。\emph{加带不加维}是定理（$1+1$ 维秩 $\le2$）；秩界本身在任何维数都是纯线性代数定理（$d+1$ 维中秩 $\le d+1$），而把秩界读作\emph{振动坐标的维数}的公式 $\dim=\min(\#\text{带},\,d+1)$ 是框架的读法、作为提议陈述（仅 $1+1$ 维被形式化）。要第三个独立坐标必须升空间维数，不是加一条同向带。
+\end{theorem}
+
+\section{组装链}
+\label{sec:chain}
+
+引言的四件事不是一条定理，但共享一个逻辑骨架。材料组织成三个互不相连的机器检验簇 --- {AB}、{AT+YM+SM}、{VF+TC+GD+ND} --- 加一个\emph{字典接缝}：三个已证判据（VF4、AT5 与 GD2）的显式对应，让参与的两簇说同一种语言。{AB} 簇不参与本接缝，只在评注层与其余相连。本节接缝 = 非退化判据在 VF、AT 与 GD 三种词汇里的同一性。
+
+\paragraph{字典接缝（已证判据的显式对应）。}
+振动坐标系证（VF4，机器检验）：波矢非零的两带给出真坐标当且仅当相速度不一致，$k_1k_2\ne0 \wedge (\det J=k_1k_2(c_1-c_2)\ne0 \Leftrightarrow c_1\ne c_2)$。顺序定理证（AT5，机器检验，复用 YM3）：梯度使顺序可观测，$\lambda\ne0 \wedge (\lambda^2(v_q-v_p)\ne0 \Leftrightarrow v_q\ne v_p)$。一般色散定理（GD1，机器检验）把同一判据写成 $\det_2=k_1k_2(v_{{\mathrm{ph}},2}-v_{{\mathrm{ph}},1})$。接缝是三个已证陈述的\emph{共享形状} --- 现在它自身也被机器检验（Seam 模块，Lean）：引理 ${\tt seam\_iff}: a\ne0 \rightarrow (a(x-y)\ne0 \leftrightarrow x\ne y)$ 只证一次，VF4、AT5 与 GD2 声明为它的三个实例。接缝不是关于新对象的新定理：它是用三种词汇写出的同一判据；连接词汇的\emph{识别} --- \emph{把点上的场值识别为带相速度}（$v_i:=c_i$；框架的识别、作为提议陈述、不是定理）--- 即使共享形状被机器检验，仍是提议。同形状的三条陈述、前提 $k_1k_2\ne0$、$\lambda\ne0$ 显式给出：
+\begin{equation}
+\begin{aligned}
+\text{坐标非退化} &\;\Leftrightarrow\; c_1\ne c_2
+\;\Leftrightarrow\; \text{顺序可观测} \\
+&\;\Leftrightarrow\; v_q\ne v_p \;\Leftrightarrow\;
+\det J\ne0 \;\Leftrightarrow\; \text{在 } p \text{ 处交换子}\ne0 ,
+\qquad (k_1k_2\ne0,\; \lambda\ne0)
+\end{aligned}
+\label{eq:seam}
+\end{equation}
+共同形状才是要点：三种判据都归结为「系数非零且速度差非零」。这就是「瞬时」直觉把「广」与「快」熔成一轴 --- 把振动坐标的两根轴 $\Delta k$ 与 $\Delta c$ 塌成一轴。接缝使这种熔合显式化：共享形状被机器检验（Seam 模块），连接词汇的识别 $v_i:=c_i$ 仍是框架的提议。
+
+瞬时是同时面，不是速度。速度是时间序上的比率；时间序由梯度生出来（定理 \ref{thm:gradient}），而梯度正是平坦场所缺的（定理 \ref{thm:flat}）：场越广、相位越平、时间序越小；$k\to0$ 极限处振动坐标塌掉（定理 \ref{thm:vf10}）、瞬时信道零容量（定理 \ref{thm:ab9}）。升级为真速度的唯一路径是新层、自带光锥与无量纲比（AB12--AB15），其经验分辨通道是各向异性。
+
+\section{与所提问题的关系}
+\label{sec:relation}
+
+本文不证明超光速传信，也不声称宇宙\emph{是}物理以太意义上的振动集体；标题中的「本体」在描述过程的层面被主张 --- 物理学即该场在振动坐标系中的描述 --- 而非作为对基底实体的断定。与动机问题的关系如下。
+
+\begin{enumerate}
+\item \emph{陈述与直觉哪里不同。} 直觉是单条声称：「更广，故更快。」本文把它拆成四件事（表 \ref{tab:claims}），三件在相位层为真、一件在信号层为假。边界就是数学内容：消息是时变序列，时变序列要求非零带宽；常值模是同时面。
+\item \emph{我们能否推出直觉？} 不能照原样。真正更快分支要求新无量纲比，框架没有强迫它的方程；这是第二输入缺口，与 $\lambda$、$M_0$ 同类。死线已写：若 ratio 可从公设导出，分支 II 不再是新公设、缺口关闭。
+\item \emph{框架凭什么能在此说些什么？} 因为框架有原生非对易（YM3）与原生计数（VBC 闭包），且两者都是定理、不是公设。时间序是已证交换子的读法；带计数是已证闭包计数的读法。本文没有加时间公设。
+\item \emph{直觉按原样说为什么危险。} 因为一般色散下相位速度不是信号速度（GD8），把「相位速度无界」读成「信号更快」正是超光速声称赖以建立的偷换；AB7--AB9 是正式的拒绝。
+\end{enumerate}
+
+\section{六轮对抗审计（2026-10-30）}
+\label{sec:audit-zh}
+
+第 III--VI 节先写成，随后由六条独立对抗线在冻结合同下审计。判据不是「标准物理是否同意」，
+而是「是否忠于框架自己的推导次序」；无信号定理、光锥、Shannon 容量、QFT 公理被明令禁止充当判据。
+判决：**两条撤回、四条降级、零条原样保留**。
+
+\begin{enumerate}
+\item \textbf{（R1，撤回）「瞬时 $\Rightarrow$ 不可传信」。} AB7--AB8 的对象是
+$s:\mathbb{Z}\to\alpha$（\emph{同一位置}的时刻序列），而框架的主张是\emph{同一时刻、两个位置} ——
+坐标轴被换掉了。替代对象是介质纤维 $\mathrm{MediumFiber}\,L:=\lambda x\,y.\,Lx=Ly$（等价关系，
+不是序、不是信道），决定性引理是空间同相\emph{不}蕴含时间恒定
+（\texttt{spatial\_const\_not\_time\_const}）。
+\item \textbf{（R2，降级）「时间 $=$ 非对易」。} 交换差 $\lambda^{2}(v_q-v_p)$ 只报告两种复合次序
+\emph{可区分}：不给朝向（对 $p,q$ 对称）、不给量纲（两侧都是场值）、也不存在从场值到秒的映射。
+时间的接口是带指标与闭合计数 $n=kL/2\pi$（TC1--TC6、VBC4--VBC5）。
+\item \textbf{（R3，降级）「带数不是维数」。} $\mathrm{rank}\le\min(\#\text{带},d+1)$ 只在所有带
+共享同一对 $(x,t)$ 时成立，且对带数不敏感（$N=3,\dots,1000$ 一律秩 $2$）——
+它是投影降秩（因子化）陈述，其正内容是\emph{相位锁定}（$N>2$ 条共享帧相位存在非平凡线性关系）。
+维度是独立振动轴的个数，是输入。
+\item \textbf{（R4，降级）「群速度更正相位速度读法」。} $c$ 是介质层常量（\texttt{MediumFlow.c}，无 $k$），
+$v_{ph}$ 与 $v_g$ 是同一介质的波层描述；GD8 是波层内部的真话，不构成对介质层主张的判决。
+\item \textbf{（R5，降级）「无质量 $=$ 无散度」。} 散度是\emph{电荷}层的量（P3）；质量是条数／锚定
+（P2、MC1：$m^{2}=NM_0^{2}$）。并且涡旋 $v=(0,1,1,0)$ 有梯度，按 MC1 \emph{有质量}：
+它见证的是「无源而非平坦」，不是「无质量而非平坦」。
+\item \textbf{（R6，撤回）「以太 $=$ $P1$ 换名」。} 在 $\mathcal{A}:=C$ 的定义恒等之下，
+「$\mathcal{A}$ 超越 $C$」不可表达，且任何谓词都对差别失明（Leibniz）。
+介质必须是场映射的\emph{纤维}：$\mathrm{observe}:\text{介质}\to\text{场}$ 非单射，
+且不存在只由场算出的泛函能读出介质的同步速度标度
+（\texttt{no\_field\_functional\_reads\_speedScale}）。
+\end{enumerate}
+
+存活下来的是框架自己的正面内容，且被放到正确的层
+（\texttt{Explorations/AetherMedium.lean}，AL1--AL7，零 \texttt{sorry}）：
+场不能钉死介质（AL1、AL7）；同步是介质层上的等价关系（AL2）；时间坐标由带供给，
+无带意味着\emph{没有周期}而非「周期为零」（AL3）；秩界属于\emph{帧}（AL4）；
+无质量是无锚定、与场的形状无关（AL5）；不存在「那条就是光速」的带（AL6）。
+超广意场的动力学方程 —— 框架的正面任务 —— 本文没有给出，仍然开放。
+
+\section{诚实评估}
+\label{sec:honest}
+
+\begin{table}[h]
+\centering
+\caption{第 I 节四件事实、重新组织并延伸它们的四块主张、各自的验证状态与死线。}
+\begin{ruledtabular}
+\begin{tabular}{llll}
+\multicolumn{1}{c}{事实（第 I 节）} & \multicolumn{1}{c}{主张块} &
+\multicolumn{1}{c}{状态} & \multicolumn{1}{c}{死线}\\
+\hline
+相位速度无界（AB1--AB2） & 瞬时及其容量与更快层（AB1--AB18） & 机器检验、零 \texttt{sorry} &
+$k=0$ 集体模携带时变符号（分支 I）\\
+瞬时信道零容量（AB7--AB9） & 同一块 & 机器检验 & 同一死线、分支 I\\
+更快层需要独立光锥（AB12--AB18） & 同一块 & 判别器（AB15）是提议、非定理 &
+ratio 可从公设导出，或观测到既非拖曳也非 ratio 的快因子（分支 II）\\
+时间 = 非对易的影子（YM3） & 时间序 = 非对易的代数影子（AT1--AT14） & 机器检验 &
+平坦场上两汇算子不交换\\
+& 真坐标当且仅当相速度不一致（VF2--VF10） & 机器检验 & 非零波数下相速度相等\\
+& 带数不是维数（ND1--ND4） & 机器检验 &
+相位秩与物理维数在识别 $v_i:=c_i$ 下不符\\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\begin{itemize}
+\item \emph{数学内容。} 第 III--VI 节全部定理是初等实分析、线性代数与序关系（Lean~4 机器检验、零 \texttt{sorry}）；边界已写明：\texttt{GD5}（群速度是导数）未在 Lean 证（mathlib v4.35 的形式化工程缺口），用数值替身；维数上限只覆盖 $1+1$ 维。
+\item \emph{结构对应。} 时间序与非对易的认同是框架读法，不是「时间 $=$ 非对易」定理；「时间可从非对易读出」的想法在非对易几何中有先例（Connes~\cite{connes1994ncg}，其模自同构是完全不同的机制 --- von Neumann 代数上的 Tomita--Takesaki 流，区别于我们的格点汇收缩交换子；我们将其引为思想的先例、而非机制的先例），我们承认其存在，而这里的格点实现是框架自身的；振动坐标系是两带线性色散的模型选择；层级层是与框架相容、但不由框架推出的读法。
+\item \emph{数值匹配。} 第 IV--VI 节全部数值断言是对恒等式的机器精度检验（最大残差 $\sim 10^{-15}$）；时间可观测度公式（式 \ref{eq:timeobs}）不是新预言。
+\item \emph{预言，分三层如实陈述。} \emph{(i) 无条件预言：无。} 本文证明边界、给出判据形状，不给新数字；除组织恒等式之外，唯一新定量闭式是式 \ref{eq:timeobs}，它是受限族上的代数组合、非无条件预言（其条件状态见下文「睡眠判别器」条）。\emph{(ii) 条件判别预言：三条。} 若真实存在快于 $c$ 的因子，第 III 节两分支携带零新输入的判别角签名 --- 坐标拖曳各向异性（$1+v(\theta)$）、层级比各向同性 --- 观测到的角模式若与两者都不符，两分支俱死（AB15）；若 $k=0$ 集体模携带时变可分辨符号，分支 I 死（AB7--AB9）；任一具有二次色散 $\omega=ck+\beta k^2$ 的介质中，群速度差与拍频波长被 $|\Delta v_g|\,\lambda_{\mathrm{beat}}=4\pi|\beta|$ 锁死（GD9：$k$-形式 $|\Delta v_g|=2|\beta||\Delta k|$ 机器检验；$\lambda$-形式是同一式以 $\lambda_{\mathrm{beat}}=2\pi/|\Delta k|$ 的等价改写、数值 N12 验证）：测得一对 $(\Delta v_g,\lambda_{\mathrm{beat}})$ 即确定 $\beta$，任何偏离都是框架内的证伪者。\emph{(iii) 扩展层预言（带新输入）：两条。} 框架自身的实验纲领已列出其未推导公设的签名 --- 回旋反常 $R_{ci}=1/(1-\mu)-1$（零假设 $R_{ci}=0$）与自旋劈裂 $\Delta R_{ci}=-2\varepsilon/((1-\mu)(1-\varepsilon^2))$ --- 它们以输入 $\mu,\varepsilon$ 为条件（SA8--SA9）；此处登记为纲领的经验接触点，不是本文的声称。
+\item \emph{第二输入缺口未变。} ratio（AB14）、$\lambda$、$M_0$ 仍是输入；框架内没有方程推导它们。式 \ref{eq:timeobs} 在此登记为\emph{睡眠判别器}：它在两支撑点族上是精确结构恒等式（不是预言），一旦 $Q_A$ 获得观测词典即转为数值判别器；反向映射 --- $Q_A$ 起伏能量的测量程序 --- 是框架具名开放问题（第一步：用杨--米尔斯标度 $\lambda^2 M_0^2$ 锚定 $Q_A$ 的量纲）。
+\item \emph{死线。} 分支 I 死于：$k=0$ 集体模携带时变可分辨符号；分支 II 死于：ratio 可从公设导出、或观测到既非拖曳也非 ratio 的「快因子」；平坦读法死于：平坦场上两汇算子不交换；维数上限（读法 $\dim=\min(\#\text{带},\,d+1)$）死于：在任意具体模型中，相位秩与物理维数在识别 $v_i:=c_i$ 下不符 --- 秩界本身在任何维数都是同一线性代数论证的定理（$d+1$ 维中秩 $\le d+1$），故死线在识别层、不在秩定理层 --- 识别层可被具体模型证伪。
+\item \emph{以太、同步与传信（防火墙）。} 框架内「以太」（P1）许可同时面（共相位、$d\tau=0$），但按 AB7--AB9 携带零信息容量；它是分支 I，不是信道。真正更快的层（分支 II，$c_2=\mathrm{ratio}\cdot c$）要求新无量纲输入，被公开写为未推导的公设、不是推论（AB12 是死线）。纲领的声称因此恰是本边界：直觉的「更快同步」要么是共相位（免费、无信号）、要么是新公设（代价 ratio）；本文既不断言更快的传信、也不断言其否认作为物理。本文没有任何陈述把同时面升级为通信信道。
+\end{itemize}
+
+\section{结论}
+\label{sec:conclusion}
+
+流动空间框架内，「瞬时、比光速快」直觉被拆成四件陈述，其中三件在相位层被证明为真、一件在信号层被拒绝；本文承载的每块主张均以机器检验定理建立。相位速度无界；瞬时信道零容量；唯一真速度是新层 + 新无量纲比、各向异性为唯一分辨通道；时间本身是框架非对易性的代数影子 --- 被梯度生成、在平坦处缺席、两支撑点族上强度随起伏平方根缩放。场越广、相位越平；相位越平、时间序越小；超广极限既无坐标也无信道 --- 只有同时面。瞬时不是速度。本文提出的本体论就是振动坐标系本身：时间序、带数、维数、广与瞬时都是其公设的输出、经 Lean 机器检验；它所提出的基底 --- 大胆公设、诚实设界 --- 是纲领自身前几篇论文所没有、标准数学物理亦未曾作为单一系统提供的组装（其元件是教科书内容，其「时间来自非对易」的想法在非对易几何中有先例）。
+
+\section*{利益冲突}
+作者声明无竞争利益。
+
+\section*{数据可用性}
+全部定理在 Lean~4 机器检验（零 \texttt{sorry}）；全部数值声称由仓库验证脚本以可复现随机种子生成。源码与完整定理陈述见 ProjectionPhysics 仓库。
+
+\bibliography{projection-physics}
+
+\end{document}

@@ -158,7 +158,7 @@ for _ in range(200):
     # ⚠ 相消量：按操作数量级归一（不用结果归一），否则 k₁≈k₂ 处是假相对误差
     scale9 = abs(k1 * w2) + abs(k2 * w1)
     rel9 = max(rel9, abs(num - pred) / scale9)
-check("N9 ★★ 二次色散 det₂ = k₁k₂β(k₂−k₁)（GD4）", rel9 < 1e-14,
+check("N9 ★★ 二次色散 det₂ = k₁k₂β(k₂−k₁)（GD1 的直接推论）", rel9 < 1e-14,
       f"200 组按操作数量级归一的误差 = {rel9:.2e}（相消量，几个 ulp）")
 
 # N10 群速度是导数（中心差分收敛阶 ≈ 2）
@@ -225,9 +225,20 @@ for L in (0.5, 1.0, 3.0, 7.5):
     res14 = max(res14, abs(lhs - rhs))
 M = np.array([[m1["k"], m1["w"]], [m2["k"], m2["w"]], [m3["k"], m3["w"]]])
 rank = int(np.linalg.matrix_rank(M))
-check("N14 ★★★ 计数也冗余（n₃ = a n₁ + b n₂）；3×2 相位矩阵秩 = 2 ⟹ 第三条带不增维（ND3/ND4）",
-      res14 < 1e-13 and rank == 2,
-      f"4 个跨度 max 残差 = {res14:.1e}；rank(3 带 × (k,ω)) = {rank}（= min(3 带, 2 维时空)）")
+
+# ⚠ 六轮攻防 R3（2026-10-30）：只报「3×2 矩阵秩 = 2」是在验夹具自己的形状
+#（matrix_rank ≤ min(3,2) 由数组形状保证）。可判死的量是「秩对**带数**不敏感」：
+# 共享二帧下无论加多少条带，秩恒为 2。
+rank_by_bandcount = {}
+for N in (3, 10, 50, 200):
+    Mb = rng.normal(size=(N, 2))
+    rank_by_bandcount[N] = int(np.linalg.matrix_rank(Mb))
+rank_is_band_free = set(rank_by_bandcount.values()) == {2}
+check("N14 ★★★ 计数也冗余（n₃ = a n₁ + b n₂）；共享二帧下秩对带数不敏感（ND3/ND4 + R3 更正）",
+      res14 < 1e-13 and rank == 2 and rank_is_band_free,
+      f"4 个跨度 max 残差 = {res14:.1e}；rank(3 带)= {rank}；"
+      f"rank(N 带, N∈{sorted(rank_by_bandcount)}) = {[rank_by_bandcount[N] for N in sorted(rank_by_bandcount)]}"
+      " ⟹ 该上界属于**帧**（2 维），不回答『多带是否高维』")
 
 # ═════════════════════ 图 ═════════════════════
 # 图 1：时间计数 vs 跨度（不同带 = 不同斜率）

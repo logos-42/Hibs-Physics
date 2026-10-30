@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-10-19
+last_confirmed: 2026-10-30
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,53 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-10-30 session：六轮攻防 —— 接受 leo 的推导逻辑，重审我的六条主张（2 撤回 / 4 降级）
+
+leo：「觉得你的这几轮攻防不够到位，**你误解了我的意思，而且坚持的点不对，你被过去的知识误导了**。
+所以，你需要**接受我自己的推导逻辑**，重新再进行 6 轮攻防。而且这些攻防要靠你自己的子智能体去分配。」
+
+### 做法
+
+冻结合同 `docs/adversarial/aether-6rounds-contract.md`（leo 九条前提逐字 + 六条被攻主张带 file:line +
+**禁止引入的外部假设**：无信号定理/光锥/Shannon/QFT 公理/MM 实验/同时性优先）。
+6 条独立子智能体各领一轮（只读、不改仓、结构化 JSON 落盘），判据是「是否忠于他的推导次序」。
+
+### 判决（记录：`docs/adversarial/aether-6rounds.md`；共识页：`docs/wiki/theory-aether-medium.md`）
+
+| 轮 | 被攻 | 判决 | 一句话 |
+|---|---|---|---|
+| R1 | 瞬时 ⟹ 不可传信（AB7/8/9） | **撤回** | `s : ℤ → α` 无位置参数；他的「彼此」是同 t 异 x。`spatial_const_not_time_const`：空间同相 ⇏ 时间恒定 |
+| R2 | 时间 = 非交换（AT5/AT9） | **降级** | 交换差只报「复合次序可区分」：**不给朝向、不给量纲、不生成时间**；文件里也没有 YM 方程（只有仿射收缩算子） |
+| R3 | 多带不是高维（ND1–ND4） | **降级** | rank ≤ 2 是**共享 (x,t)** 时的投影降秩，对带数不敏感（N=3…1000 恒 2）⟹ 上界属**帧**；维度 = 独立轴数 n |
+| R4 | 「相位速度无界⟹不能读成更快」这个更正 | **降级** | c 属**介质层**（`MediumFlow.c`，无 k），v_ph/v_g 属**波层**；两层互不判定 → 降为波形层附注 |
+| R5 | 无质量 = 无散度（AT11/12/14） | **降级** | div 是**电荷层**（P3）的「无源/中性」；质量 = 条数/锚定（P2/MC1）；涡旋有梯度⟹**有质量**，不是无质量见证 |
+| R6 | 以太 = P1 换名（`A := C`） | **撤回** | 定义恒等使「A 超越 C」不可表达；介质与场必须类型分离，`fieldOf_not_injective` 才是「场不判介质」的证据 |
+
+### 落地（真跑）
+
+**Lean（零 sorry）**：新增 `Explorations/AetherMedium.lean`（AL1–AL6，6 结构 + 8 定理）；
+`AetherBand.lean` 新增 ⑥ 段（`MediumFiber / mediumFiber_equivalence / coPhaseAll_iff_const /
+spatial_const_not_time_const`）+ 改名 `BandZero→TimeConst`、`message_needs_bandwidth→not_timeConst_of_two_instants`；
+`AetherTime.lean` 改名 `order_visible_of_gradient→commutator_of_gradient`、
+`no_strict_order_of_zero_intervals→degenerate_no_strict_order`、`flat_massless_no_time→flat_and_degenerate`、
+`flat_implies_divFree→flat_implies_sourceless`、`vortex_massless_not_flat→vortex_sourceless_not_flat`、
+`flat_strict_subset_massless→flat_strict_subset_sourceless` + 新增 ⑦ 段（`massSq / massless_iff_zero_strands`）；
+`DispersionGeneral.lean` 符号纪律 `quadMode (c₀ β k)`；`BandDimension.lean` 定位改写（共享帧因子化引理 + 相位锁定）+ ND5 三条改为互不相同。
+
+**数值**：新增 `scripts/verify_aether_medium.py`（N1–N7 **7/7**：`min|T·0−2π| = 6.283185`、
+`rank [3,2]`、`max|v(x)−v(0)| = 1.00`），挂 `verify_all`（7 新门）；
+`verify_band_structure.py` N14 改为**对带数扫描**（N=3/10/50/200 秩恒 2），14/14。
+
+**wiki**：新页 `theory-aether-medium.md`（当前共识）；`theory-aether-band.md` /
+`theory-aether-time.md` / `theory-band-structure.md` 页首加更正块 + 改动载重句 + 定理改名；
+index 加条目并给旧条目打撤回标记。
+
+### 仍未闭合（写死）
+
+① **超广意场动力学方程**未给（六轮只纠正「哪些结论不适用」）；② 「无质量但非平坦」的见证仍缺（需 N=0 探针）；
+③ 维度可达性 `rank_attained` 未做；④ 分支Ⅱ 的 ratio 仍是未闭合输入。
+
 
 ## ★ 2026-10-29 session（四续）：带结构三件 —— 时间计数 / 一般色散 / 带维度（TC1–ND5）
 
@@ -2026,3 +2073,74 @@ leo 方向：「不是从四种力开始，而是从空间流动开始，从构�
 
 **诚实边界**：SFG9 的计数律 hcount 仍是**公设输入**（质量=条数），本链闭合的是「非交换自带非平凡场内容」这一环，不是 Clay 的 4 维 QFT 存在性；a→0 拓扑收敛、SU(3)^Λ Haar、重整化仍开放。
 
+
+
+## paper4 攻防（重启后第 1 轮完成，2026-10-30）
+
+**触发**：leo 纠正攻防基准 ——「你被过去的知识误导了，接受我自己的推导逻辑，重新 6 轮攻防」。基准=作者推导逻辑（大胆公设是有效前提），禁止以「与标准物理不一致/初等数学/思想有先例/无无条件预言」否定；攻击方向限框架内部（自洽性/定理-声称-标签对应/Lean 真实性/诚实边界/死法/自我矮化）。
+
+**Round 1 四线评审**（攻①形式化自洽 + 攻②本体论忠实 + 防辩护 + 帮助型统一，全部 dee 子智能体分配）：
+- **防方裁决（a–h 攻击）**：初等数学/先例/期刊定位类攻击=类别错误拒绝；(g) 反例方向算术验实为真（此前修复正确）；(h) N=2 未数值覆盖=真核（已修，16 组 8/8 PASS）
+- **最该补强的一件事 = 字典接缝 Lean 形式化**（已落地）：
+  - 新增 `Seam.lean`：共享形状引理 `seam_iff`（a≠0 → (a·(x−y)≠0 ⟺ x≠y)）+ 三实例 `seam_vf4`（VF4）/`seam_at5`（AT5，经 YM3）/`seam_gd2`（GD2）
+  - ⟹ §7 接缝从「可见对应」升级为「机器检验的共享形状」；识别层 v_i:=c_i 仍是提议
+  - 零 sorry 零 warning，聚合根已 import，lake build 5716 jobs 全绿
+- **攻①三条件修复**：Connes 引用回补 §IX+机制区分（Tomita–Takesaki vs 格点交换子）、N6-AB 标签真实化（verify_aether_band.py 检查名 N6→N6-AB）、AT10 定理改名 `gradient_creates_time_order`（历史遗留名 mass_creates 与梯度口径不符）+ wiki 同步
+- **攻②三发现修复**：EN 摘要「Four claims are proved」→「established」（三块机检+第四块为提议）、ZH 摘要补 min(#bands,d+1) 公式与限定、EN L735「not a new prediction」残留清除
+- **帮助型约 30 条**：摘要长括号拆开、四块引导语、摘要是声明的四块对应关系、VF8 术语统一（inverse beat wavelength→squared beat wavenumber）、GD2 前提标注、ND3 标签补、eq:seam [commutator]→commutator at p、§V 过渡句、超广意→超广 统一、否定清单跨版对齐、GD9 提为第三条条件判别预言、N6 登记「睡眠判别器」+ Q_A 词典为具名开放问题
+
+**门禁**：make test ALL PASS（610 PASS/0 FAIL）、双版 tectonic 零 error、parity 完整（label/cite 一致、10 节对 10 节）、残留清零。
+
+
+## paper4 攻防（重启后第 3 轮完成，2026-10-30）
+
+**修复**（双版一致验证）：
+- N6 计数 16→15（5 N × 3 g；EN/ZH/脚本 verify_aether_time.py 三处同步，8/8 PASS）
+- §7 接缝「two statements」残留清除（三实例/三陈述全篇统一）；簇计数修正（AB 不参与⟹经接缝对话的是两簇）
+- EN 主张段 VF8 旧术语残留清除（inverse beat wavelength squared→拍频波数平方，全篇统一）
+- GD9b 标签精度：§VI 明写 k-形式=|Δv_g|=2|β||Δk| 是 Lean 机检陈述（GD9/GD9b），λ-形式=同一式重写+N12 数值验证
+- 维数死线移向识别层：秩界任何维都是定理（d+1 形式秩≤d+1），死线→具体模型中相位秩与物理维数在 v_i:=c_i 识别下不符
+- 摘要 F 条收回「想法层不主张新」的过度让渡（task-1 战略裁决）：抽象口号有先例（Connes），已实现判据（顺序盲⟺可交换、定量交换子 λ²(v_q−v_p)）是框架自身构造、主张为新
+- §8 标题对齐：标题「本体」在描述过程层面主张（物理=该场在振动坐标中的描述），非基底实体断定
+
+**第 3 轮两 referee 战略结论**：
+- task-1（终极立场向）：够发（本体论提议+边界设定+机器核验，三人 Found.Phys./PRD 级）；离「新预言论文」差一步=给 Q_A 观测词典唤醒 N6；「用新词汇重组初等数学」的三句最强反驳已整理
+- task-0（修复收敛向）：8 项修复 6 项合格 2 项部分；新颖性裁决句诚实不过度让渡
+
+**遗留（具名开放问题）**：Q_A 观测词典（N6 唤醒）=框架级工作，需 leo 定方向；GD9 λ-形式（数值验证非机检）边界已写明。
+
+
+## paper4 攻防（重启后第 4 轮完成，2026-10-30）
+
+**修复**（双版一致验证，RC=0、parity 40 label 保持）：
+- P1 摘要四块-四事实映射修正：「four claims are the four facts of Sec.~I」→「regroup and extend」/「重新组织并延伸」（第 I 节四事实=相位无界/零容量/独立光锥/时间影子，摘要四块 VF/ND 是对其重组延伸，原断言事实1缺失不成立）
+- F 句新颖性层级修正（task-0+task-1 双 referee 一致）：「输出层」→「判据结构层」（criterion structure：时间计数/广/维数上限/两分支及死线）+「不是新的输出数字」（与 §9 无条件新数字为零对齐，消解自毁感）；F 条补「定量格点实现层面新、非定义等价本身新」限定（防把判据新误读为等价关系新）
+- 维数上限分层声明：秩界任何维都是线性代数定理（rank≤d+1），dim=min(#带,d+1) 读法才是提议（不再整体降级『仅 1+1 形式化』）
+- P3/P4/P5：死线句 EN/ZH 镜像统一（d+1 维）、『链中中间环节』→『三种判据』镜像、§IX 『beyond the organizing identities』限定
+- P2 脚本图例 12→15 组（verify_aether_time.py 8/8 PASS）
+
+**第 4 轮战略结论（task-1 立场对照向）**：
+- 本质对照：『预言新』→降格为判别器结构但站稳；『原体系没有』→组装层站稳（seam_iff 机检）；『预设大胆』→全站稳但移交自前作；『新组件』→半站稳（防火墙结构标准文献无对应物）
+- 最硬的一处新 = AT5/AT10 判据族（时间序=梯度生成的定量判据 λ²(v_q−v_p)）——机制区别于 Tomita–Takesaki、标准文献无此物、四块结构之轴
+- 缴械型让步 4 条：①摘要『输出层新』vs §9『无新数字』未对齐（已改判据结构层）；②维数上限整体降级（已分层声明）；③分支II判别器解释层标注（可缓）；④标题让步（未执行——保留《振动坐标系下的宇宙本体》，正文已诚实）
+- 终局判定：措辞差为主、内容差为辅；新颖性锚定『判据结构层+可判死死线』后完全自洽
+- 最希望作者解决：Q_A 观测词典（唤醒 N6 睡眠判别器，第一步量纲锚定 λ²M₀² 已在文中）
+
+**遗留（具名）**：Q_A 观测词典=框架级工作（需 leo 定方向）；GD9 λ-形式数值验证非机检（边界已写明）。
+
+
+## paper4 攻防（重启后第 5 轮完成，2026-10-30）
+
+**修复**（双版一致，RC=0、parity 40 label、残留清零）：
+- §IX 起首新增「四件事实→四块主张→验证状态→死线」映射总表（读者验收向『投稿前最后要做的一件事』；映射修正：AB 事实→AB 块、YM3→AT 块、VF/ND 为延伸行）
+- 摘要 F 句"判据结构层"补括号式自包含定义（框架从公设推出的判据结构本身，区别于判据取值）
+- 结论"four facts, each proved"→"four statements, three true at phase level and one refused at signal level, each claim established"（修 N5：第4件事实是被拒非被证）
+- ZH §VI thm:nd 补秩界半句镜像（秩界任何维都是纯线性代数定理，dim=min 读法才是提议——半闭合项闭合）
+- N6 术语统一：§8 与表题注 "four claims"→"four statements"（直觉四件 vs 论文四块区分一致）
+- ZH 死线段移除 ZH-only "反例在数学上不存在" 句（与 EN 镜像）
+
+**第 5 轮双 referee 结论**：
+- task-0（修复收敛核查）：5 项 4 项完全闭合 1 项半闭合（本轮已闭合）；F 句"判据结构层"无过度声称、与 N6/GD9/VF8 及 §9 互锁自洽；**处于收敛末态**
+- task-1（读者验收向）：能定稿（本体论提议+边界+机器核验体裁）；第一遍阅读记住"三真一假/瞬时=同时面/接缝统一三判据/死线四条"；卡点=摘要过长+判据结构层无定义（已补）+四块四事实对应（已用映射总表解决）
+
+**遗留（具名）**：Q_A 观测词典=框架级开放问题（N6 唤醒路径）；GD9 λ-形式数值验证非机检（边界写明）；'本体'标题=描述过程层面主张。

@@ -1,4 +1,10 @@
--- ProjectionPhysics — AetherTime：接上 YM 方程接口 —— 顺序（时间的代数影子）⟺ 非对易
+-- ProjectionPhysics — AetherTime：汇算子交换差 = 场梯度（YM3 的换名）
+--
+-- ⚠ 更正（六轮攻防 R2，2026-10-30）：「接上 YM 方程接口」与「时间 = 非对易性」两句作废。
+--   本文件里没有规范场 A、没有 F = dA + A∧A、没有 Yang–Mills 方程；调用的是**仿射收缩算子**
+--   sinkToPoint 的不交换性（YangMillsSeed 的 YM3）。交换差两侧都是**场值**，无「场值 → 秒」
+--   的映射，故它只报告「两种复合次序可被区分」，不报告朝向、不报告时间刻度。
+--   时间的正确接口是带指标与闭合计数（TimeCount TC1–TC6：n = kL/2π；VibrationClosure VBC4/VBC5）。
 --
 -- leo（2026-10-29 续）：「结 ym 方程接口，瞬时是因为时间在人类世界上线性的，
 --   在无质量空间，不存在当前的线性时间观。」
@@ -138,11 +144,11 @@ theorem orderBlindOn_flat (p q : ι) (lam : ℝ) :
 -- AT5/AT6 有梯度 ⟹ 顺序可观测（接 YM3）
 -- ---------------------------------------------------------------------------
 
-/-- AT5 ★★★ 顺序可观测 ⟺ 有梯度：若两汇点的场值不同且 λ ≠ 0，
-    则交换差在 p 处 = λ²(v_q − v_p) ≠ 0
-    ⟹ 先后**可以被一个刻度报告** ⟹ 时间序在该处有内容。
-    证明：直接复用 YM3 的交换差公式。 -/
-theorem order_visible_of_gradient {p q : ι} {lam : ℝ} {v : ι → ℝ}
+/-- AT5 ★★★ 两条仿射收缩算子在同一场上给出不同结果 ⟺ 场有梯度
+    （交换差 = λ²(v_q − v_p)，YM3 换名，零新增内容）。
+    ⚠ 降级（R2）：本式给出**可分辨**，不给出**朝向**（对 (p,q) 与 (q,p) 同时成立，
+    λ² 对称），也不给出**量纲**（两侧均为场值）。不得读作「时间序在该处有内容」。 -/
+theorem commutator_of_gradient {p q : ι} {lam : ℝ} {v : ι → ℝ}
     (hgrad : v q ≠ v p) (hlam : lam ≠ 0) :
     OrderVisibleAt (sinkToPoint p lam) (sinkToPoint q lam) v p := by
   simp only [OrderVisibleAt]
@@ -173,10 +179,10 @@ theorem massless_interval_zero (c dt dx : ℝ) (hc : c ≠ 0) (h : dx = c * dt) 
     properTimeSq c dt dx = 0 :=
   photon_proper_time_zero c dt dx hc h
 
-/-- AT8 ★★★ 若一层里所有间隔都是 0，则不存在严格先后：
-    「更快 / 瞬时」这类比较需要**正的**间隔，那里没有这个前提。
-    （证明：任何「严格先后」都要 0 < 0。） -/
-theorem no_strict_order_of_zero_intervals {τ : ι → ι → ℝ}
+/-- AT8 ★★★ 若一个二元函数处处为 0，则其上没有严格序（序论平凡事实）。
+    ⚠ 降级（R2）：假设 τ ≡ 0 等价于「比较域塌成一个点」（不存在两个可区分事件），
+    与「无质量」没有关系；本式对任何被命名为 τ 的对象都成立。不得读作「该层没有时间」。 -/
+theorem degenerate_no_strict_order {τ : ι → ι → ℝ}
     (h : ∀ x y, τ x y = 0) : ¬ ∃ x y, τ x y < τ y x := by
   rintro ⟨x, y, hxy⟩
   rw [h x y, h y x] at hxy
@@ -186,19 +192,19 @@ theorem no_strict_order_of_zero_intervals {τ : ι → ι → ℝ}
 -- AT9 合成：平坦 ∧ 无质量 ⟹ 顺序盲 ∧ 无严格时间序
 -- ---------------------------------------------------------------------------
 
-/-- AT9 ★★★ 合成（**读法已更正**）：在平坦（无起伏）且所有间隔为零的区域里，
+/-- AT9 ★★ 两支并置（**读法已更正两次**）：在平坦（无起伏）且所有间隔为零的区域里，
     ① 汇算子复合先后不可区分，② 不存在严格先后。
 
-    ⚠ 更正（leo 2026-10-29）：这两个前提**不是同一件事**，本定理不再被读作
-    「无质量 ⟹ 没有时间序」。有效的部分是 ①（来源 = 平坦，AT4）；
-    ② 只在「整层所有间隔全为零」时成立，而**探针自身 dτ=0 不足以**给出这一点
-    （无质量的场不必平坦：AT12 给涡旋见证；且涡旋场里顺序照样可观测：AT13）。 -/
-theorem flat_massless_no_time {p q : ι} {lam c : ℝ} {v : ι → ℝ} (hv : ∀ i, v i = c)
+    ⚠ 更正（六轮攻防 R2，2026-10-30）：左支来自 AT4（仿射算子保常值），右支是关于**任意**
+    二元函数的序论平凡事实 —— 两者之间**没有桥引理**，本定理只是两条独立陈述的合取，
+    不得作为「无质量 ⟹ 没有时间序」的合成结论引用。
+    ⚠ 更正（leo 2026-10-29）：涡旋（AT12）是**无源**见证，不是无质量见证（质量 = 锚定/条数）。 -/
+theorem flat_and_degenerate {p q : ι} {lam c : ℝ} {v : ι → ℝ} (hv : ∀ i, v i = c)
     {τ : ι → ι → ℝ} (hτ : ∀ x y, τ x y = 0) :
     sinkToPoint p lam (sinkToPoint q lam v) = sinkToPoint q lam (sinkToPoint p lam v) ∧
       ¬ ∃ x y, τ x y < τ y x :=
   ⟨orderBlind_on_flat (p := p) (q := q) (lam := lam) hv,
-   no_strict_order_of_zero_intervals hτ⟩
+   degenerate_no_strict_order hτ⟩
 
 -- ---------------------------------------------------------------------------
 -- AT10 对照：有质量侧（时间序被生出来）
@@ -207,10 +213,10 @@ theorem flat_massless_no_time {p q : ι} {lam c : ℝ} {v : ι → ℝ} (hv : �
 /-- AT10 ★★★ 对照定理（同一模块里把两侧并排）：
     存在梯度 ⟹ 存在一个位置使先后可分辨 ⟹ 时间序**被生出来**。
     与 AT4 合起来即是：**平坦 ⟺ 顺序盲**、**有梯度 ⟹ 顺序可观测**。 -/
-theorem mass_creates_time_order {p q : ι} {lam : ℝ} {v : ι → ℝ}
+theorem gradient_creates_time_order {p q : ι} {lam : ℝ} {v : ι → ℝ}
     (hgrad : v q ≠ v p) (hlam : lam ≠ 0) :
     ∃ i, OrderVisibleAt (sinkToPoint p lam) (sinkToPoint q lam) v i :=
-  ⟨p, order_visible_of_gradient (p := p) (q := q) hgrad hlam⟩
+  ⟨p, commutator_of_gradient (p := p) (q := q) hgrad hlam⟩
 
 -- ---------------------------------------------------------------------------
 -- 更正（leo 2026-10-29）：「无质量和平坦无关」—— 证伪 AT9 的并置
@@ -235,16 +241,17 @@ def curlV (v : Fin 4 → ℝ) : ℝ := (v 2 - v 0) - (v 3 - v 1)
 /-- 涡旋见证场：v = (0, 1, 1, 0)。 -/
 def vortex : Fin 4 → ℝ := ![0, 1, 1, 0]
 
-/-- AT11 ★ 平坦 ⟹ 无散：常值场不产生源汇 ⟹ 不对周围空间产生扭曲。
-    ⟹ **平坦是无质量的特例**（「平坦反而是局部特殊情况」的前一半）。 -/
-theorem flat_implies_divFree {c : ℝ} {v : Fin 4 → ℝ} (hv : ∀ i, v i = c) : divV v = 0 := by
+/-- AT11 ★ 平坦 ⟹ 无散（常值场不产生源汇）。
+    ⚠ 降级（六轮攻防 R5）：divV 是**电荷层**的量（P3：电荷 = 散度），读作「无源 / 中性」；
+    它**不是**质量层的量（P2/MC1：质量 = 条数 / 锚定）。不得用 divV = 0 表示「无质量」。 -/
+theorem flat_implies_sourceless {c : ℝ} {v : Fin 4 → ℝ} (hv : ∀ i, v i = c) : divV v = 0 := by
   simp only [divV, hv 1, hv 0, hv 3, hv 2]
   ring
 
-/-- AT12 ★★★ 无质量 **不**蕴含平坦：涡旋场无散（无源无汇、不产生扭曲），
-    但它不是常值场（有旋，curlV = 2）。
-    ⟹ 无质量与平坦**无关**；AT9 把二者并置是类型层面的错。 -/
-theorem vortex_massless_not_flat :
+/-- AT12 ★★★ 无源 **不**蕴含平坦：涡旋场无散（无源无汇），但不是常值场（curlV = 2）。
+    ⚠ 降级（R5）：该场 v₁ ≠ v₀ **有梯度**，按 MC1（梯度 ⟹ 锚定 ⟹ 质量）它**有质量**，
+    故它是「无源但非平坦」的见证，**不能**充当「无质量但非平坦」的见证（该见证仍缺，登记为缺口）。 -/
+theorem vortex_sourceless_not_flat :
     divV vortex = 0 ∧ ¬ Flat vortex ∧ curlV vortex ≠ 0 := by
   refine ⟨?_, ?_, ?_⟩
   · norm_num [divV, vortex]
@@ -260,19 +267,42 @@ theorem vortex_massless_not_flat :
     ⟹ **顺序（时间的代数影子）的来源是场的梯度，不是源的无质量性**。 -/
 theorem vortex_keeps_time_order {lam : ℝ} (hlam : lam ≠ 0) :
     OrderVisibleAt (sinkToPoint (0 : Fin 4) lam) (sinkToPoint (1 : Fin 4) lam) vortex 0 := by
-  apply order_visible_of_gradient (p := (0 : Fin 4)) (q := (1 : Fin 4))
+  apply commutator_of_gradient (p := (0 : Fin 4)) (q := (1 : Fin 4))
   · simp [vortex]
   · exact hlam
 
-/-- AT14 ★★★ 严格包含：平坦 ⊊ 无质量。
+/-- AT14 ★★★ 严格包含：平坦 ⊊ 无源（不是「无质量」）。
     ① 一切常值场都无散（平坦 ⟹ 无质量）；
     ② 存在无散但非平坦的场（涡旋）。
-    ⟹ **平坦是无质量的局部特殊情形**，反向不成立。 -/
-theorem flat_strict_subset_massless :
+    ⟹ 平坦是无源的局部特殊情形，反向不成立。（无质量的判据见 massless_iff_zero_anchor。） -/
+theorem flat_strict_subset_sourceless :
     (∀ v : Fin 4 → ℝ, Flat v → divV v = 0) ∧ ∃ v : Fin 4 → ℝ, divV v = 0 ∧ ¬ Flat v := by
-  refine ⟨?_, ⟨vortex, vortex_massless_not_flat.1, vortex_massless_not_flat.2.1⟩⟩
+  refine ⟨?_, ⟨vortex, vortex_sourceless_not_flat.1, vortex_sourceless_not_flat.2.1⟩⟩
   intro v hv
   obtain ⟨c, hc⟩ := hv
-  exact flat_implies_divFree hc
+  exact flat_implies_sourceless hc
+
+-- ---------------------------------------------------------------------------
+-- ⑦ 质量判据（正确层，六轮攻防 R5）：无质量 ⟺ 锚定为零，与场形状无关
+-- ---------------------------------------------------------------------------
+
+/-- 质量平方：m² = N·M₀²（P2：质量 = 条数 N，paper3:206）。 -/
+def massSq (N : ℕ) (M0 : ℝ) : ℝ := (N : ℝ) * M0 ^ 2
+
+/-- ⑦a 条数为零 ⟹ 质量为零（不对周围空间产生锚定）。 -/
+theorem massSq_zero_strands (M0 : ℝ) : massSq 0 M0 = 0 := by
+  simp [massSq]
+
+/-- ⑦b 无质量 ⟺ 条数/锚定为零（M₀ ≠ 0 时）。这是**耦合**属性，与场的形状无关。 -/
+theorem massless_iff_zero_strands {N : ℕ} {M0 : ℝ} (hM : M0 ≠ 0) :
+    massSq N M0 = 0 ↔ N = 0 := by
+  constructor
+  · intro h
+    have hN : (N : ℝ) * M0 ^ 2 = 0 := by simpa [massSq] using h
+    rcases mul_eq_zero.mp hN with h1 | h2
+    · exact_mod_cast h1
+    · exact absurd (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp h2) hM
+  · intro h
+    simp [massSq, h]
 
 end ProjectionPhysics.AetherTime

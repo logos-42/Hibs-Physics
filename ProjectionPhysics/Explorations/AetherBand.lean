@@ -136,36 +136,43 @@ theorem distinct_phase_of_gradient {k d : ℝ} (hk : 0 < k) (hd : 0 < d) :
   exact mul_ne_zero hk.ne' hd.ne'
 
 -- ---------------------------------------------------------------------------
--- ③ 零带宽 ⟹ 零信道（瞬时相关不是传信）
+-- ③ 同一位置的时间序列（波层内部）：**不含位置参数**，故不陈述跨位置同步
+--
+-- ⚠ 更正（六轮攻防 R1，2026-10-30）：leo 的「超广意场范围更大，可以瞬时影响彼此」说的是
+--   **同一时刻、两个位置**；本节的对象是 s : ℤ → α，只有时刻、没有位置。
+--   因此「零带宽 ⟹ 零容量」只是同一位置时间序列的内部陈述，
+--   **不能**当作「瞬时 ⟹ 不可传信」的判决。跨位置的正对象见本节末尾 ⑥（MediumFiber）。
 -- ---------------------------------------------------------------------------
 
-/-- 带零：一个时间序列在所有时刻与 n = 0 时刻相同（频带为零）。 -/
-def BandZero {α : Type*} (s : ℤ → α) : Prop := ∀ n, s n = s 0
+/-- 时间恒定：一个时间序列在所有时刻与 n = 0 时刻相同（同一位置、沿 t 不变）。 -/
+def TimeConst {α : Type*} (s : ℤ → α) : Prop := ∀ n, s n = s 0
 
-/-- AB7 ★★ 零带宽 ⟺ 序列为常数 ⟹ **无可分辨的符号**。
-    （若所有时刻相同，则任意两个时刻无法区分 ⟹ 传不了任何比特。） -/
-theorem bandZero_iff_const {α : Type*} (s : ℤ → α) :
-    BandZero s ↔ ∀ m n, s m = s n := by
+/-- AB7 ★★ 时间恒定 ⟺ 序列为常数（同一位置内部）。
+    ⚠ 本定理**不**涉及跨位置关系，也不构成「传不了比特」的判决（见 ⑥）。 -/
+theorem timeConst_iff_const {α : Type*} (s : ℤ → α) :
+    TimeConst s ↔ ∀ m n, s m = s n := by
   constructor
   · intro h m n
     rw [h m, h n]
   · intro h n
     exact h n 0
 
-/-- AB8 ★★ 可传信 ⟹ 带宽非零：若存在两个时刻可区分，则序列不是常数，
-    即频带不可能为零。⟹ **「更快」若要求传比特，就必须有带宽；
-    带宽为零的瞬时模恰好传不了比特**。 -/
-theorem message_needs_bandwidth {α : Type*} (s : ℤ → α)
-    (h : ∃ m n, s m ≠ s n) : ¬ BandZero s := by
+/-- AB8 ★★ 若两个时刻可区分，则序列不是常数（同一位置内部）。
+    ⚠ 改名：原「可传信 ⟹ 带宽非零」读法撤回（R1）；本式不含发送者/接收者/位置。 -/
+theorem not_timeConst_of_two_instants {α : Type*} (s : ℤ → α)
+    (h : ∃ m n, s m ≠ s n) : ¬ TimeConst s := by
   intro hz
   obtain ⟨m, n, hmn⟩ := h
-  exact hmn ((bandZero_iff_const s).mp hz m n)
+  exact hmn ((timeConst_iff_const s).mp hz m n)
 
-/-- Shannon 型容量（每单位时间，单位模）：C = d · B · log₂(1 + SNR)。 -/
+/-- 外部信道模型（**不在本框架的前提内**）：C = d · B · log₂(1 + SNR)。
+    六轮攻防 R1 判定：Shannon 型容量把「发送者—接收者—符号集—噪声—时间分槽」五件套
+    当先验，本框架一条都没有；因此下面的定理只能读作**该模型内部**的算术。 -/
 noncomputable def capacity (dim B snr : ℝ) : ℝ :=
   dim * B * (Real.log (1 + snr) / Real.log 2)
 
-/-- AB9 ★★ 带宽为零 ⟹ 容量为零：**瞬时通道的信道容量恰为 0**。 -/
+/-- AB9 ★★ 在该外部模型内：B = 0 ⟹ C = 0（把 0 代进一个对 B 线性的式子）。
+    ⚠ **不作**对「瞬时」的判决（R1）。 -/
 theorem capacity_zero_band (dim snr : ℝ) : capacity dim 0 snr = 0 := by
   simp [capacity]
 
@@ -260,5 +267,38 @@ theorem reach_rate_bound {c k L ε : ℝ} (hc : 0 < c) (hL : 0 < L)
     **横跨全空间的相位不能承载任何变化**（与 AB7/AB8 合起来即为「瞬时 ⟹ 不可传信」）。 -/
 theorem global_mode_is_static (c : ℝ) : c * 0 = 0 := by
   ring
+
+
+-- ---------------------------------------------------------------------------
+-- ⑥ 更正（六轮攻防 R1，2026-10-30）：跨位置同步的正确对象
+-- ---------------------------------------------------------------------------
+
+/-- 介质纤维：共享同一标定 L 的两点 —— 「瞬时影响彼此」的记号层形式（跨位置、同一时刻）。 -/
+def MediumFiber {X : Type*} (L : X → ℝ) : X → X → Prop := fun x y => L x = L y
+
+/-- ⑥a 同步是等价关系（同一纤维 / 同一同时面），不是序、不是信道。 -/
+theorem mediumFiber_equivalence {X : Type*} (L : X → ℝ) : Equivalence (MediumFiber L) :=
+  ⟨fun _ => rfl, fun h => h.symm, fun h₁ h₂ => h₁.trans h₂⟩
+
+/-- ⑥b 空间处处同相（同一时刻、任意两位置）。 -/
+def CoPhaseAll {X : Type*} (θ : X → ℝ) : Prop := ∀ x y, θ x = θ y
+
+/-- ⑥c 空间处处同相 ⟺ 场在该时刻为常值（取一个参考点）。 -/
+theorem coPhaseAll_iff_const {X : Type*} (θ : X → ℝ) (x0 : X) :
+    CoPhaseAll θ ↔ ∃ c, ∀ x, θ x = c := by
+  constructor
+  · intro h
+    exact ⟨θ x0, fun x => h x x0⟩
+  · rintro ⟨c, hc⟩ x y
+    rw [hc x, hc y]
+
+/-- ⑥d ★★★ 空间同相 **不**蕴含时间恒定：存在一个场，任意时刻在空间上处处同相，
+    但沿时间并不恒定。⟹ AB7/AB8 的模型（s : ℤ → α）对「瞬时影响彼此」**无判定力**。 -/
+theorem spatial_const_not_time_const :
+    ∃ θ : ℝ → ℤ → ℝ, (∀ t x y, θ x t = θ y t) ∧ ¬ (∀ x n, θ x n = θ x 0) := by
+  refine ⟨fun _ n => (n : ℝ), fun _ _ _ => rfl, ?_⟩
+  intro h
+  have h1 : ((1 : ℤ) : ℝ) = ((0 : ℤ) : ℝ) := h 0 1
+  norm_num at h1
 
 end ProjectionPhysics.AetherBand

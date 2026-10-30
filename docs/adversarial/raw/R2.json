@@ -1,0 +1,133 @@
+{
+  "round": "R2",
+  "claim_under_attack": "「顺序（时间的代数影子）可观测 ⟺ 非交换 ⟺ 有梯度」（AT5/AT10），并把它升格为读法「线性时间不是先验坐标，而是非对易性的记录」，由此得出「无质量层没有线性时间观 / 快慢在那里没有定义」（AT8/AT9）。",
+  "hidden_premises": [
+    "P1 时间已被预设成一个先验存在、处处有定义的**全函数** τ : ι → ι → ℝ（AetherTime.lean:179 binders）。于是「无质量层没有时间」只能以「τ 恒等于 0」的形式出现——「零点」是 codomain 里的一个值，而「对象不存在」在 codomain 里没有值可写。零读数 ≠ 无对象，这一步从未被检查。",
+    "P2 「全层间隔为零」在数学上等价于「ι 里没有两个可区分的事件」（τ 若为间隔，τ≡0 ⟹ 一切事件是同一个点）。所以 AT8 的假设是**比较域塌成一个点**，与「无质量」无任何关系；AT8 可以逐字用在任何恒零二元函数上（换掉名字 τ 它仍成立），「时间」二字在定理里不起作用。",
+    "P3 词序是**输入**而非输出：T(S v) 与 S(T v) 的先后由我写下的嵌套固定（AetherTime.lean:119-120、:198-199；operator 定义 :69、sinkToPoint 定义 YangMillsSeed.lean:89）。AT2/AT5 只能报告「我写的两种词序给出不同结果」，这是对**语法**在语义下可见性的陈述，不是「时间被非交换性生出来」。",
+    "P4 结论里的 ℝ 是**场值单位**：AT5 的结论是 T(S v) p ≠ S(T v) p（:145-154），两侧取值都在 (ι→ℝ)，交换差 = λ²(v_q−v_p) 无量纲、无时间量纲。全文件不存在任何「场值 → 秒」的映射，因此「时间刻度强度 ∝ 起伏」（wiki §4 N6）在量纲上不成立。",
+    "P5 「可分辨」被默认等于「有方向」：hgrad 对 (p,q) 与 (q,p) 同时可满足（:145-147），λ² 对称，故 AT5 给出的是「两种词序不同」，**不给朝向**；「谁先」必须由外部再指定。有差 ≠ 有先后。",
+    "P6 「接 YM 方程接口」（:1）被预设为已达成：文件只调用 sinkToPoint 与 sinkToPoint_commutator_formula（YangMillsSeed.lean:89/138），全文无规范场 A、无 F = dA + A∧A、无 Yang–Mills 方程。接上的是「**仿射收缩算子**不交换」，不是 YM。",
+    "P7 顺序盲的来源被误记为「场的平坦性」：sinkToPoint 是仿射且保常值（YangMillsSeed.lean:90；AetherTime.lean:110-128 的证明只用 hv : ∀i, v i = c）。AT3/AT4 之所以成立，是因为**我的算子是保常值的**，不是因为「那里没有时间」。把「算子的代数性质」读成「时间的缺席」是本轮最深的偷换。",
+    "P8 「平坦」被当成无质量层的形态：Flat = 场取常值（:72）。而 leo 前提 1 的宇宙是「振动频率和维度的超广阔集体」——常值场是那个集体只剩一个成员（k=0、单一频率、无相位差）的退化情形，不是「无质量层」。用退化情形去论证无质量层没有时间，等于用「一维」论证「高维不存在」。",
+    "P9 AT9 的两个合取项互不相连：τ 在全文只出现于 :179/:180/:182/:197，与场算子部分（:69-235）之间**零引理**；flat_massless_no_time（:196）只是两条无关命题的 ∧。把 ∧ 叫「合成」（:186 标题）制造了「两半互相支持」的错觉。"
+  ],
+  "term_substitution": "leo 说「不存在**当前的线性时间观**」（否掉的是**观/仪器**：一个把多维频率集体压成一维有序刻度的读法）；我的 AT8/AT9 写成「¬∃ x y, τ x y < τ y x」（否掉的是**序关系的存在**）。一次换掉两个词：『观失败』→『对象缺席』、『线性』→『存在』。第二处：「瞬时是因为时间在人类世界上线性的」= 用一把线性钟去看，必然看见同时（底层**有**结构：共相位/同步，他那层比人类层**更富**）；我的读法（wiki §1、AT8）说那里「快慢没有定义」（底层**变空**）。单调性反转：他的无质量层是瞬时互联的富结构，我的无质量层是零。第三处：「时间的代数影子」是**派生物**（人类层的投影），「非对易性的记录」是**生成源**（本体论）；我把投影的像提升成了本体的因——方向反了。第四处（量级最大）：他要的时间语言是**振动坐标系（频率/相位）**（前提 8），而 AT1–AT10 全文没有 k、没有频率、没有相位、没有周期；我用来替代时间的东西与他要的刻度**无共同参数**，所以「时间 = 非交换」这条读法里根本不包含他指名的那个量。",
+  "correct_reading": "在前提 1–9 内应当读作：时间的主对象是（带指标 k，相位 φ），刻度是闭合计数 n = kL/2π（仓内已证：TimeCount.timeCount :51、TC1–TC6 :53-103；VibrationClosure VBC4 clos_translate :120、VBC5 clos_periodic_of_root :141）；无质量/全局层不是「读数 = 0」而是**时间坐标这个对象没有被生成**——那里 φ 属同一相位类（瞬时 = 相位等价，而非间隔为零），k = 0 使闭合根本不发生（TC5 timeCount_zero_band :88），故不存在可比的刻度；线性时间 = 沿**某一条**带把相位除成一维刻度（一个 section），它是人类层选定的读法而不是宇宙的坐标（TC4 :80 已证不存在带无关的绝对计数）；非交换性记录的是**全局线性钟不存在**，不是时间的诞生。可形式化的对象：phase : ι → ℝ/2πℤ、k : ι → ℝ、n = timeCount k L、sameInstant φ x y := φ x ≡ φ y [PMOD 2π]（等价关系，非序），以及新定理 no_band_free_reading : ¬ ∃ F : ℝ → ℝ, ∀ k L, F L = timeCount k L（「线性时间只是观」的机器可检形式，由 TC4 直接给出）。",
+  "verdict": "降级",
+  "evidence": [
+    "ProjectionPhysics/Explorations/AetherTime.lean:179 —— AT8 的假设 h : ∀ x y, τ x y = 0 直接假定时间是一个处处有定义的全函数；定理对该假设下任何恒零二元函数成立，与「时间」一词无关（纯序论：0 < 0 为假）。",
+    "ProjectionPhysics/Explorations/AetherTime.lean:196-201 —— AT9 = 两条无关命题的 ∧：左支用 sinkToPoint，右支用 τ；τ 全文仅出现在 :179/:180/:182/:197，与场算子之间零引理。:186 的「合成」只是把 ∧ 换了名字。",
+    "ProjectionPhysics/Explorations/AetherTime.lean:145-154 —— AT5 结论是 T(S v) p ≠ S(T v) p（场值不等式），交换差 = λ²(v_q−v_p)（YangMillsSeed.lean:138-142 原式），无时间量纲；且对 (p,q)/(q,p) 同时成立 ⟹ 可分辨而无朝向。",
+    "ProjectionPhysics/Explorations/AetherTime.lean:22-25 —— 「线性时间…不是先验的坐标，而是非交换性的记录」：把派生物升格为生成源，而文件自己的诚实边界 :34-37 承认没证「时间 = 非对易」。读法与边界自相矛盾但读法占了标题位置。",
+    "ProjectionPhysics/Explorations/AetherTime.lean:110-128 —— AT3/AT4 的证明只用 hv : ∀i, v i = c，即只用了「sinkToPoint 保常值」（定义 YangMillsSeed.lean:90 的仿射性）。顺序盲来自算子类，不来自场的物理平坦性。",
+    "ProjectionPhysics/Explorations/YangMillsSeed.lean:89-90 —— sinkToPoint p lam v i = (1−lam)*v i + lam*v p：仿射、保常值。AT4/AT5 的全部非平凡内容都坐在这条仿射性上。",
+    "ProjectionPhysics/Explorations/TimeCount.lean:51/80/88 —— 已有更贴近 leo 的对象：timeCount k L = kL/2π（TC1）、TC4 计数依赖带（无绝对计数）、TC5 k=0 不产生计数。AetherTime 完全没有引用它们（import 只有 YangMillsSeed 与 SpaceMetric，:58-59）。",
+    "ProjectionPhysics/Explorations/VibrationClosure.lean:120/141 —— VBC4 闭合 ⟹ 时间单位（n 的每步 = 一个时间单位）、VBC5 周期 = 时间存在的条件。这才是「时间单位从振动来」的既有实现；AT 系列把它替换成了序关系。",
+    "scripts/verify_aether_time.py:137 —— massless_tau = np.zeros((5,5))：脚本**自己**把「无质量层间隔」清零，再在 :149-151 验证「全 0 ⟹ 无严格序」。这是自证（验证的是它刚写入的零）。",
+    "scripts/verify_aether_time.py:153-169 —— N6「交换差 = λ²√(Q_A·N/(N−1))」只是把 YM3（λ²×最大梯度）与样本标准差代数式重排；同时 :191-206 的 N8 自证该桥在斜坡/涡旋上偏 15.5% ⟹ 「时间可观测度 ∝ √起伏能量」在一般构型不成立。",
+    "docs/wiki/theory-aether-time.md:54/58/59 —— 表格仍写「AT4 无质量层没有时间序」「AT8 更快的前提消失」「AT9 主结论」，与 §11(:148-153) 的更正（无质量与平坦无关）直接冲突：标题层没改，更正只在下半页。",
+    "docs/wiki/theory-aether-time.md:32/171-177 —— 「在无质量层，快慢这个比较没有定义」与 §11「无质量不破坏时间序（AT13）」并存；同一页对同一层给出相反判决。"
+  ],
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 1,
+      "action": "改写",
+      "text": "标题改为「AetherTime：汇算子交换差 = 场梯度（YM3 的换名）；**不**声称接上 YM 方程、**不**声称时间 = 非交换」。理由：全文无 A、无 F = dA + A∧A（见 evidence 第 6 条）。「接 YM 接口」这句是所有后续误读的源头，必须删掉，不能只加注。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 22,
+      "action": "删除",
+      "text": "删 :22-25「于是『线性时间』在本框架里不是先验的坐标，而是非交换性的记录」。替换为：「非交换性记录的是**全局线性钟不存在**：读数必须指定带（TimeCount TC4），没有带无关的绝对计数。时间的主对象是（k, φ, n=kL/2π），本文件不构造它。」三行内不出现「时间 = 」这种定义式。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 145,
+      "action": "改写",
+      "text": "【降级】AT5 更名为 commutator_of_gradient，docstring 改为：「两条仿射收缩算子在同一场上给出不同结果（= YM3 换名，零新增内容）。⚠ 本定理给出**可分辨**，不给出**朝向**（对 (p,q) 与 (q,p) 同时成立），也不给出**量纲**（两侧均为场值）。不得读作『时间序在该处有内容』。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 179,
+      "action": "改写",
+      "text": "【降级】AT8 更名为 degenerate_no_strict_order，docstring 改为：「若一个二元函数处处为 0，则其上没有严格序。这是序论平凡事实，对任何被命名为 τ 的对象成立。⚠ 假设 τ≡0 意味着比较域塌成一个点（不存在两个可区分事件），与『无质量』无关；不得读作『该层没有时间』。此定理不承载任何物理读法。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 196,
+      "action": "改写",
+      "text": "【撤回「合成」】AT9 拆成两条独立陈述（flat_order_blind 与 degenerate_no_strict_order），删掉 ∧ 形式与「合成」标题（:186），并在文件头注明「左支依赖 sinkToPoint 的仿射保常值性，右支是关于任意二元函数的序论平凡事实；两者之间无桥引理，不得合并引用」。或整条删除，只保留 AT4 与 AT8 各自的使用。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 34,
+      "action": "改写",
+      "text": "诚实边界第 1 条（:34-37）改写为：「本模块**不是**时间理论。它证明的是汇算子（仿射、保常值）的交换差 = 场梯度。把这条等式读成『时间』需要一张从场值到秒的映射，本仓库不存在该映射；时间读数的正确接口见 TimeCount（n = kL/2π）与 VibrationClosure（闭合 = 时间单位）。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 277,
+      "action": "新增",
+      "text": "在 end 前新增三个对象，把正确读法落成可机检形式（全部引用已有 TimeCount，避免新公设）：① def sameInstant (φ : ι → ℝ) (m : ℝ) (x y : ι) : Prop := ∃ n : ℤ, φ x - φ y = n * m —— 证 iseqv（瞬时是等价关系，不是序）；② theorem no_band_free_reading : ¬ ∃ F : ℝ → ℝ, ∀ k L, F L = timeCount k L（由 TC4 直取两带见证）—— 「线性时间只是选定的带」的机器可检形式；③ theorem global_mode_no_tick (L : ℝ) : timeCount 0 L = 0（引 TC5）并加注：「这不是『时间 = 0』，是**该带不产生刻度**——读数对象不存在，不是读数为零」。判据：② 若可证，则「线性时间 = 人类层的观」在仓内成立，AT5 的时间读法可以安全退场。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/AetherTime.lean",
+      "line": 51,
+      "action": "改写",
+      "text": "死法 ③（:51-52）改写为可判死的版本：「若在**任意**两条带 k₁≠k₂ 上存在带无关读数 F 使 timeCount k₁ L = timeCount k₂ L 对所有 L 成立，则『线性时间只是观』死（TC4 已排除此情形）。若在 k=0 全局模上找到不靠闭合的可区分相继状态（如全局振幅零穿越计数），则『全局模无刻度』死。」"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 2,
+      "action": "改写",
+      "text": "标题去掉「无质量层没有线性时间观」，改为「汇算子交换差 = 场梯度（YM3 换名）；时间读数应由带/相位给出（接口指向 TimeCount/VBC）」。理由：标题层的主张比正文更正后（§11）的主张强，全页最重要的误读就发生在标题。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 32,
+      "action": "改写",
+      "text": "§1「一句话」改为：「『先/后』是**在一块线性钟下**才有的读法；交换差记录的是这块全局钟在带之间不一致（TC4），而不是时间的诞生。无质量层不是没有时间，而是没有**唯一的**时间读数——那里相位全局同一类（瞬时 = 相位等价）。」删掉「快慢这个比较没有定义」。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 54,
+      "action": "改写",
+      "text": "表格 AT4 行的「地位」列「无质量层没有时间序」改为「常值场上的排序无内容（**与无质量无关**，见 §11）」；AT8 行地位改为「序论平凡事实，不承载物理读法」；AT9 行「主结论」改为「两条无关陈述的 ∧（已拆），**不作主结论**」。"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 171,
+      "action": "改写",
+      "text": "§11「更正后的干净陈述」代码块（:170-177）整块替换为：\n顺序（时间影子）可观测 ⟺ 汇算子不交换 ⟺ 场有梯度     ← 只与场有关，与源的无质量性无关（保留，但只是 YM3 换名）\n上述「顺序」可分辨但**无朝向、无量纲** ⟹ 不构成时间刻度\n时间刻度 = 闭合计数 n = kL/2π（TC1），读数依赖带（TC4）⟹ 无绝对时间\nk = 0 全局模不产生计数（TC5）⟹ 该层无刻度生成器，而非「读数为 0」\n线性时间 = 沿一条带把相位除成 1-D 刻度 ⟹ 人类层选定的读法，非宇宙坐标\n非交换性记录的是「全局线性钟不存在」，不是「时间存在」"
+    },
+    {
+      "file": "docs/wiki/theory-aether-time.md",
+      "line": 179,
+      "action": "改写",
+      "text": "「仍然站得住的原结论」改为：「『瞬时』不是『比光速更快』，理由是**那一层没有唯一的线性钟可比**（相位同一类 + k=0 不产生闭合），不是『间隔为零使快慢无定义』——后者把『观失败』换成了『对象缺席』。」"
+    },
+    {
+      "file": "scripts/verify_aether_time.py",
+      "line": 137,
+      "action": "删除",
+      "text": "删 massless_tau = np.zeros((5,5)) 与 :149-151 的 N5。它先把数组清零再验「全 0 ⟹ 无严格序」，只验证了 np.zeros 是零。替换为可判死的 N5'：对真实相位场 φ(x)=k·x 按带 k 构造读数表 n_ij = timeCount k (x_j − x_i)，验证 (a) 带间读数不同（TC4 对位）、(b) k=0 时 n≡0（TC5 对位）—— 判据是「读数不存在」而非「读数为零」要求把 k=0 的情形标为 undefined 而不是 0。"
+    },
+    {
+      "file": "scripts/verify_aether_time.py",
+      "line": 14,
+      "action": "改写",
+      "text": "抬头 N1–N6 的说明里 AT9 那句「『瞬时』= 比较无定义，不是更快」改为「瞬时 = 相位同一类（比较需要先选带，无带则无比较对象）」。"
+    },
+    {
+      "file": "scripts/verify_aether_time.py",
+      "line": 168,
+      "action": "改写",
+      "text": "【降级】N6 的断言名去掉「时间序可观测度」，改为「交换差 = λ²·最大梯度（YM3 重述；经样本标准差代数式重排）」，并在同一 check 的 message 里固定写出 N8 的 15.5% 反例，防止下一步把这个代数式当物理律引用。"
+    }
+  ],
+  "death_condition": "新读法的可判死形态（三条，任一成立即撤回）：① 在 k = 0 的全局模上找到不依赖闭合的可分辨相继状态（如全局振幅的零穿越计数不同）⟹「k=0 ⟹ 无时间单位」死，相位计数不是唯一刻度；② 若存在带无关读数 F 使 ∀k, timeCount k L = F L（所有跨度上一致）⟹「线性时间只是观」死——TC4（TimeCount.lean:80）已排除此情形，故这条读法比 AT5 更难被杀，这是它相对旧读法的优势，也是它必须被写进 wiki 的理由；③ 若能在不指定任何带的情况下从场上直接构造出跨层可比的「更快」（τ 独立于 k 而有内容）⟹「τ 必须先由带生成」死，AT8 的用法复活。反向（旧读法的死法，保留登记并加严）：AT4 之所以成立只因 sinkToPoint 仿射保常值（YangMillsSeed.lean:90）——一旦换成任何非常值保持的算子（如含归一化、乘性耦合或曲率项的收缩），平坦场上立刻可有不交换，AT4 的物理读法当即死；因此 AT4 的 docstring 必须写明「本定理关于一类仿射算子，不关于平坦空间」。",
+  "rebuts": "驳 R1（「瞬时 ⟹ 不可传信」/ AB9「带宽 0 ⟹ 容量 0」，AetherBand.lean:169、:165；theory-aether-band.md §1/§5）：R1 建议**保留** AB9 作为对「另一层更快」的约束，这条必须否决，两点。(a) 形式上 AB9 是 capacity dim 0 snr = 0，而 capacity 被定义为对 B 线性（:165 dim * B * log₂(1+snr)）—— 它是「把 0 代进一个自己定义成线性的式子」，与我在 R2 攻击 AT8 的错误**同构**：都是「给定函数的读数为 0」被当成「对象不存在」。R1 若保留 AB9 而又接受我对 AT8 的判决，则同一把刀会割到自己（AT8 与 AB9 必须同进退）。(b) 内容上它把 Shannon 容量当判据，违反合同 §3 对「Shannon 信道容量」的禁用条款；而且它约束的对象错了——「另一层更快」真正缺的不是每单位时间的比特数，而是**该层有没有可分辨的闭合计数**（TimeCount TC1/TC3）。建议把 AB9 降级为「容量公式的代入恒等式」，并把 AB 轮对「更快」的约束换成相位可分辨性（同一相位类 ⟹ 无符号；相位差可分辨 ⟹ 可载符号），这样 R1 与 R2 才共用同一个「对象不存在 vs 读数为零」的判据，而不是各用一把刀。",
+  "confidence": "高"
+}

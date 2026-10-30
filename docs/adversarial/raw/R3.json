@@ -1,0 +1,94 @@
+{
+  "round": "R3",
+  "claim_under_attack": "「1+1 维里三条带必线性相关 ⟹ 多带不是高维 ⟹ 振动坐标的秩 ≤ 2」「维度 = min(带数, 空间维数+1)」（BandDimension.lean:50 exists_coefficients / :66 third_band_redundant / 头注释:6-12；theory-band-structure.md:88-90 与结论句:101）",
+  "hidden_premises": [
+    "P1（共享单帧，未陈述）：所有带共用同一对坐标 (x,t)。证据：phaseOfG 的签名是 `(m : ModeG) (x t : ℝ)`（DispersionGeneral.lean:58），(x,t) 是**所有带共用的实参**，不是每条带自己的。ND2 里那个「∀ x t」（BandDimension.lean:67）不是量词技巧，它就是这条前提本身——一旦某条带自带时钟/位置，量词覆盖不到它，关系式立刻不成立。",
+    "P2（带 = 一对实数）：ModeG 只有两个 ℝ 字段（DispersionGeneral.lean:51-55，注释还自陈 k 与 ω「独立」）。于是「N 条带」在本编码里恒等于「ℝ² 里的 N 个点」，N 再大也装不进第三个方向——结论在**编码层**已经预先为真。",
+    "P3（维数 = 像的秩，不是空间的维数）：ND 口里的「振动坐标的维数」实际是相位映射 (x,t) ↦ (θ₁,…,θ_N) 的**像**的维数。而 rank-nullity 说：ℝ²→ℝ³ 秩 ≤ 2 的同一句话也给出 dim ker ≥ 1。也就是说，真正的结论是「有一维冗余方向（相位锁定/约束面）」，不是「三维变两维」。ND 取走了秩的一半，扔掉了核。",
+    "P4（上界与带数无关）：rank ≤ min(带数, d+1) 是 rank-nullity 的算术，其中 d 只来自**源空间**。这条上界对带数是**不变量**——我复算：同一 2 槽编码下 N=3/10/100/1000 条带 rank 恒为 2。用一个对被测变量完全不响应的量去回答「多带是否高维」，逻辑上不可能有判别力。",
+    "P5（门验的是夹具形状）：verify_band_structure.py:205-207 手填 m1/m2/m3，:226 组 M = np.array(3×2)，matrix_rank ≤ min(3,2)=2，且 ≥2 由 det(m1,m2)=2.0≠0 保证（我复算 = 1.9999999999999998）。所以 N14 的 `rank == 2` 只要夹具不改就永远通过；N13 的 300 组随机 (x,t) 只是把代数恒等式在浮点里重放（残差 7.1e−15 是舍入，不是验证）。"
+  ],
+  "term_substitution": "他把 **维度** 说成「独立振动轴的个数」（原话：「宇宙的本身是振动频率和维度的超广阔的集体」——频率与维度是并列的两个自由度族，维度是集体自己的一个参数），我形式化成 **共享 (x,t) 之后相位映射的秩**。差别在方向：他的维度是**配置空间 𝕋ⁿ 的 n（输入，由集体任选）**；我的 rank 是**投影到 1+1 帧后像的维数（输出的秩）**。我把输入换成了输出的上界，再用这个上界去否定输入的可变性。第二处偷换：「多带不是高维」把「ℝ³ 的像只有 2 维」读成「ℝ³ 不是 3 维」——这是把**映射的秩**当成**空间的维数**，同一句话在 rank-nullity 里同时是「像 2 维」和「核 1 维」。第三处：「带」被降格成一对实数，于是「加一条带」= 「在 ℝ² 里再加一个点」，从第一步起就不可能增维；ND 证的不是关于带的命题，是关于 ModeG 这个两字段结构体的命题。",
+  "correct_reading": "一句话：**维度 = 独立振动轴的个数 n = 配置空间 𝕋ⁿ 的维数；带是该空间上的一个频率向量（ω⃗ ∈ ℝⁿ，或 (k⃗,ω) ∈ ℝ^{n+1} 的一个模），n 由集体给出、不被共享的 (x,t) 封顶；ND 的 rank ≤ 2 只是「把所有带强行投影到同一 1+1 帧」之后像的秩，它是因子化定理（投影降秩），不是维度上界。** 可形式化对象：`structure ModeN (n : ℕ) where (k : Fin n → ℝ) (ω : ℝ)` + `phaseN m (x : Fin n → ℝ) t := ∑ i, m.k i * x i - m.ω * t`；在其上必须补两条：`rank_le`（N 条带的 (k⃗,ω) 矩阵秩 ≤ n+1，即 ND 的因子化引理，**与带数无关**）与 `rank_attained`（存在 n+1 条满秩带；模型复算：槽数 n+1 = 2,3,4,6 时秩 = 2,3,4,6 均可满）——后者才是「维度能有多高」的回答，现在整份材料缺的正是它。同时把 ND 扔掉的那一维核升级为正命题：`phase_lock`：N > n+1 条带共享同一帧 ⟹ ∃ 非平凡 (c_i)，∑ c_i θ_i ≡ 0（可观测的相位锁定/约束面）。这样 ND 从「否定他的维度」变成「在给定帧下算约束数」——这才是 ND 真有内容的那一半。",
+  "verdict": "降级",
+  "evidence": [
+    "ProjectionPhysics/Explorations/BandDimension.lean:6-12 — 头注释把「秩 ≤ 2」直接写成结论「多带不是高维」「要得到第 3 个独立振动坐标，必须升空间维数」。定理（:50/:66）与这句结论之间没有任何 Lean 步骤。",
+    "ProjectionPhysics/Explorations/BandDimension.lean:26-27 — 文件自己已承认：「『维度 = min(带数, d+1)』是本模块的**读法**，Lean 里证的是 1+1 维的秩封顶那一半」。所以缺口是**被写在文件里的**，不是外来指控。",
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:51-55 — `structure ModeG where (k : ℝ) (ω : ℝ)`，两字段；:51 注释「k 与 ω 独立」。N 条带 = ℝ² 的 N 点。",
+    "ProjectionPhysics/Explorations/DispersionGeneral.lean:58 — `phaseOfG (m) (x t : ℝ) := m.k * x - m.ω * t`：(x,t) 是共享实参，P1 在此落地。",
+    "ProjectionPhysics/Explorations/BandDimension.lean:50-62 — ND1 是 Cramer 展开，前提只有 det2 m₁ m₂ ≠ 0；其全部内容 = dim ℝ² = 2。",
+    "ProjectionPhysics/Explorations/BandDimension.lean:66-74 — ND2 唯一的额外假设藏在 `∀ x t` 里（共享帧），它被当成结论的一部分而非前提。",
+    "ProjectionPhysics/Explorations/BandDimension.lean:87-95 — ND4 用 timeCount k L = kL/2π（TimeCount.lean:50）对 k 线性，故 ND4 = ND1 的 k 分量乘常数 L/2π；「计数也冗余」不是独立结论，是同一恒等式的重排。",
+    "ProjectionPhysics/Explorations/BandDimension.lean:97-100 — ND5 的结论体是同一个命题连写三次（:99 `phaseOfG ⟨0,0⟩ x t = 0 ∧ phaseOfG ⟨0,0⟩ x t = 0 ∧ phaseOfG ⟨0,0⟩ x t = 0`），三条带其实是一条；这条也属「夹具形状当结论」。",
+    "scripts/verify_band_structure.py:205-207 + 226-230 — 夹具手填 + `M = np.array(3×2)` + `rank == 2`：rank 上界由数组形状给出，下界由 det(m₁,m₂) = 2.0 给出，检查对「带数」无敏感性。",
+    "自测（scratch，未改仓，numpy 复算）：同一 2 槽编码下 N = 3/10/100/1000 条带 rank 恒 = 2；把槽数升到 n+1 后 n = 1/2/3/5 分别 rank = 2/3/4/6（满秩可达）。⟹ 决定上界的是**帧的维数**，带数完全不影响——「多带不是高维」是关于帧的话，不是关于带的话。",
+    "docs/wiki/theory-band-structure.md:88-90 — 同一条推理的 wiki 版：「任意三条带都线性相关 ⟹ … ⟹ 振动坐标的秩 ≤ 2 = 时空维数」。:99 表格「秩封顶（数值）rank = 2」。:101 结论句「维度 = 独立相位的个数 = min(带数, 空间维数+1)」。",
+    "docs/wiki/theory-band-structure.md:130 — 诚实边界 3 已写「『维度 = min(带数, d+1)』只有 1+1 维被覆盖；高维是读法」——与 :101 的断言式结论句自相矛盾，:101 应服从 :130。",
+    "ProjectionPhysics/Explorations/VibrationFrame.lean:10 / :34 — VF1「单模的振动坐标只有一维信息」；:34「『振动坐标』是**描述坐标**（相空间式的），不是物理时空坐标」。⟹ 3 条带 = 3 个相位标签，目标空间 ℝ³/𝕋³ 本就 3 维；「秩 ≤ 2」约束的是像，不是那个空间。"
+  ],
+  "fix": [
+    {
+      "file": "ProjectionPhysics/Explorations/BandDimension.lean",
+      "line": 6,
+      "action": "改写",
+      "text": "头注释换成：「本模块证的是**共享帧因子化引理**：若所有带都用同一个 phaseOfG（即共享同一对 (x,t)），则 N 条带的相位落在 (x,t) 的像里，秩 ≤ 2，且 N > 2 时出现 1 维非平凡关系（相位锁定）。**这不构成维度上界**：维度 = 独立振动轴的个数 n，n 是输入，rank ≤ min(带数, n+1) 是投影降秩。删掉原 :11-12 的『多带不是高维』与『必须升空间维数』两句，代之以：『加带在共享帧下买到的是一条约束，不是一维空间；要独立轴，必须让带自带轴（ModeN），那是换模型不是加带。』"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/BandDimension.lean",
+      "line": 26,
+      "action": "改写",
+      "text": "：「『维度 = min(带数, d+1)』**不是读法，而是一个坏定义**：它是 rank-nullity 的算术恒等式，对带数完全不敏感（N=3..1000 秩恒 2）。因此它不回答『维度能有多高』。回答它的必须是可达性 `rank_attained`（ModeN n 上存在 n+1 条满秩带），本模块尚未做。」"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/BandDimension.lean",
+      "line": 66,
+      "action": "新增",
+      "text": "在 ND2 之后新增两条（不删 ND2，ND2 作为『共享帧』子情形保留）：① `theorem phase_lock {n N : ℕ} (hN : N > n + 1) (m : Fin N → ModeN n) (h : Function.Injective m) : ∃ c : Fin N → ℝ, c ≠ 0 ∧ ∀ x t, ∑ i, c i * phaseN (m i) x t = 0`（约束数 = N − (n+1)）；② `theorem rank_attained (n : ℕ) : ∃ m : Fin (n+1) → ModeN n, LinearIndependent ℝ (fun i => (m i).vec)`（维度可满）。两条必须成对出现，单有 ① 就是现在的 ND。"
+    },
+    {
+      "file": "ProjectionPhysics/Explorations/BandDimension.lean",
+      "line": 97,
+      "action": "改写",
+      "text": "ND5 的结论体目前是同一命题连写三遍（:99）。改成三条不同的带：`phaseOfG ⟨0,0⟩ x t = 0 ∧ phaseOfG ⟨0,1⟩ x t = -t ∧ phaseOfG ⟨1,0⟩ x t = x`——前者证『无坐标』，后两者证『有 k 或 ω 就立刻有坐标』，否则 ND5 也只是夹具重复。"
+    },
+    {
+      "file": "docs/wiki/theory-band-structure.md",
+      "line": 101,
+      "action": "改写",
+      "text": "：「**维度 = 独立振动轴的个数 n（配置空间 𝕋ⁿ 的维数），由集体给出，不被共享的 (x,t) 封顶。** 本页可算的只有『共享 1+1 帧下相位映射的秩 ≤ 2』——那是投影降秩（因子化引理），不是维度封顶；它的正内容是 N > 2 时的相位锁定（1 维核）。『min(带数, d+1)』应读作『分辨率』而非『维度』。」"
+    },
+    {
+      "file": "docs/wiki/theory-band-structure.md",
+      "line": 88,
+      "action": "改写",
+      "text": "代码块三行改为：`共享同一对 (x,t) ⟹ 相位落在一个 2 维像里 ⟹ 秩 ≤ 2（投影降秩）` / `⟹ N > 2 时存在非平凡关系 Σcᵢθᵢ ≡ 0（可观测的相位锁定）` / `⟹ 加带不增维，但**也不减维**：被压的是像，不是振动坐标空间`。删掉「要第 3 个独立振动坐标，必须升**空间维数**」——升级的是**帧**，而带若各自带轴，帧本来就不是 1+1。"
+    },
+    {
+      "file": "docs/wiki/theory-band-structure.md",
+      "line": 99,
+      "action": "改写",
+      "text": "表格行「秩封顶（数值）rank = 2」→「`rank == 2` **由 3×2 夹具形状保证，非可判死量**（matrix_rank ≤ min(3,2)，下界由 det(m₁,m₂)=2≠0 给出）；可判死的量是 `rank 与带数无关`，本页尚未测」。"
+    },
+    {
+      "file": "scripts/verify_band_structure.py",
+      "line": 226,
+      "action": "改写",
+      "text": "把结构为 M 的 3×2 一次性秩检查换成对**带数**的扫描，使门对该变量真的有响应：`Ns = [3,10,50,200]; ranks = [int(np.linalg.matrix_rank(rng.normal(size=(N,2)))) for N in Ns]`，断言 `set(ranks) == {2}` 且报告 `rank 与 N 无关（形状上界）`；重命名检查为「N14′ 秩不随带数变化（投影降秩）」并删掉 `= min(3 带, 2 维时空)` 的解释（那是把夹具形状读成物理）。"
+    },
+    {
+      "file": "scripts/verify_band_structure.py",
+      "line": 333,
+      "action": "改写",
+      "text": "判据③「1+1 维里找到三条线性无关的相位 ⟹ 秩封顶死」**永不触发**（ℝ² 里三点必相关是算术），即当前命题不可证伪。换成两条可判死的：①「建 ModeN 后在 n+1 处 `rank_attained` 失败 ⟹ 『维度=n』死」；②「N > n+1 的相位锁定关系在数值上不成立（残差 ≫ 舍入）⟹ 因子化引理死」。原句保留为「算术边界」而非死法。"
+    },
+    {
+      "file": "docs/wiki/theory-band-structure.md",
+      "line": 142,
+      "action": "改写",
+      "text": "下一步 1 从「把 rank 上界从 2 推到 d+1」改为：「建 ModeN n（k : Fin n → ℝ），证 `rank_le`（N 条带秩 ≤ n+1，与 N 无关）+ `rank_attained`（n+1 条满秩可达）+ `phase_lock`（N > n+1 ⟹ N−(n+1) 条约束）。这三条一起才把『带的个数 ⟷ 维数』变成可判死的命题；只做 `rank_le` 等于什么都没说。」"
+    }
+  ],
+  "death_condition": "① 若在 ModeN n 上证明秩恒 ≤ 2 与 n 无关（给多少条独立轴都压回 2）⟹ 我的「n 是输入」死。② 若给出一个情形，其中「带各自带轴」与「共享 1+1 帧」在**一切可测**上不可区分（相位锁定处处等价）⟹ 额外轴成为不可观测的形上添加，我的读法降为等价描述（而此时 ND 也不算错，只算换基）。③ 若 leo 补一句操作定义「维度只按共享帧内的可测秩算」，他的词就回到我的形式化，原 ND 保留——这一句我现在没有，所以不能替他定。④ 原 ND 的死法至今无人能触发（ℝ² 里三点必相关是算术，门里 rank=2 由数组形状保证），**不可证伪本身就是它不忠于前提的证据**：一条对「带数」毫无响应的量，不可能是关于「带的维度」的结论。",
+  "rebuts": "驳 R5（合同 :41：「无质量形式化成 divV=0，用涡旋 v=(0,1,1,0) 作见证」；AetherTime.lean:230 `def divV (v : Fin 4 → ℝ) := (v 1 - v 0) + (v 3 - v 2)`，:236 `def vortex : Fin 4 → ℝ := ![0,1,1,0]`，:247 `vortex_massless_not_flat`）：这和 R3 是**同一个错误类**——把结论写进夹具的**形状**里。divV 定义在硬编码的四槽 `Fin 4` 上，槽的轴序、邻接、维数全部预设（(v₁−v₀)+(v₃−v₂) 是一张固定的两点差分格），所以「无散但有旋」不是关于「不对周围空间产生扭曲」的发现，而是 (0,1,1,0) 落在那张格上的算术（我复算：divV=0、curlV=2 只要数组是 (0,1,1,0) 就必成立，换任何轴序都变）。我不建议 R5 去 `Fin 4` 上加公理或换基，而建议把「无扭曲」形式化成 leo 的原义——**无耦合/无频率梯度**：`def unwarped (m : ModeN n) : Prop := ∀ i j, ∂_i (m.k j) = 0 ∧ ∂_i m.ω = 0`（即群速度各向同性、无频移），此时「平坦（常值场）」是它的一个特例而非同义，v=(0,1,1,0) 应降级为「四槽夹具上的演示」而不是见证；否则 R5 会像 R3 一样，拿一条对被测词无响应的量当判据。",
+  "confidence": "高"
+}
