@@ -60,7 +60,7 @@ index 加条目并给旧条目打撤回标记。
 
 ### 发布
 
-paper4 首发 aiXiv（**只发 EN**）：**`aixiv.261030.000001` v1.0 `Under Review`**（`is_public=1`，已用
+paper4（**只发 EN**）：**`aixiv.261030.000001` 已升到 v1.1 `Under Review`**（v1.0 为 `official review completed`；v1.1 的 s3 PDF 与本地 sha256 逐字节一致）。首版 v1.0 `Under Review`（`is_public=1`，已用
 `GET /api/submissions/aixiv_id/aixiv.261030.000001` 复核；s3_url 为公开 PDF 直链）。
 论文含「Note added (2026-10-30)」+ `§Six-round adversarial audit`，把 6 处解释更正（主张不撤回、定理不降级）写进正文与摘要；
 ZH 版只留仓库（leo 规则）。

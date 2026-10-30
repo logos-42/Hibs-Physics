@@ -18,7 +18,7 @@
 
 ## 发布
 
-- **aiXiv（EN 单版）**：`aixiv.261030.000001` v1.0（2026-10-30 提交，`Under Review`，`is_public=1`）。
+- **aiXiv（EN 单版）**：`aixiv.261030.000001` —— **v1.1**（2026-10-30 升版，`Under Review`，`is_public=1`；v1.0 保留为 `official review completed`）。v1.1 = 口径不撤回不降级 + 引用补到 30 条 + 底部 TABLE II/公式排版修复。
   详情页 `https://aixiv.science/papers/aixiv.261030.000001`。
 - 中文版按 leo 规则**只留仓库**，不推送 aiXiv。
 - 本版含「Note added (2026-10-30)」与 `§Six-round adversarial audit`：六轮攻防判定
