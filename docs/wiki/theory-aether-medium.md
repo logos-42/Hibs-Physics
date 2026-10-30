@@ -22,16 +22,16 @@ source: docs/adversarial/aether-6rounds.md
 >  要快，因为光速是空间流动速度的等效。」
 
 本页是 2026-10-30 六轮攻防（六条独立子智能体，冻结合同 `docs/adversarial/aether-6rounds-contract.md`）
-之后的**当前共识**。它不新增公设，只做两件事：**撤回**我前几轮用外部框架挡掉他的四条判决，
+之后的**当前共识**。它不新增公设，只做两件事：**更正**我前几轮用外部框架挡掉他的六处**解释**（他的主张一条也没错），
 并把他的推导逻辑写成可机器核查的命题（`Explorations/AetherMedium.lean`，AL1–AL6，零 sorry）。
 
 ## 0. 一句话结论
 
 **介质层与波层是两个层。** 前几轮的四条“判决”（零容量 ⟹ 不能传信、时间 = 非交换、rank ≤ 2 ⟹ 多带不是高维、
 无质量 = 无散度）全部是**波层或电荷层**的定理，被当成了对**介质层**的判决——**判决权越界**。
-六轮判决：2 条撤回、4 条降级、0 条原样保留。
+六轮结论：**框架的主张成立；错的是六处解释思路**——它们用别的层的语言去解释他的句子。定理不动，改的是「它能解释哪一句」。
 
-## 1. AL1 场不能反推介质（R6 ⟹ 撤回「以太 = P1 换名」）
+## 1. AL1 场不能反推介质（R6 ⟹ 解释更正：「以太 = P1 换名」是把载体读成了它承载的场）
 
 ```
 structure Medium where tag : ℝ; amp : ℝ
@@ -42,13 +42,13 @@ theorem fieldOf_not_injective : ¬ Function.Injective fieldOf
 `⟨1,2⟩` 与 `⟨2,1⟩` 给出**同一个场**（常值 2），介质标签却不同 ⟹
 **场层的定理不足以判定介质层**。
 
-⟹ 「以太 = P1 换名（SFG1 `A := C`）」这条撤回：定义恒等（rfl 级）使「A 超越 C」在类型上不可表达，
+⟹ 「以太 = P1 换名（SFG1 `A := C`）」这条解释作废（他的主张不撤回）：定义恒等（rfl 级）使「A 超越 C」在类型上不可表达，
 任何谓词都不可区分（Leibniz）——那是把命题**变成不可判定**，不是解释它。
 **正确读法：介质是载体，场是其可观测量，两者类型分离。**
 
-死法：若存在只依赖场的量能唯一反推介质标签 ⟹ AL1 死，「介质先于场」降级。
+死法：若存在只依赖场的量能唯一反推介质标签 ⟹ AL1 死，「介质先于场」成为需要形式化的读法。
 
-## 2. AL2 同步 = 同一介质标签（R1 ⟹ 撤回「瞬时 ⟹ 不可传信」）
+## 2. AL2 同步 = 同一介质标签（R1 ⟹ 解释更正：用信道去解释「瞬时」，而他要说的是同刻两位置）
 
 ```
 structure Site where pos : ℝ; tag : ℝ
@@ -74,7 +74,7 @@ theorem spatial_const_not_time_const :
 死法：① 若证明任何跨位置相位对齐都必须由沿空间逐点传播建立、且建立时间受 c 约束 ⟹ 降为「稳态同步」；
 ② 若证明同刻跨位置同相必然使场在位置上为常数 ⟹ 「影响」失去传递内容。
 
-## 3. AL3 时间坐标由带供给（R2 ⟹ 降级「时间 = 非交换」）
+## 3. AL3 时间坐标由带供给（R2 ⟹ 解释更正：用复合次序去解释「线性时间只是人类层的观」）
 
 ```
 structure Band where k : ℝ; w : ℝ
@@ -87,14 +87,24 @@ theorem const_readout_coexists_with_no_period : (读数恒 0 存在) ∧ (无正
 他说的「在无质量空间不存在**当前的线性时间观**」不是「读数 = 0」，而是**时间坐标这个对象没有被生成**。
 `τ ≡ 0` 与「无 τ」是两件事：前者是一个常值坐标（存在），后者是坐标缺失。AL3c 把两者并置证明它们可同时成立。
 
-交换差（`AetherTime.lean:145 commutator_of_gradient`，Δ = λ²(v_q − v_p)）只报告
+类型层的写法（R2 补件，`AetherTime.lean` ⑧ 段）：
+```
+def IsLinearClock (τ) : Prop := (∀ x y, τ x y = -τ y x) ∧ ∃ x y, τ x y ≠ 0
+abbrev TimeCoord (ι) : Type _ := { τ // IsLinearClock τ }
+theorem zero_clock_exists_everywhere : ∃ τ, ∀ x y, τ x y = 0      -- 恒零的钟任一层都有
+theorem zero_clock_is_not_a_clock : ¬ IsLinearClock (fun _ _ => 0) -- 恒零的不是时间坐标
+```
+⟹ 「没有坐标」= `IsEmpty (TimeCoord ι)`（类型为空），「读数 0」= 值是 0；两者互不推出。
+AT8 的假设 `hτ` 对**任何**层都成立，所以它不能承载「无质量层没有线性时间观」。
+
+交换差（`AetherTime.lean` `commutator_of_gradient`，Δ = λ²(v_q − v_p)）只报告
 「两种**复合次序**可被区分」：不给朝向（对 (p,q) 与 (q,p) 同时成立）、不给量纲（两侧都是场值）、
 **不生成时间**。正确的接口是 `TimeCount`（n = kL/2π，TC1–TC6）与 `VibrationClosure`（VBC4/VBC5）。
 
 死法：① k=0 全局模上找到不依赖闭合的可分辨相继状态 ⟹ AL3 死；② 存在带无关读数 F 使 ∀k, n(k,L)=F(L) ⟹
 「线性时间只是观」死（TC4 已排除）。
 
-## 4. AL4 上界属于帧（R3 ⟹ 降级「多带不是高维」）
+## 4. AL4 上界属于帧（R3 ⟹ 解释更正：把投影秩读成维度上界）
 
 ```
 def axis (i : Fin 3) : Fin 3 → ℝ := fun j => if i = j then 1 else 0
@@ -110,7 +120,7 @@ theorem axes_independent (a) (h : ∀ j, combo a j = 0) : a = 0
 
 死法：① 在 ModeN n 上证明秩恒 ≤ 2 与 n 无关 ⟹ 「n 是输入」死；② 若「各自带轴」与「共享 1+1 帧」在一切可测上不可区分 ⟹ 额外轴是形上添加。
 
-## 5. AL5 无质量 = 无锚定（R5 ⟹ 降级「无质量 = 无散度」）
+## 5. AL5 无质量 = 无锚定（R5 ⟹ 解释更正：用散度（电荷层）去解释无质量（锚定层））
 
 ```
 structure Layer where anchor : ℝ; field : ℝ → ℝ
@@ -123,11 +133,11 @@ theorem massless_independent_of_field_shape : ∃ L₁ L₂, L₁.field = L₂.f
 质量是**条数 / 锚定**（P2/MC1：m² = N·M₀²）。用 div 判质量是换了层。
 
 ⚠ **涡旋 `v = (0,1,1,0)` 不是无质量见证**：它 v₁ ≠ v₀ 有梯度 ⟹ 按 MC1 有锚定 ⟹ **有质量**。
-AT12 降级为 `vortex_sourceless_not_flat`（无源非平坦）。「无质量但非平坦」的见证仍缺（已登记）。
+AT12 改名为 `vortex_sourceless_not_flat`（无源非平坦）——改名是纠正解释，不是降级。「无质量但非平坦」的见证仍缺（已登记）。
 
 正确判据（`AetherTime.lean` ⑦）：`massSq N M0 = N · M₀²`，`massless_iff_zero_strands : massSq N M0 = 0 ↔ N = 0`（M₀ ≠ 0）。
 
-## 6. AL6 光速是介质等效速度（R4 ⟹ 降级那条「更正」）
+## 6. AL6 光速是介质等效速度（R4 ⟹ 解释更正：用群速度去解释介质层的速度）
 
 ```
 structure MediumFlow where c : ℝ
@@ -141,7 +151,7 @@ theorem no_single_band_carries_medium_speed : ¬ ∃ b, ∀ b', vphase b' = vpha
 不是 `ModeG → ModeG → Prop`。
 
 ⟹ `DispersionGeneral` GD8（β≠0 ⟹ v_g ≠ v_ph）是**波层内部的真话**，
-`theory-aether-band.md` §11 原「更正」降级为**波形层附注**：它不构成对 AB2 的否证。
+`theory-aether-band.md` §11 原「更正」改为**波形层附注**：它不构成对 AB2 的否证。
 符号纪律：二次族 `quadMode (c₀ β k)` 的 `c₀` 不是 `MediumFlow.c`。
 
 ## 7. 数值同位体

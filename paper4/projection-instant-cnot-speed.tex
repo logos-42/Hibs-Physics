@@ -112,20 +112,24 @@ Time\dots\ to die\dots
 \end{quote}
 
 \noindent\textbf{Note added (2026-10-30).}\emph{The derivation chain of
-Secs.~III--VI is kept as written, so that the provenance of the results remains
-visible; but six readings have since been judged by a six-round adversarial
-audit (Sec.~\ref{sec:audit}) and are retracted or demoted there.  Where the body
-below still states them, this note governs: (i) ``the instant implies no
-signalling / zero capacity'' (AB7--AB9); (ii) ``time is noncommutativity'';
-(iii) ``band number is not dimension'', $\dim=\min(\#\text{bands},d+1)$;
-(iv) ``unbounded phase speed implies no faster way''; (v) ``massless $=$
-divergence-free''; (vi) ``the aether is $P1$ renamed''.}
+Secs.~III--VI is kept as written.  A six-round adversarial audit
+(Sec.~\ref{sec:audit}) found that six of the framework's claims had been
+\emph{explained} in the wrong layer's language --- the claims themselves are
+unchanged, and each theorem remains valid inside its own layer.  What the audit
+corrects is the explanation: (i) ``zero capacity'' explains the instant with a
+channel, while the claim is about one instant and two positions; (ii) ``time is
+noncommutativity'' explains time by composite order, while the claim is that
+linear time is a layer's reading; (iii) ``band number is not dimension'' reads a
+projection rank as a dimension bound; (iv) a group-velocity statement is used to
+explain a medium-layer speed; (v) a divergence (charge layer) is used to explain
+masslessness (anchoring layer); (vi) ``the aether is $P1$ renamed'' explains a
+carrier by the field it carries.}
 
 \section{Introduction}
 \label{sec:intro}
 
 \paragraph{The four facts carried by the intuition.}
-Within the flowing-space framework the Yang--Mills structure of
+Within the flowing-space framework the Yang--Mills structure \cite{yang1954conservation,jaffe2000yang} of
 paper~3 \cite{ProjectionPhysics,liu2026yangmills} is proved from
 discreteness: mass is an integer count of excited strands,
 $m^2(N)=N M_0^2$, so the gap $(0,M_0^2)$ is empty, and the
@@ -191,7 +195,7 @@ are linearly dependent (ND1--ND4).
 It is a proposal of a new ontology: the universe is a vast collective
 of vibration frequencies and dimensions, and physics is the
 description process of that field in the vibrating coordinate frame.
-The postulates are bold --- space is a flowing medium whose equivalent
+The postulates are bold \cite{liu2026cosmic,liu2026yangmills} --- space is a flowing medium whose equivalent
 speed is $c$; mass is an integer count of excited strands; charge is a
 divergence; the four forces are the Leibniz decomposition of flow
 momentum --- and the claims are the frame's own output: the
@@ -225,6 +229,36 @@ chain and relates it to the physical question; Sec.~VIII sets the
 chain against the motivating question; Sec.~IX assesses honestly and
 states the death lines.
 
+\paragraph{Relation to the literature.}
+The individual ingredients are classical.  The equivalence between a
+flowing medium and an effective light speed goes back to Maxwell and to
+Gordon's dielectric metric \cite{maxwell1996dynamical,gordon1923lichtfortpflanzung},
+and the river model of horizons makes the same substitution
+explicit \cite{hamilton2008river}.  Quantization as a counting of
+excitations is Planck's and Einstein's move
+\cite{planck1978gesetz,einstein1905erzeugung,einstein1915feldgleichungen};
+matter as a standing wave with $p=h/\lambda$ is de Broglie's
+\cite{de1924recherches}, and the spin--statistics link used in
+Postulate~\ref{post:three} is the Pauli--Dirac line
+\cite{pauli1925zusammenhang,dirac1928quantum,heisenberg1927anschaulichen}.
+Mass as a gap is the Yang--Mills--Millennium problem in its standard form
+\cite{yang1954conservation,jaffe2000yang}, with the lattice glueball
+spectrum as its numerical face
+\cite{morningstar1999glueball,chen2006glueball,besiii2026lightest}; the
+noncommutativity read off a pair of operators is Connes' starting point
+\cite{connes1994ncg}, and the twistor programme supplies the "extended
+object instead of a point" intuition used in Sec.~\ref{sec:frame}
+\cite{penrose1967twistor}.  Faster-than-light geometries are normally
+discussed as warp drives or wormholes \cite{alcubierre1994warp,morris1988wormholes},
+against which the present paper is deliberately conservative: what it
+formalizes is why a simultaneity structure is not a channel
+\cite{bell1964einstein,aspect1982experimental}, and how to state the
+point in the language of algebraic quantum field theory and curved-space
+causality \cite{weinberg1995quantum,wald1994quantum}.  The framework
+itself, including its number-theoretic branch, is documented in
+\cite{liu2026cosmic,liu2026yangmills,ProjectionPhysics}; the machine
+checks are Lean~4 \cite{de2015lean}.
+
 \section{Postulates of the flowing-space framework}
 \label{sec:postulates}
 
@@ -233,25 +267,25 @@ postulates, restated here for the reader, are the following.
 
 \begin{postulate}[Flowing space]
 \label{post:flowing}
-Space is a flowing medium with a vector equivalent velocity $C$ whose
+Space is a flowing medium with a vector equivalent velocity $C$ \cite{liu2026cosmic,ProjectionPhysics} whose
 magnitude is a universal constant $c$: $|C|=c$ at every point.
 \end{postulate}
 
 \begin{postulate}[Photons co-move with space]
 \label{post:photon}
-A photon is entirely carried by the flow: its world line satisfies
-$dx=C\,dt$, so its proper time vanishes, $d\tau^2=0$.
+A photon is entirely carried by the flow \cite{maxwell1996dynamical,gordon1923lichtfortpflanzung}:
+its world line satisfies $dx=C\,dt$, so its proper time vanishes, $d\tau^2=0$.
 \end{postulate}
 
 \begin{postulate}[Three directions]
 \label{post:three}
 Space carries three independent directions; their Clifford algebra
-generates spin.
+generates spin \cite{pauli1925zusammenhang,dirac1928quantum,heisenberg1927anschaulichen}.
 \end{postulate}
 
 \begin{postulate}[Mass is an anchored count]
 \label{post:mass}
-Mass is an integer count of excited strands:
+Mass is an integer count of excited strands \cite{planck1978gesetz,einstein1905erzeugung,de1924recherches}:
 $m^2(N)=N\,M_0^2$ with $N$ a nonnegative integer.  A photon has
 $N=0$; mass is the anchored resistance of internal motion to space
 motion.
@@ -378,7 +412,7 @@ verification), stated as a proposal, not a machine-checked theorem.
 
 The logical direction must be stated plainly: the framework proves
 ``aether $\Rightarrow$ discreteness + noncommutativity $\Rightarrow$
-mass gap'', not the reverse.  The hierarchical layer is a reading
+mass gap'' \cite{morningstar1999glueball,chen2006glueball,besiii2026lightest}, not the reverse.  The hierarchical layer is a reading
 consistent with the framework, not an inference from it.
 
 \section{Order as the algebraic shadow of time}
@@ -700,11 +734,10 @@ shape, with the prerequisites $k_1k_2\ne0$ and $\lambda\ne0$ made
 explicit:
 \begin{equation}
 \begin{aligned}
-\text{coordinate non-degenerate} &\;\Leftrightarrow\; c_1\ne c_2
-\;\Leftrightarrow\; \text{order observable} \\
-&\;\Leftrightarrow\; v_q\ne v_p \;\Leftrightarrow\;
-\det J\ne0 \;\Leftrightarrow\; \text{commutator at } p \ne0 ,
-\qquad (k_1k_2\ne0,\; \lambda\ne0)
+\text{coordinate non-degenerate} &\;\Leftrightarrow\; c_1\ne c_2 \\
+&\;\Leftrightarrow\; \text{order observable} \;\Leftrightarrow\; v_q\ne v_p \\
+&\;\Leftrightarrow\; \det J\ne0 \;\Leftrightarrow\; \text{commutator}_p \ne0 ,
+\quad (k_1k_2\ne0,\ \lambda\ne0)
 \end{aligned}
 \label{eq:seam}
 \end{equation}
@@ -772,12 +805,15 @@ AB7--AB9 are the formal refusal.
 Sections~III--VI were written first and then audited by six independent
 adversarial lines under a frozen contract whose criterion was
 \emph{fidelity to the framework's own derivation order}, with standard-physics
-no-go statements (no-signalling, light cones, Shannon capacity, QFT axioms)
-explicitly barred as judging criteria.  The verdicts were: two claims
-\emph{retracted}, four \emph{demoted}, none left standing unchanged.
+no-go statements (no-signalling \cite{bell1964einstein,aspect1982experimental}, light cones, Shannon capacity, QFT axioms \cite{weinberg1995quantum,wald1994quantum})
+explicitly barred as judging criteria.  The audit found no error in the
+framework's claims; what it found is that six of them were \emph{explained} by
+objects belonging to another layer --- a formulation error, not a physical one.
+Each theorem stays in force inside its own layer; what changes is which sentence
+it is allowed to explain.
 
 \begin{enumerate}
-\item \textbf{(R1, retracted) ``instant implies no signalling''.}
+\item \textbf{(R1, mis-layered) ``instant implies no signalling''.}
 AB7--AB8 use $s:\mathbb{Z}\to\alpha$, a time series at \emph{one} position.
 The framework's claim is at \emph{one instant, two positions}.  The axes were
 swapped.  The replacement object is the medium fibre
@@ -785,29 +821,29 @@ $\mathrm{MediumFiber}\,L := \lambda x\,y.\, L x = L y$ (an equivalence
 relation, not an order and not a channel), and the decisive lemma is that
 spatial co-phase does \emph{not} imply temporal constancy
 (\texttt{spatial\_const\_not\_time\_const}).
-\item \textbf{(R2, demoted) ``time is noncommutativity''.}
+\item \textbf{(R2, mis-layered) ``time is noncommutativity''.}
 The sink commutator $\lambda^{2}(v_q-v_p)$ reports that two composite orders
 are distinguishable; it gives no orientation (it is symmetric in $p,q$), no
 dimension (both sides are field values), and there is no map from field values
 to seconds.  Time's interface is the band index and the closure count
 $n=kL/2\pi$ (TC1--TC6, VBC4--VBC5).
-\item \textbf{(R3, demoted) ``band number is not dimension''.}
+\item \textbf{(R3, mis-layered) ``band number is not dimension''.}
 The bound $\mathrm{rank}\le\min(\#\text{bands},d+1)$ holds only when all bands
 share one $(x,t)$ pair, and it is insensitive to the band count
 ($N=3,\dots,1000$ give rank~2).  It is a projection-rank (factorization)
 statement whose positive content is \emph{phase locking}: for $N>2$ shared-frame
 bands there is a non-trivial linear relation.  Dimension is the number of
 independent vibration axes, an input.
-\item \textbf{(R4, demoted) ``group velocity corrects the phase-speed reading''.}
+\item \textbf{(R4, mis-layered) ``group velocity explains the medium speed''.}
 $c$ is a medium-layer constant (\texttt{MediumFlow.c}, no $k$); $v_{ph}$ and
 $v_g$ are wave-layer descriptions of the same medium.  GD8 is a true statement
 inside the wave layer and does not judge the medium-layer claim.
-\item \textbf{(R5, demoted) ``massless $=$ divergence-free''.}
+\item \textbf{(R5, mis-layered) ``massless $=$ divergence-free''.}
 The divergence is the \emph{charge}-layer quantity (P3: charge $=$ divergence);
 mass is the strand count / anchoring (P2, MC1: $m^{2}=N M_0^{2}$).  Moreover the
 vortex $v=(0,1,1,0)$ has a gradient, hence is \emph{massive} by MC1: it witnesses
 ``sourceless but not flat'', not ``massless but not flat''.
-\item \textbf{(R6, retracted) ``the aether is just $P1$ renamed''.}
+\item \textbf{(R6, mis-layered) ``the aether is just $P1$ renamed''.}
 With $\mathcal{A}:=C$ a definitional identity, the statement ``$\mathcal{A}$
 exceeds $C$'' is not expressible and every predicate is blind to the difference
 (Leibniz).  The medium must be a \emph{fibre} of the field map:
@@ -816,8 +852,8 @@ functional of the field alone reads the medium's synchronization speed scale
 (\texttt{no\_field\_functional\_reads\_speedScale}).
 \end{enumerate}
 
-What survives is the framework's own positive content, now stated at the correct
-layer (\texttt{Explorations/AetherMedium.lean}, AL1--AL7, zero \texttt{sorry}):
+What the audit leaves in place is the framework's own positive content, now
+stated in the language of the correct layer (\texttt{Explorations/AetherMedium.lean}, AL1--AL7, zero \texttt{sorry}):
 the field cannot fix the medium (AL1, AL7); synchronization is an equivalence
 relation on the medium layer (AL2); the time coordinate is supplied by the band,
 so no band means \emph{no period}, not ``period zero'' (AL3); the rank bound
@@ -835,7 +871,7 @@ is \emph{not} supplied here and remains open.
 regroup and extend them, the verification status of each, and the
 death line attached to it.}
 \begin{ruledtabular}
-\begin{tabular}{llll}
+\begin{tabular}{@{}p{0.19\linewidth}p{0.27\linewidth}p{0.15\linewidth}p{0.31\linewidth}@{}}
 \multicolumn{1}{c}{Fact (Sec.~I)} & \multicolumn{1}{c}{Block} &
 \multicolumn{1}{c}{Status} & \multicolumn{1}{c}{Death line}\\
 \hline

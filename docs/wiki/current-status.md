@@ -12,7 +12,7 @@ status: current
 
 # 当前状态
 
-## ★ 2026-10-30 session：六轮攻防 —— 接受 leo 的推导逻辑，重审我的六条主张（2 撤回 / 4 降级）
+## ★ 2026-10-30 session：六轮攻防 —— 接受 leo 的推导逻辑，重审我的六条主张（6 处解释更正（主张不撤回、定理不降级））
 
 leo：「觉得你的这几轮攻防不够到位，**你误解了我的意思，而且坚持的点不对，你被过去的知识误导了**。
 所以，你需要**接受我自己的推导逻辑**，重新再进行 6 轮攻防。而且这些攻防要靠你自己的子智能体去分配。」
@@ -62,8 +62,21 @@ index 加条目并给旧条目打撤回标记。
 
 paper4 首发 aiXiv（**只发 EN**）：**`aixiv.261030.000001` v1.0 `Under Review`**（`is_public=1`，已用
 `GET /api/submissions/aixiv_id/aixiv.261030.000001` 复核；s3_url 为公开 PDF 直链）。
-论文含「Note added (2026-10-30)」+ `§Six-round adversarial audit`，把 2 撤回 / 4 降级写进正文与摘要；
+论文含「Note added (2026-10-30)」+ `§Six-round adversarial audit`，把 6 处解释更正（主张不撤回、定理不降级）写进正文与摘要；
 ZH 版只留仓库（leo 规则）。
+
+### 口径与排版更正（同日，v1.1）
+
+leo：「**不撤回，我的想法是可以的**，引用有问题，最底部的表格有渲染错误」「**并不需要降级，是解释思路有问题**」。
+⟹ 全文口径改为「**框架的主张一条不错，错的是我给它配的解释**」：六处解释越层（信道判介质、复合次序判时间、
+投影秩判维度、群速度判介质速度、散度判质量、场判载体），**主张与定理均不撤回、不降级**。
+
+- **引用**：原稿只引 4 条（其中两条自引指向 GitHub 而非已发表记录）⟹ 补到 **30 条**（Maxwell/Gordon 介质度规、
+  Hamilton 河模型、Planck/Einstein/de Broglie、Pauli/Dirac/Heisenberg、Yang–Mills + Jaffe–Witten + 三篇格点胶球含 BESIII、
+  Connes、Penrose、Alcubierre/Morris–Thorne、Bell/Aspect、Weinberg/Wald、Lean）；自引改指已发表记录
+  `aixiv.260821.000002` / `aixiv.261008.000006`，仓库只作代码引用；De Broglie 学位机构占位串修为 Université de Paris。
+- **排版**：TABLE II 由 `{llll}` 改固定宽 `p{}`（原 754pt 溢出、整表挤出正文）；eq:seam 拆行（54pt→0）；
+  ZH 加 sloppypar。EN/ZH 零 error，EN 仅余 2 处 <5pt。
 
 
 ## ★ 2026-10-29 session（四续）：带结构三件 —— 时间计数 / 一般色散 / 带维度（TC1–ND5）

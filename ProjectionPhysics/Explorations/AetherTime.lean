@@ -1,6 +1,7 @@
 -- ProjectionPhysics — AetherTime：汇算子交换差 = 场梯度（YM3 的换名）
 --
--- ⚠ 更正（六轮攻防 R2，2026-10-30）：「接上 YM 方程接口」与「时间 = 非对易性」两句作废。
+-- ⚠ 解释更正（六轮攻防 R2，2026-10-30）：「接上 YM 方程接口」与「时间 = 非对易性」两句是**解释越层**——
+--   框架的主张（线性时间只是人类层的观）不撤回；作废的是我用算符复合次序去解释它。
 --   本文件里没有规范场 A、没有 F = dA + A∧A、没有 Yang–Mills 方程；调用的是**仿射收缩算子**
 --   sinkToPoint 的不交换性（YangMillsSeed 的 YM3）。交换差两侧都是**场值**，无「场值 → 秒」
 --   的映射，故它只报告「两种复合次序可被区分」，不报告朝向、不报告时间刻度。
@@ -146,7 +147,7 @@ theorem orderBlindOn_flat (p q : ι) (lam : ℝ) :
 
 /-- AT5 ★★★ 两条仿射收缩算子在同一场上给出不同结果 ⟺ 场有梯度
     （交换差 = λ²(v_q − v_p)，YM3 换名，零新增内容）。
-    ⚠ 降级（R2）：本式给出**可分辨**，不给出**朝向**（对 (p,q) 与 (q,p) 同时成立，
+    ⚠ 解释更正（R2）：本式给出**可分辨**，不给出**朝向**（对 (p,q) 与 (q,p) 同时成立，
     λ² 对称），也不给出**量纲**（两侧均为场值）。不得读作「时间序在该处有内容」。 -/
 theorem commutator_of_gradient {p q : ι} {lam : ℝ} {v : ι → ℝ}
     (hgrad : v q ≠ v p) (hlam : lam ≠ 0) :
@@ -180,7 +181,7 @@ theorem massless_interval_zero (c dt dx : ℝ) (hc : c ≠ 0) (h : dx = c * dt) 
   photon_proper_time_zero c dt dx hc h
 
 /-- AT8 ★★★ 若一个二元函数处处为 0，则其上没有严格序（序论平凡事实）。
-    ⚠ 降级（R2）：假设 τ ≡ 0 等价于「比较域塌成一个点」（不存在两个可区分事件），
+    ⚠ 解释更正（R2）：假设 τ ≡ 0 等价于「比较域塌成一个点」（不存在两个可区分事件），
     与「无质量」没有关系；本式对任何被命名为 τ 的对象都成立。不得读作「该层没有时间」。 -/
 theorem degenerate_no_strict_order {τ : ι → ι → ℝ}
     (h : ∀ x y, τ x y = 0) : ¬ ∃ x y, τ x y < τ y x := by
@@ -211,8 +212,9 @@ theorem flat_and_degenerate {p q : ι} {lam c : ℝ} {v : ι → ℝ} (hv : ∀ 
 -- ---------------------------------------------------------------------------
 
 /-- AT10 ★★★ 对照定理（同一模块里把两侧并排）：
-    存在梯度 ⟹ 存在一个位置使先后可分辨 ⟹ 时间序**被生出来**。
-    与 AT4 合起来即是：**平坦 ⟺ 顺序盲**、**有梯度 ⟹ 顺序可观测**。 -/
+    存在梯度 ⟹ 存在一个位置使**复合次序**可分辨（不是「时间序被生出来」，R2 更正）。
+    与 AT4 合起来即是：**平坦 ⟹ 顺序盲**、**有梯度 ⟹ 次序可辨**；
+    反向（可辨 ⟹ 必有梯度）本模块**未证**，原 docstring 的「⟺」已改为单箭头。 -/
 theorem gradient_creates_time_order {p q : ι} {lam : ℝ} {v : ι → ℝ}
     (hgrad : v q ≠ v p) (hlam : lam ≠ 0) :
     ∃ i, OrderVisibleAt (sinkToPoint p lam) (sinkToPoint q lam) v i :=
@@ -242,14 +244,14 @@ def curlV (v : Fin 4 → ℝ) : ℝ := (v 2 - v 0) - (v 3 - v 1)
 def vortex : Fin 4 → ℝ := ![0, 1, 1, 0]
 
 /-- AT11 ★ 平坦 ⟹ 无散（常值场不产生源汇）。
-    ⚠ 降级（六轮攻防 R5）：divV 是**电荷层**的量（P3：电荷 = 散度），读作「无源 / 中性」；
+    ⚠ 解释更正（六轮攻防 R5）：divV 是**电荷层**的量（P3：电荷 = 散度），读作「无源 / 中性」；
     它**不是**质量层的量（P2/MC1：质量 = 条数 / 锚定）。不得用 divV = 0 表示「无质量」。 -/
 theorem flat_implies_sourceless {c : ℝ} {v : Fin 4 → ℝ} (hv : ∀ i, v i = c) : divV v = 0 := by
   simp only [divV, hv 1, hv 0, hv 3, hv 2]
   ring
 
 /-- AT12 ★★★ 无源 **不**蕴含平坦：涡旋场无散（无源无汇），但不是常值场（curlV = 2）。
-    ⚠ 降级（R5）：该场 v₁ ≠ v₀ **有梯度**，按 MC1（梯度 ⟹ 锚定 ⟹ 质量）它**有质量**，
+    ⚠ 解释更正（R5）：该场 v₁ ≠ v₀ **有梯度**，按 MC1（梯度 ⟹ 锚定 ⟹ 质量）它**有质量**，
     故它是「无源但非平坦」的见证，**不能**充当「无质量但非平坦」的见证（该见证仍缺，登记为缺口）。 -/
 theorem vortex_sourceless_not_flat :
     divV vortex = 0 ∧ ¬ Flat vortex ∧ curlV vortex ≠ 0 := by
@@ -304,5 +306,29 @@ theorem massless_iff_zero_strands {N : ℕ} {M0 : ℝ} (hM : M0 ≠ 0) :
     · exact absurd (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp h2) hM
   · intro h
     simp [massSq, h]
+
+-- ---------------------------------------------------------------------------
+-- ⑧ 更正（六轮攻防 R2，2026-10-30）：「没有时间坐标」≠「读数恒为 0」
+-- ---------------------------------------------------------------------------
+
+/-- 合格的线性时间坐标：反对称 + 非恒零（有内容）。 -/
+def IsLinearClock {ι : Type*} (τ : ι → ι → ℝ) : Prop :=
+  (∀ x y, τ x y = -τ y x) ∧ ∃ x y, τ x y ≠ 0
+
+/-- 时间坐标的**类型**：`IsEmpty (TimeCoord ι)` 才是「该层没有时间坐标」。 -/
+abbrev TimeCoord (ι : Type*) : Type _ := { τ : ι → ι → ℝ // IsLinearClock τ }
+
+/-- ⑧a 恒零的钟对**任意**层都存在（含人类层）⟹ AT8 的假设 `hτ` 不刻画「哪一层」，
+    所以它不能承载「无质量层没有线性时间观」。 -/
+theorem zero_clock_exists_everywhere {ι : Type*} :
+    ∃ τ : ι → ι → ℝ, ∀ x y, τ x y = 0 :=
+  ⟨fun _ _ => 0, fun _ _ => rfl⟩
+
+/-- ⑧b 恒零的 τ **不是**时间坐标 ⟹「没有坐标」（类型为空）与「读数恒 0」（值为 0）
+    是两件事，互不推出。 -/
+theorem zero_clock_is_not_a_clock {ι : Type*} :
+    ¬ IsLinearClock (fun _ _ : ι => (0 : ℝ)) := by
+  rintro ⟨_, x, y, hne⟩
+  exact hne rfl
 
 end ProjectionPhysics.AetherTime
