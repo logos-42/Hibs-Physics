@@ -165,4 +165,12 @@ theorem witness_one_color : (∑ _i : Fin 4, (Real.pi / 2)) = 1 * (2 * Real.pi) 
 theorem witness_count : countOfWindings ![1, 0, 0] = 1 := by
   decide
 
+/-- CS7 ★★★ **条数在色置换（Weyl 群）下不变**：N(k∘σ) = N(k)。
+    ⟹ 逐色绕数 k_c 本身依赖规范（选哪个色基），但**条数 Σ|k_c|² 在色置换下不变**。
+       这是「条数能不能当可观测量」的第一道关：Weyl 不变成立。 -/
+theorem countOfWindings_perm {σ : Equiv.Perm (Fin 3)} (k : Fin 3 → ℤ) :
+    countOfWindings (k ∘ σ) = countOfWindings k := by
+  unfold countOfWindings
+  exact Equiv.sum_comp σ (fun c => (k c).natAbs * (k c).natAbs)
+
 end ProjectionPhysics.ColorSplit
