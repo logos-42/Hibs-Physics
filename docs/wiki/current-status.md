@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-10-30
+last_confirmed: 2026-11-01
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,47 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-01 session：胶球阶梯的 Lean 端（LAD1–LAD7）+ M₀ 定死的可判死预言
+
+leo：「把 M₀ 从每文一个拟合改成单一定值，给出 ≥4 GeV 的整数阶梯预言 + 死法，写成可判死脚本」→ 续「用 lean 来证明」。
+
+### ① 定死（脚本端 `scripts/verify_glueball_ladder_prediction.py`）
+- **M₀**：单锚点态 0++、单次除法 `m(0++)/√3` ⟹ TABLE XXI **987.3 MeV**、AT2020 **934.7 MeV**（每约定一个数，不再逐态重标定）
+- **规则**：`N = Σnᵢ² + |μ̄₃|`，变体 II、R=6（无整数选择自由）；对位两口径各报（严格 5/7、简并 7/7）
+- **失败照登**：3+- −9.04%、3++ −6.81%（TABLE XXI 严格版）
+- **真发现 D4**：阶梯阶间距 ≈1/(2√N)（3 GeV 处 5.41%/4.45%）vs 谱的 2% 近简并对（2 例）⟹ √N 间距不是谱的真实间距
+- **≥4 GeV**：落阶判据饱和（随机基线 100%）⟹ 只剩禁区：N=16 `3824–4071`、N=32 `5497–5671`、N=40 `6165–6322` MeV；需格点误差 ≤±78 MeV（现差 2.7×）
+- **死法 D1–D6** 带数值阈值
+
+### ② Lean 端（`Explorations/GlueballLadder.lean`，LAD1–LAD7，零 sorry，5720 jobs 全绿）
+`not_base_seven`（7 非三非零平方和）· `four/five/eight/sixteen_not_ladder`（**无条件不可达**）· **`window_empty_sq`**（一般窗口定理）⟹ **`sixteen_window_empty` = D1 的形式化版本** · `rung_spacing_lt_two_percent`（N≥25 ⟹ 间距 <2%，**无标度**）· `ladderMass_strictMono` · `ladderMass_sq`（接 MassGap MG1）。
+
+### ③ 未闭合（写死）
+N=32/40 不可达**未在 Lean 证**（需 R=6 有界枚举）；M₀ 仍是输入（SC6）；J^PC 仍不可导出（RT-F）；宽度/衰变/产生率未碰；两口径判决不同说明模型尚未锐化到唯一预言。
+
+### ④ 同批（同日续）：杨–米尔斯**四维化** + 三处开口闭合（`Explorations/YangMillsFourD.lean`，Y4D1–Y4D9）
+
+- **现状更正**：`YangMillsLattice` 是**一维**；`YangMillsContinuum` 只有**四维指标**（场强是**同点**交换子），**全仓无链路/plaquette/规范变换/Wilson 环** ⟹ 「四维化」此前只到指标层。
+- **补的四维结构**：`plaquette`（1×1 Wilson 环，链路 = `Units Mat3C`）· ★ `plaquette_gauge_covariant`（**伴随协变**）· ★ `trace_plaquette_gauge_invariant`（**Wilson 可观测量**）· `F4_can_be_nonzero`（真四维点见证）· ★ `F4_norm_bound_uniform_in_dimension`（**常数 6 只来自色维数 3**，与 d=4 无关）。
+- **结掉三处（负面结果）**：★ `mass_gap_independent_of_dimension`（间隙与维数无关 ⟹ 四维化贡献 0）· ★★★ `noncommutativity_is_not_the_source_of_the_gap`（非交换与间隙**互相独立** ⟹ 把「箭头未证」升级为**已证不可能**）· **仍缺**：格距 a→0 的拓扑收敛（一致有界 ≠ 收敛；不能靠加维度补）。
+- **删除**：`RunningCoupling.lean`（上一轮起念，未编译通过、偏离目标，不留半成品）。
+- **待裁决**：`paper3:1303`「conjecture is proved」与同篇 `:392`/`:1230` 的条件式口径冲突。
+
+### ⑤ 同批（同日再续）：以**流动空间**为前提的四维化（`Explorations/FlowFourD.lean`，F4D1–F4D7）
+
+- **分工**：Y4D = 通用格点规范结构（不依赖流动）；F4D = 换前提（C=流势 / 电荷=流散度 / 汇不交换 ⟹ 非阿贝尔）。
+- **核心**：★ `d_comm`（二阶差分可交换 = 全部内容的唯一来源）⟹ ★★★ `Fstr_gauge_invariant`（**规范自由度 = 流势的梯度重标，不是公设**）+ ★★★ `bianchi_4d`（**四维 Bianchi = 法拉第 + 无磁单极**，让 1+1 维 `MaxwellSpace` 与静态 `SpaceField3D` 在含时四维里合法）+ ★★ `Fmat_adjoint_covariant`（非阿贝尔整体协变）+ 非零场强见证 + `flow_gap_independent`（流动前提不改间隙）。
+- **边界**：只到整体共轭（局部需 Y4D3 的 plaquette）；连续极限仍无；不声称 Clay/禁闭/λ、M₀。
+- **死法**：若流动空间存在直接测流势本身的可观测量，F4D2 的物理解读失效（定理仍成立）。
+
+### ⑥ 同批（同日三续）：「格子有连续性」的判决（`Explorations/FlowTopology.lean`，FT1–FT5）
+
+leo：「空间本身的格子是有连续性的，因为电子的散度是有拓扑结构的」。**拆两半**：
+- **拓扑/整数那一半成立**：`gauss_law_1d`（格点 Gauss：盒内总荷 = 边界流之差，不取极限）· `charge_conserved_closed_box`（**精确**守恒，无误差项）· `total_charge_boundary_only`（只由边界决定）· `integer_charge_is_resolution_free`（整数与分辨率无关）⟹ 在**荷**层次上「格子有连续性」是真的，且不需要 a→0。
+- **度量那一半补不上**：`topology_does_not_fix_energy` —— 同一总荷 2，粗格 ∑ρ²=4、细格 ∑ρ²=2 ⟹ 拓扑决定「哪一类」，决定不了「多大」；能量分辨率无关必须乘**格距**（框架没有）。
+- **口径**：a→0 缺的是**度量**（长度尺），不是拓扑。两条不能互相替代。
+
 
 ## ★ 2026-10-30 session：六轮攻防 —— 接受 leo 的推导逻辑，重审我的六条主张（6 处解释更正（主张不撤回、定理不降级））
 

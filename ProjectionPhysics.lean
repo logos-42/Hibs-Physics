@@ -124,6 +124,10 @@ import ProjectionPhysics.Explorations.SpaceField3D
 import ProjectionPhysics.Explorations.SpinFromSpace
 import ProjectionPhysics.Explorations.DoubleSlit
 import ProjectionPhysics.Explorations.GlueballCoupling
+import ProjectionPhysics.Explorations.GlueballLadder
+import ProjectionPhysics.Explorations.YangMillsFourD
+import ProjectionPhysics.Explorations.FlowFourD
+import ProjectionPhysics.Explorations.FlowTopology
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
