@@ -133,6 +133,7 @@ import ProjectionPhysics.Explorations.GapFromTopology
 import ProjectionPhysics.Explorations.LinkTopology
 import ProjectionPhysics.Explorations.NonAbelianLinkTopology
 import ProjectionPhysics.Explorations.ColorSplit
+import ProjectionPhysics.Explorations.ColorSplitGauge
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
