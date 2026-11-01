@@ -129,6 +129,7 @@ import ProjectionPhysics.Explorations.YangMillsFourD
 import ProjectionPhysics.Explorations.FlowFourD
 import ProjectionPhysics.Explorations.FlowTopology
 import ProjectionPhysics.Explorations.MassBookkeeping
+import ProjectionPhysics.Explorations.GapFromTopology
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
