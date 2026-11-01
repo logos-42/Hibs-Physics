@@ -1259,6 +1259,26 @@ absence of magnetic monopoles.  So the earlier, strictly one-dimensional
 lattice statement of Sec.~\ref{sec:lattice} has a four-dimensional
 counterpart with the same content.
 
+\paragraph{The non-Abelian version.}
+Angles of a matrix cannot be added, but one quantity multiplies by
+construction: the determinant.  $\det:\mathrm{GL}(3,\mathbb{C})\to\mathbb{C}^{\times}$
+is a homomorphism, so around a closed loop the determinant phase again
+returns to unity in steps of $2\pi$ (\texttt{NA1}--\texttt{NA3}), and
+$\det(gPg^{-1})=\det P$ makes the step count independent of the gauge
+(\texttt{NA4}).  Three directions and three closed loops give
+$N=\sum|k|^2$ and the floor (\texttt{NA5}).  The integer of
+Sec.~\ref{sec:closure} is therefore not an artifact of using phases: in the
+matrix theory it is an observable.
+
+Two limits are stated.  The determinant is a colour sum, so it returns one
+integer where the counting rule asks for three; the per-colour
+decomposition is so far witnessed only on a diagonal link whose single
+phase already carries the winding (\texttt{NA7}).  And this is not the
+Pontryagin index: the instanton charge of a four-dimensional gauge field is
+$\epsilon_{\mu\nu\rho\sigma}\operatorname{tr}(F\wedge F)$, a sum over
+two-dimensional faces, whereas what is proved here is the winding of a
+closed loop --- its Abelian shadow, the first Chern class.
+
 \paragraph{Two facts, but not cause and effect.}
 The gap does not depend on the dimension: on the four-dimensional lattice the
 statement is word for word the one-dimensional one and uses no lattice
@@ -1336,8 +1356,10 @@ now conditional on the price alone, because closure supplies the integer.  The
 lattice of Sec.~\ref{sec:lattice} is now four-dimensional in structure, with a
 Wilson-type observable and a gauge transformation.  The two facts named by the
 problem --- discreteness and self-interaction --- are independent theorems
-rather than a cause and its effect.  And the spectrum is a prediction of
-shape inside a sector, not of the ratios between sectors.
+rather than a cause and its effect.  And the integer survives the
+passage to matrices, where it becomes a gauge-invariant quantity, while the
+spectrum remains a prediction of shape inside a sector and not of the ratios
+between sectors.
 
 \section{Honest assessment}
 \label{sec:honest}
