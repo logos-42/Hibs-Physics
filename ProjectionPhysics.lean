@@ -136,6 +136,7 @@ import ProjectionPhysics.Explorations.ColorSplit
 import ProjectionPhysics.Explorations.ColorSplitGauge
 import ProjectionPhysics.Explorations.FlowFrame
 import ProjectionPhysics.Explorations.FrameBasis
+import ProjectionPhysics.Explorations.ChainClosure
 import ProjectionPhysics.Explorations.Twistor
 import ProjectionPhysics.Explorations.QFTFlow
 import ProjectionPhysics.Explorations.SpaceExtensibility
