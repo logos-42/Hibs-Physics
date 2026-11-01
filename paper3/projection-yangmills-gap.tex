@@ -1330,6 +1330,33 @@ physical work: either it is declared as an input --- a maximal-torus gauge
 --- or the flow has to supply it.  Only the second makes the count derived
 rather than chosen, and it is not constructed yet.
 
+\paragraph{The frame from the flow.}
+The framework can supply the frame instead of borrowing one.  Take the flow
+field $C$ and the gradient of its divergence, $g=\nabla(\nabla\cdot C)$; the
+three axes $\{C,\,g,\,C\times g\}$ are then fixed with no free parameter
+(\texttt{FF1}--\texttt{FF2}).  The construction comes with three failure
+modes, each proved: the frame collapses when the two vectors are parallel
+(\texttt{FF3}), it drifts from site to site unless the flow is taken
+constant (\texttt{FF6}), and it is not in general aligned with the
+coordinate directions (\texttt{FF7}).  A globally constant flow removes the
+drift; in a fixed basis the sandwich $P^{-1}UP$ preserves multiplication
+and the identity, so closure is basis-independent (\texttt{GF1}--\texttt{GF3})
+and the winding stays an integer (\texttt{GF4}).  The colour numbers are
+then functions of the link and the flow rather than of a choice of ours
+(\texttt{GF5}).
+
+What this does not give is the last step, and it should be said without
+softening: nothing proved here makes the loop product \emph{diagonal} in
+the flow frame.  The frame supplies three directions of space; the split
+needs three directions of colour space, and the two have no reason to
+coincide.  Basis-invariance of closure says that changing the frame does
+not change which configurations close; it does not say that the flow frame
+diagonalizes the colour structure.  The two statements are easily confused
+because both are called invariance.  Closing the gap needs an
+identification of colour direction with space direction --- or a coupling
+postulate, which would be a new input and would have to carry its own death
+line.
+
 \paragraph{Two facts, but not cause and effect.}
 The gap does not depend on the dimension: on the four-dimensional lattice the
 statement is word for word the one-dimensional one and uses no lattice
