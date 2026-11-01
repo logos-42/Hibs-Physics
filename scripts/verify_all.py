@@ -114,6 +114,7 @@ def main():
                        "scripts/verify_mu_control_law.py",
                        "scripts/verify_glueball_ring_twist.py",
                        "scripts/verify_glueball_ladder_prediction.py",
+                       "scripts/verify_mass_bookkeeping.py",
                        "scripts/verify_tl3_jones.py",
                        "scripts/verify_conformal_blocks.py",
                        "scripts/verify_mu_power.py",
