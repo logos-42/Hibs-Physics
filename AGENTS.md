@@ -56,3 +56,14 @@ python3 scripts/delta_compile.py --write-drafts
 - `current-status.md` 和其他 wiki 页面冲突时 → 以更具体的页面为准，然后修正 `current-status.md`
 - `log.md` 缺少之前 session 的记录 → 不猜，只追加自己的
 - 两个 wiki 页面矛盾 → 标记给用户，解决后再继续
+
+## 5. Commit 门禁（与 NODS 对齐）
+
+**任何 commit 之前必须过一遍门禁：**
+
+1. 跑 `python3 scripts/wiki_check.py`、`python3 scripts/wiki_lint.py --strict=v2`、`python3 scripts/raw_manifest_check.py`，全绿才允许 commit。
+2. 改动涉及 Lean 源码或数值脚本时，另跑 `python3 scripts/verify_all.py --fast`（或 `make test`），要求 ALL PASS；零 sorry / 零 admit 是硬门禁。
+3. `docs/wiki/log.md` 追加本批条目；标题格式 `## [YYYY-MM-DD] 主题 | 子题`——**必须带 `|`**，否则 `wiki_check.py` 的 `LOG_HEADER_RE` 校验不过。
+4. `docs/wiki/current-status.md` 同步本批改动（新文件/新定理/状态变化），并更新 `last_confirmed`。
+5. 只 `git add` 本次涉及的文件，禁 `add -A`；有并发编辑时先 `git status` 再动文件。
+6. 门禁跑不起来（环境缺 shell / 依赖不可用）时**不提交**，在 log 条目里写明原因。

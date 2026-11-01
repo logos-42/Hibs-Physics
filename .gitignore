@@ -6,3 +6,7 @@ __pycache__/
 projection-unifiedNotes.bib
 docs/
 manifests
+
+# macOS
+.DS_Store
+._*
