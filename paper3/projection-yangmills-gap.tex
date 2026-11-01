@@ -52,7 +52,13 @@ and the gap is quantified over every closed configuration
 (Sec.~\ref{sec:closure}).  What remains an input is the price $M_0$ ---
 and, for ratios between sectors, the second price: a shared price is
 excluded by four measured ratios at $10^4$--$10^5\sigma$ (MB4), while a
-freely varying one fits anything and predicts nothing (MB5).  Every
+freely varying one fits anything and predicts nothing (MB5).  The
+colour-resolved form of the chain carries one premise more --- that the
+links are diagonal in the frame the flow supplies --- and the premise is
+not innocent: diagonal links commute, so the field strength vanishes on
+the patch where colour windings exist.  Unconditionally the gap survives in
+the coarse form $N=k^2$; the ladder, and the spectrum compared with data,
+live on the aligned sector.  Every
 theorem stated is machine-checked in Lean~4 with
 zero \texttt{sorry}; the identifications that link theorems to the
 problem's two facts are stated explicitly as proposals of the
@@ -1356,6 +1362,37 @@ because both are called invariance.  Closing the gap needs an
 identification of colour direction with space direction --- or a coupling
 postulate, which would be a new input and would have to carry its own death
 line.
+
+\paragraph{The chain as a single statement.}
+The pieces can be compressed into one theorem with its premises on the
+signature (\texttt{CL1}--\texttt{CL4}): if (i) the flow supplies a basis,
+$P$ with $P^{-1}P=PP^{-1}=1$, (ii) every link is diagonal in that basis,
+and (iii) the loop closes, then each colour carries an integer winding, the
+count is $N=\sum_c k_c^2$, and the mass is zero or at least $M_0$
+(\texttt{CL1}).  The compression is worth having because it makes the
+dependency list auditable at a glance, and because three auxiliary
+theorems block the three ways of misreading it: alignment is not automatic,
+since non-diagonal matrices exist (\texttt{CL3}); a degenerate frame has no
+inverse, so the chain breaks in its first link (\texttt{CL4}); and the gap
+alone can be extracted without the rest (\texttt{CL2}).
+
+One consequence of premise (ii) belongs beside the theorem rather than in a
+footnote.  Diagonal links commute, so the field strength --- a
+nearest-neighbour commutator --- vanishes identically on any patch where the
+colour windings are defined.  The colour-resolved sector is therefore the
+flat, maximal-torus sector.  Without premise (ii) only the determinant's
+winding survives and the count collapses to $N=k^2$, with square values
+alone.  The gap itself is thus available unconditionally in the coarse
+form, while the ladder --- and with it the spectrum compared with data --- is
+available only on the aligned sector.  The measured counts are $3,6,7,9,10$
+and not squares, which says the physical configurations sit in that sector;
+it does not prove that every configuration does.
+
+The alignment is registered as a conjecture with two death lines
+(\texttt{ALIGN}): a non-diagonal link kills the colour windings
+(\texttt{CG5}), and a frame that drifts from site to site makes a global
+$k_c$ meaningless (\texttt{FF6}).  Either failure demotes the chain to the
+Weyl-symmetric case.
 
 \paragraph{Two facts, but not cause and effect.}
 The gap does not depend on the dimension: on the four-dimensional lattice the
