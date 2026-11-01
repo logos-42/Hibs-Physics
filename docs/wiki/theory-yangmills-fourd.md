@@ -121,3 +121,9 @@ Y4D6 给的是**一致有界**（收敛的必要条件），**不是收敛**。�
 
 - Lean：`ProjectionPhysics/Explorations/YangMillsFourD.lean`（Y4D1–Y4D8 定理 + Y4D9 边界，零 sorry，已挂聚合根；`#print axioms` 只依赖 `propext / Classical.choice / Quot.sound`）
 - `lake build` 5722 jobs 全绿
+
+### → paper4 §X（2026-11-01）：口径从「记账」改成「构造」
+
+论文侧把这条链写成正面声称（`paper4` 新增第 X 节 / ZH 镜像同名节）：场的四维非阿贝尔结构（Y4D1–Y4D6）→ 规范自由度继承自流动前提（F4D2）→ 闭合迫绕数整数（GT1）→ 条数由场给（GT2）→ 谱 0 或 ≥M₀（GT5）；并明确「缺的是解释不是间隙」：plaquette→拓扑荷、一层坐几个、单价随扇区变。
+
+**读法纪律**：引用「间隙与非交换无关」（Y4D8）时必须带上编码更正——那句话在旧写法里把条数当自由自然数，场没出现在句子里；正确的两句是「交换子不进入间隙」+「场通过绕数进入」。
