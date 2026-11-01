@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-01
+last_confirmed: 2026-11-02
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,28 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-02 session：paper3 首发 aiXiv + ALIGN 判据落地（AC1–AC4）
+
+### ① 发布（EN 单版）
+- `aixiv.261101.000006` v1.0，submission 1716，《Counting, Not Confinement》，category `Natural Sciences / Physics / Mathematical physics`，`is_public=1`
+- 站上 PDF 与本地 `paper3/projection-yangmills-gap.pdf` **sha256 逐字节一致**（`1886fdb7…`，207814 B）
+- 只发 EN；中文版留仓库
+
+### ② 发布前收口的三处口径冲突
+- 结论开头：「chain connecting them is closed」→「点明一条前提」：间隙走闭合性（粗条数 $N=k^2$）无条件成立；逐色 $N=\sum_c k_c^2$、与格点对位的谱在对齐扇区上成立，该扇区场强为零，越过不声称
+- 结论 (i)：「计数律是公设、间隙是条件定理」→「整数由闭合性给出、条数由场给出」，剩下的输入是单价 $M_0$ 与跨扇区的第二单价
+- §V 的「lattice is one-dimensional」补前向指路（四维链路/plaquette 在 §XI）
+
+### ③ ALIGN 判据（`Explorations/AlignCriterion.lean`，AC1–AC4，5750 jobs 零 sorry）
+- **AC1/AC2**：共同对角框架 ⟹ 两两可交换 ⟹ **逆否即判据**（不交换 ⟹ 无共同对角框架）
+- 判据要作用在**需要同时对角的那一族**上：拆色用回路上的**链路**，不是回路乘积（后者更弱，会漏）
+- **AC3/AC4**：`[diag123, cycle3]` 的 (0,1) 元 = −1 ⟹ 环面 × Weyl 的李括号长出根方向 ⟹ **非阿贝尔在无穷小层面成立**（规范场论用的层面）；有限乘积仍只是正规化子 N(T) ⟹ 大规范变换受限
+
+### ④ 未闭合（写死）
+- 反方向（可交换 + 可对角化 ⟹ 共同特征基）需谱定理，**未**形式化（只证了证伪那一半）
+- AC3/AC4 是具体见证（cycle3、diag123），不是任意 Weyl 元素的一般定理；「群 = N(T)」未形式化
+- ALIGN 仍是**物理赌注**：为什么世界坐在对齐扇区（阶梯非平方支持它，未证明它）
 
 ## ★ 2026-11-01 session：胶球阶梯的 Lean 端（LAD1–LAD7）+ M₀ 定死的可判死预言
 
@@ -36,7 +58,7 @@ N=32/40 不可达**未在 Lean 证**（需 R=6 有界枚举）；M₀ 仍是输�
 - **补的四维结构**：`plaquette`（1×1 Wilson 环，链路 = `Units Mat3C`）· ★ `plaquette_gauge_covariant`（**伴随协变**）· ★ `trace_plaquette_gauge_invariant`（**Wilson 可观测量**）· `F4_can_be_nonzero`（真四维点见证）· ★ `F4_norm_bound_uniform_in_dimension`（**常数 6 只来自色维数 3**，与 d=4 无关）。
 - **结掉三处（负面结果）**：★ `mass_gap_independent_of_dimension`（间隙与维数无关 ⟹ 四维化贡献 0）· ★★★ `noncommutativity_is_not_the_source_of_the_gap`（非交换与间隙**互相独立** ⟹ 把「箭头未证」升级为**已证不可能**）· **仍缺**：格距 a→0 的拓扑收敛（一致有界 ≠ 收敛；不能靠加维度补）。
 - **删除**：`RunningCoupling.lean`（上一轮起念，未编译通过、偏离目标，不留半成品）。
-- **待裁决**：`paper3:1303`「conjecture is proved」与同篇 `:392`/`:1230` 的条件式口径冲突。
+- **已收口（2026-11-02）**：`paper3` 结论与条件式口径的冲突按「点明一条前提」统一 —— 间隙（区间 $(0,M_0^2)$ 为空）走闭合性、粗条数 $N=k^2$ 无条件成立；逐色 $N=\sum_c k_c^2$ 与格点对位的谱在对齐扇区上成立，该扇区场强为零，越过不声称。
 
 ### ⑤ 同批（同日再续）：以**流动空间**为前提的四维化（`Explorations/FlowFourD.lean`，F4D1–F4D7）
 

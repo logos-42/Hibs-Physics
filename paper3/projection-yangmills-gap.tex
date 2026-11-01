@@ -584,9 +584,11 @@ where the matrix value lives in the color space of the framework
 (the $3\times3$ complex matrices carrying the color cycle $C_3$).
 \end{postulate}
 
-\emph{Reading.}  The lattice is one-dimensional --- position is an
-integer --- and the field value at each site is a $3\times3$ complex
-matrix.  The dimension $3$ is the framework's color number: the same
+\emph{Reading.}  The lattice in this section is one-dimensional ---
+position is an integer --- and the field value at each site is a
+$3\times3$ complex matrix; the four-dimensional lattice with links,
+plaquettes and a gauge transformation is built in
+Sec.~\ref{sec:closure}.  The dimension $3$ is the framework's color number: the same
 three that appear as spatial directions, anchoring directions, and
 colors (the color cycle $C_3$, a $3\times3$ permutation matrix).
 The field is the carrier of the color structure, and the
@@ -1620,27 +1622,28 @@ translation must satisfy, not as a claim already checked.
 \label{sec:conclusion}
 
 The Yang--Mills conjecture is proved in the gauge theory of the
-flowing-space framework: within the postulates of this framework ---
-space as a flowing medium, mass as an integer count of excited
-strands, charge as the divergence of the flow, and the four forces
-as the Leibniz decomposition of the flow momentum --- the two facts
-named by the conjecture are theorems, and the chain connecting them
-is closed.
+flowing-space framework, with one premise named.  Within the postulates ---
+space as a flowing medium, mass as an integer count of excited strands,
+charge as the divergence of the flow, and the four forces as the Leibniz
+decomposition of the flow momentum --- the two facts named by the
+conjecture are theorems.  The gap, in the form ``the interval $(0,M_0^2)$
+is empty'', follows from closure alone, in the coarse count $N=k^2$.  The
+colour-resolved count $N=\sum_c k_c^2$, and with it the spectrum compared
+with lattice data, is proved on the sector where the links are diagonal in
+the frame the flow supplies; on that sector the field strength vanishes,
+and the completion of the chain beyond it is not claimed.
 
-(i)~\emph{The mass gap follows from the counting postulate.}  Mass
-squared is $m^2(N)=N M_0^2$ with $N\in\mathbb{N}$
-(Postulate~\ref{post:mass}); this counting law is a postulate of the
-framework, not a derived consequence of the gauge dynamics.  Given
-it, the spectrum is discrete by construction; the electron--photon
-transition $N\ge1\to N=0$ is an integer jump (MG3); the interval
-$(0,M_0^2)$ is empty (MG2b); the glueball mass squared is an
-integer, $0$ or $\ge1$ (MG4).  The positive lower bound of the mass
-spectrum --- the mass gap --- is therefore a conditional theorem of
-the framework: \emph{if} mass is an integer count of excited strands,
-\emph{then} the spectrum has a gap at $M_0^2$.  The counting law
-itself, and the value of $M_0$, are the framework's input, not its
-output; deriving them from the gauge dynamics is the open program of
-Sec.~\ref{sec:honest}.
+(i)~\emph{The mass gap.}  Mass squared is $m^2(N)=N M_0^2$
+(Postulate~\ref{post:mass}).  The integer is no longer merely postulated:
+closure of a configuration makes its winding integral, the count comes from
+the field, and the mass is zero or at least $M_0$ for every closed
+configuration --- in the coarse count $N=k^2$ unconditionally, and in the
+colour-resolved count $N=\sum_c k_c^2$ on the aligned sector of
+Sec.~\ref{sec:closure}.  The electron--photon transition is an integer
+jump (MG3), the interval $(0,M_0^2)$ is empty (MG2b), and the glueball mass
+squared is an integer (MG4).  What remains an input is the price $M_0$, and
+--- for ratios between sectors --- a second price; deriving the price from
+structure is the open program of Sec.~\ref{sec:honest}.
 
 (ii)~\emph{The self-interaction is a theorem about sink
 noncommutativity, with a stated structural difference from

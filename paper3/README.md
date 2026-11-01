@@ -62,4 +62,6 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 
 ## 状态
 
-**待用户审阅**（v1.1 = 2026-11-01 新增 §XI 后的本地版本）。审阅通过后才发布（GitHub 仓库 + aiXiv）。
+**已发布**：aiXiv `aixiv.261101.000006` v1.0（`Under Review`），标题《Counting, Not Confinement》。
+只发 EN；中文版留在仓库。站上 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`1886fdb7685275d1…`）。
+§XI 之后的一轮收口：结论不再说「链条闭合」，改为「间隙走闭合性（粗条数 N=k²）无条件成立；逐色 N=Σk_c² 在对齐扇区上成立，该扇区场强为零，越过不作声称」。
