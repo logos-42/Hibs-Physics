@@ -68,4 +68,4 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 - v1.5（submission 1718，2026-11-02）＝ 本轮 §XI（条数从场里来：LT → NA → CS → 框架来自流动 → 整条链压成一条定理 + ALIGN 判据）之后的正文
 - 站上 v1.5 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`3fba02d4…`，207443 B）
 - 口径：结论保留原句「the two facts named by the conjecture are theorems, and the chain connecting them is closed」；前提与死线写在 §XI 与诚实评估正文里，不在结论重复限定
-- 旁支：`aixiv.261101.000006` 是本次误建的同名记录（v1.0/v1.1，`official review completed`），内容同源但不含 §XI，**以 261008.000006 为准**
+- 旁支：`aixiv.261101.000006` 是本次误建的同名记录，**已设为隐私**（最新版本 v1.2 `is_public=0`，匿名访问返回 No Result、Explore 列表不再出现），内容同源但不含 §XI，**以 261008.000006 为准**

@@ -18,7 +18,7 @@ status: current
 - leo 给出原记录：`aixiv.261008.000006`（2026-10-16 首次上线，此前已到 v1.4）⟹ 新内容作为 **v1.5** 提交（submission 1718，`Under Review`），不另起记录
 - 标题以记录为准：《Counting, Not Confinement: The Yang–Mills Conjecture in the Flowing-Space Gauge Theory》
 - 站上 v1.5 PDF 与本地 `paper3/projection-yangmills-gap.pdf` **sha256 逐字节一致**（`3fba02d4…`，207443 B）；网页复核 `v1.5 / Under Review`
-- **误建记录**：`aixiv.261101.000006`（v1.0、v1.1，`official review completed`）是本次新建的同名记录，不含 §XI；API 无删除接口，需在网页端归档——以 261008.000006 为准
+- **误建记录已设为隐私**：`aixiv.261101.000006` 无法删除（openapi 无 DELETE/edit），只能以「提交一个 `is_public=0` 的新版本」翻转可见性 ⟹ 提交 v1.2（submission 1719，`is_public=0`）后：匿名访问 `/abs/aixiv.261101.000006` 返回 **No Result**，Explore 列表不再出现；但 `/api/submissions/public` 仍返回 v1.0/v1.1 两条旧版本行（后端不回收旧行），前端按 aixiv_id 去重取最新版本 ⟹ 表现为已隐藏
 
 ### ② 口径：收口被 leo 判掉，按原稿发
 - 我曾把前提写进结论首句（「with one premise named」，把间隙拆成粗条数 $N=k^2$ / 逐色 $N=\sum_c k_c^2$ 两段并限定量词）
