@@ -6,7 +6,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| `projection-yangmills-gap.tex` | **英文版**：《The Mass Gap and Self-Interaction in Flowing Space: Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure》。把 2026-10-07 的 Lean 推导链写成论文：① 质量间隙种子（MG1–MG4：质量=整数条数 ⟹ 区间 (0,M₀²) 空）② 自相互作用（YM1–YM3：汇收缩迭代自抹平、双汇非对易、交换差=λ²×梯度）③ 格点杨-米尔斯（CA1–CA6：格点规范场、场强=近邻交换子）④ 连续极限机制（CA8–CA10：四力求导作为存在性机制）⑤ 严格估计（L1–L3：交换子范数有界、导数通道、范数非零）+ 组装链（CA7/CA10）+ **§XI（2026-11-01）条数是从场里来的**：LT1–LT6（链路 → 绕数 → 条数 → 下限）、NA1–NA7（矩阵版：det 同态 ⟹ 绕数仍整数，且 det(gPg⁻¹)=detP ⟹ 规范不变 ⟹ 可观测量）、GT1–GT5、Y4D1–Y4D9（四维结构/规范自由度是推论/两条否定结果）、FT1–FT5、MB1–MB7（单价记账与四比值测量）、LAD3（禁区）——把「计数律是公设」收窄成「整数由闭合给出，只剩单价是输入」。 |
+| `projection-yangmills-gap.tex` | **英文版**：《The Mass Gap and Self-Interaction in Flowing Space: Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure》。把 2026-10-07 的 Lean 推导链写成论文：① 质量间隙种子（MG1–MG4：质量=整数条数 ⟹ 区间 (0,M₀²) 空）② 自相互作用（YM1–YM3：汇收缩迭代自抹平、双汇非对易、交换差=λ²×梯度）③ 格点杨-米尔斯（CA1–CA6：格点规范场、场强=近邻交换子）④ 连续极限机制（CA8–CA10：四力求导作为存在性机制）⑤ 严格估计（L1–L3：交换子范数有界、导数通道、范数非零）+ 组装链（CA7/CA10）+ **§XI（2026-11-01）条数是从场里来的**：LT1–LT6（链路 → 绕数 → 条数 → 下限）、NA1–NA7（矩阵版：det 同态 ⟹ 绕数仍整数，且 det(gPg⁻¹)=detP ⟹ 规范不变 ⟹ 可观测量）、CS1–CS7（极大环面上把 det 拆成三色：逐色绕数 k_c、det 绕数 = Σk_c、条数 N = Σk_c²；色置换下 N 不变 ⟹ 条数从矩阵算出，不再是规则；**边界**：只在选定规范里定义，全 SU(3) 下分量不是不变量，出路是本征相位/谱定义）、GT1–GT5、Y4D1–Y4D9（四维结构/规范自由度是推论/两条否定结果）、FT1–FT5、MB1–MB7（单价记账与四比值测量）、LAD3（禁区）——把「计数律是公设」收窄成「整数由闭合给出，只剩单价是输入」。 |
 | `projection-yangmills-gap-zh.tex` | **中文版**：《流动空间中的质量间隙与自相互作用：离散性、非对易性与格点杨--米尔斯结构》。内容与英文版等同；REVTeX 4.2 + ctex（fandol）。 |
 | `projection-yangmills-gap.pdf` | 英文版编译产物（tectonic，零错误） |
 | `projection-yangmills-gap-zh.pdf` | 中文版编译产物（tectonic，零错误） |
