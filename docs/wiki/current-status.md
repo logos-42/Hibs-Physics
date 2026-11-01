@@ -14,15 +14,16 @@ status: current
 
 ## ★ 2026-11-02 session：paper3 首发 aiXiv + ALIGN 判据落地（AC1–AC4）
 
-### ① 发布（EN 单版）
-- `aixiv.261101.000006` v1.0，submission 1716，《Counting, Not Confinement》，category `Natural Sciences / Physics / Mathematical physics`，`is_public=1`
-- 站上 PDF 与本地 `paper3/projection-yangmills-gap.pdf` **sha256 逐字节一致**（`1886fdb7…`，207814 B）
-- 只发 EN；中文版留仓库
+### ① 发布：落在原记录上（`aixiv.261008.000006` v1.5）
+- leo 给出原记录：`aixiv.261008.000006`（2026-10-16 首次上线，此前已到 v1.4）⟹ 新内容作为 **v1.5** 提交（submission 1718，`Under Review`），不另起记录
+- 标题以记录为准：《Counting, Not Confinement: The Yang–Mills Conjecture in the Flowing-Space Gauge Theory》
+- 站上 v1.5 PDF 与本地 `paper3/projection-yangmills-gap.pdf` **sha256 逐字节一致**（`3fba02d4…`，207443 B）；网页复核 `v1.5 / Under Review`
+- **误建记录**：`aixiv.261101.000006`（v1.0、v1.1，`official review completed`）是本次新建的同名记录，不含 §XI；API 无删除接口，需在网页端归档——以 261008.000006 为准
 
-### ② 发布前收口的三处口径冲突
-- 结论开头：「chain connecting them is closed」→「点明一条前提」：间隙走闭合性（粗条数 $N=k^2$）无条件成立；逐色 $N=\sum_c k_c^2$、与格点对位的谱在对齐扇区上成立，该扇区场强为零，越过不声称
-- 结论 (i)：「计数律是公设、间隙是条件定理」→「整数由闭合性给出、条数由场给出」，剩下的输入是单价 $M_0$ 与跨扇区的第二单价
-- §V 的「lattice is one-dimensional」补前向指路（四维链路/plaquette 在 §XI）
+### ② 口径：收口被 leo 判掉，按原稿发
+- 我曾把前提写进结论首句（「with one premise named」，把间隙拆成粗条数 $N=k^2$ / 逐色 $N=\sum_c k_c^2$ 两段并限定量词）
+- leo：「不对撤回，在原有的基础上发布」⟹ 正文 `git checkout` 回 `0748268`（diff = 0 行），结论恢复原句
+- 前提与死线仍在 §XI / 诚实评估正文（不删），只是结论不重复限定
 
 ### ③ ALIGN 判据（`Explorations/AlignCriterion.lean`，AC1–AC4，5750 jobs 零 sorry）
 - **AC1/AC2**：共同对角框架 ⟹ 两两可交换 ⟹ **逆否即判据**（不交换 ⟹ 无共同对角框架）
@@ -58,7 +59,7 @@ N=32/40 不可达**未在 Lean 证**（需 R=6 有界枚举）；M₀ 仍是输�
 - **补的四维结构**：`plaquette`（1×1 Wilson 环，链路 = `Units Mat3C`）· ★ `plaquette_gauge_covariant`（**伴随协变**）· ★ `trace_plaquette_gauge_invariant`（**Wilson 可观测量**）· `F4_can_be_nonzero`（真四维点见证）· ★ `F4_norm_bound_uniform_in_dimension`（**常数 6 只来自色维数 3**，与 d=4 无关）。
 - **结掉三处（负面结果）**：★ `mass_gap_independent_of_dimension`（间隙与维数无关 ⟹ 四维化贡献 0）· ★★★ `noncommutativity_is_not_the_source_of_the_gap`（非交换与间隙**互相独立** ⟹ 把「箭头未证」升级为**已证不可能**）· **仍缺**：格距 a→0 的拓扑收敛（一致有界 ≠ 收敛；不能靠加维度补）。
 - **删除**：`RunningCoupling.lean`（上一轮起念，未编译通过、偏离目标，不留半成品）。
-- **已收口（2026-11-02）**：`paper3` 结论与条件式口径的冲突按「点明一条前提」统一 —— 间隙（区间 $(0,M_0^2)$ 为空）走闭合性、粗条数 $N=k^2$ 无条件成立；逐色 $N=\sum_c k_c^2$ 与格点对位的谱在对齐扇区上成立，该扇区场强为零，越过不声称。
+- **已撤回（2026-11-02）**：leo 判定该收口为错（「不对撤回，在原有的基础上发布」）——`paper3` 结论按原稿「the two facts are theorems, and the chain connecting them is closed」，前提与死线留在 §XI/诚实评估正文，不在结论重复限定。
 
 ### ⑤ 同批（同日再续）：以**流动空间**为前提的四维化（`Explorations/FlowFourD.lean`，F4D1–F4D7）
 

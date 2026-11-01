@@ -62,6 +62,10 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 
 ## 状态
 
-**已发布**：aiXiv `aixiv.261101.000006` v1.0（`Under Review`），标题《Counting, Not Confinement》。
-只发 EN；中文版留在仓库。站上 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`1886fdb7685275d1…`）。
-§XI 之后的一轮收口：结论不再说「链条闭合」，改为「间隙走闭合性（粗条数 N=k²）无条件成立；逐色 N=Σk_c² 在对齐扇区上成立，该扇区场强为零，越过不作声称」。
+**已发布**：aiXiv **`aixiv.261008.000006`**（2026-10-16 首次上线，现行 **v1.5**）。中文版留仓库。
+标题以记录为准：《Counting, Not Confinement: The Yang–Mills Conjecture in the Flowing-Space Gauge Theory》。
+
+- v1.5（submission 1718，2026-11-02）＝ 本轮 §XI（条数从场里来：LT → NA → CS → 框架来自流动 → 整条链压成一条定理 + ALIGN 判据）之后的正文
+- 站上 v1.5 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`3fba02d4…`，207443 B）
+- 口径：结论保留原句「the two facts named by the conjecture are theorems, and the chain connecting them is closed」；前提与死线写在 §XI 与诚实评估正文里，不在结论重复限定
+- 旁支：`aixiv.261101.000006` 是本次误建的同名记录（v1.0/v1.1，`official review completed`），内容同源但不含 §XI，**以 261008.000006 为准**
