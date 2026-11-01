@@ -1302,6 +1302,34 @@ loop product, because eigenvalues survive conjugation; that step is not
 done, and the honest statement is that $N$ is at present defined in a
 chosen gauge.
 
+\paragraph{Why the split needs a frame.}
+The three integers are not gauge invariant, and no amount of bookkeeping
+will make them so.  The reason is group-theoretic: $\pi_1(\mathrm{U}(3))=\mathbb{Z}$
+while $\pi_1(\mathrm{SU}(3))=0$, so every winding of a $\mathrm{U}(3)$ loop
+sits in the determinant and the $\mathrm{SU}(3)$ part carries none.  A
+non-permutation conjugation turns $\mathrm{diag}(i,1,1)$ into a matrix with
+a non-zero off-diagonal entry $1-i$, after which the phases of the diagonal
+entries are no longer the whole story.  Reading the windings from
+eigenvalues does not repair this: eigenvalues are invariant under
+conjugation of a \emph{single} matrix, but the intermediate products along a
+loop transform as $g(x)P_t\,g(x_t)^{-1}$, which is not a conjugation, and at
+the end of a closed loop the product is the identity with nothing left to
+read.  A common diagonal frame exists exactly where the links commute,
+which is where the field strength --- itself a commutator --- vanishes.
+Per-colour windings and non-Abelian field strength therefore exclude each
+other on the same patch.
+
+This is not a fault of the construction; it is the standard reason lattice
+QCD uses abelian projections when it wants colour-resolved objects.  What it
+forces here is a choice, and the choice is visible in the data.  If the
+count had to be gauge invariant, only the winding of the determinant would
+be available, $N=k^2$, and the ladder could contain square counts alone.
+The ladder contains $3,6,7,9,10$, and three states share $N=6$.  The count
+the framework uses is therefore frame-dependent, and the frame is doing
+physical work: either it is declared as an input --- a maximal-torus gauge
+--- or the flow has to supply it.  Only the second makes the count derived
+rather than chosen, and it is not constructed yet.
+
 \paragraph{Two facts, but not cause and effect.}
 The gap does not depend on the dimension: on the four-dimensional lattice the
 statement is word for word the one-dimensional one and uses no lattice
