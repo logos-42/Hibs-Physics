@@ -45,7 +45,14 @@ difference, whereas $[A_\mu,A_\nu]$ is quadratic in the field
 (Sec.~IV).  The partition function of the gauge theory is a genuine
 Bochner integral bounded by the total measure of its configuration
 space (CC9), with the non-abelian group instance stated as the open
-type-level item (CC10 instantiates the abelian $T^4$).  Every
+type-level item (CC10 instantiates the abelian $T^4$).  The counting law
+is no longer an input: a closed configuration of the field has integer
+winding (LT1--LT6), so the count is an integer because the field closes,
+and the gap is quantified over every closed configuration
+(Sec.~\ref{sec:closure}).  What remains an input is the price $M_0$ ---
+and, for ratios between sectors, the second price: a shared price is
+excluded by four measured ratios at $10^4$--$10^5\sigma$ (MB4), while a
+freely varying one fits anything and predicts nothing (MB5).  Every
 theorem stated is machine-checked in Lean~4 with
 zero \texttt{sorry}; the identifications that link theorems to the
 problem's two facts are stated explicitly as proposals of the
@@ -130,7 +137,7 @@ noncommutative self-interaction, continuum mechanism, mass gap --- is
 a chain of theorems in the framework: each node is a theorem (CR, MG,
 YM, CA, L), and the arrows between nodes are identifications stated
 in the framework's language, formalized where the framework states
-them.  The honest status of every claim is stated in Sec.~XI.
+them.  The honest status of every claim is stated in Sec.~\ref{sec:honest}.
 
 \paragraph{What this paper is and is not.}
 It is a proof of the Yang--Mills conjecture within the gauge theory
@@ -147,7 +154,7 @@ translate the framework's intrinsic continuum into the standard
 Wightman axiom system; that translation is a translation of
 languages, stated as the open program, not a gap in the framework's
 own proof.  These boundaries, and the conditions under which the
-program dies, are stated in Sec.~XI.  What the paper does claim is
+program dies, are stated in Sec.~\ref{sec:honest}.  What the paper does claim is
 narrower and verifiable: the two facts named by the problem are the
 same mechanism, and every step is a machine-checked theorem.
 
@@ -383,7 +390,7 @@ states themselves.  The empirical anchor --- a lightest glueball at
 about $1.6$ GeV with a gap above the vacuum --- is the same shape
 \cite{morningstar1999glueball,chen2006glueball};
 the framework's unit is not yet tied to GeV, and that calibration is
-an open problem (Sec.~XII).
+an open problem (Sec.~\ref{sec:conclusion}).
 
 \paragraph{Why this is not circular.}
 The mass gap of the Yang--Mills problem is an existence statement
@@ -395,7 +402,10 @@ value of $M_0$ is an input, not derived --- it is the second-input
 gap already named in the preceding paper.  The theorem is no less a
 theorem for being conditional; what it removes from the problem is
 not the calibration but the mystery: the gap is integer arithmetic,
-once mass is a count.
+once mass is a count.  Since this text was first written the conditional
+has been narrowed: closure of a configuration supplies the integer
+(\texttt{LT1}--\texttt{LT6}, Sec.~\ref{sec:closure}), so what the gap
+depends on is the price alone.
 
 \section{Self-interaction from sink noncommutativity}
 \label{sec:selfinteraction}
@@ -1013,7 +1023,7 @@ $\dot p=\dot m(C-v)+m(\dot C-\dot v)$ is exactly the time derivative
 of the flow momentum.  The four channels are the terms of a real
 calculus identity.  This is the strict version of the continuum
 mechanism of CA8 --- in the scalar setting; the matrix-valued
-generalization is an open problem (Sec.~XII).  Formalized as
+generalization is an open problem (Sec.~\ref{sec:conclusion}).  Formalized as
 \texttt{flow\_momentum\_derivative} in \texttt{YangMillsStrict.lean}.
 
 \begin{theorem}[L3: nuclear channel norm-nonzero]
@@ -1043,7 +1053,7 @@ framework's intrinsic continuum in the standard Wightman formulation
 continuum field, the proof that the commutator field strength
 converges to the continuum $[A_\mu,A_\nu]$, and the matrix-valued
 generalization of the derivative theorem L2 --- is the open program
-named in Sec.~XII.  It is a translation of languages, stated as
+named in Sec.~\ref{sec:conclusion}.  It is a translation of languages, stated as
 such, not a gap in the framework's own proof.  The strict estimates
 above are the norm prerequisites of that translation.
 
@@ -1201,6 +1211,134 @@ reconstructed from the separated one --- the topological limit, and
 its $3{+}1$-dimensional extension --- is the open program of
 Sec.~\ref{sec:strict} and Sec.~\ref{sec:honest}.
 
+\section{The count comes from the field}
+\label{sec:closure}
+
+So far the counting law has been a postulate: mass squared is an integer
+times $M_0^2$, and the integer is given.  Two later rounds change that, and
+one earlier statement has to be corrected.
+
+\paragraph{Closure makes the integer.}
+Give each link a phase, $U=e^{i\theta}$.  Going around a loop multiplies the
+links, and the product is $e^{i\sum\theta}$ (\texttt{LT1}).  If the loop
+closes, the product is $1$, so $\sum\theta=2\pi k$ with $k$ an integer
+(\texttt{LT2}).  Wind the loop once in each of the three directions and count
+$N=\sum_i|k_i|^2$ (\texttt{LT4}); the mass is $\sqrt N\,M_0$, so for every
+closed link configuration the mass is either zero or at least $M_0$
+(\texttt{LT4}, \texttt{LT6}).  Three single windings give $N=3$, the count of
+the lightest glueball (\texttt{GT3}).  The counting law keeps its form, but
+$N$ is no longer free: a configuration that does not close is not a state, and
+one that closes carries an integer by construction.  What remains an input is
+the price $M_0$, not the integrality.
+
+There is a threshold worth naming.  If each segment of a loop carries less
+than $2\pi/n$, the total phase is under one full turn and the winding must be
+zero (\texttt{LT3}).  Topological charge switches on in whole steps.  On a
+lattice it is an integer because a total phase short of a turn is pinned at
+zero, and not because integrality was imposed by hand.
+
+\paragraph{Four dimensions in structure, and gauge freedom as a consequence.}
+Before this round the repository had four-dimensional indices --- sites in
+$\mathbb{Z}^4$, four directions, a measure on a four-torus --- and none of the
+objects that define a gauge theory.  It now has them (\texttt{Y4D1}--\texttt{Y4D6}):
+link variables in $\mathrm{GL}(3,\mathbb{C})$, the plaquette
+$P_{\mu\nu}(x)=U_\mu(x)U_\nu(x+\hat\mu)U^{-1}_\mu(x+\hat\nu)U^{-1}_\nu(x)$, a
+local transformation under which $P\mapsto gPg^{-1}$, the invariant trace
+$\operatorname{tr}P$ that lattice QCD measures, a non-zero field strength on
+an explicit four-dimensional configuration, and the bound
+$\|F\|\le 6\|U_\mu\|\|U_\nu\|$ whose $6$ comes from the colour dimension alone,
+not from the number of spacetime dimensions or the lattice size.
+
+Gauge freedom is not an extra axiom here.  The potential is the flow
+potential, the only observables are differences of the flow, and replacing
+$C_\mu$ by $C_\mu+\partial_\mu\chi$ therefore changes nothing physical; the
+proof needs only the commutation of second differences (\texttt{F4D1},
+\texttt{F4D2}).  On the same structure the four-dimensional Bianchi identity
+holds (\texttt{F4D3}), which in $3+1$ dimensions is Faraday's law plus the
+absence of magnetic monopoles.  So the earlier, strictly one-dimensional
+lattice statement of Sec.~\ref{sec:lattice} has a four-dimensional
+counterpart with the same content.
+
+\paragraph{Two facts, but not cause and effect.}
+The gap does not depend on the dimension: on the four-dimensional lattice the
+statement is word for word the one-dimensional one and uses no lattice
+hypothesis (\texttt{Y4D7}).  It also does not depend on the commutator
+(\texttt{Y4D8}): the framework contains non-Abelian configurations with
+$F\ne0$ and everywhere-commuting ones with $F\equiv0$, and the gap holds for
+both.  An earlier round recorded the arrow ``self-interaction implies
+gap'' as unproved; it is now known to be unavailable inside the present
+dynamics --- making it true would need a new dynamics tying the field
+strength to the count.
+
+One correction belongs with this.  The theorem behind \texttt{Y4D8} was
+written with the count as a free natural number, so the field did not appear
+in it, and what it showed was independence from an encoding rather than from
+the field.  Split the statement: the commutator does not enter the gap, and
+that half stands; the field enters through the winding numbers, which is the
+chain above.
+
+\paragraph{One price, or several.}
+Inside one sector the price cancels: two states of the same sector stand in
+the pure ratio $\sqrt{N_1/N_2}$ (\texttt{MB2}).  Across sectors the ratio
+factorizes into a counting part and a price part (\texttt{MB3}), and if one
+price is shared, $(m_1/m_2)^2$ must be rational (\texttt{MB4}).
+
+Measured ratios do not oblige.  At $\sigma=10^{-9}$ relative precision, the
+best fraction with denominator $\le60$ misses by $1.3\times10^{5}\sigma$ for
+$p/e$, $4.3\times10^{4}\sigma$ for $\mu/e$, $9.6\times10^{4}\sigma$ for the
+$0^{++}$ glueball over the electron, and $2.5\times10^{5}\sigma$ for
+$\tau/e$.  Two more arguments need no precision: with counts up to $N=109$
+one price reaches at most $\sqrt{109}=10.4$ while $\mu/e$ is $206.8$; and
+forcing the proton onto $N\approx3.37\times10^{6}$ makes the mass grid
+$2.4\times10^{-4}$ MeV wide near $1.6$ GeV, which would put some
+$4.1\times10^{6}$ states in the interval where three are seen.  Letting the
+price vary by sector is not a repair: any two masses can be fitted exactly by
+two prices, with zero residual (\texttt{MB5}), and a model that fits whatever
+it is shown predicts nothing.
+
+So the price has to come from structure, and this the repository does not
+derive; $\lambda$ is an arbitrary real in the Lean development.  The same
+debt appears in the standard theory as a Yukawa coupling.  What the counting
+predicts is the shape of the spectrum inside one sector --- the ladder of the
+companion paper --- and not the ratios between sectors.
+
+\paragraph{One rung, several states.}
+The measured $2^{++}$ at $2328$ MeV and $0^{-+}$ at $2509$ MeV invert to
+$N=5.56$ and $N=6.46$ once the $0^{++}$ at $1710$ MeV fixes $M_0=987.3$ MeV.
+Both lie within half a rung of $6$, and the counts $5$ and $8$ do not exist
+(\texttt{LAD3}: $4,5,8,16$ are unreachable, unconditionally).  So the two
+states share a rung, and a rule for how many states a rung carries is
+missing.  Such a rule is new --- the standard theory has nothing of the kind
+--- but it is not a patch: the mass formula knows only the count, and
+$J^{PC}$ cannot be read out of it (\texttt{RT-F}), so a formula blind to
+shape should carry several shapes at one count.  As precision improves the
+two readings separate: sharing a rung forces the two masses together, while
+adjacent rungs $6$ and $7$ would force their ratio to stay at
+$\sqrt{7/6}=1.0801$ (measured $2509/2328=1.0777$).  The second is not
+excluded; it costs the exactness of the anchor, moving the price to about
+$949$ MeV and placing $0^{++}$ at $N=3.24$, eight percent off an integer.
+
+\paragraph{Where the calculation stops.}
+There is no measure, no reflection positivity and no continuum limit.  Uniform
+boundedness of the field strength is necessary for $a\to0$ and not the same
+as convergence (\texttt{Y4D9}), and the reason is metric rather than
+topological: the lattice Gauss law and charge conservation are exact without
+any limit (\texttt{FT1}, \texttt{FT2}), the total charge depends on the
+boundary only (\texttt{FT3}), integer charge survives refinement
+(\texttt{FT5}), and yet two configurations of equal charge have quadratic
+densities $4$ and $2$, so a resolution-independent energy would need the
+lattice spacing as an input (\texttt{FT4}).  There is no confinement
+argument, and $M_0$ and $\lambda$ remain inputs.
+
+\paragraph{What this adds to the chain.}
+The gap of Sec.~\ref{sec:massgap} was conditional on a counting law; it is
+now conditional on the price alone, because closure supplies the integer.  The
+lattice of Sec.~\ref{sec:lattice} is now four-dimensional in structure, with a
+Wilson-type observable and a gauge transformation.  The two facts named by the
+problem --- discreteness and self-interaction --- are independent theorems
+rather than a cause and its effect.  And the spectrum is a prediction of
+shape inside a sector, not of the ratios between sectors.
+
 \section{Honest assessment}
 \label{sec:honest}
 
@@ -1222,6 +1360,23 @@ charge to the mass gap is a conditional sequence of theorems,
 assembled in CA7/CA10.  All statements are formalized in Lean~4 with
 zero \texttt{sorry}.
 
+\paragraph{Added after the first draft (2026-11-01).}
+The count is no longer a free integer: a closed configuration has integer
+winding (\texttt{LT1}--\texttt{LT6}), and the gap is quantified over
+every closed configuration.  The lattice is four-dimensional in
+structure, with a plaquette, a local gauge transformation, an invariant
+trace and a norm bound independent of dimension
+(\texttt{Y4D1}--\texttt{Y4D6}), and gauge freedom follows from the flow
+premise rather than being postulated (\texttt{F4D2}).  Two negative
+results are recorded: the gap does not depend on the dimension
+(\texttt{Y4D7}) and does not depend on the commutator (\texttt{Y4D8}),
+the second correcting an earlier encoding in which the field never entered
+the statement.  The spectrum is a prediction of shape inside a sector: a
+shared price is excluded by four measured ratios at
+$10^4$--$10^5\sigma$ (\texttt{MB4}) and a free price is unfalsifiable
+(\texttt{MB5}), so the ratios between sectors remain an input
+(Sec.~\ref{sec:closure}).
+
 \paragraph{What is proved, and the position taken.}
 The argument completed here is the proof of the classical
 Yang--Mills conjecture in its own right: the four-dimensional
@@ -1238,7 +1393,7 @@ given, and the self-interaction is a theorem about sink
 noncommutativity whose identification with $[A_\mu,A_\nu]$ is
 structural and partial.  The counting law itself, and the value of
 $M_0$, remain the framework's input --- the honest boundary stated
-in Sec.~XI.
+in Sec.~\ref{sec:honest}.
 \begin{itemize}
 \item \emph{Four dimensions, not a one-dimensional toy.}  The
 four-dimensional continuous gauge field is the intrinsic substrate

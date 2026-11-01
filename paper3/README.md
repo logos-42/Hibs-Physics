@@ -6,7 +6,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| `projection-yangmills-gap.tex` | **英文版**：《The Mass Gap and Self-Interaction in Flowing Space: Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure》。把 2026-10-07 的 Lean 推导链写成论文：① 质量间隙种子（MG1–MG4：质量=整数条数 ⟹ 区间 (0,M₀²) 空）② 自相互作用（YM1–YM3：汇收缩迭代自抹平、双汇非对易、交换差=λ²×梯度）③ 格点杨-米尔斯（CA1–CA6：格点规范场、场强=近邻交换子）④ 连续极限机制（CA8–CA10：四力求导作为存在性机制）⑤ 严格估计（L1–L3：交换子范数有界、导数通道、范数非零）+ 组装链（CA7/CA10）。 |
+| `projection-yangmills-gap.tex` | **英文版**：《The Mass Gap and Self-Interaction in Flowing Space: Discreteness, Noncommutativity, and a Lattice Yang--Mills Structure》。把 2026-10-07 的 Lean 推导链写成论文：① 质量间隙种子（MG1–MG4：质量=整数条数 ⟹ 区间 (0,M₀²) 空）② 自相互作用（YM1–YM3：汇收缩迭代自抹平、双汇非对易、交换差=λ²×梯度）③ 格点杨-米尔斯（CA1–CA6：格点规范场、场强=近邻交换子）④ 连续极限机制（CA8–CA10：四力求导作为存在性机制）⑤ 严格估计（L1–L3：交换子范数有界、导数通道、范数非零）+ 组装链（CA7/CA10）+ **§XI（2026-11-01）条数是从场里来的**：LT1–LT6（链路 → 绕数 → 条数 → 下限）、GT1–GT5、Y4D1–Y4D9（四维结构/规范自由度是推论/两条否定结果）、FT1–FT5、MB1–MB7（单价记账与四比值测量）、LAD3（禁区）——把「计数律是公设」收窄成「整数由闭合给出，只剩单价是输入」。 |
 | `projection-yangmills-gap-zh.tex` | **中文版**：《流动空间中的质量间隙与自相互作用：离散性、非对易性与格点杨--米尔斯结构》。内容与英文版等同；REVTeX 4.2 + ctex（fandol）。 |
 | `projection-yangmills-gap.pdf` | 英文版编译产物（tectonic，零错误） |
 | `projection-yangmills-gap-zh.pdf` | 中文版编译产物（tectonic，零错误） |
@@ -23,7 +23,7 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 
 ## 结构
 
-10 节：1 Introduction（学术规范引言：大问题/缺口/路线图/与既有工作对话/动机史）→ 2 Postulates（流动空间 / 质量=条数 / 电荷=散度 / 四力=莱布尼茨分解，每条带 Reading）→ 3 Mass gap from discreteness（MG1–MG4）→ 4 Self-interaction from sink noncommutativity（YM1–YM3b）→ 5 Lattice Yang–Mills（CA3–CA6）→ 6 Continuum-limit mechanism（CA8–CA10）→ 7 Strict estimates（L1–L3）→ 8 The assembled chain（CA7/CA10）→ 9 Honest assessment → 10 Conclusion + 开放问题清单（6 条）。
+13 节：1 Introduction → 2 Postulates（流动空间 / 质量=条数 / 电荷=散度 / 四力=莱布尼茨分解，每条带 Reading）→ 3 Mass gap from discreteness（MG1–MG4）→ 4 Self-interaction（YM1–YM3b）→ 5 Lattice Yang–Mills（CA3–CA6）→ 6 Continuum is intrinsic（采样非极限）→ 7 Continuum-limit mechanism（CA8–CA10）→ 8 Strict estimates（L1–L3）→ 9 The assembled chain（CA7/CA10）→ 10 Relation to the Yang–Mills problem as posed → **11 The count comes from the field（2026-11-01 新增）** → 12 Honest assessment → 13 Conclusion + 开放问题清单。
 
 16 定理 + 5 公设，每条定理前有直觉段、后有 Reading 解读段；具体数字（YM1 λ=½ n=10 → (½)²⁰≈10⁻⁶、L1 常数 6=2×3、MG4 整数胶球）钉住抽象结果。格言：英文版 Thales「Water is the origin of all things.」/ 中文版《道德经》「有物混成，先天地生。」（老子 第二十五章）。
 
@@ -54,7 +54,7 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 
 ## 诚实边界（全文贯穿）
 
-- **不声称解决杨–米尔斯问题**：格点构造是代数骨架，不是连续四维量子场论；无路径积分/重整化/连续时空。
+- **在框架内证明，不声称拿到 Clay 的解析包装**：两个事实（离散性、自相互作用）是框架的定理；测度 / 反射正性 / 连续极限仍未做（Y4D9 + FT4：缺的是度量不是拓扑），也不声称禁闭与重整化。
 - 格距→0 的拓扑极限未形式化（第 7 节开放层，最重）。
 - λ、M₀、抹平动力是输入而非推导。
 - 汇非对易 ⟷ [A,A] 是解释层对应；离散→连续收敛属于开放层。
@@ -62,4 +62,4 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 
 ## 状态
 
-**待用户审阅**。审阅通过后才发布（GitHub 仓库 + aiXiv）。
+**待用户审阅**（v1.1 = 2026-11-01 新增 §XI 后的本地版本）。审阅通过后才发布（GitHub 仓库 + aiXiv）。
