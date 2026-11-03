@@ -9,6 +9,8 @@
 
 \newtheorem{postulate}{Postulate}[section]
 \newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
 
 \begin{document}
 
@@ -395,8 +397,11 @@ counting postulate but a property of the repository's glueball
 states themselves.  The empirical anchor --- a lightest glueball at
 about $1.6$ GeV with a gap above the vacuum --- is the same shape
 \cite{morningstar1999glueball,chen2006glueball};
-the framework's unit is not yet tied to GeV, and that calibration is
-an open problem (Sec.~\ref{sec:conclusion}).
+the framework's unit is not \emph{derived}: it is fixed by anchoring it to
+one measured lattice state, and the anchor is therefore an input, not a
+prediction (Sec.~\ref{sec:conclusion}).  The residuals quoted below are
+given for two anchoring conventions, and the anchor's own uncertainty
+dominates them (see the remark in Sec.~\ref{sec:honest}).
 
 \paragraph{Why this is not circular.}
 The mass gap of the Yang--Mills problem is an existence statement
@@ -602,7 +607,7 @@ is the algebraic seed of $\partial_t A$ (CA2); the commutator
 \end{equation}
 is the seed of the nonlinear term $[A_\mu,A_\nu]$.
 
-\begin{theorem}[CA3/CA4: field strength is the nearest-neighbor commutator]
+\begin{definition}[CA3/CA4: field strength is \emph{defined} as the nearest-neighbor commutator]
 \label{thm:ca3}
 The lattice field strength
 \begin{equation}
@@ -615,7 +620,15 @@ F(t)\neq 0 \iff [A(t),A(t{+}1)]\neq 0 .
 A single-point term $[A(t),A(t)]$ is identically zero (the color
 cycle commutes with itself); the noncommutativity necessarily lives
 between two distinct positions, exactly as in YM2.
-\end{theorem}
+\end{definition}
+
+\begin{remark}
+The equivalence above is the unfolding of a definition, so it carries no
+mathematical content; it fixes the lattice representative of
+$[A_\mu,A_\nu]$.  The statements of this module that are \emph{not}
+definitional are CA5 (a single point carries no self-interaction) and the
+norm bound of L1 below.
+\end{remark}
 
 \emph{Reading.}  The field strength of the lattice gauge field is
 \emph{defined} to be the commutator of neighboring values, and the
@@ -851,7 +864,7 @@ at light speed around the object.  A count is an integer, so the mass
 squared is either $0$ (no strands: the photon) or at least the
 lightest excitation $M_0^2$:
 \begin{equation}
-m^2(N)\in\{0\}\sqcup[M_0^2,\infty),
+m^2(N)=0 \quad\text{or}\quad m^2(N)\ge M_0^2,
 \label{eq:sfg-gap}
 \end{equation}
 the mass gap is the discreteness of the count of the flow itself
@@ -1074,15 +1087,21 @@ The full conditional chain:
 &\qquad \Rightarrow\; \text{nuclear channel } m\dot C\neq0 \text{ (CR2)}\\
 &\qquad \Rightarrow\; \text{self-flattening sink (CR9, YM1)}\\
 &\qquad \Rightarrow\; \text{sink noncommutativity (YM2)}
-  =\; \text{self-interaction } [A,A] \text{ (CA3--CA4)}\\
+  \;\Rightarrow\; \text{represented by } [A,A] \text{ (CA3--CA4, identification)}\\
 &\qquad \Rightarrow\; \text{continuum mechanism (CA8--CA10)}
   \;\Rightarrow\; \text{mass gap (MG2b, CA7)} .
 \end{aligned}
 \end{equation}
 
-Each node of the chain is a theorem in Lean~4, and the arrows between
-nodes are the identifications stated in the framework's language,
-formalized where the framework states them.  In particular, the
+Each node of the chain is a theorem in Lean~4.  The arrows are
+identifications stated in the framework's language, and they are
+\emph{not} implications: in particular the noncommutativity of the
+\emph{linear} sink contraction (YM2--YM3) is not the \emph{quadratic}
+Yang--Mills commutator, and the step between them is a claim of the
+framework, not a derivation.  The distinguishing feature that \emph{is}
+proved is negative: the gap holds for commuting configurations as well, so
+noncommutativity is not its source (Lean:
+\texttt{noncommutativity\_is\_not\_the\_source\_of\_the\_gap}).  In particular, the
 arrow from self-interaction to the mass gap is the discreteness
 consequence of Postulate~\ref{post:mass}: a self-interacting field
 whose mass is a strand count has a discrete spectrum with an empty
@@ -1236,6 +1255,31 @@ the lightest glueball (\texttt{GT3}).  The counting law keeps its form, but
 $N$ is no longer free: a configuration that does not close is not a state, and
 one that closes carries an integer by construction.  What remains an input is
 the price $M_0$, not the integrality.
+
+\paragraph{Which integers are reachable.}
+The count is not every integer, and the rule has to be stated, because the
+empirical assignment depends on it.  Writing $n_i$ for the winding in the
+three directions, the reachable set is
+\begin{equation}
+N=\sum_{i=1}^{3} n_i^2 + |\bar\mu_3|,
+\qquad n_i\in\mathbb Z\setminus\{0\},\qquad |\bar\mu_3|\in\{0,1\},
+\label{eq:ladder-rule}
+\end{equation}
+with the collective term allowed only when $\max_i|n_i|\ge 2$
+(``variant II'').  Three points.
+(i)~\emph{It is a rule of the model, not a theorem.}  The alternative in
+which $|\bar\mu_3|$ is unrestricted (``variant I'') admits $N=4$, i.e.\ a
+state at $\sqrt4\,M_0\approx1.87$ GeV, and the lattice shows no pseudoscalar
+below $2.3$--$2.6$ GeV.
+(ii)~\emph{It is what makes $N=7$ reachable.}  Seven is not a sum of three
+non-zero squares (Legendre); in Lean this is the theorem
+\texttt{not\_base\_seven}.  Without the collective term the assignment
+$\{3,6,7,9,10\}$ cannot even be written down, since $7$ and $10$ are not
+three non-zero squares.
+(iii)~\emph{Unconditionally unreachable values are $4,5,8,16$}
+(\texttt{four\_not\_ladder}, \texttt{five\_not\_ladder},
+\texttt{eight\_not\_ladder}, \texttt{sixteen\_not\_ladder}); $16$ opens the
+window tested in Sec.~\ref{sec:strict}.
 
 There is a threshold worth naming.  If each segment of a loop carries less
 than $2\pi/n$, the total phase is under one full turn and the winding must be
@@ -1465,8 +1509,16 @@ predicts is the shape of the spectrum inside one sector --- the ladder of the
 companion paper --- and not the ratios between sectors.
 
 \paragraph{One rung, several states.}
-The measured $2^{++}$ at $2328$ MeV and $0^{-+}$ at $2509$ MeV invert to
-$N=5.56$ and $N=6.46$ once the $0^{++}$ at $1710$ MeV fixes $M_0=987.3$ MeV.
+The measured $2^{++}$ at $2328\pm10$ MeV and $0^{-+}$ at $2509\pm21$ MeV
+invert to $N=5.56$ and $N=6.46$ once the $0^{++}$ at $1710$ MeV fixes
+$M_0=987.3$ MeV.\footnote{The anchor itself carries a large uncertainty:
+$1710$ MeV is quoted with $\pm50$ (statistical) and $\pm80$ (systematic) in
+the review compilation, i.e.\ about $5\%$.  Since every prediction is
+$\sqrt N\,M_0$ with $M_0$ proportional to the anchor, all residuals below
+inherit that $5\%$ scale; an agreement ``within the lattice error bar'' is
+therefore partly an agreement with the anchor's own error bar.  The
+$0^{++}$-anchored convention is used throughout the companion scripts and
+the Lean development.}
 Both lie within half a rung of $6$, and the counts $5$ and $8$ do not exist
 (\texttt{LAD3}: $4,5,8,16$ are unreachable, unconditionally).  So the two
 states share a rung, and a rule for how many states a rung carries is
@@ -1619,13 +1671,17 @@ translation must satisfy, not as a claim already checked.
 \section{Conclusion}
 \label{sec:conclusion}
 
-The Yang--Mills conjecture is proved in the gauge theory of the
-flowing-space framework: within the postulates of this framework ---
+The Yang--Mills conjecture is \emph{answered within} the gauge theory of
+the flowing-space framework, and \emph{not solved} in its standard
+formulation.  Within the postulates of this framework ---
 space as a flowing medium, mass as an integer count of excited
 strands, charge as the divergence of the flow, and the four forces
 as the Leibniz decomposition of the flow momentum --- the two facts
 named by the conjecture are theorems, and the chain connecting them
-is closed.
+is closed \emph{from these postulates}.  What is not supplied is the
+translation into the standard setting --- no measure, no reflection
+positivity, no continuum limit --- and that translation is the open
+program, not a gap inside the framework.
 
 (i)~\emph{The mass gap follows from the counting postulate.}  Mass
 squared is $m^2(N)=N M_0^2$ with $N\in\mathbb{N}$
@@ -1665,11 +1721,15 @@ mass gap (SFG6--SFG9, CA7, MG2b).  The continuum is intrinsic to the
 framework (CC1), and the four-dimensional field strength is
 non-abelian in the continuous setting itself (CC2--CC3).
 
-The proof is therefore complete \emph{within the gauge theory of the
-flowing-space framework}: every step is a machine-checked theorem in
-Lean~4 with zero \texttt{sorry}, and the two facts named by the
-conjecture --- the mass gap and the non-abelian self-interaction ---
-are derived from the framework's postulates rather than assumed.
+The derivation is therefore complete \emph{as a derivation from the
+framework's postulates}, and incomplete \emph{as a solution of the standard
+problem}: every step that is claimed as a theorem is machine-checked in
+Lean~4 with zero \texttt{sorry}, and the two facts named by the conjecture
+--- the mass gap and the non-abelian self-interaction --- follow from the
+postulates rather than being assumed; what is not supplied is the
+translation into the Wightman/Osterwalder--Schrader setting (no measure, no
+reflection positivity, no continuum limit), and one postulate --- the
+counting law --- remains an input.
 
 The open items assemble into a short list of problems in the spirit
 of Hilbert's program \cite{hilbert1900mathematische}, now as the
