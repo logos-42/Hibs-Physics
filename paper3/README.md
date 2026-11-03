@@ -65,7 +65,8 @@ cd paper3 && tectonic projection-yangmills-gap-zh.tex
 **已发布**：aiXiv **`aixiv.261008.000006`**（2026-10-16 首次上线，现行 **v1.5**）。中文版留仓库。
 标题以记录为准：《Counting, Not Confinement: The Yang–Mills Conjecture in the Flowing-Space Gauge Theory》。
 
-- v1.5（submission 1718，2026-11-02）＝ 本轮 §XI（条数从场里来：LT → NA → CS → 框架来自流动 → 整条链压成一条定理 + ALIGN 判据）之后的正文
-- 站上 v1.5 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`3fba02d4…`，207443 B）
-- 口径：结论保留原句「the two facts named by the conjecture are theorems, and the chain connecting them is closed」；前提与死线写在 §XI 与诚实评估正文里，不在结论重复限定
+- **v1.6（submission 1729，2026-11-03）＝ 现行版**：公式链六处补齐（N 可达规则 + 不可达集 / CA3-CA4 降为定义 / 链条等号改 ⇒ 并标 identification / ⊔ 误用改 m²(N)=0 或 ≥M₀² / M₀ 状态与 ±10・±21 MeV 误差 / 结论口径改「answered within the framework, not solved in its standard formulation」）
+- v1.5（submission 1718，2026-11-02）＝ §XI 之后的正文（ALIGN 判据那版）
+- 站上 v1.6 PDF 与本地 `projection-yangmills-gap.pdf` sha256 逐字节一致（`2ceee066…`，213976 B）
+- 口径：结论「框架内已答、标准表述未解」；前提与死线写在 §XI 与诚实评估正文里
 - 旁支：`aixiv.261101.000006` 是本次误建的同名记录，**已设为隐私**（最新版本 v1.2 `is_public=0`，匿名访问返回 No Result、Explore 列表不再出现），内容同源但不含 §XI，**以 261008.000006 为准**

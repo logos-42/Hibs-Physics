@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-02
+last_confirmed: 2026-11-03
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,24 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-03 session：paper3 升版 v1.6（公式链六处补齐后的发布）
+
+### ① 发布
+- `aixiv.261008.000006` **v1.6**（submission 1729，2026-11-03T14:52，`Under Review`）＝ `5ca9dce` 六处公式链修复后的正文
+- 站上 PDF 与本地 `paper3/projection-yangmills-gap.pdf` **sha256 逐字节一致**（`2ceee066…`，213976 B）；网页复核 v1.6 在场
+- 中英双版 tectonic 0 error / 0 缺字形
+
+### ② 这一版改了什么（`5ca9dce`）
+① 补 N 的可达规则 $N=\sum n_i^2+|\bar\mu_3|$（变体 II，$\max|n_i|\ge2$），并说明 $+1$ 集体项不可省（7 不是三非零平方和）；列 4/5/8/16 无条件不可达
+② CA3/CA4 由 theorem 降为 **definition**（$F=[A,A]$ 是定义），指出本模块非定义性内容只剩 CA5 与 L1
+③ 链条式「汇非对易 = [A,A]」的等号改 **⇒** 并标 identification；补一句线性汇收缩不是二次 YM 交换子，引已证负面定理 `noncommutativity_is_not_the_source_of_the_gap`
+④ $\sqcup$ 误用改为 $m^2(N)=0$ 或 $m^2(N)\ge M_0^2$
+⑤ $M_0$ 状态统一为「非推导、由锚定给出（输入）」，数值补 $\pm10$ / $\pm21$ MeV，锚点 $1710\pm50\pm80$ MeV（约 5%）支配全部残差
+⑥ 结论口径：由「is proved … chain is closed」改为「**answered within** the framework, **not solved** in its standard formulation」
+
+### ③ 未闭合（照旧）
+测度 / 反射正性 / 连续极限未做；λ、$M_0$ 是输入；ALIGN 是物理赌注；两价模型 MB5 不可证伪 ⟹ 跨扇区比仍是输入
 
 ## ★ 2026-11-02 session：paper3 首发 aiXiv + ALIGN 判据落地（AC1–AC4）
 
