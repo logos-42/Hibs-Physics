@@ -242,6 +242,88 @@ theorem sixteen_not_ladder : ¬ IsLadderN 16 := by
   · exact not_base_sixteen ⟨a, b, c, ha, hb, hc, hbase.symm⟩
   · exact not_base_fifteen ⟨a, b, c, ha, hb, hc, by unfold baseN at hbase ⊢; omega⟩
 
+
+/-! ### LAD3e 32 / 40 不可达（**无条件**：上界由方程自身给出，不需要 R 截断）
+
+关键观察：若 a²+b²+c² = N（a,b,c ≠ 0），则 a² ≤ N−2。
+故 N=32 只需平方值 ≤ 25，N=40 只需 ≤ 36 —— **有限检查，与 R 无关**。 -/
+
+/-- 平方值的有限分类（≤ 30）：1, 4, 9, 16, 25。 -/
+lemma sq_cases_30 {a : ℤ} (ha : a ≠ 0) (h : a ^ 2 ≤ (30 : ℤ)) :
+    a ^ 2 = 1 ∨ a ^ 2 = 4 ∨ a ^ 2 = 9 ∨ a ^ 2 = 16 ∨ a ^ 2 = 25 := by
+  obtain ⟨lo, hi⟩ := abs_le_of_sq_le h
+  interval_cases a <;> omega
+
+/-- 平方值的有限分类（≤ 38）：1, 4, 9, 16, 25, 36。 -/
+lemma sq_cases_38 {a : ℤ} (ha : a ≠ 0) (h : a ^ 2 ≤ (38 : ℤ)) :
+    a ^ 2 = 1 ∨ a ^ 2 = 4 ∨ a ^ 2 = 9 ∨ a ^ 2 = 16 ∨ a ^ 2 = 25 ∨ a ^ 2 = 36 := by
+  obtain ⟨lo, hi⟩ := abs_le_of_sq_le h
+  interval_cases a <;> omega
+
+lemma not_base_thirtyone : ¬ ∃ a b c : ℤ, a ≠ 0 ∧ b ≠ 0 ∧ c ≠ 0 ∧ baseN a b c = 31 := by
+  rintro ⟨a, b, c, ha, hb, hc, h⟩
+  unfold baseN at h
+  have ha1 : 1 ≤ a ^ 2 := one_le_sq_of_ne_zero ha
+  have hb1 : 1 ≤ b ^ 2 := one_le_sq_of_ne_zero hb
+  have hc1 : 1 ≤ c ^ 2 := one_le_sq_of_ne_zero hc
+  have ha2 : a ^ 2 ≤ (30 : ℤ) := by omega
+  have hb2 : b ^ 2 ≤ (30 : ℤ) := by omega
+  have hc2 : c ^ 2 ≤ (30 : ℤ) := by omega
+  rcases sq_cases_30 ha ha2 with h1 | h1 | h1 | h1 | h1 <;>
+    rcases sq_cases_30 hb hb2 with h2 | h2 | h2 | h2 | h2 <;>
+      rcases sq_cases_30 hc hc2 with h3 | h3 | h3 | h3 | h3 <;> omega
+
+lemma not_base_thirtytwo : ¬ ∃ a b c : ℤ, a ≠ 0 ∧ b ≠ 0 ∧ c ≠ 0 ∧ baseN a b c = 32 := by
+  rintro ⟨a, b, c, ha, hb, hc, h⟩
+  unfold baseN at h
+  have ha1 : 1 ≤ a ^ 2 := one_le_sq_of_ne_zero ha
+  have hb1 : 1 ≤ b ^ 2 := one_le_sq_of_ne_zero hb
+  have hc1 : 1 ≤ c ^ 2 := one_le_sq_of_ne_zero hc
+  have ha2 : a ^ 2 ≤ (30 : ℤ) := by omega
+  have hb2 : b ^ 2 ≤ (30 : ℤ) := by omega
+  have hc2 : c ^ 2 ≤ (30 : ℤ) := by omega
+  rcases sq_cases_30 ha ha2 with h1 | h1 | h1 | h1 | h1 <;>
+    rcases sq_cases_30 hb hb2 with h2 | h2 | h2 | h2 | h2 <;>
+      rcases sq_cases_30 hc hc2 with h3 | h3 | h3 | h3 | h3 <;> omega
+
+lemma not_base_thirtynine : ¬ ∃ a b c : ℤ, a ≠ 0 ∧ b ≠ 0 ∧ c ≠ 0 ∧ baseN a b c = 39 := by
+  rintro ⟨a, b, c, ha, hb, hc, h⟩
+  unfold baseN at h
+  have ha1 : 1 ≤ a ^ 2 := one_le_sq_of_ne_zero ha
+  have hb1 : 1 ≤ b ^ 2 := one_le_sq_of_ne_zero hb
+  have hc1 : 1 ≤ c ^ 2 := one_le_sq_of_ne_zero hc
+  have ha2 : a ^ 2 ≤ (38 : ℤ) := by omega
+  have hb2 : b ^ 2 ≤ (38 : ℤ) := by omega
+  have hc2 : c ^ 2 ≤ (38 : ℤ) := by omega
+  rcases sq_cases_38 ha ha2 with h1 | h1 | h1 | h1 | h1 | h1 <;>
+    rcases sq_cases_38 hb hb2 with h2 | h2 | h2 | h2 | h2 | h2 <;>
+      rcases sq_cases_38 hc hc2 with h3 | h3 | h3 | h3 | h3 | h3 <;> omega
+
+lemma not_base_forty : ¬ ∃ a b c : ℤ, a ≠ 0 ∧ b ≠ 0 ∧ c ≠ 0 ∧ baseN a b c = 40 := by
+  rintro ⟨a, b, c, ha, hb, hc, h⟩
+  unfold baseN at h
+  have ha1 : 1 ≤ a ^ 2 := one_le_sq_of_ne_zero ha
+  have hb1 : 1 ≤ b ^ 2 := one_le_sq_of_ne_zero hb
+  have hc1 : 1 ≤ c ^ 2 := one_le_sq_of_ne_zero hc
+  have ha2 : a ^ 2 ≤ (38 : ℤ) := by omega
+  have hb2 : b ^ 2 ≤ (38 : ℤ) := by omega
+  have hc2 : c ^ 2 ≤ (38 : ℤ) := by omega
+  rcases sq_cases_38 ha ha2 with h1 | h1 | h1 | h1 | h1 | h1 <;>
+    rcases sq_cases_38 hb hb2 with h2 | h2 | h2 | h2 | h2 | h2 <;>
+      rcases sq_cases_38 hc hc2 with h3 | h3 | h3 | h3 | h3 | h3 <;> omega
+
+/-- LAD3e **32 不可达（无条件，与 R 无关）**：32 与 31 都不是三个非零平方和。 -/
+theorem thirtytwo_not_ladder : ¬ IsLadderN 32 := by
+  rintro ⟨a, b, c, ha, hb, hc, hbase | ⟨hbase, _⟩⟩
+  · exact not_base_thirtytwo ⟨a, b, c, ha, hb, hc, hbase.symm⟩
+  · exact not_base_thirtyone ⟨a, b, c, ha, hb, hc, by unfold baseN at hbase ⊢; omega⟩
+
+/-- LAD3e **40 不可达（无条件，与 R 无关）**：40 与 39 都不是三个非零平方和。 -/
+theorem forty_not_ladder : ¬ IsLadderN 40 := by
+  rintro ⟨a, b, c, ha, hb, hc, hbase | ⟨hbase, _⟩⟩
+  · exact not_base_forty ⟨a, b, c, ha, hb, hc, hbase.symm⟩
+  · exact not_base_thirtynine ⟨a, b, c, ha, hb, hc, by unfold baseN at hbase ⊢; omega⟩
+
 /-! ### LAD4 禁区窗口定理（判死条件 D1）
 
 一般形式 `window_empty_sq`：不可达的 N 在质量平方轴上撑开一个空窗
@@ -351,5 +433,19 @@ theorem ladderMass_sq (N : ℕ) (M₀ : ℝ) :
     ladderMass N M₀ ^ 2 = strandMassSq N M₀ := by
   unfold ladderMass strandMassSq
   rw [mul_pow, Real.sq_sqrt (by positivity)]
+
+
+/-- N=32 禁区（M₀ = 987.3 MeV 时 = 5497–5671 MeV）—— 无条件版。 -/
+theorem thirtytwo_window_empty {M₀ : ℝ} (hM : 0 < M₀) {K : Nat} (hK : IsLadderN K) :
+    ¬ (strandMassSq 31 M₀ < strandMassSq K M₀ ∧ strandMassSq K M₀ < strandMassSq 33 M₀) := by
+  rintro ⟨hlo, hhi⟩
+  exact window_empty_sq (by norm_num) thirtytwo_not_ladder hM hK hlo hhi
+
+/-- N=40 禁区（M₀ = 987.3 MeV 时 = 6166–6322 MeV）—— 无条件版。 -/
+theorem forty_window_empty {M₀ : ℝ} (hM : 0 < M₀) {K : Nat} (hK : IsLadderN K) :
+    ¬ (strandMassSq 39 M₀ < strandMassSq K M₀ ∧ strandMassSq K M₀ < strandMassSq 41 M₀) := by
+  rintro ⟨hlo, hhi⟩
+  exact window_empty_sq (by norm_num) forty_not_ladder hM hK hlo hhi
+
 
 end ProjectionPhysics.GlueballLadder

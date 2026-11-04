@@ -99,9 +99,8 @@ schema_version: 2
 | LAD6 | `ladderMass_strictMono` | 阶梯质量对 N 严格单调（「按质量升序对位」的合法性） |
 | LAD7 | `ladderMass_sq` | **m² = N·M₀²**：与 `MassGap.strandMassSq` 接上（MG1 的梯子版） |
 
-**Lean 端未证的一条（写死）**：N=32 / N=40 不可达（需 |nᵢ| ≤ 6 的有界枚举，`interval_cases` 代价过高）。
-但 `window_empty_sq` 是**与 N 无关的一般形式**——谁给出 `¬ IsLadderN 32` 的证明，5.2–5.4 GeV 的禁区立即免费成立。
-所以 D1（3.6–4.1 GeV 那条）是**已证**的判据，其余两条目前是**脚本端枚举**的判据。
+**32/40 已于 2026-11-04 补证（无条件，与 R 无关）**：`thirtytwo_not_ladder` / `forty_not_ladder` —— 31/32 与 39/40 都不是三个非零平方和，而界由方程自身给出（`nᵢ² ≤ N−2` ⟹ 32 只需枚举到 5、40 只需到 6），所以是**有限检查而非 R 截断枚举**。配套窗口实例 `thirtytwo_window_empty`（5497–5671 MeV）/ `forty_window_empty`（6166–6322 MeV）。
+⟹ **三个禁区（16/32/40）现在全部是已证定理**，不再是脚本端枚举。
 
 ## 6. 诚实边界（写死）
 
