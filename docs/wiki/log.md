@@ -213,3 +213,7 @@
 ## [2026-11-03] 发布 | paper3 升版 v1.6（公式链六处补齐）
 
 | 2026-11-03 | 发布 | **paper3 升版 `v1.6` 发布（`aixiv.261008.000006`，submission 1729）** | 承接 `5ca9dce` 的六处公式链修复并发布：① N 可达规则 $N=\sum n_i^2+|\bar\mu_3|$（变体 II）+ 不可达集 4/5/8/16；② CA3/CA4 降为 definition；③ 链条等号改 ⇒、标 identification、引 `noncommutativity_is_not_the_source_of_the_gap`；④ $\sqcup$ 误用改 $m^2(N)=0$ 或 $\ge M_0^2$；⑤ $M_0$ 状态与 $\pm10/\pm21$ MeV 误差、锚点脚注；⑥ 结论口径改「answered within the framework, not solved in its standard formulation」。**验证**：API `1.6 / Under Review / 2026-11-03T14:52:12`；站上 s3（`005589fc…`）与本地 sha256 逐字节一致（`2ceee066…`，213976 B）；网页复核 v1.6；中英双版 0 error / 0 缺字形。 | 测度/反射正性/连续极限未做；$\lambda$、$M_0$ 是输入；ALIGN 是物理赌注；两价模型不可证伪 ⟹ 跨扇区比仍是输入 |
+
+## [2026-11-23] 形式化 + 修订 | paper3 v1.7：螺旋散度格点（Love 加入作者）
+
+| 2026-11-23 | 形式化/修订 | **新增零依赖 Lean 包 `SpiralLattice/` + paper3 §12–§13** | Love：从「电子的两个相反散度 = 向内/向外螺旋格点」出发。① `SpiralLattice`（Lean 4.35 核心库、无 Mathlib，13 主定理零 sorry）：GL1 任意区域高斯定律、ST2 割界、HC1 ℤ^d 弦定理、GP1–GP4 间隙定理（Σ E² ∈ {0,4,6,…}）、CP1–CP4 色进动给出 [A,A]；② paper3 加 §12（定理）与 §13（对抗性审查：阶梯 χ²=19.6/5、随机谱 15.7% 一样好、领头阶 45σ、尺度矛盾 ~10¹¹·⁵、电子禁闭矛盾、夸克无预言）；③ 更正：定理给 m ∝ N，MG1（m² ∝ N）未推出。 | 只在强耦合领头阶成立；磁场项/弱耦合/连续极限/SU(3)/「紧致 ⟹ 整数」均未覆盖；正式 PDF 待 tectonic 重编。**门禁**：wiki_check / wiki_lint --strict=v2 / raw_manifest_check 全绿；verify_all --fast 中「零 sorry/admit」PASS，「lake build 全绿」FAIL——原因是根目录 lakefile 的 Mathlib 指向作者本机路径（既有问题，与本批无关），沙盒无法取得 Mathlib；`SpiralLattice/` 独立 `lake build` 通过。故本批只提交到分支 `love/spiral-lattice-v1.7`，合并前请在本地跑 `make test`。 |

@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-03
+last_confirmed: 2026-11-23
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,13 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-23 session：paper3 v1.7 — 螺旋散度格点（Love 加入作者）
+
+- 新增 **`SpiralLattice/`**：零依赖（仅 Lean 核心库）的 Lean 4.35 包，`lake build` 约 3 秒；13 条主定理零 sorry；弦定理 `string_theorem`、间隙定理 `gap_theorem`、色进动 `precession_gives_commutator`
+- paper3 新增 §12（定理）、§13（对抗性审查），摘要与 Honest assessment 加 v1.7 修订说明；作者加 Love
+- 关键更正：强耦合定理给出 **m ∝ N**，与公设 MG1（m² ∝ N）冲突，MG1 未被推出；阶梯未通过检验（χ²=19.6/5，与随机谱不可区分）
+- 待办：本地 `tectonic` 重编中英 PDF；如需发布 aiXiv 由 leo 决定
 
 ## ★ 2026-11-03 session：paper3 升版 v1.6（公式链六处补齐后的发布）
 
