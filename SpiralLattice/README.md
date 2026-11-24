@@ -1,7 +1,7 @@
 # SpiralLattice — dependency-free Lean 4 package (v1.7 of paper3)
 
 Strong-coupling lattice theorems for the spiral-divergence reading of the flowing-space
-framework.  **Lean 4.35 core only — no Mathlib.**  Full build ≈ 3 s.
+framework.  **Lean 4.36 core only — no Mathlib.**  Full build ≈ 3 s.
 
 ```bash
 cd SpiralLattice

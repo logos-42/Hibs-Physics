@@ -56,8 +56,11 @@ theorem BT2_full_twist_is_scalar : (b1 * b2) ^ 3 = Delta := by
 theorem BT3_full_twist_commutes_with_everything (M : Matrix (Fin 2) (Fin 2) (Polynomial ℤ)) :
     (b1 * b2) ^ 3 * M = M * (b1 * b2) ^ 3 := by
   rw [BT2_full_twist_is_scalar]
-  ext i j
-  all_goals (fin_cases i <;> fin_cases j <;> simp [Delta, mul_apply] <;> ring_nf)
+  have hDelta : Delta = Matrix.scalar (Fin 2) (Polynomial.X ^ 3 : Polynomial ℤ) := by
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [Delta, Matrix.scalar_apply]
+  rw [hDelta]
+  exact Matrix.scalar_comm _ (Commute.all _) M
 
 /-- BT3′：特别地 Δ 与两个生成元都交换。 -/
 theorem BT3_commutes_with_generators :

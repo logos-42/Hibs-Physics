@@ -17,7 +17,7 @@
 
 ## v1.7（2026-11-23，Love 加入作者）
 
-- **新增 §12 螺旋散度格点**：四条最干净的公设（螺旋格点 / 整数通量 / 高斯定律 / 强耦合能量）⟹ 弦定理（ℤ^d 上 Σ E² ≥ 曼哈顿距离）、间隙定理（Σ E² ∈ {0,4,6,…}，Δ = 2g²/a）、色进动给出 [A,A]（Wong 力）。全部在 **`SpiralLattice/`**（仓库根目录）中以 **Lean 4.35 核心库、零 Mathlib** 证明，13 条主定理零 sorry，只依赖 propext / Classical.choice / Quot.sound。
+- **新增 §12 螺旋散度格点**：四条最干净的公设（螺旋格点 / 整数通量 / 高斯定律 / 强耦合能量）⟹ 弦定理（ℤ^d 上 Σ E² ≥ 曼哈顿距离）、间隙定理（Σ E² ∈ {0,4,6,…}，Δ = 2g²/a）、色进动给出 [A,A]（Wong 力）。全部在 **`SpiralLattice/`**（仓库根目录）中以 **Lean 4.36 核心库、零 Mathlib** 证明，13 条主定理零 sorry，只依赖 propext / Classical.choice / Quot.sound。
 - **新增 §13 对预言的对抗性审查**：对照 Athenodorou–Teper 2020 连续极限胶球比值——阶梯 χ² = 19.6（5 个比值，p ≈ 0.002），15.7% 的随机谱拟合得一样好；强耦合领头阶 2⁺⁺/0⁺⁺ 简并偏离 45σ；物理格点 + 强耦合与 LHAASO 洛伦兹界相差 ~10¹¹·⁵；字面的「螺旋 = 正负电荷」会禁闭电子；夸克/轻子无预言。
 - **口径更正**：定理给出 m ∝ N 而非 m² ∝ N，公设 MG1 未被推出；摘要追加 v1.7 段，§Honest assessment 开头加修订说明。
 - 参考文献新增：Wilson 1974、Kogut–Susskind 1975、Osterwalder–Seiler 1978、Guth 1980、Fröhlich–Spencer 1982、Münster 1981、Athenodorou–Teper 2020、LHAASO 2024、Wong 1970。

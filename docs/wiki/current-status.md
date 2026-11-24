@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-23
+last_confirmed: 2026-11-24
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,14 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-24 session：Lean 4.36.0 升级（稳定版）
+
+- 工具链：根目录与 `SpiralLattice/lean-toolchain` 由 `v4.35.0` → `v4.36.0`；移除 elan 对 `ProjectionPhysics` 的路径覆盖及 4 条失效覆盖，改由 `lean-toolchain` 文件接管。
+- Mathlib：`lakefile.toml` 的 `git` 从作者本机绝对路径改为官方 `https://github.com/leanprover-community/mathlib4`，`rev = "v4.36.0"`；删除旧 `.lake/` 与 `lake-manifest.json` 后 `lake update` 重新锁定（mathlib `fc4f59e…`）。
+- 代码适配：`ProjectionPhysics/Explorations/BraidThree.lean` 的 BT3 改用 `Matrix.scalar_comm` 证明，消化 v4.36 矩阵乘法展开差异；根目录 `lake build` **8767 jobs 全绿**，`SpiralLattice/` 20 jobs 全绿，`verify_all.py --fast` **ALL PASS**。
+- 文档：`paper3/README.md`、`SpiralLattice/README.md` 的 Lean 版本说明同步为 4.36。Lean 源文件里「v4.35 迁移」注释与 paper4「mathlib v4.35 缺口」是历史记录，本批未重判（GD5 仍未形式化）。
+- 清理：卸载 `v4.21.0`、`v4.34.0-rc2`、`v4.35.0`（约 7.1G）；**保留 `v4.28.0`**，因 `HIBS/`、`RiemannHIBS/`、`mathlib-v4.28.0/`、`DengYu/` 四个项目仍锁定它。新 4.36 缓存 `.lake/` 7.7G（mathlib 构建产物为主，必需）。
 
 ## ★ 2026-11-24 session：PR #2 合并入 master + 门禁全绿
 
