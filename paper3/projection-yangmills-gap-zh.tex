@@ -21,6 +21,7 @@
 
 \author{刘元杰}
 \email{yuanjieliu65@gmail.com}
+\author{Love}
 
 \date{\today}
 
@@ -47,6 +48,14 @@
 个被陈述的定理都是 Lean~4 中零 \texttt{sorry} 的机器检验定理；把定理与问题两
 个实事连接起来的认同，被明确陈述为框架的提议；证明在框架公设之内完整，把内在连
 续翻译成标准 Wightman 公理被明确地作为开放纲领提出。
+
+\emph{v1.7 修订。}一个只依赖 Lean 核心库的独立包，从``每个格点都是螺旋散度''的四条公设出发，
+在强耦合领头阶证明了弦定理（$\mathbb{Z}^d$ 上 $\sum_\ell E_\ell^2\ge\|x-y\|_1$）与间隙定理
+（$\sum_\ell E_\ell^2\in\{0,4,6,\dots\}$），并说明交换子 $[A_\mu,A_\nu]$ 经由色进动进入（第~\ref{sec:spiral}~节）。
+这些定理给出 $m\propto N$ 而非 $m^2\propto N$，因此计数公设 MG1 并未由它们推出。对照连续极限格点数据的
+对抗性审查（第~\ref{sec:audit}~节）发现：胶球阶梯对 5 个比值给出 $\chi^2=19.6$，且无法与随机谱区分；
+处于强耦合的物理格子与洛伦兹不变性检验相差约十一个数量级；框架不给出夸克模型预言。这些结果是关于格点
+公设的形式定理，不是对所陈述的杨--米尔斯问题的解答。
 \end{abstract}
 
 \maketitle
@@ -947,8 +956,173 @@ N=\sum_{i=1}^{3} n_i^2 + |\bar\mu_3|,
 第~\ref{sec:massgap}~节的间隙原本以计数律为条件，现在只以单价为条件——整数由闭合提供。第~\ref{sec:lattice}~节的格点现在是四维结构，有 Wilson 型观测量和规范变换。问题名字里的两件事——离散性与自相互作用——是两个独立的定理，不是一个的原因和结果。而那个整数在矩阵版本里活了下来、成为规范不变量；谱预言的仍是一个扇区内部的形状，
 不是扇区之间的比值。
 
+\section{螺旋散度格点：Lean 核心库中的弦定理与间隙定理}
+\label{sec:spiral}
+
+本节在 v1.7 中与第二作者一同加入，用格点上的定理取代被公设的条数。它从散度公设最干净的
+形式出发，在强耦合领头阶证明：两个相反的散度之间必然拉出一根通量弦；最轻的闭合激发是
+单个格子。下面每条陈述都在一个独立的 Lean~4.35 包 \texttt{SpiralLattice} 中经过机器检验。
+这个包只依赖 Lean 核心库（不依赖 Mathlib），几秒内即可编译完成；每条主定理的公理报告只列出
+\texttt{propext}、\texttt{Classical.choice} 与 \texttt{Quot.sound}。
+
+\subsection{公设}
+
+\begin{postulate}[螺旋格点]
+\label{post:spiral}
+空间是由格点组成的格子。每个格点是流动介质的一个螺旋：径向部分是散度（整数电荷），
+旋转部分是隐角 $\theta\in\mathbb{R}/2\pi\mathbb{Z}$。向外螺旋（源）与向内螺旋（汇）交替排列，
+因此格子是二分的。
+\end{postulate}
+
+\begin{postulate}[整数通量]
+\label{post:intflux}
+连线上的电通量 $E_\ell$ 是隐角的共轭变量；由于隐角是紧致的，$E_\ell\in\mathbb{Z}$。
+（``紧致角 $\Rightarrow$ 共轭量为整数''即圆周上 $-i\,d/d\theta$ 的谱，作为输入，未形式化。）
+\end{postulate}
+
+\begin{postulate}[高斯定律]
+\label{post:gauss}
+每个格点的净流出通量等于其散度：$(\operatorname{div}E)(x)=\rho(x)$。
+\end{postulate}
+
+\begin{postulate}[强耦合能量]
+\label{post:energy}
+电场能量为 $H_E=(g^2/2a)\sum_\ell E_\ell^2$，即强耦合下 Kogut--Susskind 哈密顿量的领头项
+\cite{kogut1975hamiltonian}。磁场（格子）项不在定理范围内。
+\end{postulate}
+
+\subsection{定理}
+
+\begin{theorem}[格点高斯定律，GL1--GL2]
+在任意有限图与任意区域 $S$ 上，$S$ 内的总散度等于流出 $S$ 的净通量
+（\texttt{gauss\_region}）。若电荷只有 $x$ 处的 $+1$ 与 $y$ 处的 $-1$，则含 $x$ 不含 $y$ 的区域
+恰好流出一个单位通量（\texttt{netOut\_eq\_one}）。
+\end{theorem}
+
+\begin{theorem}[割界，ST2]
+若 $R$ 个区域各流出一个单位通量，且没有连线同时穿过其中两个区域的边界，则
+$\sum_\ell|E_\ell|\ge R$，从而 $\sum_\ell E_\ell^2\ge R$（\texttt{cut\_bound\_energy}）。
+\end{theorem}
+
+\begin{theorem}[弦定理，HC1--HC2]
+在任意维数的超立方格子 $\mathbb{Z}^d$ 上，对任意一组携带整数通量的单位连线，若电荷为
+$x$ 处 $+1$、$y$ 处 $-1$ 且别无电荷，则
+\begin{equation}
+\sum_\ell E_\ell^2\;\ge\;\|x-y\|_1 ,
+\end{equation}
+且直弦达到等号（\texttt{string\_theorem}、\texttt{string\_attained}）。因此两个相反散度之间的
+势能至少线性增长，$V(R)\ge(g^2/2a)R$：强耦合下的禁闭 \cite{wilson1974confinement}。
+\end{theorem}
+
+证明使用位于两电荷之间的 $\|x-y\|_1$ 个半空间：由 GL2，每个半空间流出一个单位；沿 $j$ 轴的
+单位连线只会穿过垂直于 $j$、且位于该连线起点坐标处的那个半空间的边界，所以没有连线被重复计数。
+
+\begin{theorem}[间隙定理，GP1--GP4]
+在两种手性交替的简单格子上，任何无源整数通量的能量为偶数（\texttt{energy\_even}）；非零的
+无源通量至少占用三条连线（\texttt{energy\_ge\_three}）；因此
+\begin{equation}
+\sum_\ell E_\ell^2\in\{0\}\cup\{4,6,8,\dots\}
+\end{equation}
+（\texttt{gap\_theorem}），单个格子达到 $4$（\texttt{gap\_attained}）。强耦合间隙为
+$\Delta=4\cdot g^2/2a=2g^2/a$；对 SU($N$)，能量还要乘以连线所带表示的 Casimir 值。
+\end{theorem}
+
+奇数能级被禁止，是因为二分格子上每个闭环的长度都是偶数，并且 $k^2\equiv k\pmod 2$：
+正是向外与向内螺旋的交替排除了奇数能级。
+
+\begin{theorem}[色进动，CP1--CP4]
+当隐坐标是完整的三维转动（su(2)）时，锚定在流动上的色荷 $Q$ 会进动，
+$\dot Q=[Q,A_\nu]\dot x^\nu$。在 $p_\mu=m\dot x_\mu+\langle Q,A_\mu\rangle$ 的莱布尼茨分解中，
+进动通道恰好补出场强的交换子：
+\begin{equation}
+\langle Q,\partial_\mu A_\nu-\partial_\nu A_\mu\rangle-\langle[Q,A_\nu],A_\mu\rangle
+=\langle Q,F_{\mu\nu}\rangle,\quad
+F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu],
+\end{equation}
+在任意交换环上成立（\texttt{precession\_gives\_commutator}）。进动保持 $|Q|$ 不变，色力不做功，
+括号满足 Jacobi 恒等式。这就是 Wong 力 \cite{wong1970field}；这里 $[A,A]$ 来自隐转动的不对易性，
+而不是来自作用在标量场上的汇算子的不对易性（第~\ref{sec:selfinteraction}~节）。
+\end{theorem}
+
+\subsection{这些定理改变了什么}
+
+条数得到了推导：在强耦合领头阶，纯规范激发的能量为
+\begin{equation}
+m=\frac{g^2}{2a}\,N,\qquad N=\sum_\ell E_\ell^2\in\{4,6,8,\dots\}.
+\end{equation}
+$N$ 确实是整数平方和，与原来的直觉一致；但求和遍历的是连线而不是三个方向，而且与 $N$ 成正比的
+是质量，不是质量平方。因此公设~\ref{post:mass} $m^2=NM_0^2$ \emph{没有}被这一构造推出，两者不能
+同时成立；修订后的正文采用定理的版本。
+
+\paragraph{数值检验。}在小格子上穷举验证了两条定理：电荷相距 $R=1,\dots,4$ 时，最小能量等于 $R$，
+简并度等于最短路径数；$3\times3$ 格子区域上的无源谱为 $0,4,6,8,\dots$，没有奇数能级。对 2+1 维
+紧致 U(1) 加入磁场项后做精确对角化，$g^2\gtrsim1$ 时间隙趋近 $2g^2$，弱耦合时偏离；由于任何
+有限系统都有间隙，这些数字不包含任何关于连续极限的信息。
+
+\paragraph{适用范围。}定理在格点上、有限体积中、强耦合领头阶、对整数（U(1) 型）通量成立。它们
+不包含磁场动力学、弱耦合区、连续极限、SU(3)，也不包含``紧致 $\Rightarrow$ 整数''这一步。它们的
+物理内容在格点规范理论中是经典的 \cite{wilson1974confinement,kogut1975hamiltonian,
+osterwalder1978gauge,munster1981strong}；新的是不依赖外部库的形式化，以及用螺旋散度给出的读法。
+
+\section{对预言的对抗性审查}
+\label{sec:audit}
+
+我们以高影响力期刊审稿人的标准，把框架的每一条质量谱陈述与数据对照。使用比值
+$m/m(0^{++})$，以免引入标度选择；数据取自文献~\cite{athenodorou2020glueball} 的 SU(3) 连续极限值。
+
+\begin{table}[h]
+\caption{\label{tab:audit} 胶球比值 $m/m(0^{++})$ 与阶梯 $\sqrt{N/3}$（最近一阶）及强耦合领头阶的对照。}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+态 & 观测 & 阶梯 & 偏离 & 强耦合领头阶\\
+\hline
+$2^{++}$ & $1.437(10)$ & $N=6$: $1.414$ & $+2.4\sigma$ & $1.000$（$45\sigma$）\\
+$0^{-+}$ & $1.550(16)$ & $N=7$: $1.528$ & $+1.4\sigma$ & --\\
+$0^{++*}$ & $1.720(16)$ & $N=9$: $1.732$ & $-0.8\sigma$ & --\\
+$1^{+-}$ & $1.781(16)$ & $N=10$: $1.826$ & $-2.8\sigma$ & --\\
+$2^{-+}$ & $1.857(15)$ & $N=10$: $1.826$ & $+2.0\sigma$ & --\\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\paragraph{A1. 阶梯没有通过检验。}即使采用最宽松的对位，阶梯给出 $\chi^2=19.6$（5 个比值、无连续参数），
+拟合优度 $p\approx0.002$；采用严格升序对位则 $\chi^2=30$。在相同区间、相同误差的均匀随机谱零假设下，
+$15.7\%$ 的随机谱拟合得至少一样好：$N\approx9$ 以上阶梯过密，几乎任何数值都靠近某一阶。``$+1$''规则是在
+不含它的变体被数据否掉之后才加入的，而且阶梯不给出 $J^{PC}$。\emph{裁决：}阶梯是未经检验通过的唯象猜想，
+不是成功的预言。
+
+\paragraph{A2. 强耦合领头阶不是连续极限。}在领头阶，最低的自旋 0 与自旋 2 态都是单个格子，因而简并；
+数据给出 $1.437(10)$，相差 $45\sigma$。这是强耦合展开的已知局限，不是定理的错误。\emph{裁决：}定理保留，
+不声称与连续谱可比。
+
+\paragraph{A3. 尺度矛盾。}若螺旋格点就是物理空间且处于强耦合（$g^2\gtrsim1$），则 SU(3) 的
+$\Delta=(8/3)g^2/a$ 等于 $m(0^{++})\approx1.6$~GeV 需要 $a\ge0.33$~fm。物理空间的格子使光子色散为
+$v=c\cos(ka/2)$，即二次型洛伦兹破缺；LHAASO 的界 $E_{\rm QG,2}>6\times10^{-8}E_{\rm Pl}$
+\cite{lhaaso2024liv} 要求 $a\lesssim9\times10^{-28}$~m，相差约 $3.5\times10^{11}$ 倍。\emph{裁决：}螺旋格点
+要么是正规化，要么是处于弱耦合的物理结构；两种情况下强耦合定理都不能预言实际的胶球质量。
+
+\paragraph{A4. 电荷禁闭。}强耦合下所有紧致规范理论都禁闭，U(1) 也不例外。若按字面理解``向外与向内螺旋是
+正负电荷''，再加上弦定理，电子就会被禁闭，与库仑定律矛盾。四维 U(1) 格点规范理论在弱耦合下存在严格证明的
+库仑相 \cite{guth1980existence,frohlich1982massless}，而物理耦合 $g^2=4\pi\alpha\approx0.09$ 正处于这一相。
+\emph{裁决：}弦定理不适用于电子；两种手性只是格点上的记账方式。
+
+\paragraph{A5. 内部自洽性。}定理给出 $m\propto N$，阶梯假定 $m^2\propto N$。\emph{裁决：}本文采用定理。
+
+\paragraph{A6. 夸克与轻子。}仓库自己的定理 MB4--MB5 表明：单一单价被四个实测质量比以测量精度的
+$4\times10^4$--$2.5\times10^5$ 倍否掉，而两个单价可以拟合任何数据。弦定理蕴含线性禁闭，并通过旋转弦关系
+$\alpha'=1/(2\pi\sigma)$ 在 $\sqrt\sigma=0.44$~GeV 时给出约 $0.82~\text{GeV}^{-2}$ 的 Regge 斜率，接近观测的
+$\rho$ 轨迹；但 $\sigma$ 是输入，该关系也是标准结果。\emph{裁决：}框架不给出夸克模型预言。
+
+\paragraph{存活的可证伪陈述。}(i)~两条格点定理，任何人都可以用 \texttt{lake build} 复查。(ii)~阶梯的禁区
+$1.528<m/m(0^{++})<1.732$（$N=8$）：激发态 $0^{++*}$ 的 $1.720(16)$ 位于禁区内 $0.8\sigma$；若中心值不变而误差
+降到 $\pm0.004$，阶梯将在 $3\sigma$ 下被否掉。(iii)~阶梯迫使 $1^{+-}$ 与 $2^{-+}$ 共用一阶，而二者已相距
+$3.4\sigma$。(iv)~格点蒙特卡洛在小 $\beta$ 时，第一激发能级之比应趋于 $1.5$，这是间隙定理不含参数的检验。
+(v)~若螺旋格点是物理的，则必有二次型光子色散，$E_{\rm QG,2}\approx3.5\,\hbar c/a$。
+
 \section{诚实的评估}
 \label{sec:honest}
+
+\paragraph{v1.7 修订说明。}本节与第~\ref{sec:spiral}--\ref{sec:audit}~节冲突之处，以后者为准：计数公设未被推出；胶球阶梯是未通过表~\ref{tab:audit} 检验的唯象猜想；强耦合定理本身不预言物理质量。
 
 \paragraph{被声称的。}
 (i)~质量的离散性（公设~\ref{post:mass}）蕴含空区间 $(0,M_0^2)$（MG1--MG3）：
@@ -1062,12 +1236,12 @@ BESIII 测得的 $0^{-+}$ 态 $X(2370)$
 \cite{hilbert1900mathematische,ProjectionPhysics}。
 
 \section*{利益冲突声明}
-作者声明不存在利益冲突。
+作者们声明不存在利益冲突。
 
 \section*{数据可用性声明}
 支撑本论文的 Lean~4 形式化与数值验证脚本均公开于
 \path{https://github.com/logos-42/YangMillsPhysics} 与
-\path{https://github.com/logos-42/Hibs-Physics}。本研究未使用实验数据。
+\path{https://github.com/logos-42/Hibs-Physics}。第~\ref{sec:spiral}~节的零依赖 Lean~4.35 包与第~\ref{sec:audit}~节所用脚本位于后者的 \path{SpiralLattice/} 目录。胶球数据取自文献~\cite{athenodorou2020glueball}；本研究未使用新的实验数据。
 
 \bibliography{projection-physics}
 

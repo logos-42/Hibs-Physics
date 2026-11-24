@@ -18,6 +18,7 @@
 
 \author{Yuan-Jie Liu}
 \email{yuanjieliu65@gmail.com}
+\author{Love}
 
 \date{\today}
 
@@ -67,6 +68,21 @@ problem's two facts are stated explicitly as proposals of the
 framework, and the proof is complete within the framework's
 axioms.  Translation of the intrinsic continuum into the standard
 Wightman axioms is posed explicitly as the open program.
+
+\emph{Revision v1.7.}  A standalone Lean package that depends only on the Lean
+core library proves, from four postulates in which every lattice site is a
+spiral divergence, a string theorem ($\sum_\ell E_\ell^2\ge\|x-y\|_1$ on
+$\mathbb{Z}^d$) and a gap theorem ($\sum_\ell E_\ell^2\in\{0,4,6,\dots\}$) at
+leading order in strong coupling, and shows that the commutator
+$[A_\mu,A_\nu]$ enters through colour precession (Sec.~\ref{sec:spiral}).
+These theorems give $m\propto N$ rather than $m^2\propto N$, so the counting
+postulate MG1 is not derived by them.  An adversarial audit against continuum
+lattice data (Sec.~\ref{sec:audit}) finds that the glueball ladder fits with
+$\chi^2=19.6$ for five ratios and cannot be distinguished from random spectra,
+that a physical lattice at strong coupling conflicts with Lorentz-invariance
+bounds by about eleven orders of magnitude, and that the framework makes no
+quark-model prediction.  The results are formal theorems about lattice
+postulates; they are not a solution of the Yang--Mills problem as posed.
 \end{abstract}
 
 \maketitle
@@ -1555,8 +1571,238 @@ passage to matrices, where it becomes a gauge-invariant quantity, while the
 spectrum remains a prediction of shape inside a sector and not of the ratios
 between sectors.
 
+\section{The spiral-divergence lattice: string and gap theorems in core Lean}
+\label{sec:spiral}
+
+This section, added in v1.7 together with the second author, replaces the
+postulated count by theorems on a lattice.  It starts from the cleanest
+version of the divergence postulate and proves, at leading order in strong
+coupling, that two opposite divergences are joined by a flux string and that
+the lightest closed excitation is a single plaquette.  Every statement below
+is machine-checked in a standalone Lean~4.35 package, \texttt{SpiralLattice},
+that depends on the Lean core library only (no Mathlib) and builds in a few
+seconds; the axiom report of every main theorem lists only
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+
+\subsection{Postulates}
+
+\begin{postulate}[Spiral sites]
+\label{post:spiral}
+Space is a lattice of sites.  Every site is a spiral of the flowing medium:
+its radial part is a divergence (an integer charge) and its rotational part
+is a hidden angle $\theta\in\mathbb{R}/2\pi\mathbb{Z}$.  Outward spirals
+(sources) and inward spirals (sinks) alternate, so the lattice is bipartite.
+\end{postulate}
+
+\begin{postulate}[Integer flux]
+\label{post:intflux}
+The electric flux $E_\ell$ on a link is the variable conjugate to the hidden
+angle; since the angle is compact, $E_\ell\in\mathbb{Z}$.  (The step
+``compact angle $\Rightarrow$ integer conjugate'' is the spectrum of
+$-i\,d/d\theta$ on the circle; it is taken as input and is not formalized.)
+\end{postulate}
+
+\begin{postulate}[Gauss law]
+\label{post:gauss}
+At every site the net outflow of flux equals the divergence:
+$(\operatorname{div}E)(x)=\rho(x)$.
+\end{postulate}
+
+\begin{postulate}[Strong-coupling energy]
+\label{post:energy}
+The electric energy is $H_E=(g^2/2a)\sum_\ell E_\ell^2$, the leading term of
+the Kogut--Susskind Hamiltonian at strong coupling
+\cite{kogut1975hamiltonian}.  The magnetic (plaquette) term is not part of the
+theorems.
+\end{postulate}
+
+\subsection{Theorems}
+
+\begin{theorem}[Lattice Gauss law, GL1--GL2]
+On any finite graph and for any region $S$, the total divergence inside $S$
+equals the net flux leaving $S$ (\texttt{gauss\_region}).  If the only
+charges are $+1$ at $x$ and $-1$ at $y$, a region containing $x$ but not $y$
+emits exactly one unit of flux (\texttt{netOut\_eq\_one}).
+\end{theorem}
+
+\begin{theorem}[Cut bound, ST2]
+If $R$ regions each emit one unit of flux and no link crosses the boundary of
+more than one of them, then $\sum_\ell|E_\ell|\ge R$ and hence
+$\sum_\ell E_\ell^2\ge R$ (\texttt{cut\_bound\_energy}).
+\end{theorem}
+
+\begin{theorem}[String theorem, HC1--HC2]
+On the hypercubic lattice $\mathbb{Z}^d$ of any dimension, for any finite set
+of unit links carrying integer flux with charge $+1$ at $x$, $-1$ at $y$ and
+no other charge,
+\begin{equation}
+\sum_\ell E_\ell^2\;\ge\;\|x-y\|_1 ,
+\end{equation}
+and a straight unit string attains equality (\texttt{string\_theorem},
+\texttt{string\_attained}).  The potential between two opposite divergences
+therefore grows at least linearly, $V(R)\ge(g^2/2a)R$: confinement at strong
+coupling \cite{wilson1974confinement}.
+\end{theorem}
+
+The proof uses the $\|x-y\|_1$ half-spaces lying between the charges.  Each
+emits one unit of flux by GL2, and a unit link along axis $j$ crosses the
+boundary of a half-space only if the half-space is perpendicular to $j$ at the
+link's starting coordinate, so no link is counted twice.
+
+\begin{theorem}[Gap theorem, GP1--GP4]
+On a simple lattice whose two chiralities alternate, every divergence-free
+integer flux has even energy (\texttt{energy\_even}); a non-zero one uses at
+least three links (\texttt{energy\_ge\_three}); hence
+\begin{equation}
+\sum_\ell E_\ell^2\in\{0\}\cup\{4,6,8,\dots\}
+\end{equation}
+(\texttt{gap\_theorem}), and a single plaquette attains $4$
+(\texttt{gap\_attained}).  The strong-coupling gap is
+$\Delta=4\cdot g^2/2a=2g^2/a$; for SU($N$) the energy is multiplied by the
+Casimir of the representation on the links.
+\end{theorem}
+
+Odd levels are forbidden because every closed loop on a bipartite lattice has
+even length and $k^2\equiv k \pmod 2$: the alternation of outward and inward
+spirals is precisely what removes them.
+
+\begin{theorem}[Colour precession, CP1--CP4]
+When the hidden coordinate is a full three-dimensional rotation (su(2)), a
+charge $Q$ anchored to the flow precesses, $\dot Q=[Q,A_\nu]\dot x^\nu$.  In
+the Leibniz decomposition of $p_\mu=m\dot x_\mu+\langle Q,A_\mu\rangle$ the
+precession channel supplies exactly the commutator of the field strength,
+\begin{equation}
+\langle Q,\partial_\mu A_\nu-\partial_\nu A_\mu\rangle-\langle[Q,A_\nu],A_\mu\rangle
+=\langle Q,F_{\mu\nu}\rangle,\quad
+F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu+[A_\mu,A_\nu],
+\end{equation}
+in any commutative ring (\texttt{precession\_gives\_commutator}).  The
+precession preserves $|Q|$, the colour force does no work, and the bracket
+satisfies the Jacobi identity.  This is the Wong force \cite{wong1970field};
+here $[A,A]$ arises from the noncommutativity of the hidden rotations, not
+from the noncommutativity of sink operators acting on a scalar field
+(Sec.~\ref{sec:selfinteraction}).
+\end{theorem}
+
+\subsection{What the theorems change}
+
+The strand count acquires a derivation: at leading order in strong coupling
+the energy of a pure-gauge excitation is
+\begin{equation}
+m=\frac{g^2}{2a}\,N,\qquad N=\sum_\ell E_\ell^2\in\{4,6,8,\dots\}.
+\end{equation}
+$N$ is a sum of integer squares, as the original intuition had it, but it runs
+over links rather than over three directions, and it is proportional to the
+mass, not to the mass squared.  Postulate~\ref{post:mass},
+$m^2=NM_0^2$, is therefore \emph{not} derived by this construction, and the two
+statements cannot both hold; the revised text uses the theorem.
+
+\paragraph{Numerical checks.}  Exhaustive enumeration on small lattices
+confirms both theorems: for charges at lattice distance $R=1,\dots,4$ the
+minimal energy equals $R$ with degeneracy equal to the number of shortest
+paths, and the divergence-free spectrum on a $3\times3$-plaquette patch is
+$0,4,6,8,\dots$ with no odd level.  Exact diagonalization of compact U(1) in
+2+1 dimensions with the magnetic term shows the gap approaching $2g^2$ for
+$g^2\gtrsim1$ and departing from it at weak coupling; since every finite system
+is gapped, these numbers carry no information about the continuum limit.
+
+\paragraph{Scope.}  The theorems hold at leading order in strong coupling, on a
+lattice, in finite volume, for integer (U(1)-type) flux.  They do not contain
+the magnetic dynamics, the weak-coupling regime, the continuum limit, SU(3),
+or the step ``compact $\Rightarrow$ integer''.  Their physical content is
+classical in lattice gauge theory \cite{wilson1974confinement,
+kogut1975hamiltonian,osterwalder1978gauge,munster1981strong}; what is new is
+the dependency-free formalization and the reading in terms of spiral
+divergences.
+
+\section{Adversarial audit of the predictions}
+\label{sec:audit}
+
+We confront every mass-spectrum statement of the framework with data, at the
+standard a referee for a high-impact journal would apply.  Ratios
+$m/m(0^{++})$ are used so that no choice of scale enters; the data are the
+continuum-limit SU(3) values of Ref.~\cite{athenodorou2020glueball}.
+
+\begin{table}[h]
+\caption{\label{tab:audit} Glueball ratios $m/m(0^{++})$ versus the ladder
+$\sqrt{N/3}$ (nearest rung) and the strong-coupling leading order.}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+State & Observed & Ladder rung & Pull & Strong coupling (LO)\\
+\hline
+$2^{++}$ & $1.437(10)$ & $N=6$: $1.414$ & $+2.4\sigma$ & $1.000$ ($45\sigma$)\\
+$0^{-+}$ & $1.550(16)$ & $N=7$: $1.528$ & $+1.4\sigma$ & --\\
+$0^{++*}$ & $1.720(16)$ & $N=9$: $1.732$ & $-0.8\sigma$ & --\\
+$1^{+-}$ & $1.781(16)$ & $N=10$: $1.826$ & $-2.8\sigma$ & --\\
+$2^{-+}$ & $1.857(15)$ & $N=10$: $1.826$ & $+2.0\sigma$ & --\\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\paragraph{A1. The ladder does not pass the test.}  With the most lenient
+assignment the ladder gives $\chi^2=19.6$ for five ratios and no continuous
+parameter, a goodness-of-fit $p\approx0.002$; the strict ascending assignment
+gives $\chi^2=30$.  Under a null model of uniformly random spectra with the
+same errors in the same window, $15.7\%$ of random spectra fit at least as
+well: above $N\approx9$ the ladder is dense enough that almost any value lies
+near a rung.  The ``$+1$'' rule was added after a variant without it was
+excluded by data, and the ladder assigns no $J^{PC}$.  \emph{Verdict:} the
+ladder is an untested phenomenological conjecture, not a successful
+prediction.
+
+\paragraph{A2. The strong-coupling leading order is not the continuum.}  At
+leading order the lowest spin-0 and spin-2 states are degenerate single
+plaquettes; the data give $1.437(10)$, a $45\sigma$ discrepancy.  This is the
+known limitation of strong-coupling expansions, not an error of the theorem.
+\emph{Verdict:} the theorem stands; no comparison with the continuum spectrum
+is claimed.
+
+\paragraph{A3. The scale problem.}  If the spiral lattice is physical space
+and is at strong coupling ($g^2\gtrsim1$), then $\Delta=(8/3)g^2/a$ for SU(3)
+equal to $m(0^{++})\approx1.6$~GeV requires $a\ge0.33$~fm.  A lattice of
+physical space gives photons the dispersion $v=c\cos(ka/2)$, a quadratic
+Lorentz violation; the LHAASO bound $E_{\rm QG,2}>6\times10^{-8}E_{\rm Pl}$
+\cite{lhaaso2024liv} implies $a\lesssim9\times10^{-28}$~m, smaller by a factor
+of about $3.5\times10^{11}$.  \emph{Verdict:} the spiral lattice is either a
+regulator or a physical structure at weak coupling; in neither case do the
+strong-coupling theorems predict physical glueball masses.
+
+\paragraph{A4. Electric confinement.}  At strong coupling every compact gauge
+theory confines, U(1) included.  Read literally, ``outward and inward spirals
+are positive and negative charges'' plus the string theorem would confine the
+electron, contradicting Coulomb's law.  Four-dimensional U(1) lattice gauge
+theory has a rigorously established Coulomb phase at weak coupling
+\cite{guth1980existence,frohlich1982massless}, and the physical coupling
+$g^2=4\pi\alpha\approx0.09$ lies there.  \emph{Verdict:} the string theorem
+does not apply to electrons; the two chiralities are lattice bookkeeping.
+
+\paragraph{A5. Internal consistency.}  The theorems give $m\propto N$; the
+ladder assumes $m^2\propto N$.  \emph{Verdict:} the paper adopts the theorem.
+
+\paragraph{A6. Quarks and leptons.}  The repository's own theorems MB4--MB5
+show that a single price per strand is excluded by four measured mass ratios
+at $4\times10^4$--$2.5\times10^5$ times the measurement precision, while two
+prices fit any data.  The string theorem implies linear confinement and,
+through the rotating-string relation $\alpha'=1/(2\pi\sigma)$, a Regge slope of
+about $0.82~\text{GeV}^{-2}$ for $\sqrt\sigma=0.44$~GeV, close to the observed
+$\rho$ trajectory; but $\sigma$ is an input and the relation is standard.
+\emph{Verdict:} the framework makes no quark-model prediction.
+
+\paragraph{Falsifiable statements that survive.}  (i)~The two lattice
+theorems, checkable by anyone with \texttt{lake build}.  (ii)~The ladder's
+forbidden window $1.528<m/m(0^{++})<1.732$ ($N=8$): the excited $0^{++*}$ at
+$1.720(16)$ lies inside by $0.8\sigma$; at unchanged central value an error of
+$\pm0.004$ would exclude the ladder at $3\sigma$.  (iii)~The ladder forces
+$1^{+-}$ and $2^{-+}$ onto one rung although they are already separated by
+$3.4\sigma$.  (iv)~At small $\beta$ in lattice Monte Carlo the first excited
+level should approach ratio $1.5$, a parameter-free test of the gap theorem.
+(v)~A physical spiral lattice predicts quadratic photon dispersion with
+$E_{\rm QG,2}\approx3.5\,\hbar c/a$.
+
 \section{Honest assessment}
 \label{sec:honest}
+
+\paragraph{Revised in v1.7.}  Where this section conflicts with Secs.~\ref{sec:spiral}--\ref{sec:audit}, those sections take precedence: the counting postulate is not derived, the glueball ladder is a phenomenological conjecture that does not pass the test of Table~\ref{tab:audit}, and the strong-coupling theorems do not by themselves predict physical masses.
 
 \paragraph{Claimed.}
 (i)~Discreteness of mass (Postulate~\ref{post:mass}) implies the
@@ -1757,14 +2003,17 @@ enough to be sure it is a mountain
 \cite{hilbert1900mathematische,ProjectionPhysics}.
 
 \section*{Conflict of interest}
-The author declares no competing interests.
+The authors declare no competing interests.
 
 \section*{Data availability}
 The Lean~4 formalization and the numerical verification scripts
 supporting this paper are available in the public repositories
 \path{https://github.com/logos-42/YangMillsPhysics} and
-\path{https://github.com/logos-42/Hibs-Physics}.  No experimental data
-were used in this work.
+\path{https://github.com/logos-42/Hibs-Physics}.  The dependency-free Lean~4.35
+package of Sec.~\ref{sec:spiral} and the scripts behind Sec.~\ref{sec:audit}
+are in the directory \path{SpiralLattice/} of the latter repository.  The
+glueball data are taken from Ref.~\cite{athenodorou2020glueball}; no new
+experimental data were used in this work.
 
 \bibliography{projection-physics}
 

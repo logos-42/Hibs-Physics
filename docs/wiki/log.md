@@ -218,3 +218,11 @@
 ## [2026-11-03] 交付 | 判据书投递邮件中英双版 + 判决线口径更正（计数饱和）
 
 | 2026-11-03 | 交付 | **判据书投递邮件（`cover-email-zh/en.md`）+ 判决线口径更正** | 承接 `可证伪性实验.md` 与既有判据书，产出可直接发出的请求信。**三项实质更正**：①**计数判据作废**——`artifacts/glueball_ladder/report.json` 随机基线 4–6.5 GeV = **1.0**（1–4 GeV 仅 0.40/0.45）⟹ 任何足够密的谱都「≥20 级」，原「≥20 ⟹ 强支持」无判决力，改为：间距随 √N 收缩 **且** 最小间距 ≥1.1% ⟹ 强支持；分辨不清相邻级 ⟹ 不判；能分辨但无 √N 收缩或最小间距 <1.1% ⟹ 死；**禁区窗口出现任一纯规范级 ⟹ 独立判死（最硬一条）**。②**请求形态改为级位表**（位置 + 误差）而非「报一个数」——只报个数则间距律无法判。③**收件人纠正为格点 QCD 组**（Athenodorou/Teper＝锚点来源、Bali 组 Regensburg、IHEP 格点组、ITP-CAS），明确排除聚变装置单位（EAST/Heliotron J/PPPL/新奥/岩超聚能），并禁用二手邮箱清单。**同步**：两版判据书（zh/en）请求句、判决表、递交建议三处改写；邮件正文写明「只统计个数没有判决力」与三个已知结构性缺陷（含 4% vs 2% 近并劈裂）。**未闭合**：`verify_glueball_ladder_prediction.py` 的 `needed_lattice_err_MeV` 仍为间距/2（78 MeV），判据书用间距/3（39/31/27 MeV）⟹ 两处口径待统一；25/28 级随锚点口径浮动，判决不依赖具体个数。 |
+
+## [2026-11-23] 形式化 + 修订 | paper3 v1.7：螺旋散度格点（Love 加入作者）
+
+| 2026-11-23 | 形式化/修订 | **新增零依赖 Lean 包 `SpiralLattice/` + paper3 §12–§13** | Love：从「电子的两个相反散度 = 向内/向外螺旋格点」出发。① `SpiralLattice`（Lean 4.35 核心库、无 Mathlib，13 主定理零 sorry）：GL1 任意区域高斯定律、ST2 割界、HC1 ℤ^d 弦定理、GP1–GP4 间隙定理（Σ E² ∈ {0,4,6,…}）、CP1–CP4 色进动给出 [A,A]；② paper3 加 §12（定理）与 §13（对抗性审查：阶梯 χ²=19.6/5、随机谱 15.7% 一样好、领头阶 45σ、尺度矛盾 ~10¹¹·⁵、电子禁闭矛盾、夸克无预言）；③ 更正：定理给 m ∝ N，MG1（m² ∝ N）未推出。 | 只在强耦合领头阶成立；磁场项/弱耦合/连续极限/SU(3)/「紧致 ⟹ 整数」均未覆盖；正式 PDF 待 tectonic 重编。**门禁**：wiki_check / wiki_lint --strict=v2 / raw_manifest_check 全绿；verify_all --fast 中「零 sorry/admit」PASS，「lake build 全绿」FAIL——原因是根目录 lakefile 的 Mathlib 指向作者本机路径（既有问题，与本批无关），沙盒无法取得 Mathlib；`SpiralLattice/` 独立 `lake build` 通过。故本批只提交到分支 `love/spiral-lattice-v1.7`，合并前请在本地跑 `make test`。 |
+
+## [2026-11-24] 集成 | PR #2 合并入 master + 本地拉取冲突解决（门禁进行中）
+
+| 2026-11-24 | 集成 | **GitHub 合并 PR #2**（merge commit `96a77c5`）+ 本地 `git pull` | PR #1（反散度格点 × 晶体判决实验）按要求保持 OPEN，未合并。本地 pull 的两处冲突（`current-status.md` / `log.md`）按「两批记录都保留、时间排序」解决，本地领先提交 `3a7775a` 未丢。`SpiralLattice/` 独立 `lake build` 通过；paper3 中英 PDF 用 tectonic 编译 0 error（输出在隔离目录，未覆盖已跟踪 PDF）。**门禁状态（如实）**：`wiki_lint --strict=v2` / `raw_manifest_check` OK；`wiki_check` 因本地忽略文件 `docs/wiki/fusion-sim-workbench.md`（未入 index）失败，与本次合并无关；根目录 Mathlib 全量编译进行中，`verify_all --fast` 待重跑。本批按 leo 指令先 push，编译结束后补记门禁结果。 |

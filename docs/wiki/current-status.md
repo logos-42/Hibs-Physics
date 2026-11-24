@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-03
+last_confirmed: 2026-11-23
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,20 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-24 session：PR #2 合并入 master（门禁进行中）
+
+- 远端 GitHub 已合并 PR #2（`paper3 v1.7` + `SpiralLattice/`），merge commit `96a77c5`；PR #1（反散度格点 × 晶体判决实验）按要求保持 OPEN。
+- 本地 `git pull` 在 `current-status.md` 与 `log.md` 两处冲突已解决：两批记录都保留，按时间排序；本地领先提交 `3a7775a` 未丢。
+- `SpiralLattice/` 独立 `lake build` 通过（13 主定理零 sorry）；paper3 中英 PDF tectonic 编译 0 error。
+- 未完成：根目录 Mathlib 全量编译进行中，`verify_all --fast` 待重跑；`wiki_check` 受本地忽略文件 `docs/wiki/fusion-sim-workbench.md` 干扰（非本批改动）。按 leo 指令先 push，编译后补门禁结果。
+
+## ★ 2026-11-23 session：paper3 v1.7 — 螺旋散度格点（Love 加入作者）
+
+- 新增 **`SpiralLattice/`**：零依赖（仅 Lean 核心库）的 Lean 4.35 包，`lake build` 约 3 秒；13 条主定理零 sorry；弦定理 `string_theorem`、间隙定理 `gap_theorem`、色进动 `precession_gives_commutator`
+- paper3 新增 §12（定理）、§13（对抗性审查），摘要与 Honest assessment 加 v1.7 修订说明；作者加 Love
+- 关键更正：强耦合定理给出 **m ∝ N**，与公设 MG1（m² ∝ N）冲突，MG1 未被推出；阶梯未通过检验（χ²=19.6/5，与随机谱不可区分）
+- 待办：本地 `tectonic` 重编中英 PDF；如需发布 aiXiv 由 leo 决定
 
 ## ★ 2026-11-03 session：判据书投递邮件（中英）+ 判决线口径更正
 
