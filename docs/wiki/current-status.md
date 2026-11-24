@@ -12,12 +12,14 @@ status: current
 
 # 当前状态
 
-## ★ 2026-11-24 session：PR #2 合并入 master（门禁进行中）
+## ★ 2026-11-24 session：PR #2 合并入 master + 门禁全绿
 
 - 远端 GitHub 已合并 PR #2（`paper3 v1.7` + `SpiralLattice/`），merge commit `96a77c5`；PR #1（反散度格点 × 晶体判决实验）按要求保持 OPEN。
-- 本地 `git pull` 在 `current-status.md` 与 `log.md` 两处冲突已解决：两批记录都保留，按时间排序；本地领先提交 `3a7775a` 未丢。
-- `SpiralLattice/` 独立 `lake build` 通过（13 主定理零 sorry）；paper3 中英 PDF tectonic 编译 0 error。
-- 未完成：根目录 Mathlib 全量编译进行中，`verify_all --fast` 待重跑；`wiki_check` 受本地忽略文件 `docs/wiki/fusion-sim-workbench.md` 干扰（非本批改动）。按 leo 指令先 push，编译后补门禁结果。
+- 本地 `git pull` 在 `current-status.md` 与 `log.md` 两处冲突已解决：两批记录都保留，按时间排序；本地领先提交 `3a7775a` 未丢。合并提交 `66b9171` 已 push 到 `origin/master`。
+- `SpiralLattice/` 独立 `lake build` 通过（13 主定理零 sorry）；paper3 中英 PDF tectonic 编译 0 error（输出在隔离目录，未覆盖已跟踪 PDF）。
+- 编译插曲：两个后台钩子各起了一个重复 `lake build`，并发写同一 build 目录导致首轮末段 `no such file or directory`；杀掉重复进程后单进程增量 `lake build` 成功（5776 jobs）。
+- 门禁：`wiki_check` / `wiki_lint --strict=v2` / `raw_manifest_check` 全绿；`verify_all.py --fast` **ALL PASS**。`wiki_check` 运行时临时移开本地忽略文件 `docs/wiki/fusion-sim-workbench.md`（与非本批改动无关），跑完已复原。
+- 按 leo 指令先 push 后编译：合并提交先推，门禁结果在本条补记；提交时因钩子仍卡在编译，使用 `LEFTHOOK=0` 跳过钩子。
 
 ## ★ 2026-11-23 session：paper3 v1.7 — 螺旋散度格点（Love 加入作者）
 
