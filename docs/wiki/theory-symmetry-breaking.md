@@ -14,7 +14,7 @@ confidence: medium
 
 > 2026-08-05 会话问答编译（compile-first）。leo 问：物理的对称性破缺推导（Z₂ 势 → 真空选择 → Goldstone → Higgs）能否在隐数推导里实现？
 > 结论：**能，且已证三个定理（SB1–SB3）**。对称性破缺的静态结构全部落在已有框架内——它比微积分（差商 D7'）更早可达，因为**核平移只需加法，不需要乘法逆元**。
-> 所有引用定理见 SPEC.md 与各 .lean 模块；状态标记：✅ 已证 / 📋 草案 / ❌ 未做。
+> 所有引用定理见 docs/SPEC.md 与各 .lean 模块；状态标记：✅ 已证 / 📋 草案 / ❌ 未做。
 
 ## 1. 核心主张：核平移对称性 = 隐数里的规范对称性
 
@@ -109,6 +109,6 @@ V(ζ) := Ṽ(π ζ)
 
 ## 9. 相关链接
 
-- 草案：D8 SymmetryBreaking（SPEC.md）· Mass.lean KernelRepresentation · D5 FlowRepresentation
+- 草案：D8 SymmetryBreaking（docs/SPEC.md）· Mass.lean KernelRepresentation · D5 FlowRepresentation
 - 已证：K3/K4（Kernel.lean）· L5（LinearAlgebra.lean）· E1–E16（Differential.lean）
 - 概念：theory-kernel-mass.md（核/质量）· theory-time-emergence.md（时间/破缺的旧结论）

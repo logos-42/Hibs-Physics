@@ -10,3 +10,5 @@ manifests
 # macOS
 .DS_Store
 ._*
+.claude/
+

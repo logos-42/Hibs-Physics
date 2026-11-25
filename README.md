@@ -6,7 +6,7 @@
 momentum, mass, spin) are *necessary representations* of a non-injective
 projection π and its kernel ker π, not objects we are free to define.
 
-- **中文版**: [README.zh-CN.md](README.zh-CN.md) · 数学草案细节: [SPEC.md](SPEC.md)
+- **中文版**: [docs/README.zh-CN.md](docs/README.zh-CN.md) · 数学草案细节: [docs/SPEC.md](docs/SPEC.md)
 - **License**: [MIT](LICENSE) (Copyright 2026 Yuanjie Liu)
 - **Paper**: [paper/projection-physics.tex](paper/projection-physics.tex) —
   single-column REVTeX preprint (PRD style), 20+ pp; Chinese version:
@@ -282,9 +282,9 @@ Layout:
 
 ```
 ProjectionPhysics/
-├── SPEC.md                 # detailed math spec (Chinese): theorem inventory, proof status
+├── docs/SPEC.md                 # detailed math spec (Chinese): theorem inventory, proof status
 ├── README.md               # this file (English)
-├── README.zh-CN.md         # Chinese overview
+├── docs/README.zh-CN.md         # Chinese overview
 ├── paper/                  # 2026-08-14: first paper (REVTeX 4.2, single-column preprint)
 │   ├── projection-physics.tex    # English version (20 pp, tectonic-compiled PDF included)
 │   ├── projection-physics-zh.tex # Chinese version (content-equivalent)
@@ -363,5 +363,5 @@ ProjectionPhysics/
 ---
 
 *Formalized in Lean 4 (core, no mathlib). Proofs: `omega`, `simp`, `rw`,
-`ac_rfl`, classical choice. See [SPEC.md](SPEC.md) for the full theorem
+`ac_rfl`, classical choice. See [docs/SPEC.md](docs/SPEC.md) for the full theorem
 inventory and proof-status ledger.*

@@ -75,6 +75,6 @@ entity_type: concept
 
 ## 5. 相关链接
 
-- 草案：D7 Differential Emergence（SPEC.md §3）· D7' DifferenceQuotient（逆元层）· D5 FlowRepresentation · D4 MetricRepresentation
+- 草案：D7 Differential Emergence（docs/SPEC.md §3）· D7' DifferenceQuotient（逆元层）· D5 FlowRepresentation · D4 MetricRepresentation
 - 已证：A1/A2 复合封闭/结合（Algebra.lean）· C2 反交换（Clifford.lean）· K4 核运动（Kernel.lean）· infoLoss（Bridges.lean）· **E1–E16 微分代数种子（Differential.lean）**
 - 相关页：[[theory-kernel-mass.md]] · [[theory-time-emergence.md]]

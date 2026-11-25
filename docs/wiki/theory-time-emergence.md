@@ -106,5 +106,5 @@ P(Flow(s)) = P(s)
 
 ## 6. 相关链接
 
-- 草案：D5 FlowRepresentation（SPEC.md）· D4 MetricRepresentation（签名推导）
+- 草案：D5 FlowRepresentation（docs/SPEC.md）· D4 MetricRepresentation（签名推导）
 - 已证：`FlowConservation.lean` 的迭代组合律和条件式不变量保持 · C1–C6 Clifford/自旋（Clifford.lean）· L6 极化恒等式（LinearAlgebra.lean）
