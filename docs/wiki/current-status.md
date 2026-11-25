@@ -1,7 +1,7 @@
 ---
 title: Hibs-Physics 当前状态
 source: session
-last_confirmed: 2026-11-24
+last_confirmed: 2026-11-25
 audience: self
 stage: draft
 schema_version: 2
@@ -11,6 +11,13 @@ status: current
 ---
 
 # 当前状态
+
+## ★ 2026-11-25 session：`.gitignore` 忽略 `scripts/` 目录 + 补索引引用后提交推送
+
+- 按 leo 要求，在 `.gitignore` 新增 `scripts/` 忽略规则。
+- 注意：`scripts/` 下既有脚本已被 Git 跟踪，新增忽略规则不会自动取消跟踪；仅对新文件生效。若需从版本库中移除，另需 `git rm -r --cached scripts`。
+- 提交门禁发现 `wiki_check` 既有失败：`docs/wiki/index.md` 未引用 `fusion-sim-workbench.md`；已补该索引行，三门禁全绿后提交推送。
+- 本批只改忽略规则与 wiki 索引/回写，未改门禁脚本内容。
 
 ## ★ 2026-11-24 session：Lean 4.36.0 升级（稳定版）
 

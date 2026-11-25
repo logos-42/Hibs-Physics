@@ -3,6 +3,7 @@ build/
 lake-manifest.json
 artifacts/
 __pycache__/
+scripts/
 projection-unifiedNotes.bib
 docs/
 manifests
